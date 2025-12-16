@@ -5,6 +5,7 @@ import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Stores() {
   const [stores, setStores] = useState([]);
   const [filteredStores, setFilteredStores] = useState([]);

@@ -246,3 +246,12 @@ body.dark-mode .dark-toggle {
   align-items: center;
   justify-content: center;
 }
+.wishlist-badge {
+  margin-left: auto;
+  background: #ef4444;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+}

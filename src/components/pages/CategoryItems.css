@@ -19,7 +19,6 @@
 .page-title {
   font-size: 26px;
   font-weight: 700;
-  margin-bottom: 24px;
 }
 
 /* Grid – same density as home page */
@@ -149,5 +148,40 @@
 }
 
 .item-card {
-  position: relative; /* 🔥 REQUIRED */
+  position: relative; 
+}
+/* HEADER ROW */
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+/* SEARCH BOX */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  padding: 10px 14px;
+  border-radius: 22px;
+  width: 440px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* DARK MODE */
+body.dark-mode .search-box {
+  background: #1f2937;
+}
+
+body.dark-mode .search-box input {
+  color: #e5e7eb;
 }

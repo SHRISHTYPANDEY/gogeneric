@@ -3,6 +3,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import { addToCart } from "../../utils/cartHelper";
+import WishlistButton from "../WishlistButton";
+
 import {
   MapPin,
   Star,
@@ -24,53 +26,24 @@ export default function StoreDetails() {
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("products");
-  const [reviews, setReviews] = useState([]);
-  const [reviewsLoading, setReviewsLoading] = useState(false);
+
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
 
-  useEffect(() => {
-    const loadPage = async () => {
-      await fetchStoreDetails();
-    };
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
 
-    loadPage();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  /* ================= Fetch Store ================= */
+  useEffect(() => {
+    fetchStoreDetails();
   }, [id]);
 
   useEffect(() => {
-    if (store?.id) {
-      fetchProducts();
-    }
+    if (store?.id) fetchProducts();
   }, [store]);
 
-  const handleAddToCart = async (item) => {
-    const token = localStorage.getItem("token");
-
-    try {
-      const payload = {
-        item_id: item.id,
-        quantity: 1,
-        price: item.price,
-        model: "Item",
-      };
-
-      const res = await api.post("/api/v1/customer/cart/add", payload, {
-        headers: {
-          moduleId: 2,
-          zoneId: JSON.stringify([3]),
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      toast.success("Added to cart");
-      window.dispatchEvent(new Event("cart-updated"));
-    } catch (err) {
-      console.log("ERROR DATA:", err?.response?.data);
-      toast.error(
-        err?.response?.data?.errors?.[0]?.message || "Add to cart failed"
-      );
-    }
-  };
   const fetchStoreDetails = async () => {
     try {
       const res = await api.get(`/api/v1/stores/details/${id}`, {
@@ -87,30 +60,10 @@ export default function StoreDetails() {
     }
   };
 
-  const fetchReviews = async () => {
-    try {
-      setReviewsLoading(true);
-      const res = await api.get("/api/v1/stores/reviews", {
-        params: { store_id: id },
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
-      });
-      setReviews(res.data.reviews || []);
-      console.log("REVIEWS FULL RESPONSE:", res.data);
-    } catch (err) {
-      console.error("Reviews error:", err.response?.data);
-    } finally {
-      setReviewsLoading(false);
-    }
-  };
-
-  /* ===== Products API ===== */
+  /* ================= Products ================= */
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-
       const res = await api.get("/api/v1/items/latest", {
         params: {
           store_id: id,
@@ -123,12 +76,8 @@ export default function StoreDetails() {
           moduleId: 2,
         },
       });
-      const productsData =
-        res.data.products || res.data.items || res.data.data || [];
 
-      setProducts(productsData);
-      console.log("PRODUCTS FULL RESPONSE:", res.data);
-      console.log("SINGLE PRODUCT:", productsData[0]);
+      setProducts(res.data.products || res.data.items || []);
     } catch (err) {
       console.error("Products error:", err.response?.data);
     } finally {
@@ -136,14 +85,43 @@ export default function StoreDetails() {
     }
   };
 
-  if (loading) return <Loader text="Loading store details..." />;
+  /* ================= Reviews ================= */
+  const fetchReviews = async () => {
+    try {
+      setReviewsLoading(true);
+      const res = await api.get("/api/v1/stores/reviews", {
+        params: { store_id: id },
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      });
+      setReviews(res.data.reviews || []);
+    } catch (err) {
+      console.error("Reviews error:", err.response?.data);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
 
+  /* ================= Search Filters ================= */
+  const filteredProducts = products.filter((p) =>
+    p.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredReviews = reviews.filter(
+    (r) =>
+      r.comment?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      r.customer_name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) return <Loader text="Loading store details..." />;
   if (!store) return <div>Store not found</div>;
 
   return (
     <div className="z-store-page">
-      {/* ===== Breadcrumb ===== */}
       <p className="breadcrumb">Home / Stores / {store.name}</p>
+
       {/* ===== Header ===== */}
       <div className="store-header">
         <div>
@@ -155,6 +133,7 @@ export default function StoreDetails() {
             <MapPin size={14} /> {store.address}
           </p>
         </div>
+
         <div className="rating-box">
           <div className="rating-value">
             {store.avg_rating || "N/A"}
@@ -163,48 +142,49 @@ export default function StoreDetails() {
           <p>Store Rating</p>
         </div>
       </div>
+
       {/* ===== Actions ===== */}
       <div className="action-row">
-        <button>
-          <Navigation size={16} /> Direction
-        </button>
-        <button>
-          <Share2 size={16} /> Share
-        </button>
-        <button>
-          <Phone size={16} /> Call
-        </button>
+        <button><Navigation size={16} /> Direction</button>
+        <button><Share2 size={16} /> Share</button>
+        <button><Phone size={16} /> Call</button>
       </div>
+
       {/* ===== Image ===== */}
       <div className="single-image">
         <img src={cleanImageUrl(store.cover_photo_full_url)} alt={store.name} />
       </div>
-      {/* ===== Tabs ===== */}
-      <div className="tabs">
-        <span
-          className={activeTab === "products" ? "active" : ""}
-          onClick={() => {
-            setActiveTab("products");
-            if (products.length === 0) fetchProducts();
-          }}
-        >
-          Products
-        </span>
-        <span
-          className={activeTab === "overview" ? "active" : ""}
-          onClick={() => setActiveTab("overview")}
-        >
-          Overview
-        </span>
-        <span
-          className={activeTab === "reviews" ? "active" : ""}
-          onClick={() => {
-            setActiveTab("reviews");
-            if (reviews.length === 0) fetchReviews();
-          }}
-        >
-          Reviews
-        </span>
+
+      {/* ===== Tabs + Search ===== */}
+      <div className="tabs-row">
+        <div className="tabs">
+          {["products", "overview", "reviews"].map((tab) => (
+            <span
+              key={tab}
+              className={activeTab === tab ? "active" : ""}
+              onClick={() => {
+                setActiveTab(tab);
+                setSearchTerm("");
+                if (tab === "reviews" && reviews.length === 0) fetchReviews();
+              }}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </span>
+          ))}
+        </div>
+
+        {(activeTab === "products" || activeTab === "reviews") && (
+          <input
+            className="tab-search"
+            placeholder={
+              activeTab === "products"
+                ? "Search products..."
+                : "Search reviews..."
+            }
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        )}
       </div>
 
       {/* ===== OVERVIEW ===== */}
@@ -212,19 +192,13 @@ export default function StoreDetails() {
         <>
           <div className="overview-section">
             <h3>Contact Information</h3>
-            <p>
-              <Phone size={14} /> {store.phone || "N/A"}
-            </p>
-            <p>
-              <Mail size={14} /> {store.email || "N/A"}
-            </p>
+            <p><Phone size={14} /> {store.phone || "N/A"}</p>
+            <p><Mail size={14} /> {store.email || "N/A"}</p>
           </div>
 
           <div className="overview-section">
             <h3>Available Categories</h3>
-            <p className="category-text">
-              {store.category_details?.map((c) => c.name).join(", ")}
-            </p>
+            <p>{store.category_details?.map((c) => c.name).join(", ")}</p>
           </div>
         </>
       )}
@@ -232,27 +206,29 @@ export default function StoreDetails() {
       {/* ===== PRODUCTS ===== */}
       {activeTab === "products" && (
         <div className="products-section">
-        {productsLoading ? (
-  <Loader text="Loading products..." />
-) : products.length === 0 ? (
-            <p>No products available</p>
+          {productsLoading ? (
+            <Loader text="Loading products..." />
+          ) : filteredProducts.length === 0 ? (
+            <p>No products found</p>
           ) : (
-            products.map((p) => (
+            filteredProducts.map((p) => (
               <div key={p.id} className="product-card">
+                <WishlistButton item={p} />
+
                 <div
                   className="add-cart-btn"
                   onClick={() =>
-                    addToCart({
-                      item: p,
-                      navigate,
-                      location,
-                    })
+                    addToCart({ item: p, navigate, location })
                   }
                 >
                   <Plus size={18} />
                 </div>
 
-                <img src={cleanImageUrl(p.image_full_url)} alt={p.name} />
+                <img
+                  src={cleanImageUrl(p.image_full_url)}
+                  alt={p.name}
+                  onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
+                />
                 <h4>{p.name}</h4>
                 <p>₹{p.price}</p>
               </div>
@@ -264,18 +240,16 @@ export default function StoreDetails() {
       {/* ===== REVIEWS ===== */}
       {activeTab === "reviews" && (
         <div className="reviews-section">
-       {reviewsLoading ? (
-  <Loader text="Loading reviews..." />
-) : reviews.length === 0 ? (
-
+          {reviewsLoading ? (
+            <Loader text="Loading reviews..." />
+          ) : filteredReviews.length === 0 ? (
             <p>No reviews found</p>
           ) : (
-            reviews.map((r) => (
+            filteredReviews.map((r) => (
               <div key={r.id} className="review-card">
                 <strong>{r.customer_name || "Anonymous"}</strong>
                 <span>
-                  <Star size={14} fill="#00c16e" stroke="none" />
-                  {r.rating}
+                  <Star size={14} fill="#00c16e" stroke="none" /> {r.rating}
                 </span>
                 <p>{r.comment}</p>
               </div>

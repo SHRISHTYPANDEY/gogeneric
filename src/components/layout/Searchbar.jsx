@@ -143,7 +143,7 @@ export default function Searchbar() {
   return (
     <header className="header-main">
       <div className="header-container">
-        <h2 className="logo">GoGenericPharma</h2>
+        <h2 className="logo">GOGENRIC Healthcare</h2>
 
         <div
           className={`search-wrapper ${isMobileOpen ? "mobile-open" : ""}`}

@@ -1,0 +1,25 @@
+.wishlist-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;   /* 👈 LEFT side */
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.wishlist-btn svg {
+  color: #888;
+}
+
+.wishlist-btn.active svg {
+  color: red;
+  fill: red;
+}

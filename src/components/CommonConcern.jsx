@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Plus } from "lucide-react";
 import { addToCart } from "../utils/cartHelper";
 import { useNavigate, useLocation } from "react-router-dom";
+import WishlistButton from "./WishlistButton";
 
 export default function CommonConcern() {
   const [concerns, setConcerns] = useState([]);
@@ -158,6 +159,7 @@ export default function CommonConcern() {
   <div className="concern-grid">
     {medicines.map((item) => (
     <div className="concern-card" key={item.id}>
+      <WishlistButton item={item} />
               {/* ➕ ADD TO CART */}
               <div
                 className="add-cart-btn"

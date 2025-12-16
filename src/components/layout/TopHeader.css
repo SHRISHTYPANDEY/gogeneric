@@ -67,65 +67,7 @@
   font-size: 18px;
 }
 
-/* DARK MODE MAIN BACKGROUND */
-body.dark-mode {
-  background-color: #0d1117;
-  color: #e6e6e6;
-  transition: 0.3s ease;
-}
 
-/* HEADER DARK MODE */
-.dark-header {
-  background-color: #1a2332 !important;
-}
-
-/* WHITE BOXES → DARK */
-.dark-box {
-  background: #2d3748 !important;
-}
-
-/* TEXT DARK MODE */
-.dark-text {
-  color: #e6e6e6 !important;
-}
-
-.dark-text-bold {
-  color: #fff !important;
-}
-
-/* LANGUAGE DROPDOWN DARK */
-.dark-dropdown {
-  background: #2d3748 !important;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
-}
-
-.dark-dropdown .lang-option:hover {
-  background: #3b475a !important;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(255,255,255,0.08);
-}
-
-
-/* TOGGLE BUTTON */
-.theme-btn {
-  background: white;
-  border-radius: 20px;
-  padding: 6px 12px;
-}
-
-body.dark-mode .theme-btn {
-  background: #2d3748;
-  color: white;
-}
-
-/* LIGHT MODE LOCATION TEXT (FORCE BLACK) */
-body:not(.dark-mode) .dark-text {
-  color: #1a1a1a !important;
-}
-
-body:not(.dark-mode) .dark-text-bold {
-  color: #000 !important;
-}
 /* PROFILE DROPDOWN */
 .profile-dropdown {
   position: absolute;
@@ -172,20 +114,15 @@ body:not(.dark-mode) .dark-text-bold {
   transform: translateY(-2px);
   box-shadow: 0 3px 8px rgba(0,0,0,0.12);
 }
-
-/* Make ALL text bright in dark mode */
-body.dark-mode .topheader * {
-  color: #ffffff !important;
+.download-app-btn {
+  background: #16a34a;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: background 0.2s;
 }
 
-/* But keep icons with their original color if needed */
-body.dark-mode .topheader svg {
-  color: #ffffff !important;
-}
-
-/* Boxes background dark */
-body.dark-mode .lang-selected,
-body.dark-mode .profile-dropdown,
-body.dark-mode .lang-dropdown {
-  background: #2d3748 !important;
+.download-app-btn:hover {
+  background: #15803d;
 }

@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import "./HomeBanner.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
-import Loader from "./Loader"; // ✅ reusable loader
+import Loader from "./Loader";
+
+const DUMMY_BANNER = "/orange.png"; 
 
 export default function HomeBanner() {
   const [banners, setBanners] = useState([]);
   const [index, setIndex] = useState(0);
-  const [loading, setLoading] = useState(true); // ✅ loader state
+  const [loading, setLoading] = useState(true);
 
   const getBannerUrl = (banner) => {
-    if (!banner) return "/no-image.jpg";
+    if (!banner) return DUMMY_BANNER;
 
     const rawImage =
       banner.image_full_url ||
@@ -18,7 +20,7 @@ export default function HomeBanner() {
       banner.image_url ||
       banner.photo;
 
-    if (!rawImage) return "/no-image.jpg";
+    if (!rawImage) return DUMMY_BANNER;
 
     let normalizedPath = rawImage;
 
@@ -26,7 +28,7 @@ export default function HomeBanner() {
       normalizedPath = `/storage/banner/${rawImage}`;
     }
 
-    return cleanImageUrl(normalizedPath) || "/no-image.jpg";
+    return cleanImageUrl(normalizedPath) || DUMMY_BANNER;
   };
 
   useEffect(() => {
@@ -45,14 +47,15 @@ export default function HomeBanner() {
       })
       .catch((err) => {
         console.error("Banner fetch error:", err);
+        setBanners([]); 
       })
       .finally(() => {
-        setLoading(false); // ✅ stop loader
+        setLoading(false);
       });
   }, []);
 
   useEffect(() => {
-    if (!banners.length) return;
+    if (banners.length <= 1) return;
 
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % banners.length);
@@ -65,18 +68,19 @@ export default function HomeBanner() {
     <div className="banner-container max-w-7xl mx-auto px-4 py-2">
       {loading ? (
         <Loader text="Loading banners..." />
-      ) : banners.length > 0 ? (
+      ) : (
         <img
-          key={index}
-          src={getBannerUrl(banners[index])}
+          src={
+            banners.length > 0
+              ? getBannerUrl(banners[index])
+              : DUMMY_BANNER
+          }
           alt="banner"
           className="banner-image fade"
           onError={(e) => {
-            e.currentTarget.src = "/no-image.jpg";
+            e.currentTarget.src = DUMMY_BANNER;
           }}
         />
-      ) : (
-        <p className="empty-text">No banners available</p>
       )}
     </div>
   );

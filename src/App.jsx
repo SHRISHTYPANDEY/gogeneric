@@ -17,6 +17,8 @@ import Cart from "./components/pages/Cart.jsx";
 import CategoryItems from "./components/pages/CategoryItems.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import FeaturedStoreDetails from "./components/pages/FeaturedStoreDetails.jsx";
+import Wishlist from "./components/pages/Wishlist.jsx";
+import ContactUs from "./components/pages/ContactUs.jsx";
 
 function App() {
   return (
@@ -32,11 +34,14 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/doctors" element={<Doctors />} />
+        <Route path="/contactus" element={<ContactUs />} />
         <Route path="/profile" element={ <ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/view-stores/:id" element={<StoreDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/category/:id" element={<CategoryItems />} />
         <Route path="/store/:id" element={<FeaturedStoreDetails />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+
 
       </Routes>
       </AuthProvider>

@@ -3,9 +3,10 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import "./CategoryItems.css";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { addToCart } from "../../utils/cartHelper";
 import Loader from "../Loader";
+import WishlistButton from "../WishlistButton";
 
 export default function CategoryItems() {
   const { id } = useParams();
@@ -13,7 +14,10 @@ export default function CategoryItems() {
   const navigate = useNavigate();
 
   const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
   const [categoryName, setCategoryName] = useState(
     location.state?.categoryName || "Category Products"
   );
@@ -22,6 +26,18 @@ export default function CategoryItems() {
     setLoading(true);
     fetchCategoryItems();
   }, [id]);
+
+  useEffect(() => {
+    if (!search) {
+      setFilteredItems(items);
+    } else {
+      setFilteredItems(
+        items.filter((item) =>
+          item.name.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, items]);
 
   const fetchCategoryItems = async () => {
     try {
@@ -36,11 +52,13 @@ export default function CategoryItems() {
         },
       });
 
-      setItems(
+      const data =
         res.data?.items ||
         res.data?.products ||
-        []
-      );
+        [];
+
+      setItems(data);
+      setFilteredItems(data);
     } catch (err) {
       console.error("Category items error:", err?.response?.data);
     } finally {
@@ -54,18 +72,33 @@ export default function CategoryItems() {
 
   return (
     <div className="category-items-page">
-      <h2 className="page-title">{categoryName}</h2>
+      {/* 🔹 HEADER ROW */}
+      <div className="category-header">
+        <h2 className="page-title">{categoryName}</h2>
 
-      {items.length === 0 ? (
+        {/* 🔍 SEARCH BOX */}
+        <div className="search-box">
+          <Search size={16} />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {filteredItems.length === 0 ? (
         <p className="empty-text">No products found</p>
       ) : (
         <div className="items-grid">
-          {items.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <div
               key={item.id}
               className={`item-card grad-${(index % 8) + 1}`}
             >
-              {/* ➕ ADD TO CART */}
+              <WishlistButton item={item} />
+
               <div
                 className="add-cart-btn"
                 onClick={() =>

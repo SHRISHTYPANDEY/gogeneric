@@ -5,6 +5,9 @@ import { RxCross1 } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
 import { FaSignOutAlt, FaShoppingCart } from "react-icons/fa";
 import api from "../../api/axiosInstance";
+import { FaHeart } from "react-icons/fa";
+import { useWishlist } from "../../context/WishlistContext";
+
 import {
   FaUser,
   FaShoppingBag,
@@ -24,6 +27,8 @@ export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { wishlist } = useWishlist();
+
   const handleProfileClick = () => {
   setOpen(false);
   if (user) {
@@ -64,11 +69,6 @@ const fetchCartCount = async () => {
     );
   }
 };
-
-
-
-
-
   return (
     <>
       <nav className="navbar">
@@ -97,7 +97,7 @@ const fetchCartCount = async () => {
                 <Link to="/blog">Blog</Link>
               </li>
               <li>
-                <Link to="/contact">Contact Us</Link>
+                <Link to="/contactus">Contact Us</Link>
               </li>
             </ul>
 
@@ -144,6 +144,30 @@ const fetchCartCount = async () => {
             </Link>
           </li>
           <li>
+  <Link
+    to="#"
+    onClick={(e) => {
+      e.preventDefault();
+      setOpen(false);
+      if (user) {
+        navigate("/wishlist");
+      } else {
+        setShowLogin(true);
+      }
+    }}
+  >
+    <FaHeart />
+    My Wishlist
+    {wishlist.length > 0 && (
+      <span className="wishlist-badge">
+        {wishlist.length}
+      </span>
+    )}
+  </Link>
+</li>
+
+          <li>
+            
             <Link to="/orders">
               <FaShoppingBag /> My Orders
             </Link>

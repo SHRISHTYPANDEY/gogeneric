@@ -235,3 +235,30 @@ body.dark-mode .add-cart-btn {
   background: #2c3645;
   color: #fff;
 }
+.product-card {
+  position: relative;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}
+.tabs-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tab-search {
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #7b7575;
+  outline: none;
+  width: 520px;
+  font-size: 14px;
+}
+

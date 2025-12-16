@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { addToCart } from "../utils/cartHelper";
 import Loader from "./Loader";
+import WishlistButton from "./WishlistButton";
 
 export default function NearbyStores() {
   const [stores, setStores] = useState([]);
@@ -109,6 +110,7 @@ export default function NearbyStores() {
               ) : (
                 filteredStores.map((store) => (
                   <div className="store-card" key={store.id}>
+                    <WishlistButton item={store} />
                     {/* ➕ ADD TO CART */}
                     <div
                       className="add-cart-btn"
