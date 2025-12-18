@@ -3,10 +3,11 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
-import { FaSignOutAlt, FaShoppingCart } from "react-icons/fa";
+import { FaSignOutAlt, FaShoppingCart,FaBell } from "react-icons/fa";
 import api from "../../api/axiosInstance";
 import { FaHeart } from "react-icons/fa";
 import { useWishlist } from "../../context/WishlistContext";
+
 
 import {
   FaUser,
@@ -28,6 +29,29 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { wishlist } = useWishlist();
+  const [notificationCount, setNotificationCount] = useState(0);
+
+  const fetchNotifications = async () => {
+  try {
+    if (!user) return;
+
+    const token = localStorage.getItem("token");
+    const res = await api.get("/api/v1/customer/notifications", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        moduleId: 2,
+        zoneId: JSON.stringify([3]),
+      },
+    });
+
+    const unread = res.data.filter((n) => !n.read).length;
+    setNotificationCount(unread);
+  } catch (err) {
+    console.error("Notification error", err);
+  }
+};
+
+
 
   const handleProfileClick = () => {
   setOpen(false);
@@ -44,6 +68,7 @@ const handleLogout = () => {
 };
   useEffect(() => {
   fetchCartCount();
+  fetchNotifications();
    window.addEventListener("cart-updated", fetchCartCount);
   return () =>
     window.removeEventListener("cart-updated", fetchCartCount);
@@ -100,6 +125,25 @@ const fetchCartCount = async () => {
                 <Link to="/contactus">Contact Us</Link>
               </li>
             </ul>
+{/* NOTIFICATION */}
+<div
+  className="notification-icon"
+  onClick={() => {
+    setOpen(false);
+    if (user) {
+      navigate("/notifications");
+    } else {
+      setShowLogin(true);
+    }
+  }}
+>
+  <FaBell />
+  {notificationCount > 0 && (
+    <span className="notification-badge">
+      {notificationCount}
+    </span>
+  )}
+</div>
 
            {/* CART */}
   <div

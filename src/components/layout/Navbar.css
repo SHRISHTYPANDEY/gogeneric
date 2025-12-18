@@ -283,3 +283,20 @@ body.dark-mode .dark-toggle {
   scrollbar-width: thin;
   scrollbar-color: #499ad4 transparent;
 }
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: 600;
+}

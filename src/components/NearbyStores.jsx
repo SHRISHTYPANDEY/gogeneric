@@ -139,7 +139,6 @@ export default function NearbyStores() {
                     />
 
                     <h4>{store.name}</h4>
-                    <button className="view-btn">View</button>
                   </div>
                 ))
               )}

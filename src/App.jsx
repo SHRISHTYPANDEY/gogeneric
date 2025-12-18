@@ -20,6 +20,7 @@ import ContactUs from "./components/pages/ContactUs.jsx";
 import WhatsAppChat from "./components/layout/WhatsAppChat.jsx";
 import MedicineDetails from "./components/pages/MedicineDetails.jsx";
 import LoginModal from "./components/auth/LoginModal.jsx";
+import Notifications from "./components/pages/Notifications.jsx";
 
 function AppLayout() {
   const { showLoginModal, setShowLoginModal } = useAuth();
@@ -51,6 +52,8 @@ function AppLayout() {
         <Route path="/store/:id" element={<FeaturedStoreDetails />} />
         <Route path="/medicine/:id" element={<MedicineDetails />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/notifications" element={<Notifications />} />
+
       </Routes>
       {/* ✅ GLOBAL LOGIN MODAL */}
       {showLoginModal && (

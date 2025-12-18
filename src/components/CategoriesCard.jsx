@@ -65,7 +65,7 @@ export default function CategoryCards() {
                 alt={cat.name}
               />
               <p>{cat.name}</p>
-              <button
+              {/* <button
                 className="view-btn"
                 onClick={(e) => {
                   e.stopPropagation(); // prevent card click
@@ -73,7 +73,7 @@ export default function CategoryCards() {
                 }}
               >
                 View
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
