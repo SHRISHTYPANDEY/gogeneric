@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Search, X } from "lucide-react";
 import api from "../../api/axiosInstance";
 import "./Searchbar.css";
@@ -13,12 +13,14 @@ export default function Searchbar() {
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   const abortRef = useRef(null);
+  const debounceRef = useRef(null);
   const cacheRef = useRef({});
 
-  // 📍 Location
+  /* 📍 Location */
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -30,61 +32,43 @@ export default function Searchbar() {
     );
   }, []);
 
-  // 🔍 Debounce
+  /* ❌ Cleanup on unmount */
   useEffect(() => {
-    if (!query.trim() || query.length < 2 || !location) {
-      setResults([]);
-      setShowDropdown(false);
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      fetchResults(query);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [query, location]);
-
-  // ❌ Outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setShowDropdown(false);
-        setActiveIndex(-1);
-      }
+    return () => {
+      abortRef.current?.abort();
+      clearTimeout(debounceRef.current);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ⌨️ Keyboard navigation
-  const handleKeyDown = (e) => {
-    if (!showDropdown || results.length === 0) return;
+  /* 🔍 Optimized Search Handler */
+  const triggerSearch = useCallback(
+    (text) => {
+      const searchText = text.trim().toLowerCase();
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((prev) => (prev + 1) % results.length);
-    }
+      if (searchText.length < 2 || !location) {
+        setResults([]);
+        setShowDropdown(false);
+        return;
+      }
 
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((prev) =>
-        prev <= 0 ? results.length - 1 : prev - 1
-      );
-    }
+      // Clear previous debounce
+      clearTimeout(debounceRef.current);
 
-    if (e.key === "Enter" && activeIndex >= 0) {
-      handleSelect(results[activeIndex]);
-    }
+      debounceRef.current = setTimeout(() => {
+        fetchResults(searchText);
+      }, 300);
+    },
+    [location]
+  );
 
-    if (e.key === "Escape") {
-      setShowDropdown(false);
-      setActiveIndex(-1);
-    }
-  };
+  /* 🔁 Input change */
+  useEffect(() => {
+    triggerSearch(query);
+  }, [query, triggerSearch]);
 
-  // 🚀 Fetch (with cache)
+  /* 🔍 Fetch API */
   const fetchResults = async (searchText) => {
+    // Cache hit
     if (cacheRef.current[searchText]) {
       setResults(cacheRef.current[searchText]);
       setShowDropdown(true);
@@ -92,21 +76,24 @@ export default function Searchbar() {
     }
 
     try {
-      if (abortRef.current) abortRef.current.abort();
+      abortRef.current?.abort();
       abortRef.current = new AbortController();
 
       setLoading(true);
 
-      const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: searchText },
-        headers: {
-          zoneId: "[3]",
-          moduleId: 2,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        signal: abortRef.current.signal,
-      });
+      const res = await api.get(
+        "/api/v1/items/item-or-store-search",
+        {
+          params: { name: searchText },
+          headers: {
+            zoneId: "[3]",
+            moduleId: 2,
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
+          signal: abortRef.current.signal,
+        }
+      );
 
       const data = [
         ...(res.data?.items || []).map((i) => ({
@@ -133,23 +120,57 @@ export default function Searchbar() {
     }
   };
 
-  // ✅ Select item
-const handleSelect = (item) => {
-  setShowDropdown(false);
-  setIsMobileOpen(false);
-  setActiveIndex(-1);
+  /* ⌨️ Keyboard navigation */
+  const handleKeyDown = (e) => {
+    if (!showDropdown || results.length === 0) return;
 
-  if (item.type === "medicine") {
-    const id = item.id.replace("item-", "");
-    navigate(`/medicine/${id}`);
-  }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % results.length);
+    }
 
-  if (item.type === "store") {
-    const id = item.id.replace("store-", "");
-    navigate(`/view-stores/${id}`);
-  }
-};
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
+    }
 
+    if (e.key === "Enter" && activeIndex >= 0) {
+      handleSelect(results[activeIndex]);
+    }
+
+    if (e.key === "Escape") {
+      setShowDropdown(false);
+      setActiveIndex(-1);
+    }
+  };
+
+  /* ✅ Select result */
+  const handleSelect = (item) => {
+    setShowDropdown(false);
+    setIsMobileOpen(false);
+    setActiveIndex(-1);
+
+    const id = item.id.split("-")[1];
+
+    navigate(
+      item.type === "medicine"
+        ? `/medicine/${id}`
+        : `/view-stores/${id}`
+    );
+  };
+
+  /* ❌ Outside click */
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setShowDropdown(false);
+        setActiveIndex(-1);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="header-main max-w-7xl mx-auto px-4 py-3">
@@ -163,9 +184,8 @@ const handleSelect = (item) => {
           <div className="search-bar">
             <Search size={18} />
             <input
-              type="text"
-              placeholder="Search medicines, brands, stores..."
               value={query}
+              placeholder="Search medicines, brands, stores..."
               onChange={(e) => setQuery(e.target.value)}
               onFocus={() => {
                 setShowDropdown(true);

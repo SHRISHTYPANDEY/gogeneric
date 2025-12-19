@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import "./NearbyStores.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
@@ -13,55 +13,82 @@ export default function NearbyStores() {
   const [categories, setCategories] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [loading, setLoading] = useState(true);
+
   const scrollRef = useRef(null);
+  const abortRef = useRef(null);
+
   const navigate = useNavigate();
   const location = useLocation();
 
+  /* ❌ Cleanup */
   useEffect(() => {
-    setLoading(true);
-    api
-      .get("/api/v1/items/basic?limit=20&offset=0", {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
+
+  /* 📦 Fetch basic medicines (Abort-safe) */
+  const fetchBasicMedicines = useCallback(async () => {
+    try {
+      abortRef.current?.abort();
+      abortRef.current = new AbortController();
+
+      setLoading(true);
+
+      const res = await api.get("/api/v1/items/basic", {
+        params: {
+          limit: 20,
+          offset: 0,
+        },
         headers: {
           zoneId: JSON.stringify([3]),
           moduleId: 2,
         },
-      })
-      .then((res) => {
-        const products =
-          res.data.items ||
-          res.data.products ||
-          res.data.data ||
-          res.data.medicines ||
-          [];
-
-        const cats =
-          res.data.categories ||
-          res.data.filters ||
-          res.data.category_list ||
-          [];
-
-        setStores(products);
-        setCategories(cats);
-      })
-      .catch((err) => {
-        console.log("API ERROR:", err);
-      })
-      .finally(() => {
-        setLoading(false);
+        signal: abortRef.current.signal,
       });
+
+      const products =
+        res.data.items ||
+        res.data.products ||
+        res.data.data ||
+        res.data.medicines ||
+        [];
+
+      const cats =
+        res.data.categories ||
+        res.data.filters ||
+        res.data.category_list ||
+        [];
+
+      setStores(products);
+      setCategories(cats);
+    } catch (err) {
+      if (err.name !== "CanceledError") {
+        console.error("API ERROR:", err);
+      }
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  /* 🔁 Initial load */
+  useEffect(() => {
+    fetchBasicMedicines();
+  }, [fetchBasicMedicines]);
+
+  /* 🔍 Derived filter */
   const filteredStores =
     activeFilter === "All"
       ? stores
       : stores.filter((p) => p.category_id === activeFilter);
 
+  /* ⬅️➡️ Scroll controls */
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
   };
 
   return (
@@ -75,7 +102,7 @@ export default function NearbyStores() {
         <Loader text="Loading medicines..." />
       ) : (
         <>
-          {/* FILTERS */}
+          {/* 🟦 FILTERS */}
           <div className="nearby-filters">
             <button
               className={`nearby-filter-btn ${
@@ -99,6 +126,7 @@ export default function NearbyStores() {
             ))}
           </div>
 
+          {/* ⬅️ */}
           <button className="nearby-btn left" onClick={scrollLeft}>
             ❮
           </button>
@@ -157,6 +185,7 @@ export default function NearbyStores() {
             </div>
           </div>
 
+          {/* ➡️ */}
           <button className="nearby-btn right" onClick={scrollRight}>
             ❯
           </button>

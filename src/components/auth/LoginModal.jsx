@@ -103,7 +103,7 @@ export default function LoginModal({ onClose }) {
         field_type: identifier.includes("@") ? "email" : "phone",
         guest_id: guestId,
       });
-      console.log("FULL LOGIN RESPONSEEEE:", res.data);
+      // console.log("FULL LOGIN RESPONSEEEE:", res.data);
 
       const apiUser = res.data?.user || res.data;
 

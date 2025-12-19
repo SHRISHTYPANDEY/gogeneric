@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import "./Highlights.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../api/axiosInstance";
@@ -7,49 +7,62 @@ export default function Highlights() {
   const [highlights, setHighlights] = useState([]);
   const scrollRef = useRef(null);
 
- useEffect(() => {
-  console.log("useEffect running...");
-  fetchAdvertisements();
-}, []);
+  const abortRef = useRef(null);
+  const rafRef = useRef(null);
 
-const fetchAdvertisements = async () => {
-  console.log("Function fetchAdvertisements() started");
-  console.log("Token:", localStorage.getItem("token"));
+  /* ❌ Cleanup */
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
+  /* 📢 Fetch Advertisements (Abort-safe) */
+  const fetchAdvertisements = useCallback(async () => {
+    try {
+      abortRef.current?.abort();
+      abortRef.current = new AbortController();
 
-  try {
-  const response = await api.get("/api/v1/advertisement/list", {
-  headers: {
-  zoneId: JSON.stringify([1]),
-  moduleId: "2",
-  Authorization: `Bearer ${localStorage.getItem("token")}`,
-},
+      const token = localStorage.getItem("token");
 
-});
+      const res = await api.get("/api/v1/advertisement/list", {
+        headers: {
+          zoneId: JSON.stringify([1]),
+          moduleId: 2,
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        signal: abortRef.current.signal,
+      });
 
-    const ads = response.data;
- console.log(" highlight API Response:", response.data);
-    const formattedAds = ads.map((ad) => ({
-      id: ad.id,
-      type: ad.type === "video" ? "video" : "image",
-      src: ad.file_full_path || ad.video_link,
-      title: ad.store?.name || "Advertisement",
-    }));
+      const ads = res.data || [];
 
-    setHighlights(formattedAds);
-  } catch (err) {
-  console.log("API ERROR DETAILS:");
-  console.log("Error Message:", err.message);
-  console.log("Error Response:", err.response?.data);
-  console.log("Status:", err.response?.status);
-  console.log("Headers:", err.response?.headers);
-}
-};
+      const formattedAds = ads.map((ad) => ({
+        id: ad.id,
+        type: ad.type === "video" ? "video" : "image",
+        src: ad.file_full_path || ad.video_link,
+        title: ad.store?.name || "Advertisement",
+      }));
+
+      setHighlights(formattedAds);
+    } catch (err) {
+      if (err.name !== "CanceledError") {
+        console.error("Advertisement API error:", err);
+      }
+    }
+  }, []);
+
+  /* 🔁 Initial load */
+  useEffect(() => {
+    fetchAdvertisements();
+  }, [fetchAdvertisements]);
+
+  /* 🔄 Auto scroll (RAF-safe) */
   useEffect(() => {
     const slider = scrollRef.current;
     if (!slider) return;
 
-    let speed = 1;
+    let speed = 0.6;
 
     const autoScroll = () => {
       slider.scrollLeft += speed;
@@ -58,18 +71,23 @@ const fetchAdvertisements = async () => {
         slider.scrollLeft = 0;
       }
 
-      requestAnimationFrame(autoScroll);
+      rafRef.current = requestAnimationFrame(autoScroll);
     };
 
-    autoScroll();
+    rafRef.current = requestAnimationFrame(autoScroll);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
+  /* ⬅️➡️ Manual scroll */
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
   };
 
   return (
@@ -84,11 +102,9 @@ const fetchAdvertisements = async () => {
         <div className="highlight-scroll">
           {highlights.map((item) => (
             <div key={item.id} className="highlight-card">
-              {/* IMAGE */}
               {item.type === "image" ? (
                 <img src={item.src} alt={item.title} />
               ) : (
-                // YOUTUBE VIDEO
                 <iframe
                   src={
                     item.src.includes("youtube")
@@ -98,7 +114,7 @@ const fetchAdvertisements = async () => {
                   title={item.title}
                   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                ></iframe>
+                />
               )}
               <p className="highlight-name">{item.title}</p>
             </div>

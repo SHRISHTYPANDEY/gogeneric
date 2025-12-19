@@ -1,0 +1,304 @@
+/* Layout & Typography */
+.plans-section {
+  background-color: #f8fafc;
+  padding: 80px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.plans-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.plans-heading {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.plans-heading .highlight {
+  color: #0d9488;
+}
+
+.plans-subheading {
+  color: #64748b;
+  margin-bottom: 50px;
+  font-size: 1.1rem;
+}
+
+/* Grid System */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  align-items: stretch; /* Cards ki height barabar rakhega */
+  padding: 20px 0;
+}
+
+/* Base Card Styling */
+.plan-card {
+  background: #ffffff;
+  border-radius: 28px; /* Extra rounded for modern look */
+  padding: 40px 30px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Premium Spring effect */
+}
+
+/* Hover Effect (For Non-Selected Cards) */
+.plan-card:hover:not(.active-highlight) {
+  transform: translateY(-8px);
+  border-color: #cbd5e1;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* Selection Logic (Ubhar kar dikhne wala part) */
+.active-highlight {
+  background: #ffffff;
+  border: 2.5px solid #0d9488 !important;
+  transform: scale(1.08) !important; /* Zyada ubhar kar dikhega */
+  box-shadow: 0 30px 60px -12px rgba(13, 148, 136, 0.25); /* Deep shadow for depth */
+  z-index: 10;
+}
+
+/* Badge Styling */
+.popular-badge {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0d9488;
+  color: white;
+  padding: 6px 20px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.3);
+}
+
+/* Content Styling */
+.plan-header {
+  margin-bottom: 30px;
+}
+
+.plan-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-subtitle {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+
+.plan-price {
+  font-size: 3.5rem; /* Large and bold price */
+  font-weight: 900;
+  color: #0f172a;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+/* Features List */
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+  text-align: left;
+  flex-grow: 1; /* Push button to bottom */
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.check-mark {
+  color: #0d9488;
+  background: #f0fdfa;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-right: 12px;
+  font-size: 0.8rem;
+}
+
+/* Buttons */
+.plan-button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: #0d9488;
+  color: white;
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+}
+
+.btn-primary:hover {
+  background: #0f766e;
+  box-shadow: 0 12px 25px rgba(13, 148, 136, 0.4);
+}
+
+.btn-outline {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-outline:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .active-highlight {
+    transform: scale(1.03) !important;
+    margin: 15px 0;
+  }
+  .plans-heading {
+    font-size: 2rem;
+  }
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+/* Modal Box */
+.modal-box {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Close Button (Top Right - Simple & Straight) */
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.close-modal-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.modal-title span {
+  color: #0d9488;
+}
+
+/* Booking Rows Styling */
+.booking-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.option-icon {
+  font-size: 1.2rem;
+  margin-right: 15px;
+}
+
+.option-info {
+  flex-grow: 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.option-title {
+  font-weight: 600;
+  color: #334155;
+  font-size: 1rem;
+}
+
+.option-subtitle {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.arrow-right {
+  color: #cbd5e1;
+  font-size: 1.2rem;
+  font-weight: 300;
+}
+
+.option-row:hover {
+  border-color: #0d9488;
+  background: #f0fdfa;
+}
+
+.option-row:hover .arrow-right {
+  color: #0d9488;
+  transform: translateX(3px);
+}

@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./Stores.css";
 import { MapPin, Star } from "lucide-react";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
-
 
 export default function Stores() {
   const [stores, setStores] = useState([]);
@@ -13,55 +12,63 @@ export default function Stores() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
-const [reviews, setReviews] = useState([]);
-const [reviewsLoading, setReviewsLoading] = useState(false);
 
+  const abortRef = useRef(null);
   const navigate = useNavigate();
 
-  
+  /* ================= FETCH STORES ================= */
+  const fetchStoresByFilter = async (filter) => {
+    // Abort previous request
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
 
-  async function fetchStoresByFilter(filter) {
-    console.log(" FETCH TRIGGERED FOR FILTER:", filter);
+    const controller = new AbortController();
+    abortRef.current = controller;
 
     setLoading(true);
 
     let url = "/api/v1/stores/get-stores/all";
-
     if (filter === "Newly Joined")
       url = "/api/v1/stores/get-stores/newly-joined";
-
     if (filter === "Popular") url = "/api/v1/stores/popular";
-
     if (filter === "Top Rated") url = "/api/v1/stores/get-stores/top-rated";
-
-    // console.log("API URL:", url);
 
     try {
       const res = await api.get(url, {
-        headers: { zoneId: JSON.stringify([3]),
-           moduleId: 2,
-         },
-       
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+        signal: controller.signal,
       });
 
-      console.log("API RESPONSE:", res.data);
-
-      const data = res.data.stores;
-
+      const data = res.data?.stores || [];
       setStores(data);
       setFilteredStores(data);
     } catch (err) {
-      console.log(" Filtered API Error:", err.response?.data);
+      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") {
+        // Request was aborted – ignore
+        return;
+      }
+      console.log("Stores API Error:", err.response?.data);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
+  /* ================= FILTER CHANGE ================= */
   useEffect(() => {
     fetchStoresByFilter(activeFilter);
+
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
   }, [activeFilter]);
 
+  /* ================= CATEGORY FILTER ================= */
   useEffect(() => {
     let updated = [...stores];
 
@@ -114,7 +121,6 @@ const [reviewsLoading, setReviewsLoading] = useState(false);
                 className="store-card-6am"
                 key={store.id}
                 onClick={() => navigate(`/view-stores/${store.id}`)}
-                style={{ cursor: "pointer" }}
               >
                 <div className="store-image-wrapper">
                   <img
@@ -122,8 +128,8 @@ const [reviewsLoading, setReviewsLoading] = useState(false);
                       store.cover_photo_full_url || store.cover_photo
                     )}
                     alt={store.name}
+                    loading="lazy"
                   />
-
                   {store.offer && (
                     <div className="store-offer-badge">{store.offer}</div>
                   )}
@@ -131,7 +137,6 @@ const [reviewsLoading, setReviewsLoading] = useState(false);
 
                 <div className="store-content-vertical">
                   <h3 className="store-name">{store.name}</h3>
-
                   <p className="store-address">
                     {store.address || "Address unavailable"}
                   </p>
@@ -139,9 +144,10 @@ const [reviewsLoading, setReviewsLoading] = useState(false);
                   <div className="store-bottom-row">
                     <span className="store-distance">
                       <MapPin size={14} />
-                      {store.distance > 1000
-                        ? (store.distance / 1000).toFixed(1)
-                        : Number(store.distance).toFixed(1)}{" "}
+                      {(store.distance > 1000
+                        ? store.distance / 1000
+                        : store.distance
+                      ).toFixed(1)}{" "}
                       km
                     </span>
 

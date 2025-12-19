@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import "./MedicineDetails.css";
@@ -11,17 +11,33 @@ import Loader from "../Loader";
 export default function MedicineDetails() {
   const { id } = useParams();
   const location = useLocation();
+  const abortRef = useRef(null);
 
   const [medicine, setMedicine] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const passedPrice = location.state?.price || null;
 
+  /* ================= FETCH DETAILS ================= */
   useEffect(() => {
     fetchMedicineDetails();
+
+    return () => {
+      if (abortRef.current) {
+        abortRef.current.abort();
+      }
+    };
   }, [id]);
 
   const fetchMedicineDetails = async () => {
+    // Abort previous request
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     try {
       const res = await api.get(`/api/v1/items/details/${id}`, {
@@ -29,10 +45,18 @@ export default function MedicineDetails() {
           zoneId: JSON.stringify([3]),
           moduleId: 2,
         },
+        signal: controller.signal,
       });
 
       setMedicine(res.data);
     } catch (err) {
+      if (
+        err.name === "CanceledError" ||
+        err.code === "ERR_CANCELED"
+      ) {
+        // request aborted → ignore
+        return;
+      }
       console.error("Medicine fetch error:", err);
       toast.error("Failed to load medicine details");
     } finally {
@@ -40,7 +64,6 @@ export default function MedicineDetails() {
     }
   };
 
-  /* ================= LOADER ================= */
   if (loading) {
     return (
       <div className="medicine-loader">
@@ -91,6 +114,7 @@ export default function MedicineDetails() {
               medicine.image_full_url || medicine.image
             )}
             alt={medicine.name}
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = "/no-image.jpg";
             }}

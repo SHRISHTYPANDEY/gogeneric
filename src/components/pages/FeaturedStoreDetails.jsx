@@ -27,7 +27,7 @@ export default function FeaturedStoreDetails() {
           moduleId: 2,
         },
       });
-      console.log("Recommended API full response:", res.data);
+      // console.log("Recommended API full response:", res.data);
       console.log("Store ID from URL:", id);
 
 

@@ -36,7 +36,52 @@ const [loading, setLoading] = useState(false);
     setUser(JSON.parse(storedUser));
   }, [navigate]);
 
-  const handleChangePassword = async () => {
+
+const handleProfileUpdate = async () => {
+  try {
+    setLoading(true);
+
+    const token = localStorage.getItem("token");
+
+    const payload = {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      button_type: "profile",
+    };
+
+    const res = await api.post(
+      "/api/v1/customer/update-profile",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      }
+    );
+
+    toast.success(res.data.message || "Profile updated");
+
+    // save updated user
+    localStorage.setItem("user", JSON.stringify(user));
+
+    setEditing(false);
+  } catch (err) {
+    console.error("Profile update error:", err);
+    toast.error(
+      err?.response?.data?.message ||
+      err?.response?.data?.errors?.[0]?.message ||
+      "Profile update failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+const handleChangePassword = async () => {
   if (!newPassword || !confirmPassword) {
     toast.error("All fields are required");
     return;
@@ -50,26 +95,40 @@ const [loading, setLoading] = useState(false);
   try {
     setLoading(true);
 
-    await api.post("/api/v1/auth/forgot-password", {
-      password: newPassword,
-      confirm_password: confirmPassword,
-    });
+    const token = localStorage.getItem("token");
 
-    toast.success("Password updated successfully");
+    const res = await api.post(
+      "/api/v1/customer/update-profile",
+      {
+        password: newPassword,
+        button_type: "change_password",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      }
+    );
 
-    // reset + close modal
+    toast.success(res.data.message || "Password updated");
+
     setShowChangePassword(false);
     setNewPassword("");
     setConfirmPassword("");
   } catch (err) {
     console.error("Password error:", err);
     toast.error(
-      err?.response?.data?.message || "Failed to update password"
+      err?.response?.data?.message ||
+        err?.response?.data?.errors?.[0]?.message ||
+        "Failed to update password"
     );
   } finally {
     setLoading(false);
   }
 };
+
 
   /* ================= FETCH WALLET ================= */
  const fetchWalletBalance = async () => {
@@ -92,7 +151,7 @@ const [loading, setLoading] = useState(false);
       }
     );
 
-    console.log("Wallet API FULL RESPONSE:", res.data);
+    // console.log("Wallet API FULL RESPONSE:", res.data);
 
     const transactions = res.data?.transactions || [];
 
@@ -162,19 +221,27 @@ const [loading, setLoading] = useState(false);
               }
             />
 
-            <Input label="Email" value={user.email} disabled />
+            <Input label="Email" value={user.email}   onChange={(e) =>
+    setUser({ ...user, email: e.target.value })
+  } />
+            <Input
+  label="Phone"
+  value={user.phone || ""}
+  onChange={(e) =>
+    setUser({ ...user, phone: e.target.value })
+  }
+/>
+
 
             <div className="flex gap-3 mt-4">
-              <button
-                onClick={() => {
-                  localStorage.setItem("user", JSON.stringify(user));
-                  setEditing(false);
-                  toast.success("Profile updated");
-                }}
-                className="bg-teal-600 text-white px-4 py-2 rounded-lg"
-              >
-                Save
-              </button>
+            <button
+  onClick={handleProfileUpdate}
+  disabled={loading}
+  className="bg-teal-600 text-white px-4 py-2 rounded-lg"
+>
+  {loading ? "Saving..." : "Save"}
+</button>
+
 
               <button
                 onClick={() => setEditing(false)}

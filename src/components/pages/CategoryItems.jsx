@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
@@ -18,29 +18,29 @@ export default function CategoryItems() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  const [categoryName, setCategoryName] = useState(
+  const abortRef = useRef(null);
+  const debounceRef = useRef(null);
+
+  const [categoryName] = useState(
     location.state?.categoryName || "Category Products"
   );
 
+  /* ❌ Cleanup */
   useEffect(() => {
-    setLoading(true);
-    fetchCategoryItems();
-  }, [id]);
+    return () => {
+      abortRef.current?.abort();
+      clearTimeout(debounceRef.current);
+    };
+  }, []);
 
-  useEffect(() => {
-    if (!search) {
-      setFilteredItems(items);
-    } else {
-      setFilteredItems(
-        items.filter((item) =>
-          item.name.toLowerCase().includes(search.toLowerCase())
-        )
-      );
-    }
-  }, [search, items]);
-
-  const fetchCategoryItems = async () => {
+  /* 📦 Fetch category items (AbortController) */
+  const fetchCategoryItems = useCallback(async () => {
     try {
+      abortRef.current?.abort();
+      abortRef.current = new AbortController();
+
+      setLoading(true);
+
       const res = await api.get(`/api/v1/categories/items/${id}`, {
         params: {
           limit: 20,
@@ -50,6 +50,7 @@ export default function CategoryItems() {
           zoneId: JSON.stringify([3]),
           moduleId: 2,
         },
+        signal: abortRef.current.signal,
       });
 
       const data =
@@ -60,11 +61,39 @@ export default function CategoryItems() {
       setItems(data);
       setFilteredItems(data);
     } catch (err) {
-      console.error("Category items error:", err?.response?.data);
+      if (err.name !== "CanceledError") {
+        console.error("Category items error:", err?.response?.data);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  /* 🔁 Load when category changes */
+  useEffect(() => {
+    fetchCategoryItems();
+  }, [fetchCategoryItems]);
+
+  /* 🔍 Debounced local search */
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      if (!search.trim()) {
+        setFilteredItems(items);
+        return;
+      }
+
+      const lower = search.toLowerCase();
+      setFilteredItems(
+        items.filter((item) =>
+          item.name.toLowerCase().includes(lower)
+        )
+      );
+    }, 250);
+
+    return () => clearTimeout(debounceRef.current);
+  }, [search, items]);
 
   if (loading) {
     return <Loader text="Loading products..." />;
@@ -96,27 +125,27 @@ export default function CategoryItems() {
             <div
               key={item.id}
               className={`item-card grad-${(index % 8) + 1}`}
-              onClick={()=>{
-                navigate(`/medicine/${item.id}`,{
-                  state:{
-                    price :item.price,
-                    store_id:item.store_id,
+              onClick={() =>
+                navigate(`/medicine/${item.id}`, {
+                  state: {
+                    price: item.price,
+                    store_id: item.store_id,
                   },
                 })
-              }}
+              }
             >
               <WishlistButton item={item} />
+
               <div
                 className="add-cart-btn"
-                onClick={(e) =>{
+                onClick={(e) => {
                   e.stopPropagation();
                   addToCart({
                     item,
                     navigate,
                     location,
-                  })
-                }
-                }
+                  });
+                }}
               >
                 <Plus size={18} />
               </div>

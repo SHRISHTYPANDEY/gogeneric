@@ -21,13 +21,14 @@ import WhatsAppChat from "./components/layout/WhatsAppChat.jsx";
 import MedicineDetails from "./components/pages/MedicineDetails.jsx";
 import LoginModal from "./components/auth/LoginModal.jsx";
 import Notifications from "./components/pages/Notifications.jsx";
-
+import DoctorDetails from "./components/pages/DoctorDetails.jsx";
+import DoctorPlans from "./components/pages/PlansPage.jsx";
 function AppLayout() {
   const { showLoginModal, setShowLoginModal } = useAuth();
 
   return (
     <>
-      <Toaster position="top-right" toastOptions={{ style: { zIndex: 99999 } }} />
+      <Toaster position="top-right" toastOptions={{ style: { zIndex: 9999999 } }} />
       <TopHeader />
       <Navbar />
       <Searchbar />
@@ -37,6 +38,9 @@ function AppLayout() {
         <Route path="/about" element={<About />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/doctors" element={<Doctors />} />
+<Route path="/doctors/:id" element={<DoctorDetails />} />
+<Route path="/doctors/:id/plans" element={<DoctorPlans />} />
+
         <Route path="/contactus" element={<ContactUs />} />
         <Route
           path="/profile"

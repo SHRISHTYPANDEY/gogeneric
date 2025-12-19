@@ -9,8 +9,10 @@ export default function FeaturedStores() {
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
+  const animationRef = useRef(null);
   const navigate = useNavigate();
 
+  /* ================= FETCH STORES ================= */
   useEffect(() => {
     fetchStores();
   }, []);
@@ -33,13 +35,45 @@ export default function FeaturedStores() {
     }
   };
 
+  /* ================= AUTO SCROLL ================= */
+  useEffect(() => {
+    const slider = scrollRef.current;
+    if (!slider || stores.length === 0) return;
+
+    let speed = 0.6;
+
+    const autoScroll = () => {
+      slider.scrollLeft += speed;
+
+      if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth) {
+        slider.scrollLeft = 0;
+      }
+
+      animationRef.current = requestAnimationFrame(autoScroll);
+    };
+
+    animationRef.current = requestAnimationFrame(autoScroll);
+
+    return () => cancelAnimationFrame(animationRef.current);
+  }, [stores]);
+
+  const pauseScroll = () => cancelAnimationFrame(animationRef.current);
+  const resumeScroll = () => {
+    animationRef.current = requestAnimationFrame(() => {
+      scrollRef.current.scrollLeft += 0.6;
+    });
+  };
+
+  /* ================= MANUAL SCROLL ================= */
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -400, behavior: "smooth" });
   };
+
   const scrollRight = () => {
     scrollRef.current.scrollBy({ left: 400, behavior: "smooth" });
   };
 
+  /* ================= UI ================= */
   return (
     <div className="fs-container max-w-7xl mx-auto px-4">
       <div className="fs-header">
@@ -50,19 +84,28 @@ export default function FeaturedStores() {
       </div>
 
       {loading && <p className="fs-loading">Loading Stores...</p>}
-      
+
       {!loading && stores.length > 0 && (
         <div className="fs-relative-wrapper">
           <button className="fs-scroll-btn fs-left" onClick={scrollLeft}>
             <ChevronLeft size={22} />
           </button>
 
-          <div className="fs-wrapper" ref={scrollRef}>
+          <div
+            className="fs-wrapper"
+            ref={scrollRef}
+            onMouseEnter={pauseScroll}
+            onMouseLeave={resumeScroll}
+          >
             <div className="fs-scroll-content">
               {stores.map((store) => {
-                const finalImage = cleanImageUrl(store.logo || store.image_full_url);
+                const image = cleanImageUrl(
+                  store.logo || store.image_full_url
+                );
                 const isOpen = store.open === 1 || store.is_open === 1;
-                const distance = store.distance ? `${store.distance.toFixed(1)} km` : null;
+                const distance = store.distance
+                  ? `${store.distance.toFixed(1)} km`
+                  : null;
 
                 return (
                   <div
@@ -71,15 +114,27 @@ export default function FeaturedStores() {
                     onClick={() => navigate(`/store/${store.id}`)}
                   >
                     <div className="fs-img-container">
-                       <img src={finalImage || "/no-image.jpg"} alt={store.name} />
+                      <img
+                        src={image || "/no-image.jpg"}
+                        alt={store.name}
+                        loading="lazy"
+                      />
                     </div>
-                    
+
                     <h3 className="fs-name">{store.name}</h3>
-                    <p className="fs-address">{store.address || "Address not available"}</p>
-                    
+                    <p className="fs-address">
+                      {store.address || "Address not available"}
+                    </p>
+
                     <div className="fs-meta">
-                      {distance && <span className="fs-distance">📍 {distance}</span>}
-                      <span className={`fs-status ${isOpen ? "fs-open" : "fs-closed"}`}>
+                      {distance && (
+                        <span className="fs-distance">📍 {distance}</span>
+                      )}
+                      <span
+                        className={`fs-status ${
+                          isOpen ? "fs-open" : "fs-closed"
+                        }`}
+                      >
                         {isOpen ? "Open Now" : "Closed"}
                       </span>
                     </div>

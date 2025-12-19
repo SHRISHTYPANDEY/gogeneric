@@ -1,192 +1,236 @@
-/* ================= PREMIUM SHOPPING CART (FIXED) ================= */
+/* ================= MODERN PREMIUM CART ================= */
 
 .cart-page {
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 60px auto;
   padding: 0 20px;
   min-height: 70vh;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .cart-title {
-  font-size: 32px;
+  font-size: 34px;
   font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 30px;
-  letter-spacing: -1px;
+  color: #020617;
+  margin-bottom: 35px;
+  letter-spacing: -0.8px;
 }
 
+/* ===== LAYOUT ===== */
 .cart-layout {
   display: grid;
-  grid-template-columns: 1.8fr 1fr;
-  gap: 30px;
-  align-items: start;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  align-items: flex-start;
 }
 
-/* 🔹 CART ITEMS LIST */
+/* ===== CART LIST ===== */
 .cart-items {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
+/* ===== CART ITEM ===== */
 .cart-item {
   display: grid;
-  /* Columns fix: Image | Info | Qty | Total | Delete */
-  grid-template-columns: 100px 1.5fr 120px 100px 50px; 
+  grid-template-columns: 90px 1.6fr 120px 120px 44px;
   align-items: center;
-  gap: 20px;
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 24px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
-  position: relative; /* Fixed for mobile absolute delete icon */
-  transition: all 0.3s ease;
+  gap: 18px;
+  background: linear-gradient(180deg, #ffffff, #fbfbfb);
+  padding: 22px;
+  border-radius: 22px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+  position: relative;
 }
 
 .cart-item:hover {
-  border-color: #f57c00;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+  border-color: #f97316;
 }
 
-/* 🖼️ ITEM IMAGE */
+/* ===== IMAGE ===== */
 .cart-img {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  border-radius: 16px;
+  border-radius: 14px;
   background: #f8fafc;
-  padding: 8px;
+  padding: 10px;
 }
 
-/* 🏷️ ITEM INFO */
+/* ===== INFO ===== */
 .item-info h4 {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 4px;
+  color: #0f172a;
+  margin-bottom: 6px;
 }
 
 .item-info p {
   font-size: 15px;
-  font-weight: 600;
-  color: #f57c00;
+  font-weight: 700;
+  color: #f97316;
 }
 
-/* 🔢 QUANTITY CONTROL */
+/* ===== QTY ===== */
 .qty-control {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: #f1f5f9;
-  padding: 6px;
+  padding: 6px 8px;
   border-radius: 14px;
   width: 110px;
 }
 
 .qty-control button {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
   border: none;
-  background: #ffffff;
-  color: #0f172a;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  background: white;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: 0.2s ease;
+}
+
+.qty-control button:hover {
+  background: #f97316;
+  color: white;
+  transform: scale(1.1);
 }
 
 .qty-control span {
   font-weight: 700;
   font-size: 14px;
+  color: #020617;
 }
 
-/* 💰 PRICE */
+/* ===== PRICE ===== */
 .item-total {
-  font-size: 17px;
-  font-weight: 800;
-  color: #0f172a;
   text-align: right;
+  font-size: 18px;
+  font-weight: 800;
+  color: #020617;
 }
 
-/* 🗑️ DELETE BUTTON (FIXED VISIBILITY) */
+/* ===== DELETE ===== */
 .delete {
-  color: #94a3b8;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  display: flex !important; /* Ensure it's visible */
-  align-items: center;
-  justify-content: center;
+  width: 38px;
+  height: 38px;
+  display: grid !important;
+  place-items: center;
   border-radius: 12px;
   background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  color: #94a3b8;
   transition: all 0.2s ease;
-  border: 1px solid #f1f5f9;
-  justify-self: center;
 }
 
 .delete:hover {
-  background: #fef2f2;
+  background: #fee2e2;
   color: #ef4444;
-  border-color: #fee2e2;
-  transform: scale(1.1);
+  border-color: #fecaca;
+  transform: scale(1.15);
 }
 
-/* 🧾 SUMMARY CARD */
+/* ===== SUMMARY ===== */
 .cart-summary {
-  background: #ffffff;
+  background: white;
   padding: 30px;
   border-radius: 28px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
   position: sticky;
-  top: 100px;
+  top: 110px;
 }
 
+.cart-summary h3 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: #334155;
+}
+
+.summary-row.total {
+  font-size: 18px;
+  font-weight: 800;
+  border-top: 1px dashed #e5e7eb;
+  padding-top: 14px;
+  margin-top: 20px;
+  color: #020617;
+}
+
+/* ===== CHECKOUT ===== */
 .checkout-btn {
   width: 100%;
-  margin-top: 25px;
-  padding: 16px;
-  background: #0f172a;
-  color: #fff;
-  border-radius: 16px;
+  margin-top: 26px;
+  padding: 18px;
+  background: linear-gradient(135deg, #020617, #1e293b);
+  color: white;
+  font-size: 16px;
   font-weight: 700;
+  border-radius: 18px;
   border: none;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.25s ease;
 }
 
 .checkout-btn:hover {
-  background: #f57c00;
+  background: linear-gradient(135deg, #f97316, #fb923c);
   transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(249, 115, 22, 0.4);
 }
 
-/* 📱 MOBILE OPTIMIZATION (Trash button special fix) */
+/* ===== STATES ===== */
+.cart-loading,
+.empty-cart {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 80px;
+}
+
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
-  .cart-layout { grid-template-columns: 1fr; }
-  
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
   .cart-item {
-    grid-template-columns: 80px 1fr;
-    grid-template-rows: auto auto;
-    padding-right: 50px; /* Space for trash icon */
+    grid-template-columns: 70px 1fr;
+    padding-right: 56px;
+  }
+
+  .qty-control {
+    margin-top: 12px;
   }
 
   .delete {
     position: absolute;
-    right: 15px;
+    right: 16px;
     top: 50%;
     transform: translateY(-50%);
   }
-
-  .qty-control {
-    grid-row: 2;
-    margin-top: 10px;
-  }
 }
 
-/* Lucide Icon Size Force */
+/* Force Lucide Size */
 svg.delete {
   width: 20px !important;
   height: 20px !important;

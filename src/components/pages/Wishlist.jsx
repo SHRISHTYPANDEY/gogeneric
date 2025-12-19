@@ -66,7 +66,7 @@ export default function Wishlist() {
   return (
     <div className="wishlist-page max-w-7xl mx-auto">
       <h2 className="wishlist-heading">
-        <Heart size={20} /> My Wishlist
+        <Heart size={20} /> Your Wishlist
       </h2>
 
       <div className="items-grid">

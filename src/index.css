@@ -23,7 +23,24 @@ body {
   padding: 0;
 }
 
-.react-hot-toast {
+/* 🔥 FORCE toast on top of EVERYTHING */
+.toast-container {
+  z-index: 2147483647 !important;
   position: fixed !important;
-  z-index: 2147483647 !important; /* browser max */
+  top: 20px !important;
+}
+
+/* react-hot-toast internal wrapper */
+.react-hot-toast {
+  z-index: 2147483647 !important;
+}
+
+/* login modal overlay fix */
+.login-overlay {
+  z-index: 9999;
+}
+
+/* any full screen modal */
+.modal-overlay {
+  z-index: 9999;
 }
