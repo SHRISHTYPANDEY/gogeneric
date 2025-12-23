@@ -28,7 +28,7 @@ export default function Highlights() {
 
       const res = await api.get("/api/v1/advertisement/list", {
         headers: {
-          zoneId: JSON.stringify([1]),
+          zoneId: JSON.stringify([3]),
           moduleId: 2,
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },

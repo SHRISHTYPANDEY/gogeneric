@@ -160,13 +160,24 @@ export default function TopHeader() {
       )}
 
       {/* LOCATION MODAL */}
-      {openLocationModal && (
-        <LocationModal
-  onClose={() => setOpenLocationModal(false)}
-  onPickLocation={(loc) => {
-    setLocation(loc.address); 
-    localStorage.setItem("userLocation", loc.address); 
-  }}
+     {openLocationModal && (
+  <LocationModal
+    onClose={() => setOpenLocationModal(false)}
+    onPickLocation={(loc) => {
+
+      // ✅ UI ke liye (header me dikhane ke liye)
+      setLocation(loc.address);
+      localStorage.setItem("userLocation", loc.address);
+
+      // ✅ MOST IMPORTANT — distance calculation ke liye
+      localStorage.setItem(
+        "user_location",
+        JSON.stringify({
+          lat: loc.lat,
+          lng: loc.lng,
+        })
+      );
+    }}
 />
 
       )}

@@ -19,8 +19,6 @@ export default function Searchbar() {
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
   const cacheRef = useRef({});
-
-  /* 📍 Location */
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -32,7 +30,7 @@ export default function Searchbar() {
     );
   }, []);
 
-  /* ❌ Cleanup on unmount */
+  
   useEffect(() => {
     return () => {
       abortRef.current?.abort();
@@ -40,7 +38,7 @@ export default function Searchbar() {
     };
   }, []);
 
-  /* 🔍 Optimized Search Handler */
+
   const triggerSearch = useCallback(
     (text) => {
       const searchText = text.trim().toLowerCase();
@@ -51,7 +49,6 @@ export default function Searchbar() {
         return;
       }
 
-      // Clear previous debounce
       clearTimeout(debounceRef.current);
 
       debounceRef.current = setTimeout(() => {
@@ -61,7 +58,6 @@ export default function Searchbar() {
     [location]
   );
 
-  /* 🔁 Input change */
   useEffect(() => {
     triggerSearch(query);
   }, [query, triggerSearch]);
@@ -119,8 +115,6 @@ export default function Searchbar() {
       setLoading(false);
     }
   };
-
-  /* ⌨️ Keyboard navigation */
   const handleKeyDown = (e) => {
     if (!showDropdown || results.length === 0) return;
 
@@ -144,7 +138,6 @@ export default function Searchbar() {
     }
   };
 
-  /* ✅ Select result */
   const handleSelect = (item) => {
     setShowDropdown(false);
     setIsMobileOpen(false);
@@ -159,7 +152,6 @@ export default function Searchbar() {
     );
   };
 
-  /* ❌ Outside click */
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {

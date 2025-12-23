@@ -1,31 +1,103 @@
+/* Notifications.css */
+
 .notifications-page {
   max-width: 700px;
-  margin: 30px auto;
-  padding: 0 16px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f8fafc;
+  border-radius: 16px;
+  min-height: 80vh;
 }
 
+.notifications-page h2 {
+  color: #1e293b;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* Empty State */
+.notifications-page .empty {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 50px;
+  font-size: 1.1rem;
+}
+
+/* Notification Card */
 .notification-card {
-  padding: 15px;
-  border-bottom: 1px solid #e5e5e5;
-  cursor: pointer;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
+.notification-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+/* Unread Style */
 .notification-card.unread {
-  background: #f3f3f3;
+  background: #f0f7ff;
+  border-left: 4px solid #f57c00;
+}
+
+.notification-card.unread::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 10px;
+  height: 10px;
+  background-color:#f57c00;
+  border-radius: 50%;
+}
+
+/* Card Content */
+.notification-card h4 {
+  margin: 0 0 8px 0;
+  color: #0f172a;
+  font-size: 1.1rem;
   font-weight: 600;
 }
 
-.notification-card h4 {
-  margin: 0 0 5px;
+.notification-card p {
+  margin: 0 0 12px 0;
+  color: #475569;
+  line-height: 1.5;
+  font-size: 0.95rem;
 }
 
 .notification-card span {
-  font-size: 12px;
-  color: gray;
+  display: block;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
 }
 
-.empty {
+/* Loading & Error Text (Centered) */
+.text-center {
   text-align: center;
-  margin-top: 40px;
-  color: gray;
+  font-family: sans-serif;
+  color: #64748b;
+  margin-top: 50px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .notifications-page {
+    margin: 10px;
+    padding: 15px;
+  }
 }

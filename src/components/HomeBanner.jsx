@@ -3,7 +3,7 @@ import "./HomeBanner.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 
-const DUMMY_BANNER = "/orange.png";
+const DUMMY_BANNER = "";
 
 export default function HomeBanner() {
   const [banners, setBanners] = useState([]);
@@ -33,7 +33,7 @@ export default function HomeBanner() {
     api
       .get("/api/v1/banners", {
         headers: {
-          zoneId: "[1]",
+          zoneId: "[3]",
           moduleId: "2",
           Accept: "application/json",
         },

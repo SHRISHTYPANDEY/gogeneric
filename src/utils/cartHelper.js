@@ -1,13 +1,24 @@
 import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 
-export const addToCart = async ({ item, navigate, location }) => {
+export const addToCart = async ({ item }) => {
   const token = localStorage.getItem("token");
 
   let guestId = localStorage.getItem("guest_id");
   if (!token && !guestId) {
     guestId = crypto.randomUUID();
     localStorage.setItem("guest_id", guestId);
+  }
+
+  // ✅ FRONTEND STOCK CHECK (FAST FAIL)
+  if (
+    item.available_stock === 0 ||
+    item.stock === 0 ||
+    item.quantity === 0 ||
+    item.is_available === false
+  ) {
+    toast.error("Product is out of stock");
+    return; // ⛔ STOP HERE
   }
 
   try {
@@ -30,6 +41,15 @@ export const addToCart = async ({ item, navigate, location }) => {
 
     // 🔹 STEP 3: IF EXISTS → UPDATE QTY
     if (existingItem) {
+      // 🚫 BLOCK IF STOCK LIMIT REACHED
+      if (
+        item.available_stock &&
+        existingItem.quantity >= item.available_stock
+      ) {
+        toast.error("No more stock available");
+        return;
+      }
+
       await api.post(
         "/api/v1/customer/cart/update",
         {
@@ -48,7 +68,7 @@ export const addToCart = async ({ item, navigate, location }) => {
       );
 
       toast.success("Quantity updated");
-    } 
+    }
     // 🔹 STEP 4: ELSE → ADD NEW ITEM
     else {
       await api.post(
@@ -75,8 +95,19 @@ export const addToCart = async ({ item, navigate, location }) => {
     window.dispatchEvent(new Event("cart-updated"));
   } catch (err) {
     console.error("Add to cart error:", err?.response?.data);
+
+    // ✅ HANDLE BACKEND OUT-OF-STOCK MESSAGE
+    if (
+      err?.response?.data?.message ===
+      "Product out of stock warning"
+    ) {
+      toast.error("Product is out of stock");
+      return;
+    }
+
     toast.error(
-      err?.response?.data?.errors?.[0]?.message || "Failed to add item"
+      err?.response?.data?.errors?.[0]?.message ||
+        "Failed to add item"
     );
   }
 };

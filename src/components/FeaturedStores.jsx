@@ -18,22 +18,44 @@ export default function FeaturedStores() {
   }, []);
 
   const fetchStores = async () => {
-    try {
-      const res = await api.get("/api/v1/stores/recommended", {
-        params: { limit: 10, offset: 0, type: "all" },
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: "2",
-          Accept: "application/json",
-        },
-      });
-      setStores(res.data?.stores || []);
-    } catch (error) {
-      console.log("ERROR:", error);
-    } finally {
-      setLoading(false);
+  try {
+    const stored = localStorage.getItem("user_location");
+
+    if (!stored) {
+      console.warn("User location missing");
+      return;
     }
-  };
+
+    const { lat, lng } = JSON.parse(stored);
+
+    console.log("FINAL USER COORDS:", lat, lng);
+
+
+    const res = await api.get("/api/v1/stores/recommended", {
+      params: {
+        limit: 10,
+        offset: 0,
+        type: "all", 
+      },
+      headers: {
+        zoneId: JSON.stringify([3]),
+        moduleId: "2",
+         latitude: lat,         
+    longitude: lng,  
+        Accept: "application/json",
+      },
+    });
+console.log("STORES RAW:", res.data?.stores);
+
+    setStores(res.data?.stores || []);
+  } catch (error) {
+    console.log("ERROR:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   /* ================= AUTO SCROLL ================= */
   useEffect(() => {
@@ -117,8 +139,9 @@ export default function FeaturedStores() {
                 console.log("Store Image URL:", image);
                 const isOpen = store.open === 1 || store.is_open === 1;
                 const distance = store.distance
-                  ? `${store.distance.toFixed(1)} km`
-                  : null;
+  ? `${(store.distance / 1000).toFixed(1)} km`
+  : null;
+
 
                 return (
                   <div

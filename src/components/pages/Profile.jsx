@@ -4,17 +4,18 @@ import { toast } from "react-hot-toast";
 import api from "../../api/axiosInstance";
 import { Pencil } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
-// import "./Profile.css";  
+// import "./Profile.css"; 
+import { useWallet } from "../../context/WalletContext"; 
 
 
 export default function Profile() {
   const navigate = useNavigate();
+  const {balance } = useWallet();
 
   const [user, setUser] = useState(null);
   const [editing, setEditing] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
-  const [walletBalance, setWalletBalance] = useState(0);
   const [showChangePassword, setShowChangePassword] = useState(false);
 const [newPassword, setNewPassword] = useState("");
 const [confirmPassword, setConfirmPassword] = useState("");
@@ -155,48 +156,7 @@ const handleChangePassword = async () => {
 };
 
 
-  /* ================= FETCH WALLET ================= */
- const fetchWalletBalance = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await api.get(
-      "/api/v1/customer/wallet/transactions",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
-        params: {
-          limit: 100,
-          offset: 0,
-        },
-      }
-    );
-
-    // console.log("Wallet API FULL RESPONSE:", res.data);
-
-    const transactions = res.data?.transactions || [];
-
-    const total = transactions.reduce(
-      (sum, tx) => sum + Number(tx.amount || 0),
-      0
-    );
-
-    setWalletBalance(total);
-  } catch (err) {
-    console.error("🔴 Wallet error:");
-    console.log("Status:", err?.response?.status);
-    console.log("Response:", err?.response?.data);
-    toast.error("Failed to fetch wallet balance");
-  }
-};
-
-
   useEffect(() => {
-    fetchWalletBalance();
     fetchTotalOrders();
   }, []);
 
@@ -230,7 +190,7 @@ const handleChangePassword = async () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <StatCard title="Loyalty Points" value="0" />
         <StatCard title="Total Orders" value={totalOrders} />
-        <StatCard title="Wallet Balance" value={`₹${walletBalance}`} />
+        <StatCard title="Wallet Balance" value={`₹${balance}`} />
       </div>
 
       {/* ===== PROFILE DETAILS ===== */}

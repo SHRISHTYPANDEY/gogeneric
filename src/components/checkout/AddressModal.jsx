@@ -14,7 +14,7 @@ export default function AddressModal({ onClose, onSelect }) {
   }, []);
 
   return (
-    <div className="address-modal-overlay">
+    <div className="address-modal-overlay max-w-7xl mx-auto px-4 py-3">
       <div className="address-modal">
 
         <div className="modal-header">

@@ -9,6 +9,7 @@ import Stores from "../Stores";
 import Footer from "../Footer";
 import CommonConcern from "../CommonConcern";
 import Loader from "../Loader";
+import SearchBar from "../layout/Searchbar";
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +32,7 @@ export default function Home() {
 
   return (
     <div className="home">
-     
+      <SearchBar />
       <HomeBanner />
       <CategoriesCard />
       <CommonConcern />

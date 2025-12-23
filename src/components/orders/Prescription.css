@@ -1,0 +1,48 @@
+.prescription-section {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 16px;
+}
+
+.prescription-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.prescription-upload-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.prescription-upload-box input[type="file"] {
+  display: none;
+}
+
+.upload-btn {
+  background: #0d9488;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-name {
+  font-size: 13px;
+  color: #555;
+}
+
+.prescription-hint {
+  font-size: 13px;
+  color: #ca8a04;
+  margin-top: 8px;
+}
+
+.prescription-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+}

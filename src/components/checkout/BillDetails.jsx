@@ -12,29 +12,27 @@ export default function BillDetails() {
     localStorage.setItem("guest_id", guestId);
   }
 
+  const PLATFORM_FEE = 2;
+
   const [bill, setBill] = useState({
     itemTotal: 0,
     deliveryFee: 0,
     discount: 0,
     tax: 0,
+    platformFee: PLATFORM_FEE,
     toPay: 0,
   });
 
   const fetchBill = async () => {
     try {
-      const res = await api.get(
-        "/api/v1/customer/cart/list",
-        {
-          headers: {
-            zoneId: JSON.stringify([3]),
-            moduleId: "2",
-            ...(token
-              ? { Authorization: `Bearer ${token}` }
-              : {}),
-          },
-          params: !token ? { guest_id: guestId } : {},
-        }
-      );
+      const res = await api.get("/api/v1/customer/cart/list", {
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: "2",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        params: !token ? { guest_id: guestId } : {},
+      });
 
       const cart = res.data || [];
 
@@ -44,17 +42,22 @@ export default function BillDetails() {
       );
 
       const discount = itemTotal >= 300 ? 50 : 0;
-      const deliveryFee = itemTotal >= 499 ? 0 : 30;
+      const deliveryFee = itemTotal >= 499 ? 0 : 50;
       const tax = Math.round(itemTotal * 0.05);
 
       const toPay =
-        itemTotal + tax + deliveryFee - discount;
+        itemTotal +
+        tax +
+        deliveryFee +
+        PLATFORM_FEE -
+        discount;
 
       setBill({
         itemTotal,
         discount,
         deliveryFee,
         tax,
+        platformFee: PLATFORM_FEE,
         toPay,
       });
     } catch (err) {
@@ -65,13 +68,9 @@ export default function BillDetails() {
   useEffect(() => {
     fetchBill();
 
-    // 🔁 Recalculate when cart updates
     window.addEventListener("cart-updated", fetchBill);
     return () =>
-      window.removeEventListener(
-        "cart-updated",
-        fetchBill
-      );
+      window.removeEventListener("cart-updated", fetchBill);
   }, []);
 
   return (
@@ -95,6 +94,11 @@ export default function BillDetails() {
               ? "Free"
               : `₹${bill.deliveryFee}`}
           </span>
+        </div>
+
+        <div className="bill-row">
+          <span>Platform Fee</span>
+          <span>₹{bill.platformFee}</span>
         </div>
 
         {bill.discount > 0 && (

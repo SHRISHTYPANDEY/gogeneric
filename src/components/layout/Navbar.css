@@ -1,4 +1,3 @@
-/* ================= PRECISE FIXED NAVBAR CSS ================= */
 :root {
   --primary: #f57c00;
   --text: #1e293b;
@@ -9,9 +8,10 @@
   background: var(--glass) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+
   position: sticky;
   top: 0;
-  /* z-index: 10; */
+  z-index: 2000;
   border-bottom: 1px solid #e2e8f0;
   padding: 10px 0 !important;
   height: 75px;
@@ -29,19 +29,16 @@
   padding: 0 20px;
 }
 
-/* Logo - Fixed Size */
 .nav-logo img {
   height: 45px;
   width: auto;
   cursor: pointer;
 }
 
-/* --- UPDATED PREMIUM NAVIGATION LINKS --- */
 .nav-links {
   display: flex !important;
   flex-direction: row !important;
   align-items: center;
-  /* Spacing badha di gayi hai */
   gap: 35px; 
   margin: 0 auto !important;
   list-style: none;
@@ -54,16 +51,15 @@
 
 .nav-links li a {
   text-decoration: none;
-  font-size: 16px; /* Thoda bada aur clear font */
-  font-weight: 500; /* Medium weight for premium look */
-  color: #475569; /* Soft dark slate color */
+  font-size: 16px;
+  font-weight: 500; 
+  color: #475569; 
   padding: 8px 4px;
   transition: all 0.3s ease;
-  letter-spacing: 0.3px; /* Clean spacing between letters */
+  letter-spacing: 0.3px; 
   display: inline-block;
 }
 
-/* Elegant Underline Animation */
 .nav-links li a::after {
   content: '';
   position: absolute;
@@ -76,21 +72,19 @@
   border-radius: 2px;
 }
 
-/* Hover State */
 .nav-links li a:hover {
   color: var(--primary) !important;
-  transform: translateY(-1px); /* Halka sa upar uthega */
+  transform: translateY(-1px);
 }
 
 .nav-links li a:hover::after {
-  width: 100%; /* Line smooth expand hogi */
+  width: 100%;
 }
 
-/* Logo aur Icons ke beech container spacing fix */
 .nav-container {
-  padding: 0 40px !important; /* Side margins badha di hain */
+  padding: 0 40px !important; 
 }
-/* Action Icons Group - Right Side */
+
 .flex.items-center.gap-6 {
   display: flex !important;
   flex-direction: row !important;
@@ -98,12 +92,11 @@
   gap: 15px !important;
 }
 
-/* Icon Buttons - Pointer and Size */
 .notification-icon,
 .cart-icon,
 .hamburger {
   position: relative;
-  cursor: pointer !important; /* Clicks Fix */
+  cursor: pointer !important; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,7 +106,7 @@
   background: #f8fafc;
   font-size: 20px;
   transition: all 0.2s;
-  pointer-events: auto !important; /* Ensure click works */
+  pointer-events: auto !important;
 }
 
 .notification-icon:hover,
@@ -122,8 +115,6 @@
   background: #fff7ed;
   color: var(--primary);
 }
-
-/* Badges */
 .notification-badge,
 .cart-badge {
   position: absolute;
@@ -141,7 +132,6 @@
   border: 2px solid white;
 }
 
-/* Drawer Fixes */
 .side-menu {
   position: fixed;
   top: 0;
@@ -149,7 +139,7 @@
   width: 300px;
   height: 100%;
   background: white;
-  z-index: 2000;
+  z-index: 99999;
   transition: 0.4s ease;
   padding: 25px;
   box-shadow: -10px 0 30px rgba(0,0,0,0.1);
@@ -166,21 +156,19 @@
   z-index: 100;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .nav-links {
-    display: none !important; /* Hide links on tablet/mobile */
+    display: none !important;
   }
 }
-/* ================= PREMIUM SIDE MENU DESIGN ================= */
 .side-menu {
   position: fixed;
   top: 0;
-  right: -340px; /* Hidden state */
+  right: -340px; 
   width: 320px;
   height: 100vh;
   background: #ffffff;
-  z-index: 2000;
+  z-index: 9999;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 0; /* Remove default padding to control layout */
   box-shadow: -15px 0 40px rgba(15, 23, 42, 0.1);
@@ -192,7 +180,6 @@
   right: 0;
 }
 
-/* Header inside the Drawer */
 .side-header {
   display: flex;
   justify-content: space-between;
@@ -217,7 +204,6 @@
   transform: rotate(90deg);
 }
 
-/* The List Container */
 .side-links {
   list-style: none;
   padding: 16px;
@@ -230,7 +216,6 @@
   margin-bottom: 8px;
 }
 
-/* DESIGNING THE MENU TILES */
 .side-links li a {
   display: flex;
   align-items: center;
@@ -246,19 +231,17 @@
   transition: all 0.2s ease;
 }
 
-/* Hover Effects for items */
 .side-links li a:hover {
-  background: #fff7ed; /* Light orange tint */
+  background: #fff7ed; 
   color: var(--primary);
   border-color: #fed7aa;
   transform: translateX(5px);
   box-shadow: 0 4px 12px rgba(245, 124, 0, 0.08);
 }
 
-/* Icon styling inside tiles */
 .side-links li a svg {
   font-size: 18px;
-  color: #94a3b8; /* Muted icon color */
+  color: #94a3b8; 
   transition: 0.2s;
 }
 
@@ -267,7 +250,6 @@
   transform: scale(1.1);
 }
 
-/* Special styling for Logout */
 .side-links li:last-child a {
   margin-top: 20px;
   background: #fef2f2;
@@ -284,7 +266,6 @@
   color: #ef4444;
 }
 
-/* Wishlist Badge inside menu */
 .wishlist-badge {
   margin-left: auto;
   background: var(--primary);
@@ -294,14 +275,12 @@
   border-radius: 10px;
   font-weight: 700;
 }
-
-/* Background Overlay */
 .overlay {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(4px);
-  z-index: 1500;
+  z-index: 2500;
   opacity: 0;
   animation: fadeIn 0.3s forwards;
 }
@@ -310,7 +289,6 @@
   to { opacity: 1; }
 }
 
-/* Scrollbar styling for side menu */
 .side-menu::-webkit-scrollbar {
   width: 5px;
 }

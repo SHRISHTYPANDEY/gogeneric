@@ -4,6 +4,7 @@ import OrderCard from "../../components/orders/OrderCard";
 import Loader from "../../components/Loader";
 import LoginModal from "../../components/auth/LoginModal";
 import "./Orders.css";
+import CancelOrder from "../orders/CancelOrder";
 
 const TABS = {
   RUNNING: "running",
@@ -102,7 +103,7 @@ export default function Orders() {
         </div>
       )}
   {cancelOrder && (
-  <CancelOrderModal
+  <CancelOrder
     order={cancelOrder}
     onClose={() => setCancelOrder(null)}
     onSuccess={fetchOrders}

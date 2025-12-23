@@ -9,19 +9,36 @@ export default function Stores() {
   const [stores, setStores] = useState([]);
   const [filteredStores, setFilteredStores] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
-  const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
+
+  const [userCoords, setUserCoords] = useState(null); // ✅ STATE
 
   const abortRef = useRef(null);
   const navigate = useNavigate();
 
+  /* ================= USER LOCATION LISTENER ================= */
+  useEffect(() => {
+    const loadLocation = () => {
+      const stored = localStorage.getItem("user_location");
+      setUserCoords(stored ? JSON.parse(stored) : null);
+    };
+
+    loadLocation(); // initial load
+
+    // 🔥 listen when location changes (custom event)
+    window.addEventListener("location-updated", loadLocation);
+
+    return () => {
+      window.removeEventListener("location-updated", loadLocation);
+    };
+  }, []);
+
+  const hasUserLocation = userCoords?.lat && userCoords?.lng;
+
   /* ================= FETCH STORES ================= */
   const fetchStoresByFilter = async (filter) => {
-    // Abort previous request
-    if (abortRef.current) {
-      abortRef.current.abort();
-    }
+    if (abortRef.current) abortRef.current.abort();
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -38,7 +55,12 @@ export default function Stores() {
       const res = await api.get(url, {
         headers: {
           zoneId: JSON.stringify([3]),
-          moduleId: 2,
+          moduleId: "2",
+          ...(hasUserLocation && {
+            latitude: userCoords.lat,
+            longitude: userCoords.lng,
+          }),
+          Accept: "application/json",
         },
         signal: controller.signal,
       });
@@ -47,38 +69,21 @@ export default function Stores() {
       setStores(data);
       setFilteredStores(data);
     } catch (err) {
-      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") {
-        // Request was aborted – ignore
-        return;
+      if (err.name !== "CanceledError") {
+        console.log("Stores API Error:", err);
       }
-      console.log("Stores API Error:", err.response?.data);
     } finally {
       setLoading(false);
     }
   };
 
-  /* ================= FILTER CHANGE ================= */
+  /* 🔁 Re-fetch when filter OR location changes */
   useEffect(() => {
     fetchStoresByFilter(activeFilter);
+    return () => abortRef.current?.abort();
+  }, [activeFilter, hasUserLocation]);
 
-    return () => {
-      if (abortRef.current) {
-        abortRef.current.abort();
-      }
-    };
-  }, [activeFilter]);
-
-  /* ================= CATEGORY FILTER ================= */
-  useEffect(() => {
-    let updated = [...stores];
-
-    if (activeCategory !== "All") {
-      updated = updated.filter((s) => s.category === activeCategory);
-    }
-
-    setFilteredStores(updated);
-  }, [activeCategory, stores]);
-
+  /* ================= UI ================= */
   return (
     <div className="stores-page max-w-7xl mx-auto px-4">
       <h2 className="stores-heading">Stores</h2>
@@ -116,49 +121,51 @@ export default function Stores() {
       ) : (
         <div className="stores-grid">
           {(showAll ? filteredStores : filteredStores.slice(0, 9)).map(
-            (store) => (
-              <div
-                className="store-card-6am"
-                key={store.id}
-                onClick={() => navigate(`/view-stores/${store.id}`)}
-              >
-                <div className="store-image-wrapper">
-                  <img
-                    src={cleanImageUrl(
-                      store.cover_photo_full_url || store.cover_photo
-                    )}
-                    alt={store.name}
-                    loading="lazy"
-                  />
-                  {store.offer && (
-                    <div className="store-offer-badge">{store.offer}</div>
-                  )}
-                </div>
+            (store) => {
+              const showDistance =
+                hasUserLocation && typeof store.distance === "number";
 
-                <div className="store-content-vertical">
-                  <h3 className="store-name">{store.name}</h3>
-                  <p className="store-address">
-                    {store.address || "Address unavailable"}
-                  </p>
+              const distance = showDistance
+                ? `${(store.distance / 1000).toFixed(1)} km`
+                : null;
 
-                  <div className="store-bottom-row">
-                    <span className="store-distance">
-                      <MapPin size={14} />
-                      {(store.distance > 1000
-                        ? store.distance / 1000
-                        : store.distance
-                      ).toFixed(1)}{" "}
-                      km
-                    </span>
+              return (
+                <div
+                  key={store.id}
+                  className="store-card-6am"
+                  onClick={() => navigate(`/view-stores/${store.id}`)}
+                >
+                  <div className="store-image-wrapper">
+                    <img
+                      src={cleanImageUrl(
+                        store.cover_photo_full_url || store.cover_photo
+                      )}
+                      alt={store.name}
+                    />
+                  </div>
 
-                    <span className="store-rating">
-                      <Star size={14} fill="#00c16e" stroke="none" />
-                      {store.rating || "N/A"}
-                    </span>
+                  <div className="store-content-vertical">
+                    <h3 className="store-name">{store.name}</h3>
+                    <p className="store-address">
+                      {store.address || "Address unavailable"}
+                    </p>
+
+                    <div className="store-bottom-row">
+                      {showDistance && (
+                        <span className="store-distance">
+                          <MapPin size={14} /> {distance}
+                        </span>
+                      )}
+
+                      <span className="store-rating">
+                        <Star size={14} fill="#00c16e" stroke="none" />
+                        {store.rating || "N/A"}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
+              );
+            }
           )}
         </div>
       )}

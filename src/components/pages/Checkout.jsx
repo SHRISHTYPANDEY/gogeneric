@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Checkout.css";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
+import toast from "react-hot-toast";
 
 import DeliveryType from "../../components/checkout/Deliverytype";
 import DeliveryPreference from "../../components/checkout/DelieveryPrefrence";
@@ -12,6 +13,7 @@ import BillDetails from "../../components/checkout/BillDetails";
 import AddressModal from "../../components/checkout/AddressModal";
 import PaymentModal from "../../components/checkout/PaymentModal";
 import OrderSuccessModal from "../../components/checkout/OrderSuccessModal";
+import Prescription from "../orders/Prescription";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -23,13 +25,25 @@ export default function Checkout() {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddressModal, setShowAddressModal] = useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-  const [deliveryTime, setDeliveryTime] = useState("ASAP");
+  const [deliveryTime, setDeliveryTime] = useState("");
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [orderId, setOrderId] = useState(null);
+
+  const [prescriptionFile, setPrescriptionFile] = useState(null);
+  const [prescriptionError, setPrescriptionError] = useState("");
+
+  const [placingOrder, setPlacingOrder] = useState(false);
+
+  /* ---------------- PRESCRIPTION CHECK ---------------- */
+  const prescriptionRequired = cart.some(
+    (item) =>
+      item.prescription_required === true ||
+      item.prescription_required === 1
+  );
 
   /* ---------------- FETCH CART ---------------- */
   const fetchCart = async () => {
@@ -57,13 +71,15 @@ export default function Checkout() {
   useEffect(() => {
     fetchCart();
     window.addEventListener("cart-updated", fetchCart);
-    return () => window.removeEventListener("cart-updated", fetchCart);
+    return () =>
+      window.removeEventListener("cart-updated", fetchCart);
   }, []);
 
   /* ---------------- BILL ---------------- */
   const bill = {
     totalAmount: cart.reduce(
-      (sum, item) => sum + Number(item.price) * Number(item.quantity),
+      (sum, item) =>
+        sum + Number(item.price) * Number(item.quantity),
       0
     ),
   };
@@ -80,18 +96,59 @@ export default function Checkout() {
     setShowAddressModal(false);
   };
 
+  /* ---------------- VALIDATION ---------------- */
+  const isOrderValid = () => {
+    const hasOutOfStockItem = cart.some(
+  (item) =>
+    item.available_stock === 0 ||
+    item.is_available === false
+);
+
+if (hasOutOfStockItem) {
+  toast.error("Remove out of stock items from cart");
+  return false;
+}
+
+    if (!cart.length) {
+      toast.error("Your cart is empty");
+      return false;
+    }
+
+    if (!selectedAddress) {
+      toast.error("Please select delivery address");
+      return false;
+    }
+
+    if (!deliveryTime) {
+      toast.error("Please select delivery time");
+      return false;
+    }
+
+    if (!paymentMethod) {
+      toast.error("Please select payment method");
+      return false;
+    }
+
+    if (prescriptionRequired && !prescriptionFile) {
+      setPrescriptionError("Prescription is required for this order");
+      toast.error("Prescription is required for this order");
+      return false;
+    }
+
+    return true;
+  };
+
   /* ---------------- PLACE ORDER ---------------- */
   const handlePlaceOrder = async () => {
-    if (!selectedAddress || !cart.length) {
-      alert("⚠️ Missing address or cart");
-      return;
-    }
+    if (placingOrder) return;
+    if (!isOrderValid()) return;
+
+    setPlacingOrder(true);
 
     const token = localStorage.getItem("token");
     const guestId = localStorage.getItem("guest_id");
     const storeId = cart[0]?.item?.store_id;
 
-    // 🔥 BASE PAYLOAD (same for all)
     const payload = {
       order_amount: bill.totalAmount,
       payment_method: "cash_on_delivery",
@@ -107,30 +164,38 @@ export default function Checkout() {
       contact_person_number: selectedAddress.phone,
     };
 
-    // ✅ IMPORTANT FIX
-    // guest_id ONLY for guest users
-    if (!token && guestId) {
-      payload.guest_id = guestId;
-    }
+    if (!token && guestId) payload.guest_id = guestId;
 
     try {
-      const res = await api.post("/api/v1/customer/order/place", payload, {
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: "2",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+      const res = await api.post(
+        "/api/v1/customer/order/place",
+        payload,
+        {
+          headers: {
+            zoneId: JSON.stringify([3]),
+            moduleId: "2",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
 
-      setOrderId(res.data?.order_id);
+      const createdOrderId =
+        res.data?.order_id || res.data?.data?.order_id;
+
+      if (!createdOrderId) {
+        throw new Error("Order ID missing");
+      }
+
+      setOrderId(createdOrderId);
       setShowSuccess(true);
-
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      setTimeout(() => navigate("/"), 3000);
     } catch (err) {
-      console.error("❌ Order failed", err);
-      alert("Order failed");
+      console.error("❌ Order failed:", err);
+      toast.error(
+        err?.response?.data?.message || "Unable to place order"
+      );
+    } finally {
+      setPlacingOrder(false);
     }
   };
 
@@ -167,8 +232,17 @@ export default function Checkout() {
       <TipsSection />
       <BillDetails bill={bill} />
 
+      <Prescription
+        prescriptionFile={prescriptionFile}
+        setPrescriptionFile={setPrescriptionFile}
+        prescriptionRequired={prescriptionRequired}
+        error={prescriptionError}
+        setError={setPrescriptionError}
+      />
+
       <div className="checkout-footer">
         <button
+          type="button"
           className="pay-using-btn"
           onClick={() => setShowPaymentModal(true)}
         >
@@ -176,11 +250,19 @@ export default function Checkout() {
         </button>
 
         <button
+          type="button"
           className="place-order-btn"
           onClick={handlePlaceOrder}
-          disabled={!selectedAddress || !cart.length}
+          disabled={
+            placingOrder ||
+            !cart.length ||
+            !selectedAddress ||
+            !deliveryTime ||
+            !paymentMethod ||
+            (prescriptionRequired && !prescriptionFile)
+          }
         >
-          Place Order
+          {placingOrder ? "Placing Order..." : "Place Order"}
         </button>
       </div>
 

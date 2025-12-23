@@ -2,17 +2,26 @@ import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/axiosInstance";
 import { useAuth } from "./AuthContext";
 
-const WalletContext = createContext();
+const WalletContext = createContext({
+  walletBalance: 0,
+  loading: false,
+  transactions: [],
+  refreshWallet: () => {},
+});
+
 
 export const WalletProvider = ({ children }) => {
   const { user } = useAuth();
-  const [walletBalance, setWalletBalance] = useState(0);
+
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const fetchWallet = async () => {
     try {
       if (!user) {
-        setWalletBalance(0);
+        setBalance(0);
+        setTransactions([]);
         return;
       }
 
@@ -36,23 +45,25 @@ export const WalletProvider = ({ children }) => {
         }
       );
 
-      const transactions = res.data?.transactions || [];
+      const txs = res.data?.transactions || [];
 
-      const total = transactions.reduce(
+      const total = txs.reduce(
         (sum, tx) => sum + Number(tx.amount || 0),
         0
       );
 
-      setWalletBalance(total);
+      setTransactions(txs);
+      setBalance(total);
     } catch (err) {
       console.error("Wallet fetch error", err);
-      setWalletBalance(0);
+      setBalance(0);
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔁 Auto fetch on login/logout
+  // 🔁 Auto refresh on login/logout
   useEffect(() => {
     fetchWallet();
   }, [user]);
@@ -60,9 +71,10 @@ export const WalletProvider = ({ children }) => {
   return (
     <WalletContext.Provider
       value={{
-        walletBalance,
+        balance,
+        transactions,
         loading,
-        refreshWallet: fetchWallet,
+        fetchWallet,
       }}
     >
       {children}

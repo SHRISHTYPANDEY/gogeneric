@@ -86,6 +86,46 @@ export default function LoginModal({ onClose }) {
     }
   };
 
+  /* ================= GUEST LOGIN ================= */
+const handleGuestLogin = async () => {
+  try {
+    const res = await api.post("/api/v1/auth/guest/request");
+
+    const guestId =
+      res.data?.guest_id ||
+      res.data?.data?.guest_id ||
+      res.data?.id;
+
+    const token = res.data?.token || null;
+
+    if (!guestId) {
+      toast.error("Guest login failed");
+      return;
+    }
+
+    // ✅ Save guest id for cart merge later
+    localStorage.setItem("guest_id", guestId);
+
+    const guestUser = {
+      id: guestId,
+      name: "Guest User",
+      email: null,
+      phone: null,
+      isGuest: true,
+    };
+
+    login(guestUser, token);
+
+    toast.success("Logged in as Guest");
+    onClose();
+  } catch (err) {
+    toast.error(
+      err?.response?.data?.message || "Guest login failed"
+    );
+  }
+};
+
+
   /* ================= LOGIN ================= */
   const handleLogin = async () => {
     if (!identifier || !password) {
@@ -275,6 +315,13 @@ export default function LoginModal({ onClose }) {
             <button className="submit-btn" onClick={handleLogin}>
               Login
             </button>
+            <button
+  className="guest-btn"
+  onClick={handleGuestLogin}
+>
+  Continue as Guest
+</button>
+
 
             <p className="forgot-text" onClick={() => setIsForgot(true)}>
               Forgot Password?
@@ -287,8 +334,10 @@ export default function LoginModal({ onClose }) {
               </span>
             </p>
           </>
+          
         )}
       </div>
+      
     </div>
   );
 }
