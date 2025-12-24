@@ -7,21 +7,26 @@ import "./OrderCard.css";
 export default function OrderCard({ order, isRunning }) {
   const navigate = useNavigate();
   const [showCancelModal, setShowCancelModal] = useState(false);
-
-  /* TRACK (UNCHANGED) */
   const handleTrackOrder = (e) => {
     e.stopPropagation();
     navigate(`/orders/${order.id}/track`);
   };
-
   const canCancel = ["pending", "failed"].includes(order.order_status);
-
   return (
     <>
-      <div
-        className="order-card"
-        onClick={() => navigate(`/orders/${order.id}`)}
-      >
+    <div
+  className="order-card"
+  onClick={() =>
+  navigate(`/orders/${order.id}`, {
+  state: {
+    orderAmount: order.order_amount,
+    itemPrice: order.item_price,
+    deliveryFee: order.delivery_charge,
+    discount: order.discount_amount,
+  },
+})
+  }
+>
         <div className="order-header">
           <span>Order #{order.id}</span>
           <span className={`status-badge ${order.order_status}`}>
@@ -50,7 +55,7 @@ export default function OrderCard({ order, isRunning }) {
                 className="cancel-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowCancelModal(true); // 🔥 OPEN MODAL
+                  setShowCancelModal(true); 
                 }}
               >
                 <XCircle size={16} /> Cancel

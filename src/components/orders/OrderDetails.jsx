@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,useLocation } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
@@ -8,13 +8,18 @@ import "./OrderDetails.css";
 export default function OrderDetails() {
   const { orderId } = useParams();
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState([]);
-
+  const orderSummary = location.state || {};
   useEffect(() => {
     fetchOrderDetails();
   }, [orderId]);
+
+  const handleTrackOrder = () => {
+  navigate(`/orders/${orderInfo.order_id}/track`);
+};
+
 
   const fetchOrderDetails = async () => {
     try {
@@ -22,7 +27,7 @@ export default function OrderDetails() {
       const guestId = localStorage.getItem("guest_id");
 
       const res = await api.get(
-        `/api/v1/customer/order/details`,
+        "/api/v1/customer/order/details",
         {
           headers: {
             zoneId: JSON.stringify([3]),
@@ -35,8 +40,9 @@ export default function OrderDetails() {
           },
         }
       );
-      console.log("ORDER DETAILS API RESPONSE 👉", res.data);
-      setDetails(res.data || []);
+
+      console.log("ORDER DETAILS API RESPONSE from order details 👉", res.data);
+      setDetails(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Order details error:", err);
       toast.error("Unable to load order details");
@@ -52,13 +58,31 @@ export default function OrderDetails() {
     return <p className="text-center">Order not found</p>;
 
   const orderInfo = details[0];
-  const totalAmount = details.reduce((sum, item) => {
-  return sum + Number(item.price) * Number(item.quantity);
-}, 0);
 
+  const itemTotal = details.reduce(
+  (sum, item) => sum + Number(item.price) * Number(item.quantity),
+  0
+);
+
+const deliveryFee = Number(orderInfo.delivery_charge ?? 0);
+const discount = Number(orderInfo.total_discount ?? 0);
+
+// checkout style final bill
+const totalPayable = Number(orderInfo.order_amount ?? itemTotal);
+
+
+  const itemPrice = details.reduce(
+  (sum, item) => sum + Number(item.price) * Number(item.quantity),
+  0
+);
+
+
+  // ✅ FINAL AMOUNT — FROM BACKEND ONLY
+  const finalAmount = Number(orderInfo.order_amount ?? 0);
 
   return (
     <div className="order-details-page">
+      {/* HEADER */}
       <header className="order-details-header">
         <button onClick={() => navigate(-1)}>←</button>
         <h3>Order #{orderInfo.order_id}</h3>
@@ -69,6 +93,25 @@ export default function OrderDetails() {
         {orderInfo.order_status}
       </div>
 
+      {/* GENERAL INFO */}
+      <div className="order-section">
+        <h4>General Info</h4>
+        <p><strong>Order ID:</strong> #{orderInfo.order_id}</p>
+        <p>
+          <strong>Order Date:</strong>{" "}
+          {new Date(orderInfo.created_at).toLocaleString()}
+        </p>
+        {orderInfo.delivery_verification_code && (
+          <p>
+            <strong>Delivery Code:</strong>{" "}
+            {orderInfo.delivery_verification_code}
+          </p>
+        )}
+        <p>
+          <strong>Payment:</strong>{" "}
+          {orderInfo.payment_method || "Cash on Delivery"}
+        </p>
+      </div>
       {/* STORE */}
       <div className="order-section">
         <h4>Store</h4>
@@ -81,23 +124,24 @@ export default function OrderDetails() {
 
         {details.map((item) => (
           <div key={item.id} className="order-item">
-            <div>
+            <div className="item-info">
               <strong>{item.item_details?.name}</strong>
-             {item.variation && (() => {
-  try {
-    const parsed =
-      typeof item.variation === "string"
-        ? JSON.parse(item.variation)
-        : item.variation;
 
-    return parsed?.[0]?.type ? (
-      <div className="variation">{parsed[0].type}</div>
-    ) : null;
-  } catch {
-    return null;
-  }
-})()}
+              {/* VARIATION SAFE PARSE */}
+              {item.variation && (() => {
+                try {
+                  const parsed =
+                    typeof item.variation === "string"
+                      ? JSON.parse(item.variation)
+                      : item.variation;
 
+                  return parsed?.[0]?.type ? (
+                    <div className="variation">{parsed[0].type}</div>
+                  ) : null;
+                } catch {
+                  return null;
+                }
+              })()}
             </div>
 
             <div className="item-meta">
@@ -108,13 +152,7 @@ export default function OrderDetails() {
         ))}
       </div>
 
-      {/* TOTAL */}
-<div className="order-section total">
-  <span>Total Amount</span>
-  <strong>₹{totalAmount.toFixed(2)}</strong>
-</div>
-
-      {/* ADDRESS */}
+      {/* DELIVERY ADDRESS */}
       {orderInfo.delivery_address && (
         <div className="order-section">
           <h4>Delivery Address</h4>
@@ -124,12 +162,38 @@ export default function OrderDetails() {
         </div>
       )}
 
-      {/* TIME */}
-      <div className="order-section">
-        <h4>Ordered At</h4>
-        <p>
-          {new Date(orderInfo.created_at).toLocaleString()}
-        </p>
+    {/* ORDER SUMMARY */}
+<div className="order-section">
+  <h4>Order Summary</h4>
+
+  <div className="summary-row">
+    <span>Item Total</span>
+    <span>₹{itemTotal}</span>
+  </div>
+
+  <div className="summary-row">
+    <span>Delivery Fee</span>
+    <span>₹{deliveryFee}</span>
+  </div>
+
+  <div className="summary-row">
+    <span>Discount</span>
+    <span>- ₹{discount}</span>
+  </div>
+
+  <div className="summary-row total">
+    <strong>Total Amount</strong>
+    <strong>₹{totalPayable}</strong>
+  </div>
+</div>
+
+
+      {/* ACTIONS */}
+      <div className="order-actions">
+        <button className="track-btn" onClick={handleTrackOrder}>Track Order</button>
+        {["pending", "failed"].includes(orderInfo.order_status) && (
+          <button className="cancel-btn">Cancel Order</button>
+        )}
       </div>
     </div>
   );

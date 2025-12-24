@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import "./Highlights.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../api/axiosInstance";
+import { cleanImageUrl } from "../utils";
 
 export default function Highlights() {
   const [highlights, setHighlights] = useState([]);
@@ -36,11 +37,12 @@ export default function Highlights() {
       });
 
       const ads = res.data || [];
+      console.log("🔥 FULL ADVERTISEMENT API RESPONSE:", ads);
 
       const formattedAds = ads.map((ad) => ({
         id: ad.id,
         type: ad.type === "video" ? "video" : "image",
-        src: ad.file_full_path || ad.video_link,
+        src: ad.cover_image_full_url,
         title: ad.store?.name || "Advertisement",
       }));
 
@@ -101,9 +103,13 @@ export default function Highlights() {
       <div className="highlight-wrapper" ref={scrollRef}>
         <div className="highlight-scroll">
           {highlights.map((item) => (
+            
+            
             <div key={item.id} className="highlight-card">
+              
+              
               {item.type === "image" ? (
-                <img src={item.src} alt={item.title} />
+                <img src={cleanImageUrl(item.src)} alt={item.title} />
               ) : (
                 <iframe
                   src={

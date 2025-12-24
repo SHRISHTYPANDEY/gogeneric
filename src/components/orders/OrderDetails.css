@@ -1,162 +1,146 @@
-/* PAGE */
+/* OrderDetails.css */
+
 .order-details-page {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 16px;
-  background: #f9fafb;
+  background-color: #f8f9fa;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 80px; /* Space for fixed buttons if any */
 }
 
-/* HEADER */
+/* Header */
 .order-details-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 15px;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 10;
+  padding: 10px 0;
 }
 
 .order-details-header button {
   background: none;
   border: none;
-  font-size: 18px;
+  font-size: 24px;
   cursor: pointer;
+  color: #333;
 }
 
 .order-details-header h3 {
-  font-size: 18px;
-  font-weight: 600;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
 }
 
-/* STATUS */
+/* Status Badge */
 .order-status {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 16px;
-  text-transform: capitalize;
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
 }
 
-.order-status.pending {
-  background: #fff7ed;
-  color: #c2410c;
-}
+/* Status Colors */
+.order-status.pending { background: #fff3cd; color: #856404; }
+.order-status.confirmed { background: #d1ecf1; color: #0c5460; }
+.order-status.processing { background: #e2e3e5; color: #383d41; }
+.order-status.delivered { background: #d4edda; color: #155724; }
+.order-status.failed, .order-status.canceled { background: #f8d7da; color: #721c24; }
 
-.order-status.confirmed {
-  background: #ecfeff;
-  color: #0e7490;
-}
-
-.order-status.processing {
-  background: #eef2ff;
-  color: #4338ca;
-}
-
-.order-status.delivered {
-  background: #ecfdf5;
-  color: #047857;
-}
-
-.order-status.canceled {
-  background: #fef2f2;
-  color: #b91c1c;
-}
-
-/* SECTIONS */
+/* Sections */
 .order-section {
   background: #ffffff;
   border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .order-section h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #111827;
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  color: #666;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
 }
 
 .order-section p {
-  font-size: 14px;
-  color: #374151;
-  margin: 2px 0;
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.4;
 }
 
-/* ITEMS */
+/* Items List */
 .order-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0;
+  border-bottom: 1px dashed #eee;
 }
 
 .order-item:last-child {
   border-bottom: none;
 }
 
-.order-item strong {
-  font-size: 14px;
-  color: #111827;
+.item-info strong {
+  display: block;
+  color: #222;
+  font-size: 1rem;
 }
 
 .variation {
-  font-size: 12px;
-  color: #6b7280;
-  margin-top: 2px;
+  font-size: 0.85rem;
+  color: #666;
+  background: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 4px;
 }
 
-/* ITEM META */
 .item-meta {
   text-align: right;
-  font-size: 13px;
-  color: #374151;
 }
 
 .item-meta span {
   display: block;
+  font-size: 0.9rem;
+  color: #444;
 }
 
-/* TOTAL */
-.order-section.total {
+/* Order Summary */
+.summary-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.95rem;
 }
 
-.order-section.total span {
-  font-size: 14px;
-  color: #0369a1;
+.summary-row.total {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 2px solid #f0f0f0;
+  color: #000;
+  font-size: 1.1rem;
 }
 
-.order-section.total strong {
-  font-size: 16px;
-  color: #0c4a6e;
-}
 
-/* RESPONSIVE */
-@media (max-width: 480px) {
-  .order-details-page {
-    padding: 12px;
-  }
-
-  .order-details-header h3 {
-    font-size: 16px;
-  }
-
-  .order-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-
-  .item-meta {
-    text-align: left;
-  }
+/* Loader Styling Context (if needed) */
+.text-center {
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
 }
