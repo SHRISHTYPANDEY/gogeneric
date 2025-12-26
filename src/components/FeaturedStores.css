@@ -1,4 +1,4 @@
-/* ================= PREMIUM FEATURED STORES (UNIQUE PREFIX fs-) ================= */
+/* ================= PREMIUM FEATURED STORES (TEAL & GOLD THEME) ================= */
 
 .fs-container {
   position: relative;
@@ -16,16 +16,16 @@
 .fs-main-title {
   font-size: 32px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-dark);
   margin: 0;
   letter-spacing: -0.5px;
 }
 
 .fs-see-all-btn {
   font-size: 15px;
-  color: #f57c00;
-  background: rgba(245, 124, 0, 0.1);
-  border: none;
+  color: var(--deep-teal);
+  background: var(--soft-cream);
+  border: 1px solid var(--sand-beige);
   padding: 8px 18px;
   border-radius: 12px;
   cursor: pointer;
@@ -34,8 +34,9 @@
 }
 
 .fs-see-all-btn:hover {
-  background: #f57c00;
-  color: #fff;
+  background: var(--deep-teal);
+  color: var(--white);
+  border-color: var(--deep-teal);
 }
 
 /* 🔹 WRAPPER */
@@ -66,8 +67,8 @@
   padding: 30px;
   border-radius: 35px;
   cursor: pointer;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 10px 25px rgba(18, 38, 32, 0.05);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
@@ -75,17 +76,17 @@
   justify-content: center;
 }
 
-/* Color Rotation using fs-prefix */
-.fs-card:nth-child(4n + 1) { background: #f0f9ff; }
-.fs-card:nth-child(4n + 2) { background: #f0fdf4; }
-.fs-card:nth-child(4n + 3) { background: #faf5ff; }
-.fs-card:nth-child(4n + 4) { background: #fff7ed; }
+/* Organic Background Rotation */
+.fs-card:nth-child(4n + 1) { background: var(--soft-cream); }
+.fs-card:nth-child(4n + 2) { background: #f9f6e5; }
+.fs-card:nth-child(4n + 3) { background: var(--sand-beige); }
+.fs-card:nth-child(4n + 4) { background: #fdfbf0; }
 
 .fs-card:hover {
   transform: translateY(-10px);
-  background: #ffffff !important;
-  border-color: #f57c00;
-  box-shadow: 0 20px 45px rgba(245, 124, 0, 0.15);
+  background: var(--white) !important;
+  border-color: var(--deep-teal);
+  box-shadow: 0 20px 45px rgba(0, 126, 110, 0.15);
 }
 
 /* 🔹 LOGO STYLING */
@@ -93,31 +94,34 @@
   width: 110px;
   height: 110px;
   object-fit: contain;
-  background: #ffffff;
+  background: var(--white);
   padding: 15px;
   border-radius: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  box-shadow: 0 8px 20px rgba(18, 38, 32, 0.06);
+  border: 1px solid var(--soft-cream);
+  transition: 0.4s ease;
 }
 
 .fs-card:hover .fs-img-container img {
   transform: scale(1.1) rotate(3deg);
+  border-color: var(--sand-beige);
 }
 
 .fs-name {
   margin-top: 20px;
   font-size: 22px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-dark);
   text-align: center;
 }
 
 .fs-address {
   margin-top: 8px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-body);
   text-align: center;
   max-width: 85%;
+  font-weight: 600;
 }
 
 .fs-meta {
@@ -129,11 +133,12 @@
 
 .fs-distance {
   font-size: 13px;
-  font-weight: 700;
-  color: #475569;
-  background: rgba(255, 255, 255, 0.6);
+  font-weight: 800;
+  color: var(--text-dark);
+  background: rgba(255, 255, 255, 0.7);
   padding: 5px 12px;
   border-radius: 10px;
+  border: 1px solid var(--soft-cream);
 }
 
 .fs-status {
@@ -144,8 +149,15 @@
   text-transform: uppercase;
 }
 
-.fs-status.fs-open { background: #dcfce7; color: #16a34a; }
-.fs-status.fs-closed { background: #fee2e2; color: #ef4444; }
+.fs-status.fs-open { 
+  background: var(--moss-green); 
+  color: var(--white); 
+}
+
+.fs-status.fs-closed { 
+  background: #fee2e2; 
+  color: #ef4444; 
+}
 
 /* 🔹 NAVIGATION BUTTONS */
 .fs-scroll-btn {
@@ -155,10 +167,11 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #fff;
-  border: none;
+  background: var(--white);
+  color: var(--deep-teal);
+  border: 1px solid var(--sand-beige);
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 25px rgba(18, 38, 32, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,14 +180,17 @@
 }
 
 .fs-scroll-btn:hover {
-  background: #f57c00;
-  color: #fff;
+  background: var(--deep-teal);
+  color: var(--white);
+  border-color: var(--deep-teal);
 }
 
 .fs-left { left: -25px; }
 .fs-right { right: -25px; }
 
 @media (max-width: 768px) {
+  .fs-main-title { font-size: 26px; }
   .fs-card { width: 300px; padding: 20px; }
+  .fs-name { font-size: 19px; }
   .fs-scroll-btn { display: none; }
 }

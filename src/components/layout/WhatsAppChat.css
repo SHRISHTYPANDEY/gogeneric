@@ -4,21 +4,16 @@
   right: 22px;
   width: 58px;
   height: 58px;
-
-  background-color: #25D366; /* WhatsApp green */
+  background-color: #25D366; 
   color: #fff;
-
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 32px;
   box-shadow: 0 6px 18px rgba(37, 211, 102, 0.45);
-
   z-index: 9999;
   cursor: pointer;
-
   transition: 
     transform 0.25s ease,
     box-shadow 0.25s ease;
@@ -29,7 +24,6 @@
   box-shadow: 0 8px 24px rgba(37, 211, 102, 0.6);
 }
 
-/* Mobile safe spacing */
 @media (max-width: 480px) {
   .whatsapp-float {
     bottom: 18px;

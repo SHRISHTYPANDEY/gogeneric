@@ -1,0 +1,47 @@
+:root {
+  /* Palette Colors */
+  --deep-teal: #007E6E;      /* Primary Action / Logo / Buttons */
+  --moss-green: #73AF6F;     /* Secondary / Success / Accents */
+  --soft-cream: #E7DEAF;     /* Background Highlights / Borders */
+  --sand-beige: #D7C097;     /* Subtle Backgrounds / Cards */
+  
+  /* Text Colors (Readability ke liye extra dark) */
+  --text-dark: #122620;      /* Darkest Teal-Black for headings */
+  --text-body: #243B33;      /* Dark Forest for body text */
+  
+  /* Utility */
+  --white: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.96);
+}
+
+body {
+  margin: 0;
+  background-color: #fffaf5; 
+  color: var(--dark-text);
+}
+/* Sabhi headings ko ekdum dark aur readable banane ke liye */
+h1, h2, h3, h4, .cate-title, .concern-heading, .nearby-title, .logo {
+  color: var(--text-dark) !important;
+}
+
+/* Paragraphs aur links */
+p, a, li, input {
+  color: var(--text-body);
+}
+
+/* Primary Button Style (Uniformity ke liye) */
+.primary-btn-new {
+  background: var(--deep-teal);
+  color: var(--white);
+  transition: 0.3s;
+}
+
+.primary-btn-new:hover {
+  background: var(--moss-green);
+}
+
+/* Badges across site */
+.badge-new {
+  background: var(--deep-teal);
+  color: var(--white);
+}

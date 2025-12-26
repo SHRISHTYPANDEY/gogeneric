@@ -149,8 +149,8 @@ const handleLogin = async () => {
   try {
     const res = await api.post("/api/v1/auth/login", {
       login_type: "manual",
-      email_or_phone: formattedIdentifier, // ✅ REQUIRED
-      field_type: isEmail ? "email" : "phone", // ✅ REQUIRED
+      email_or_phone: formattedIdentifier,
+      field_type: isEmail ? "email" : "phone", 
       password,
       guest_id: guestId,
     });
@@ -177,9 +177,6 @@ const handleLogin = async () => {
     );
   }
 };
-
-
-
   /* ================= FORGOT PASSWORD ================= */
   const handleForgotPassword = async () => {
     if (!forgotValue) {
@@ -258,8 +255,6 @@ const handleLogin = async () => {
     setPhone(val);
   }}
 />
-
-
             <div className="password-wrapper">
               <input
                 className="input"
@@ -293,11 +288,9 @@ const handleLogin = async () => {
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </span>
             </div>
-
             <button className="submit-btn" onClick={handleSignup}>
               Signup
             </button>
-
             <p className="switch-text">
               Already have an account?
               <span onClick={() => { setIsSignup(false); resetFields(); }}>
@@ -315,7 +308,6 @@ const handleLogin = async () => {
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
             />
-
             <div className="password-wrapper">
               <input
                 className="input"
@@ -343,8 +335,6 @@ const handleLogin = async () => {
 >
   Continue as Guest
 </button>
-
-
             <p className="forgot-text" onClick={() => setIsForgot(true)}>
               Forgot Password?
             </p>
@@ -356,10 +346,8 @@ const handleLogin = async () => {
               </span>
             </p>
           </>
-          
         )}
       </div>
-      
     </div>
   );
 }

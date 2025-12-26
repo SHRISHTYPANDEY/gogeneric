@@ -1,16 +1,4 @@
-/* ================= PREMIUM STORES SECTION (FULL UPDATE) ================= */
-
-:root {
-  /* 8-Color Palette for Card Rotation */
-  --s-bg-1: #f0f9ff; /* Light Blue */
-  --s-bg-2: #f0fdf4; /* Light Green */
-  --s-bg-3: #faf5ff; /* Light Purple */
-  --s-bg-4: #fff7ed; /* Light Orange */
-  --s-bg-5: #fef2f2; /* Light Red */
-  --s-bg-6: #ecfeff; /* Light Cyan */
-  --s-bg-7: #f5f3ff; /* Light Indigo */
-  --s-bg-8: #f8fafc; /* Light Slate */
-}
+/* ================= PREMIUM STORES SECTION (TEAL & GOLD THEME) ================= */
 
 .stores-page {
   padding: 40px 0;
@@ -20,13 +8,14 @@
 .stores-heading {
   font-size: 30px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-dark);
   margin-bottom: 4px;
 }
 
 .stores-sub {
   font-size: 15px;
-  color: #64748b;
+  color: var(--text-body);
+  opacity: 0.8;
   margin-bottom: 25px;
 }
 
@@ -53,32 +42,37 @@
 .filter-btn {
   padding: 8px 22px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid var(--sand-beige);
+  background: var(--white);
   font-size: 14px;
-  font-weight: 600;
-  color: #475569;
+  font-weight: 700;
+  color: var(--text-body);
   transition: all 0.3s ease;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .filter-btn.active {
-  background: #f57c00;
-  color: #ffffff;
-  border-color: #f57c00;
-  box-shadow: 0 8px 15px rgba(245, 124, 0, 0.2);
+  background: var(--deep-teal);
+  color: var(--white);
+  border-color: var(--deep-teal);
+  box-shadow: 0 8px 15px rgba(0, 126, 110, 0.2);
 }
 
 .view-more-btn {
-  background: #1e293b;
-  color: white;
-  padding: 8px 20px;
+  background: var(--text-dark);
+  color: var(--white);
+  padding: 10px 24px;
   border-radius: 12px;
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: 0.3s;
+}
+
+.view-more-btn:hover {
+  background: var(--deep-teal);
+  transform: translateY(-2px);
 }
 
 /* 🔹 STORES GRID */
@@ -94,91 +88,87 @@
   position: relative;
   border-radius: 28px; 
   padding: 18px;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 4px 15px rgba(18, 38, 32, 0.05);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
+  background-color: var(--white);
 }
 
-/* Color Rotation logic (8 colors) */
-.stores-grid > .store-card-6am:nth-child(8n+1) { background-color: var(--s-bg-1); }
-.stores-grid > .store-card-6am:nth-child(8n+2) { background-color: var(--s-bg-2); }
-.stores-grid > .store-card-6am:nth-child(8n+3) { background-color: var(--s-bg-3); }
-.stores-grid > .store-card-6am:nth-child(8n+4) { background-color: var(--s-bg-4); }
-.stores-grid > .store-card-6am:nth-child(8n+5) { background-color: var(--s-bg-5); }
-.stores-grid > .store-card-6am:nth-child(8n+6) { background-color: var(--s-bg-6); }
-.stores-grid > .store-card-6am:nth-child(8n+7) { background-color: var(--s-bg-7); }
-.stores-grid > .store-card-6am:nth-child(8n+8) { background-color: var(--s-bg-8); }
+/* Color Rotation (Using Palette Shades) */
+.stores-grid > .store-card-6am:nth-child(4n+1) { background-color: var(--soft-cream); }
+.stores-grid > .store-card-6am:nth-child(4n+2) { background-color: #f9f6e5; }
+.stores-grid > .store-card-6am:nth-child(4n+3) { background-color: var(--sand-beige); }
+.stores-grid > .store-card-6am:nth-child(4n+4) { background-color: #fdfbf0; }
 
 .store-card-6am:hover {
   transform: translateY(-8px);
-  background: #ffffff !important; /* Pure white on hover */
-  border-color: #f57c00;
-  box-shadow: 0 15px 30px rgba(245, 124, 0, 0.12);
+  background: var(--white) !important;
+  border-color: var(--deep-teal);
+  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.15);
 }
 
-/* 🔹 IMAGE WRAPPER (CENTERED & NO CUTTING) */
+/* 🔹 IMAGE WRAPPER */
 .store-image-wrapper {
   width: 100%;
   height: 160px;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  background: #ffffff; 
+  background: var(--white); 
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 12px;
-  border: 1px solid rgba(0,0,0,0.02);
+  border: 1px solid var(--soft-cream);
 }
 
 .store-image-wrapper img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Isse images katengi nahi */
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
 
 .store-card-6am:hover img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
-/* 🔹 CONTENT STYLING */
 .store-content-vertical {
   padding-top: 15px;
 }
 
 .store-name {
   font-size: 17px;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 800;
+  color: var(--text-dark);
   margin: 0;
   transition: color 0.3s;
 }
 
 .store-card-6am:hover .store-name {
-  color: #f57c00;
+  color: var(--deep-teal);
 }
 
 .store-address {
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-body);
   margin-top: 5px;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-weight: 600;
 }
 
-/* 🔹 BOTTOM ROW (DISTANCE & RATING) */
 .store-bottom-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
   padding-top: 12px;
-  border-top: 1px dashed rgba(0,0,0,0.1);
+  border-top: 1px dashed var(--sand-beige);
 }
 
 .store-distance {
@@ -186,19 +176,20 @@
   align-items: center;
   gap: 5px;
   font-size: 13px;
-  font-weight: 700;
-  color: #475569;
+  font-weight: 800;
+  color: var(--text-dark);
 }
 
 .store-rating {
-  color: #16a34a;
-  background: #f0fdf4;
+  color: var(--white);
+  background: var(--moss-green);
   padding: 4px 10px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 4px;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 12px;
 }
 
 /* 🔹 OFFER BADGE */
@@ -206,14 +197,14 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: #ef4444;
-  color: white;
+  background: var(--deep-teal);
+  color: var(--white);
   padding: 4px 10px;
   border-radius: 10px;
   font-size: 11px;
   font-weight: 800;
   z-index: 2;
-  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 126, 110, 0.2);
 }
 
 /* 📱 RESPONSIVE */
@@ -222,8 +213,14 @@
 }
 
 @media (max-width: 640px) {
+  .stores-heading { font-size: 24px; }
   .stores-grid { grid-template-columns: 1fr; }
   .store-card-6am { border-radius: 22px; padding: 15px; }
   .filter-row { flex-direction: column; align-items: flex-start; }
   .store-image-wrapper { height: 140px; }
+}
+.view-more-bottom {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 40px;
 }

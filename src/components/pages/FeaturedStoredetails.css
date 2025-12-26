@@ -1,9 +1,9 @@
-/* ================= PREMIUM FEATURED STORE DETAILS ================= */
+/* ================= PREMIUM FEATURED STORE DETAILS (TEAL & GOLD THEME) ================= */
 
 .store-details-page {
   width: 100%;
   padding: 40px 20px;
-  background: #f8fafc;
+  background: var(--white);
   min-height: 60vh;
 }
 
@@ -12,7 +12,7 @@
   font-size: 28px;
   font-weight: 800;
   margin-bottom: 30px;
-  color: #0f172a;
+  color: var(--text-dark);
   letter-spacing: -0.5px;
   position: relative;
   display: inline-block;
@@ -25,7 +25,7 @@
   left: 0;
   width: 50px;
   height: 4px;
-  background: #f57c00; /* Brand Orange */
+  background: var(--deep-teal); /* Theme Primary */
   border-radius: 10px;
 }
 
@@ -36,7 +36,7 @@
   gap: 25px;
 }
 
-/* 🔹 MULTI-COLOR PRODUCT CARDS (SYNCED) */
+/* 🔹 MULTI-COLOR PRODUCT CARDS (SQUIRCLE) */
 .item-card {
   padding: 24px;
   border-radius: 32px; /* Premium Squircle */
@@ -46,24 +46,26 @@
   cursor: pointer;
   position: relative;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 10px 20px rgba(18, 38, 32, 0.03);
   overflow: hidden;
 }
 
-/* 🎨 CATEGORY COLORS SYNC (8-Color Pattern) */
-.item-card:nth-child(8n + 1) { background: #f0fdf4; border-bottom: 4px solid #16a34a; }
-.item-card:nth-child(8n + 2) { background: #fff7ed; border-bottom: 4px solid #f57c00; }
-.item-card:nth-child(8n + 3) { background: #fef2f2; border-bottom: 4px solid #ef4444; }
-.item-card:nth-child(8n + 4) { background: #f0f9ff; border-bottom: 4px solid #0ea5e9; }
-.item-card:nth-child(8n + 5) { background: #faf5ff; border-bottom: 4px solid #a855f7; }
-.item-card:nth-child(8n + 6) { background: #f5f3ff; border-bottom: 4px solid #6366f1; }
-.item-card:nth-child(8n + 7) { background: #fff1f2; border-bottom: 4px solid #f43f5e; }
-.item-card:nth-child(8n + 8) { background: #f0fdfa; border-bottom: 4px solid #14b8a6; }
+/* 🎨 REFINED CATEGORY COLORS (Teal & Organic Palette) */
+.item-card:nth-child(8n + 1) { background: var(--soft-cream); border-bottom: 4px solid var(--deep-teal); }
+.item-card:nth-child(8n + 2) { background: #fdfbf0; border-bottom: 4px solid var(--sand-beige); }
+.item-card:nth-child(8n + 3) { background: #f0fdfa; border-bottom: 4px solid var(--moss-green); }
+.item-card:nth-child(8n + 4) { background: #f9f6e5; border-bottom: 4px solid #d4c491; }
+.item-card:nth-child(8n + 5) { background: #f0f9ff; border-bottom: 4px solid #14b8a6; }
+.item-card:nth-child(8n + 6) { background: #fafaf9; border-bottom: 4px solid var(--text-dark); }
+.item-card:nth-child(8n + 7) { background: #fdf2f2; border-bottom: 4px solid #ef4444; }
+.item-card:nth-child(8n + 8) { background: #f5f5f4; border-bottom: 4px solid #a8a29e; }
 
 .item-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--white) !important; /* Cleans up on hover */
+  border-color: var(--deep-teal);
+  box-shadow: 0 20px 40px rgba(0, 126, 110, 0.12);
 }
 
 /* 🖼️ IMAGE BOX */
@@ -71,34 +73,32 @@
   width: 100%;
   height: 150px;
   object-fit: contain;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.8);
+  border-radius: 22px;
+  background: var(--white);
   padding: 15px;
   transition: transform 0.4s ease;
+  border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .item-card:hover img {
-  transform: scale(1.1);
+  transform: scale(1.1) translateY(-5px);
 }
 
 /* 🏷️ TEXT & PRICE */
 .item-card h4 {
   font-size: 16px;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 800;
+  color: var(--text-dark);
   margin: 15px 0 5px;
   text-align: center;
   min-height: 42px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.3;
 }
 
 .item-card p {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--deep-teal);
   margin-top: auto;
 }
 
@@ -106,30 +106,31 @@
 .empty-state {
   text-align: center;
   padding: 80px 20px;
-  background: white;
+  background: var(--soft-cream);
   border-radius: 30px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-  color: #94a3b8;
+  border: 2px dashed var(--sand-beige);
+  color: var(--text-body);
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .empty-state::before {
-  content: "✨";
+  content: "🌿"; /* Organic Emoji */
   display: block;
   font-size: 50px;
   margin-bottom: 15px;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 /* 📱 MOBILE RESPONSIVE */
 @media (max-width: 640px) {
   .items-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns for better UX */
     gap: 15px;
   }
   .item-card { padding: 15px; border-radius: 24px; }
-  .item-card img { height: 120px; }
-  .item-card h4 { font-size: 14px; }
+  .item-card img { height: 110px; }
+  .item-card h4 { font-size: 14px; min-height: 38px; }
+  .item-card p { font-size: 17px; }
   .section-title { font-size: 22px; }
 }

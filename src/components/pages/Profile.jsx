@@ -151,109 +151,134 @@ useEffect(() => {
 
   /* ================= UPDATE PROFILE ================= */
   const handleProfileUpdate = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
+  try {
+    setLoading(true);
+    const token = localStorage.getItem("token");
 
-      const formData = new FormData();
-      formData.append("name", user.name);
-      formData.append("email", user.email);
-      formData.append("phone", user.phone);
-      formData.append("button_type", "profile");
+    const firstName =
+      user.f_name || user.name?.split(" ")[0] || "";
+    const lastName =
+      user.l_name || user.name?.split(" ").slice(1).join(" ") || "";
 
-      if (profileImage) {
-        formData.append("image", profileImage);
-      }
+    const fullName = `${firstName} ${lastName}`.trim();
 
-      /* 🔍 FORM DATA LOG */
-      for (let pair of formData.entries()) {
-        console.log("🟡 FORM DATA:", pair[0], pair[1]);
-      }
+    const formData = new FormData();
 
-      const res = await api.post(
-        "/api/v1/customer/update-profile",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            zoneId: JSON.stringify([3]),
-            moduleId: 2,
-          },
-        }
-      );
+    // ✅ REQUIRED BY BACKEND
+    formData.append("name", fullName);
+    formData.append("email", user.email);
+      {user.phone && (
+    <p className="text-sm text-gray-600">{user.phone}</p>
+  )}
 
-      console.log("🟢 UPDATE PROFILE RESPONSE:", res.data);
+    // ✅ PROFILE FIELDS
+    formData.append("f_name", firstName);
+    formData.append("l_name", lastName);
+    formData.append("phone", user.phone || "");
+    formData.append("button_type", "profile");
 
-      /* ✅ IMAGE + USER SYNC (IMPORTANT FIX) */
-      if (res.data?.image_full_url) {
-        const updatedUser = {
-          ...user,
-          image: res.data.image_full_url,
-        };
-
-        setUser(updatedUser);
-        setPreviewImage(cleanImageUrl(res.data.image_full_url));
-
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-      }
-
-      toast.success(res.data.message || "Profile updated");
-      setProfileImage(null);
-      setEditing(false);
-    } catch (err) {
-      console.error("Profile update error:", err);
-      toast.error(
-        err?.response?.data?.message ||
-          err?.response?.data?.errors?.[0]?.message ||
-          "Profile update failed"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* ================= CHANGE PASSWORD ================= */
-  const handleChangePassword = async () => {
-    if (!newPassword || !confirmPassword) {
-      toast.error("All fields are required");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
+    if (profileImage) {
+      formData.append("image", profileImage);
     }
 
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-
-      const res = await api.post(
-        "/api/v1/customer/update-profile",
-        {
-          password: newPassword,
-          button_type: "change_password",
+    const res = await api.post(
+      "/api/v1/customer/update-profile",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            zoneId: JSON.stringify([3]),
-            moduleId: 2,
-          },
-        }
-      );
+      }
+    );
 
-      console.log("🟢 CHANGE PASSWORD RESPONSE:", res.data);
+    const updatedImage =
+      res.data?.image_full_url ||
+      res.data?.data?.image_full_url;
 
-      toast.success(res.data.message || "Password updated");
-      setShowChangePassword(false);
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (err) {
-      toast.error("Failed to update password");
-    } finally {
-      setLoading(false);
-    }
-  };
+    const updatedUser = {
+      ...user,
+      name: fullName,
+      f_name: firstName,
+      l_name: lastName,
+      image: updatedImage || user.image,
+    };
+
+    setUser(updatedUser);
+    setPreviewImage(cleanImageUrl(updatedUser.image));
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    toast.success(res.data?.message || "Profile updated");
+    setEditing(false);
+    setProfileImage(null);
+  } catch (err) {
+    toast.error(
+      err?.response?.data?.errors?.[0]?.message ||
+      "Profile update failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  const handleChangePassword = async () => {
+  if (!newPassword || !confirmPassword) {
+    toast.error("All fields are required");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    toast.error("Passwords do not match");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
+    const res = await api.post(
+      "/api/v1/customer/update-profile",
+      {
+        // ✅ REQUIRED FIELDS
+        name: user.name,
+        email: user.email,
+
+        // ✅ PASSWORD CHANGE
+        password: newPassword,
+        button_type: "change_password",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      }
+    );
+
+    console.log("🟢 CHANGE PASSWORD RESPONSE:", res.data);
+
+    toast.success(res.data?.message || "Password updated successfully");
+
+    setShowChangePassword(false);
+    setNewPassword("");
+    setConfirmPassword("");
+  } catch (err) {
+    console.error("❌ Change password error:", err);
+    toast.error(
+      err?.response?.data?.message ||
+        err?.response?.data?.errors?.[0]?.message ||
+        "Failed to update password"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   if (!user) return null;
 
@@ -272,8 +297,6 @@ useEffect(() => {
   alt="Profile"
   className="w-16 h-16 rounded-full object-cover border"
 />
-
-
             {editing && (
               <label className="absolute -bottom-1 -right-1 bg-teal-600 p-1 rounded-full cursor-pointer">
                 <Pencil size={14} className="text-white" />
@@ -291,10 +314,12 @@ useEffect(() => {
               </label>
             )}
           </div>
-
           <div>
             <h2 className="font-semibold">{user.name}</h2>
             <p className="text-sm text-gray-600">{user.email}</p>
+              {user.phone && (
+    <p className="text-sm text-gray-600">{user.phone}</p>
+  )}
           </div>
         </div>
 
@@ -305,14 +330,12 @@ useEffect(() => {
           <Pencil size={18} />
         </button>
       </div>
-
       {/* ===== STATS ===== */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <StatCard title="Loyalty Points" value={loyaltyPoints} />
         <StatCard title="Total Orders" value={totalOrders} />
         <StatCard title="Wallet Balance" value={`₹${balance}`} />
       </div>
-
       {/* ===== PROFILE DETAILS ===== */}
       <div className="bg-white p-6 rounded-2xl shadow mb-6">
         {editing ? (
@@ -336,7 +359,6 @@ useEffect(() => {
           <p><strong>Email:</strong> {user.email}</p>
         )}
       </div>
-
       {/* ===== ACTIONS ===== */}
       <div className="bg-white rounded-2xl shadow divide-y">
         <SettingItem label="Change Password" onClick={() => setShowChangePassword(true)} />
@@ -348,10 +370,10 @@ useEffect(() => {
           }}
         />
       </div>
+      
     </div>
   );
 }
-
 /* ===== HELPERS ===== */
 function StatCard({ title, value }) {
   return (
@@ -361,7 +383,6 @@ function StatCard({ title, value }) {
     </div>
   );
 }
-
 function Input({ label, ...props }) {
   return (
     <div className="mb-3">
@@ -370,7 +391,6 @@ function Input({ label, ...props }) {
     </div>
   );
 }
-
 function SettingItem({ label, onClick }) {
   return (
     <div onClick={onClick} className="p-4 cursor-pointer font-medium">

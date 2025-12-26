@@ -1,184 +1,184 @@
-/* ================= ULTRA-MODERN LUXURY PROFILE DASHBOARD ================= */
+/* ================= ULTRA-MODERN LUXURY PROFILE DASHBOARD (TEAL-GOLD THEME) ================= */
 
 :root {
-  --primary-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
-  --surface-white: #ffffff;
-  --bg-slate: #f8fafc;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --premium-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.04), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  --primary-gradient: linear-gradient(135deg, var(--deep-teal) 0%, #14b8a6 100%);
+  --surface-white: var(--white);
+  --bg-slate: var(--white); /* For clean organic look */
+  --text-main: var(--text-dark);
+  --text-muted: var(--text-body);
+  --premium-shadow: 0 20px 25px -5px rgba(18, 38, 32, 0.04), 0 10px 10px -5px rgba(18, 38, 32, 0.02);
 }
 
 body {
-  background-color: var(--bg-slate);
+  background-color: var(--white);
   font-family: 'Inter', sans-serif;
 }
 
-/* 1. Profile Hero Section (Top Header) */
+/* 🔹 1. PROFILE HERO SECTION (SQUIRCLE THEME) */
 .bg-teal-50 {
-  background: var(--surface-white) !important;
-  border-radius: 30px !important;
-  padding: 40px !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  background: var(--soft-cream) !important;
+  border-radius: 35px !important;
+  padding: 45px !important;
+  border: 1px solid var(--sand-beige) !important;
   box-shadow: var(--premium-shadow) !important;
   position: relative;
   overflow: hidden;
 }
 
-/* Decorative background element for hero */
+/* Hero Decorative Glow */
 .bg-teal-50::before {
   content: "";
   position: absolute;
   top: -50px;
   right: -50px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(45, 212, 191, 0.1) 0%, transparent 70%);
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle, rgba(0, 126, 110, 0.1) 0%, transparent 75%);
   border-radius: 50%;
 }
 
+/* Profile Avatar Squircle */
 .bg-teal-200 {
   background: var(--primary-gradient) !important;
-  width: 80px !important;
-  height: 80px !important;
-  border-radius: 22px !important; /* Squircle shape */
-  font-size: 28px !important;
-  box-shadow: 0 15px 30px rgba(13, 148, 136, 0.25) !important;
+  width: 90px !important;
+  height: 90px !important;
+  border-radius: 28px !important; /* Squircle matching store icons */
+  font-size: 32px !important;
+  color: var(--white) !important;
+  box-shadow: 0 15px 35px rgba(0, 126, 110, 0.3) !important;
   transform: rotate(-3deg);
-  transition: 0.3s ease;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .bg-teal-50:hover .bg-teal-200 {
-  transform: rotate(0deg) scale(1.05);
+  transform: rotate(0deg) scale(1.08);
 }
 
-/* 2. Modern Stat Cards (Glass Look) */
+/* 🔹 2. MODERN STAT CARDS (SQUIRCLE & HOVER) */
 .grid.grid-cols-1.sm\:grid-cols-3 > div {
-  background: var(--surface-white) !important;
-  border-radius: 24px !important;
+  background: var(--white) !important;
+  border-radius: 28px !important;
   padding: 24px !important;
-  border: 1px solid #f1f5f9 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid var(--sand-beige) !important;
+  box-shadow: 0 10px 15px rgba(18, 38, 32, 0.03) !important;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .grid.grid-cols-1.sm\:grid-cols-3 > div:hover {
   transform: translateY(-10px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
-  border-color: #2dd4bf !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 126, 110, 0.12) !important;
+  border-color: var(--deep-teal) !important;
 }
 
 .grid.grid-cols-1.sm\:grid-cols-3 > div p:first-child {
   color: var(--text-muted);
-  font-weight: 600;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   font-size: 11px;
 }
 
 .grid.grid-cols-1.sm\:grid-cols-3 > div p:last-child {
-  color: var(--text-main);
-  font-size: 24px;
+  color: var(--text-dark);
+  font-size: 26px;
   font-weight: 800;
-  margin-top: 8px;
+  margin-top: 5px;
 }
 
-/* 3. Details & Settings Sections */
+/* 🔹 3. DETAILS & SETTINGS SECTIONS */
 .bg-white.rounded-2xl.shadow.p-6, 
 .bg-white.rounded-2xl.shadow.divide-y {
-  background: var(--surface-white) !important;
-  border-radius: 28px !important;
-  border: 1px solid #f1f5f9 !important;
+  background: var(--white) !important;
+  border-radius: 32px !important;
+  border: 1px solid var(--sand-beige) !important;
   box-shadow: var(--premium-shadow) !important;
-  padding: 30px !important;
+  padding: 35px !important;
 }
 
 .divide-y > div {
-  border-bottom: 1px solid #f8fafc !important;
-  padding: 20px 10px !important;
-  border-radius: 12px;
-  transition: 0.2s;
+  border-bottom: 1px solid var(--soft-cream) !important;
+  padding: 22px 10px !important;
+  border-radius: 16px;
+  transition: 0.3s ease;
 }
 
 .divide-y > div:hover {
-  background: #f8fafc;
-  transform: translateX(5px);
+  background: var(--soft-cream);
+  transform: translateX(8px);
 }
 
-/* 4. Modern Inputs */
+/* 🔹 4. MODERN INPUTS */
 input {
-  background: #f8fafc !important;
-  border: 1.5px solid #e2e8f0 !important;
-  height: 50px;
+  background: var(--soft-cream) !important;
+  border: 1.5px solid var(--sand-beige) !important;
+  height: 52px;
   padding: 0 20px !important;
-  border-radius: 14px !important;
-  color: var(--text-main) !important;
-  font-weight: 500;
+  border-radius: 16px !important;
+  color: var(--text-dark) !important;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
 input:focus {
-  background: #ffffff !important;
-  border-color: #14b8a6 !important;
-  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1) !important;
+  background: var(--white) !important;
+  border-color: var(--deep-teal) !important;
+  box-shadow: 0 0 0 4px rgba(0, 126, 110, 0.1) !important;
 }
 
-/* 5. Custom Toggle Switch (Premium Styling) */
+/* 🔹 5. PREMIUM TOGGLE SWITCH */
 .bg-teal-500 {
-  background: #14b8a6 !important;
+  background: var(--deep-teal) !important;
   height: 28px !important;
-  width: 52px !important;
+  width: 54px !important;
+  border-radius: 50px !important;
 }
 
-.bg-teal-500 div {
-  width: 22px !important;
-  height: 22px !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* 6. Action Buttons */
+/* 🔹 6. ACTION BUTTONS */
 button.bg-teal-600 {
   background: var(--primary-gradient) !important;
-  border-radius: 16px !important;
-  height: 50px;
-  font-weight: 700 !important;
-  transition: all 0.3s ease !important;
+  border-radius: 18px !important;
+  height: 52px;
+  font-weight: 800 !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
 button.bg-teal-600:hover {
-  box-shadow: 0 12px 20px -5px rgba(20, 184, 166, 0.4) !important;
-  transform: scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.3) !important;
+  transform: translateY(-3px) scale(1.02);
 }
 
-/* 7. Glassmorphism Password Modal */
+/* 🔹 7. GLASSMORPHISM PASSWORD MODAL */
 .fixed.inset-0.bg-black\/40 {
-  backdrop-filter: blur(12px);
-  background: rgba(15, 23, 42, 0.5) !important;
+  backdrop-filter: blur(15px);
+  background: rgba(18, 38, 32, 0.6) !important;
 }
 
 .fixed.inset-0 .bg-white {
-  border-radius: 35px !important;
-  padding: 40px !important;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 40px !important;
+  padding: 45px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.4) !important;
 }
 
-/* 8. Danger Styling (Logout/Delete) */
+/* 🔹 8. DANGER STYLING */
 .text-red-500 {
-  color: #f43f5e !important;
-  font-weight: 700 !important;
+  color: #ef4444 !important;
+  font-weight: 800 !important;
+  border-radius: 12px;
+  padding: 8px 12px;
+  transition: 0.3s;
 }
 
 .text-red-500:hover {
-  background: #fff1f2 !important;
-  color: #e11d48 !important;
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
 }
 
-/* Mobile Responsiveness */
+/* 📱 MOBILE RESPONSIVE */
 @media (max-width: 640px) {
-  .bg-teal-50 {
-    padding: 30px 20px !important;
-  }
-  
-  .grid.grid-cols-1.sm\:grid-cols-3 {
-    gap: 15px;
-  }
+  .bg-teal-50 { padding: 35px 20px !important; }
+  .grid.grid-cols-1.sm\:grid-cols-3 { gap: 15px; }
+  .bg-teal-200 { width: 70px !important; height: 70px !important; }
 }

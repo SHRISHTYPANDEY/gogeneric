@@ -55,13 +55,22 @@ export default function Wishlist() {
     }
   };
 
-  if (wishlist.length === 0) {
-    return (
-      <p className="empty-text">
-        Your wishlist is empty
+if (wishlist.length === 0) {
+  return (
+    <div className="empty-wishlist medical">
+      <div className="empty-icon">
+        💊
+      </div>
+
+      <h3>Your wishlist is empty</h3>
+
+      <p>
+        Save medicines or healthcare items<br />
+        to quickly access them later.
       </p>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="wishlist-page max-w-7xl mx-auto">

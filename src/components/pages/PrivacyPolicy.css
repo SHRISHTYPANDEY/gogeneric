@@ -1,36 +1,118 @@
+/* ================= PREMIUM POLICY CONTAINER (TEAL & GOLD THEME) ================= */
+
 .policy-container {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  font-family: Arial, sans-serif;
-  color: #333;
-  line-height: 1.7;
+  margin: 60px auto;
+  padding: 50px;
+  background: var(--white);
+  border-radius: 35px; /* Matching Squircle */
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+  line-height: 1.8;
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 20px 50px rgba(18, 38, 32, 0.05);
 }
 
 .policy-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 30px;
-  color: #0f766e;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 40px;
+  color: var(--text-dark);
+  letter-spacing: -1px;
+  position: relative;
+}
+
+.policy-title::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 4px;
+  background: var(--deep-teal);
+  border-radius: 10px;
 }
 
 .policy-section {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  padding: 10px 0;
 }
 
 .policy-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #115e59;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--deep-teal);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Optional: Adding a small dot before sub-headings for premium look */
+.policy-section h2::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--sand-beige);
+  border-radius: 50%;
 }
 
 .policy-section p,
 .policy-section li {
-  font-size: 0.95rem;
+  font-size: 16px;
+  color: var(--text-body);
+  font-weight: 500;
 }
 
 .policy-section ul {
   margin-left: 20px;
+  list-style-type: none; /* Custom bullets */
+}
+
+.policy-section ul li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.policy-section ul li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--sand-beige);
+  font-weight: bold;
+}
+
+/* ---------------- DARK MODE SUPPORT ---------------- */
+body.dark .policy-container {
+  background: #0d1a17 !important;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .policy-title,
+body.dark .policy-section li {
+  color: var(--white);
+}
+
+body.dark .policy-section p {
+  color: #a3b1af;
+}
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 768px) {
+  .policy-container {
+    margin: 30px 15px;
+    padding: 30px 20px;
+    border-radius: 25px;
+  }
+  
+  .policy-title {
+    font-size: 26px;
+  }
+  
+  .policy-section h2 {
+    font-size: 18px;
+  }
 }

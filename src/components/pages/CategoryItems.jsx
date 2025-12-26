@@ -15,17 +15,16 @@ export default function CategoryItems() {
 
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [hasFetched, setHasFetched] = useState(false);
   const [search, setSearch] = useState("");
 
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
 
-  const [categoryName] = useState(
-    location.state?.categoryName || "Category Products"
-  );
+  const categoryName =
+    location.state?.categoryName || "Category Products";
 
-  /* ❌ Cleanup */
+  /* 🧹 Cleanup on unmount */
   useEffect(() => {
     return () => {
       abortRef.current?.abort();
@@ -33,19 +32,22 @@ export default function CategoryItems() {
     };
   }, []);
 
-  /* 📦 Fetch category items (AbortController) */
+  /* 🔁 Reset state when category changes */
+  useEffect(() => {
+    setItems([]);
+    setFilteredItems([]);
+    setSearch("");
+    setHasFetched(false);
+  }, [id]);
+
+  /* 📦 Fetch category items */
   const fetchCategoryItems = useCallback(async () => {
     try {
       abortRef.current?.abort();
       abortRef.current = new AbortController();
 
-      setLoading(true);
-
       const res = await api.get(`/api/v1/categories/items/${id}`, {
-        params: {
-          limit: 20,
-          offset: 1,
-        },
+        params: { limit: 20, offset: 1 },
         headers: {
           zoneId: JSON.stringify([3]),
           moduleId: 2,
@@ -62,19 +64,22 @@ export default function CategoryItems() {
       setFilteredItems(data);
     } catch (err) {
       if (err.name !== "CanceledError") {
-        console.error("Category items error:", err?.response?.data);
+        console.error(
+          "Category items error:",
+          err?.response?.data || err
+        );
       }
     } finally {
-      setLoading(false);
+      setHasFetched(true);
     }
   }, [id]);
 
-  /* 🔁 Load when category changes */
+  /* 🔁 Load data */
   useEffect(() => {
     fetchCategoryItems();
   }, [fetchCategoryItems]);
 
-  /* 🔍 Debounced local search */
+  /* 🔍 Search */
   useEffect(() => {
     clearTimeout(debounceRef.current);
 
@@ -95,17 +100,23 @@ export default function CategoryItems() {
     return () => clearTimeout(debounceRef.current);
   }, [search, items]);
 
-  if (loading) {
-    return <Loader text="Loading products..." />;
+  /* 🔴 EARLY RETURN — LOADER (NO FLASH GUARANTEE) */
+  if (!hasFetched) {
+    return (
+      <div className="category-items-page">
+        <div className="category-loader">
+          <Loader text="Loading medicines..." />
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="category-items-page">
-      {/* 🔹 HEADER ROW */}
+      {/* 🔹 HEADER */}
       <div className="category-header">
         <h2 className="page-title">{categoryName}</h2>
 
-        {/* 🔍 SEARCH BOX */}
         <div className="search-box">
           <Search size={16} />
           <input
@@ -117,9 +128,13 @@ export default function CategoryItems() {
         </div>
       </div>
 
-      {filteredItems.length === 0 ? (
-        <p className="empty-text">No products found</p>
-      ) : (
+      {/* ❌ EMPTY STATE */}
+      {items.length === 0 && (
+        <p className="empty-text">No medicines found</p>
+      )}
+
+      {/* ✅ ITEMS */}
+      {filteredItems.length > 0 && (
         <div className="items-grid">
           {filteredItems.map((item, index) => (
             <div
@@ -140,24 +155,18 @@ export default function CategoryItems() {
                 className="add-cart-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  addToCart({
-                    item,
-                    navigate,
-                    location,
-                  });
+                  addToCart({ item, navigate, location });
                 }}
               >
                 <Plus size={18} />
               </div>
-
               <img
                 src={cleanImageUrl(item.image_full_url)}
                 alt={item.name}
-                onError={(e) => {
-                  e.currentTarget.src = "/no-image.png";
-                }}
+                onError={(e) =>
+                  (e.currentTarget.src = "/no-image.png")
+                }
               />
-
               <h4>{item.name}</h4>
               <p>₹{item.price}</p>
             </div>

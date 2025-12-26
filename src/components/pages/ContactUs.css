@@ -1,35 +1,38 @@
-/* ================= PREMIUM CONTACT US PAGE ================= */
+/* ================= PREMIUM CONTACT US PAGE (TEAL & GOLD THEME) ================= */
 
 .contact-page {
-  padding: 60px 20px;
-  background: #f8fafc;
+  padding: 80px 20px;
+  background: var(--white);
   min-height: 90vh;
 }
 
 .contact-title {
-  font-size: 42px;
+  font-size: 48px;
   font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -1px;
-  margin-bottom: 10px;
+  color: var(--text-dark);
+  letter-spacing: -2px;
+  margin-bottom: 12px;
   text-align: center;
 }
 
 .contact-sub {
-  color: #64748b;
+  color: var(--text-body);
   font-size: 18px;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
   text-align: center;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 500;
 }
 
 /* 🔹 MAIN WRAPPER GRID */
 .contact-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 50px;
+  gap: 60px;
   align-items: start;
 }
 
@@ -37,75 +40,75 @@
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .info-box {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 24px;
-  border-radius: 24px;
-  background: #ffffff;
+  padding: 28px;
+  border-radius: 28px; /* Premium Squircle */
+  background: var(--white);
   text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 10px 20px rgba(18, 38, 32, 0.03);
 }
 
 .info-box.clickable:hover {
-  transform: translateX(10px);
-  background: #ffffff;
-  border-color: #f57c00;
-  box-shadow: 0 15px 30px rgba(245, 124, 0, 0.08);
+  transform: translateX(12px);
+  background: var(--soft-cream);
+  border-color: var(--deep-teal);
+  box-shadow: 0 20px 40px rgba(0, 126, 110, 0.08);
 }
 
 .info-box svg {
-  color: #f57c00;
-  background: rgba(245, 124, 0, 0.1);
+  color: var(--deep-teal);
+  background: rgba(0, 126, 110, 0.08);
   padding: 12px;
-  width: 50px;
-  height: 50px;
-  border-radius: 16px;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  transition: 0.3s;
 }
 
-/* WhatsApp Specific Styling */
+/* WhatsApp Specific Styling (Keeping the brand green but softening it) */
 .info-box.whatsapp {
-  border: 1px solid rgba(37, 211, 102, 0.2);
-  background: rgba(37, 211, 102, 0.03);
+  border: 1px solid rgba(37, 211, 102, 0.15);
 }
 
 .info-box.whatsapp svg {
-  color: #25d366;
-  background: rgba(37, 211, 102, 0.1);
+  color: #128c7e;
+  background: rgba(37, 211, 102, 0.08);
 }
 
 .info-box.whatsapp:hover {
   border-color: #25d366;
-  background: #ffffff;
-  box-shadow: 0 15px 30px rgba(37, 211, 102, 0.1);
+  background: #f0fff4;
 }
 
 .info-box h4 {
-  font-size: 17px;
-  font-weight: 700;
-  color: #0f172a;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-dark);
   margin-bottom: 4px;
 }
 
 .info-box p {
-  font-size: 14px;
-  color: #64748b;
+  font-size: 15px;
+  color: var(--text-body);
   line-height: 1.5;
+  font-weight: 500;
 }
 
 /* 🔹 RIGHT SIDE: CONTACT FORM */
 .contact-form {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 32px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
-  border: 1px solid #f1f5f9;
+  background: var(--white);
+  padding: 45px;
+  border-radius: 40px; /* Luxury Curve */
+  box-shadow: 0 30px 60px rgba(18, 38, 32, 0.05);
+  border: 1px solid var(--sand-beige);
 }
 
 .form-group {
@@ -114,59 +117,80 @@
 
 .form-group label {
   font-size: 14px;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 8px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 10px;
   display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 14px 18px;
-  border-radius: 16px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1.5px solid var(--sand-beige);
+  background: var(--soft-cream);
   font-size: 15px;
-  color: #0f172a;
+  color: var(--text-dark);
   transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  background: #ffffff;
-  border-color: #f57c00;
+  background: var(--white);
+  border-color: var(--deep-teal);
   outline: none;
-  box-shadow: 0 0 0 4px rgba(245, 124, 0, 0.1);
+  box-shadow: 0 0 0 5px rgba(0, 126, 110, 0.1);
 }
 
-/* 🔹 SUBMIT BUTTON */
+/* 🔹 SUBMIT BUTTON (DEEP TEAL GRADIENT) */
 .submit-btn {
   width: 100%;
+  display: flex;
   justify-content: center;
-  gap: 10px;
-  background: #0f172a; /* Navy Dark */
-  color: #ffffff;
-  padding: 16px;
-  border-radius: 18px;
-  font-weight: 700;
+  align-items: center;
+  gap: 12px;
+  background: var(--deep-teal);
+  color: var(--white);
+  padding: 18px;
+  border-radius: 20px;
+  font-weight: 800;
   font-size: 16px;
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .submit-btn:hover {
-  background: #f57c00;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(245, 124, 0, 0.2);
+  background: var(--text-dark);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(18, 38, 32, 0.3);
 }
 
 .submit-btn:disabled {
-  background: #94a3b8;
+  background: var(--sand-beige);
+  color: var(--text-body);
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
+}
+
+/* ---------------- DARK MODE Support ---------------- */
+body.dark .contact-form,
+body.dark .info-box {
+  background: #0d1a17;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .contact-title,
+body.dark .info-box h4 {
+  color: var(--white);
 }
 
 /* 📱 RESPONSIVE DESIGN */
@@ -178,7 +202,8 @@
 }
 
 @media (max-width: 640px) {
-  .contact-title { font-size: 32px; }
-  .contact-form { padding: 25px; }
-  .info-box { padding: 18px; }
+  .contact-page { padding: 40px 15px; }
+  .contact-title { font-size: 34px; letter-spacing: -1px; }
+  .contact-form { padding: 30px 20px; border-radius: 30px; }
+  .info-box { padding: 22px; border-radius: 22px; }
 }

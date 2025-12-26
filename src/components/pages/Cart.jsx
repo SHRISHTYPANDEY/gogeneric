@@ -161,9 +161,26 @@ export default function Cart() {
     <div className="cart-page">
       <h2 className="cart-title">Your Cart</h2>
 
-      {cart.length === 0 ? (
-        <p className="empty-cart">Your cart is empty</p>
-      ) : (
+     {cart.length === 0 ? (
+  <div className="empty-cart-state medical">
+    <span className="medical-icon">💊</span>
+
+    <h3>Your cart is currently empty</h3>
+
+    <p>
+      Please add required medicines or healthcare<br />
+      items to continue.
+    </p>
+
+    <button
+      className="explore-btn"
+      onClick={() => navigate("/")}
+    >
+      Browse Medicines
+    </button>
+  </div>
+) : (
+
         <>
           {/* CART ITEMS */}
           <div className="cart-layout">

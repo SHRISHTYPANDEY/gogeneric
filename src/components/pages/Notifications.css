@@ -1,103 +1,144 @@
-/* Notifications.css */
+/* ================= PREMIUM NOTIFICATIONS PAGE (TEAL & GOLD THEME) ================= */
 
 .notifications-page {
-  max-width: 700px;
+  max-width: 750px;
   margin: 40px auto;
-  padding: 20px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #f8fafc;
-  border-radius: 16px;
+  padding: 30px;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--white);
+  border-radius: 28px;
   min-height: 80vh;
+  border: 1px solid var(--sand-beige);
+  box-shadow: 0 10px 30px rgba(18, 38, 32, 0.05);
 }
 
 .notifications-page h2 {
-  color: #1e293b;
-  font-size: 24px;
-  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 28px;
+  font-weight: 800;
   margin-bottom: 24px;
-  border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 12px;
+  border-bottom: 2px solid var(--soft-cream);
+  padding-bottom: 15px;
   display: flex;
   align-items: center;
+  gap: 12px;
+  letter-spacing: -0.5px;
 }
 
-/* Empty State */
-.notifications-page .empty {
-  text-align: center;
-  color: #94a3b8;
-  margin-top: 50px;
-  font-size: 1.1rem;
-}
-
-/* Notification Card */
+/* 🔹 NOTIFICATION CARD */
 .notification-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 16px 20px;
+  background: var(--white);
+  border-radius: 20px;
+  padding: 20px 24px;
   margin-bottom: 16px;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
+  border: 1px solid var(--sand-beige);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
 }
 
 .notification-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border-color: #cbd5e1;
+  transform: translateX(5px);
+  background: var(--soft-cream);
+  border-color: var(--deep-teal);
+  box-shadow: 0 8px 20px rgba(0, 126, 110, 0.08);
 }
 
-/* Unread Style */
+/* 🔹 UNREAD STATE (Premium Gold Accent) */
 .notification-card.unread {
-  background: #f0f7ff;
-  border-left: 4px solid #f57c00;
+  background: #fdfbf0; /* Very light gold tint */
+  border-left: 5px solid var(--deep-teal);
 }
 
 .notification-card.unread::after {
   content: '';
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 22px;
+  right: 20px;
   width: 10px;
   height: 10px;
-  background-color:#f57c00;
+  background-color: var(--deep-teal);
   border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 126, 110, 0.4);
 }
 
-/* Card Content */
+/* 🔹 CARD CONTENT */
 .notification-card h4 {
-  margin: 0 0 8px 0;
-  color: #0f172a;
+  margin: 0 0 6px 0;
+  color: var(--text-dark);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.notification-card p {
+  margin: 0 0 14px 0;
+  color: var(--text-body);
+  line-height: 1.6;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.notification-card span {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--deep-teal);
+  background: rgba(0, 126, 110, 0.08);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+/* 🔹 EMPTY STATE */
+.notifications-page .empty {
+  text-align: center;
+  color: var(--text-body);
+  margin-top: 80px;
   font-size: 1.1rem;
   font-weight: 600;
 }
 
-.notification-card p {
-  margin: 0 0 12px 0;
-  color: #475569;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-.notification-card span {
+.notifications-page .empty::before {
+  content: "🔔";
   display: block;
-  font-size: 0.8rem;
-  color: #94a3b8;
-  font-weight: 500;
+  font-size: 50px;
+  margin-bottom: 15px;
+  opacity: 0.4;
 }
 
-/* Loading & Error Text (Centered) */
-.text-center {
-  text-align: center;
-  font-family: sans-serif;
-  color: #64748b;
-  margin-top: 50px;
+/* 🔹 DARK MODE SUPPORT */
+body.dark .notifications-page {
+  background-color: #0d1a17;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
+body.dark .notification-card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark .notification-card h4 {
+  color: var(--white);
+}
+
+body.dark .notification-card p {
+  color: #a3b1af;
+}
+
+body.dark .notification-card.unread {
+  background: rgba(0, 126, 110, 0.1);
+}
+
+/* 📱 RESPONSIVE */
 @media (max-width: 640px) {
   .notifications-page {
-    margin: 10px;
-    padding: 15px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+  
+  .notifications-page h2 {
+    font-size: 22px;
   }
 }

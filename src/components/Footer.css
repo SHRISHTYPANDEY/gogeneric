@@ -1,7 +1,7 @@
-/* ================= PREMIUM MODERN FOOTER ================= */
+/* ================= PREMIUM MODERN FOOTER (TEAL & GOLD THEME) ================= */
 
 .ak-footer-section {
-  background: #0f172a; /* Deep Modern Navy */
+  background: #0d1a17; /* Very Deep Teal (Organic Dark) */
   color: #ffffff;
   padding: 80px 0 0;
   font-family: 'Inter', sans-serif;
@@ -17,7 +17,7 @@
   right: -100px;
   width: 300px;
   height: 300px;
-  background: rgba(245, 124, 0, 0.05);
+  background: rgba(0, 126, 110, 0.1); /* Teal Glow */
   filter: blur(100px);
   border-radius: 50%;
 }
@@ -30,7 +30,7 @@
 
 .ak-footer-content {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr; /* Custom width for about section */
+  grid-template-columns: 1.5fr 1fr 1fr;
   gap: 60px;
   padding-bottom: 60px;
 }
@@ -39,14 +39,15 @@
 .ak-footer-logo-img {
   max-width: 200px;
   margin-bottom: 25px;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
 }
 
 .ak-footer-text {
   font-size: 15px;
   line-height: 1.8;
-  color: #94a3b8;
+  color: #a3b1af; /* Muted Teal Gray */
   margin-bottom: 25px;
+  font-weight: 500;
 }
 
 .ak-footer-social-icon {
@@ -55,14 +56,14 @@
 }
 
 .ak-footer-social-icon a {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px; /* Premium Squircle Icons */
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: #fff;
+  color: var(--white);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -70,25 +71,26 @@
 
 .ak-footer-social-icon a:hover {
   transform: translateY(-5px);
-  background: #f57c00; /* Brand Orange on Hover */
-  border-color: #f57c00;
-  box-shadow: 0 10px 20px rgba(245, 124, 0, 0.3);
+  background: var(--deep-teal);
+  border-color: var(--deep-teal);
+  box-shadow: 0 10px 20px rgba(0, 126, 110, 0.3);
 }
 
 /* 🔹 MIDDLE COL: QUICK LINKS */
 .ak-footer-widget-heading {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 30px;
-  color: #f1f5f9;
+  color: var(--white) !important;
   position: relative;
+  letter-spacing: 0.5px;
 }
 
 .ak-footer-widget-heading::after {
   content: "";
   width: 35px;
   height: 3px;
-  background: #f57c00;
+  background: var(--sand-beige) !important; 
   position: absolute;
   left: 0;
   bottom: -10px;
@@ -105,19 +107,19 @@
 }
 
 .ak-footer-links li a {
-  color: #94a3b8;
+  color: #a3b1af;
   font-size: 15px;
   text-decoration: none;
   transition: 0.3s ease;
   display: inline-block;
+  font-weight: 600;
 }
 
 .ak-footer-links li a:hover {
-  color: #f57c00;
+  color: var(--sand-beige);
   transform: translateX(8px);
 }
 
-/* 🔹 RIGHT COL: APP DOWNLOAD */
 .app-buttons {
   display: flex;
   flex-direction: column;
@@ -127,39 +129,43 @@
 
 .app-buttons img {
   width: 160px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
 }
 
 .app-buttons img:hover {
   transform: scale(1.05);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--sand-beige);
 }
 
-/* 🔹 COPYRIGHT AREA */
 .ak-copyright-area {
-  background: #020617; /* Darker bottom bar */
+  background: #060d0b; 
   text-align: center;
   padding: 25px;
   font-size: 14px;
-  color: #64748b;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: #6a7a77;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  font-weight: 600;
 }
 
 /* 📱 RESPONSIVE DESIGN */
 @media (max-width: 992px) {
   .ak-footer-content {
     grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 }
 
 @media (max-width: 640px) {
+  .ak-footer-section { padding-top: 60px; }
+  
   .ak-footer-content {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 40px;
+    gap: 45px;
   }
 
   .ak-footer-widget-heading::after {

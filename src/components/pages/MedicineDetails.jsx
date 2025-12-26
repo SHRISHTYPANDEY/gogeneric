@@ -15,30 +15,27 @@ export default function MedicineDetails() {
 
   const [medicine, setMedicine] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fetched, setFetched] = useState(false); // 🔥 KEY FIX
 
   const passedPrice = location.state?.price || null;
 
-  /* ================= FETCH DETAILS ================= */
   useEffect(() => {
     fetchMedicineDetails();
 
     return () => {
-      if (abortRef.current) {
-        abortRef.current.abort();
-      }
+      abortRef.current?.abort();
     };
   }, [id]);
 
   const fetchMedicineDetails = async () => {
-    // Abort previous request
-    if (abortRef.current) {
-      abortRef.current.abort();
-    }
+    abortRef.current?.abort();
 
     const controller = new AbortController();
     abortRef.current = controller;
 
     setLoading(true);
+    setFetched(false);
+
     try {
       const res = await api.get(`/api/v1/items/details/${id}`, {
         headers: {
@@ -48,36 +45,27 @@ export default function MedicineDetails() {
         signal: controller.signal,
       });
 
-      setMedicine(res.data);
+      setMedicine(res.data || null);
     } catch (err) {
       if (
         err.name === "CanceledError" ||
         err.code === "ERR_CANCELED"
       ) {
-        // request aborted → ignore
         return;
       }
       console.error("Medicine fetch error:", err);
       toast.error("Failed to load medicine details");
+      setMedicine(null);
     } finally {
-      setLoading(false);
+      setFetched(true);   // ✅ API attempt completed
+      setLoading(false);  // ✅ loader OFF only after that
     }
   };
 
-  if (loading) {
-    return (
-      <div className="medicine-loader">
-        <Loader />
-      </div>
-    );
-  }
-
-  if (!medicine) return <p className="text-center">Medicine not found</p>;
-
   const price =
     passedPrice ||
-    medicine.price ||
-    medicine.unit_price ||
+    medicine?.price ||
+    medicine?.unit_price ||
     medicine?.variations?.[0]?.price ||
     null;
 
@@ -102,54 +90,59 @@ export default function MedicineDetails() {
 
   return (
     <div className="medicine-page">
-      <div className="medicine-card">
-        {/* ===== IMAGE ===== */}
-        <div className="medicine-image">
-          <div className="medicine-wishlist">
-            <WishlistButton item={medicine} />
+      {loading ? (
+        <div className="medicine-loader">
+          <Loader text="Loading medicine details..." />
+        </div>
+      ) : fetched && !medicine ? (
+        <p className="text-center">Medicine not found</p>
+      ) : (
+        <div className="medicine-card">
+          <div className="medicine-image">
+            <div className="medicine-wishlist">
+              <WishlistButton item={medicine} />
+            </div>
+
+            <img
+              src={cleanImageUrl(
+                medicine.image_full_url || medicine.image
+              )}
+              alt={medicine.name}
+              onError={(e) =>
+                (e.currentTarget.src = "/no-image.jpg")
+              }
+            />
           </div>
 
-          <img
-            src={cleanImageUrl(
-              medicine.image_full_url || medicine.image
+          <div className="medicine-info">
+            <h1>{medicine.name}</h1>
+
+            {price ? (
+              <p className="medicine-price">₹{price}</p>
+            ) : (
+              <p className="medicine-price unavailable">
+                Price unavailable
+              </p>
             )}
-            alt={medicine.name}
-            loading="lazy"
-            onError={(e) => {
-              e.currentTarget.src = "/no-image.jpg";
-            }}
-          />
-        </div>
 
-        {/* ===== INFO ===== */}
-        <div className="medicine-info">
-          <h1>{medicine.name}</h1>
+            {medicine.description && (
+              <p className="medicine-desc">
+                {medicine.description}
+              </p>
+            )}
 
-          {price ? (
-            <p className="medicine-price">₹{price}</p>
-          ) : (
-            <p className="medicine-price unavailable">
-              Price unavailable
-            </p>
-          )}
-
-          {medicine.description && (
-            <p className="medicine-desc">
-              {medicine.description}
-            </p>
-          )}
-
-          <div className="medicine-actions">
-            <button
-              className="add-cart-btn1"
-              onClick={handleAddToCart}
-              disabled={!price}
-            >
-              Add to Cart
-            </button>
+            <div className="medicine-actions">
+              <button
+                className="add-cart-btn1"
+                onClick={handleAddToCart}
+                disabled={!price}
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

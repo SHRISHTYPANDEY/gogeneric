@@ -1,4 +1,4 @@
-/* ================= THE BEST PREMIUM LOADER ================= */
+/* ================= THE BEST PREMIUM LOADER (TEAL & GOLD THEME) ================= */
 
 .global-loader {
   display: flex;
@@ -20,7 +20,7 @@
   justify-content: center;
 }
 
-/* Outer Ring (Fades in and out) */
+/* Outer Ring (Teal & Moss Green) */
 .spinner::before {
   content: "";
   position: absolute;
@@ -28,29 +28,29 @@
   height: 100%;
   border-radius: 50%;
   border: 4px solid transparent;
-  border-top-color: #f57c00; /* Brand Orange */
-  border-bottom-color: #00c16e; /* Brand Green */
+  border-top-color: var(--deep-teal); /* Brand Teal */
+  border-bottom-color: var(--moss-green); /* Brand Moss */
   animation: spin-premium 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
 }
 
-/* Inner Pulsing Circle */
+/* Inner Pulsing Squircle (Gold/Sand Beige) */
 .spinner::after {
   content: "";
   position: absolute;
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #f57c00, #ffb74d);
-  border-radius: 12px; /* Squircle Shape */
+  background: linear-gradient(135deg, var(--sand-beige), #e5dcc3);
+  border-radius: 10px; /* Squircle Shape */
   animation: pulse-squircle 1.2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(245, 124, 0, 0.3);
+  box-shadow: 0 0 20px rgba(212, 189, 145, 0.4);
 }
 
 /* 🔹 TEXT STYLING */
 .global-loader p {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #475569;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-dark);
   text-transform: uppercase;
   animation: fade-text 1.2s ease-in-out infinite alternate;
 }
@@ -67,16 +67,26 @@
 @keyframes pulse-squircle {
   0%, 100% {
     transform: scale(0.8) rotate(0deg);
-    opacity: 0.6;
+    opacity: 0.7;
+    border-radius: 10px;
   }
   50% {
     transform: scale(1.1) rotate(45deg);
     opacity: 1;
+    border-radius: 30%; /* Morphing effect */
   }
 }
 
 /* Breathing Text */
 @keyframes fade-text {
-  from { opacity: 0.4; transform: translateY(0); }
-  to { opacity: 1; transform: translateY(-3px); }
+  from { 
+    opacity: 0.5; 
+    transform: translateY(0); 
+    color: var(--text-body);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(-5px); 
+    color: var(--deep-teal);
+  }
 }

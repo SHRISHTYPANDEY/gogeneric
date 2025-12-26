@@ -54,24 +54,31 @@ const {
           <p className="empty-text">No wallet transactions found</p>
         ) : (
           <ul className="transaction-list">
-            {transactions.map((tx) => (
-              <li key={tx.id} className="transaction-item">
-                <div>
-                  <p className="tx-title">{tx.title}</p>
-                  <span className="tx-date">
-                    {new Date(tx.created_at).toLocaleDateString()}
-                  </span>
-                </div>
+          {transactions.map((tx) => {
+  const credit = Number(tx.credit || 0);
+  const debit = Number(tx.debit || 0);
+  const amount = credit > 0 ? credit : debit;
+  const isCredit = credit > 0;
 
-                <span
-                  className={`tx-amount ${
-                    tx.type === "credit" ? "credit" : "debit"
-                  }`}
-                >
-                  {tx.type === "credit" ? "+" : "-"}₹{tx.amount}
-                </span>
-              </li>
-            ))}
+  return (
+    <li key={tx.id} className="transaction-item">
+      <div>
+        <p className="tx-title">
+          {tx.transaction_type || "Wallet Transaction"}
+        </p>
+        <span className="tx-date">
+          {new Date(tx.created_at).toLocaleDateString()}
+        </span>
+      </div>
+
+      <span
+        className={`tx-amount ${isCredit ? "credit" : "debit"}`}
+      >
+        {isCredit ? "+" : "-"}₹{amount}
+      </span>
+    </li>
+  );
+})}
           </ul>
         )}
       </div>
