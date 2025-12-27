@@ -123,11 +123,8 @@ export default function Cart() {
           limit: 6,
         },
       });
-
       const products = res.data?.products || [];
-
       console.log("SUGGESTED PRODUCTS ", products);
-
       setSuggested(products);
     } catch (err) {
       console.error("Suggested error:", err?.response?.data || err.message);

@@ -135,6 +135,7 @@
 /* ================= TABS & SEARCH ================= */
 
 .sd-tabs-nav {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -171,22 +172,6 @@
   height: 3px;
   background: var(--deep-plum);
   border-radius: 10px;
-}
-
-.sd-search-bar {
-  background: white;
-  border: 2px solid var(--dusty-rose);
-  border-radius: 50px;
-  padding: 10px 20px;
-  width: 300px;
-  outline: none;
-  font-size: 14px;
-  transition: 0.3s;
-}
-
-.sd-search-bar:focus {
-  border-color: var(--deep-plum);
-  box-shadow: 0 0 0 4px rgba(107, 63, 105, 0.05);
 }
 
 /* ================= PRODUCTS GRID ================= */
@@ -280,4 +265,38 @@
   .sd-search-bar {
     width: 100%;
   }
+}
+/* ================= SEARCH BAR ================= */
+.sd-search-input {
+  top: 0;
+  right: 0;
+
+  width: 260px;
+  height: 42px;
+
+  padding: 0 16px;
+  border-radius: 999px; /* fully curved */
+  border: 1.5px solid #e5e7eb;
+
+  font-size: 14px;
+  outline: none;
+  background: #ffffff;
+
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.sd-search-input:hover {
+  border-color: #16a34a;
+}
+
+/* Focus */
+.sd-search-input:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+}
+
+/* Placeholder */
+.sd-search-input::placeholder {
+  color: #9ca3af;
 }
