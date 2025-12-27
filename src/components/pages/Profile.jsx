@@ -2,45 +2,48 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../api/axiosInstance";
-import { Pencil } from "lucide-react";
+import {
+  ShieldCheck,
+  LogOut,
+  ChevronRight,
+  Camera,
+  Heart,
+  MessageSquare,
+  Mail,
+  Phone,
+  Save,
+  Pencil,
+} from "lucide-react";
 import { useWallet } from "../../context/WalletContext";
 import { cleanImageUrl } from "../../utils";
 import LoginModal from "../auth/LoginModal";
+import "./Profile.css";
+
 export default function Profile() {
   const navigate = useNavigate();
   const { balance } = useWallet();
-  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
-  const [showLogin, setShowLogin] = useState(false);
 
   const [user, setUser] = useState(null);
-  const [editing, setEditing] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
+  const [editing, setEditing] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
 
-  const [showChangePassword, setShowChangePassword] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
 
-  /* ================= FETCH USER (LOCAL) ================= */
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const u = JSON.parse(storedUser);
-      setUser(u);
-      setPreviewImage(cleanImageUrl(u.image || ""));
-
-    }
-  }, []);
-
-  /* ================= FETCH USER (API) ================= */
+  /* ================= FETCH PROFILE ================= */
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) return;
+        if (!token) {
+          setShowLogin(true);
+          return;
+        }
 
         const res = await api.get("/api/v1/customer/info", {
           headers: {
@@ -51,11 +54,8 @@ export default function Profile() {
           },
         });
 
-        console.log("🟢 PROFILE API RESPONSE:", res.data);
-
         const apiUser = res.data?.data || res.data;
-
-        const normalizedUser = {
+        const normalized = {
           id: apiUser.id,
           email: apiUser.email,
           phone: apiUser.phone,
@@ -65,26 +65,22 @@ export default function Profile() {
           image: apiUser.image_full_url || apiUser.image || "",
         };
 
-        setUser(normalizedUser);
-       setPreviewImage(cleanImageUrl(normalizedUser.image));
-
-        localStorage.setItem("user", JSON.stringify(normalizedUser));
+        setUser(normalized);
+        setPreviewImage(cleanImageUrl(normalized.image));
+        localStorage.setItem("user", JSON.stringify(normalized));
       } catch (err) {
-        console.error("❌ Profile fetch error:", err);
+        console.error(err);
+      } finally {
+        setInitialLoading(false); // 🔑 FIX
       }
     };
 
-    fetchProfile();
-  }, []);
+    const fetchStats = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
 
-  /* ================= TOTAL ORDERS ================= */
-  useEffect(() => {
-    const fetchTotalOrders = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const res = await api.get("/api/v1/customer/order/list", {
+        const oRes = await api.get("/api/v1/customer/order/list", {
           headers: {
             Authorization: `Bearer ${token}`,
             zoneId: JSON.stringify([3]),
@@ -92,333 +88,225 @@ export default function Profile() {
           },
           params: { limit: 1, offset: 0 },
         });
+        setTotalOrders(oRes.data?.total_size || 0);
 
-        console.log("🟢 ORDERS API RESPONSE:", res.data);
-        setTotalOrders(res.data?.total_size || 0);
+        const pRes = await api.get(
+          "/api/v1/customer/loyalty-point/transactions",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              zoneId: JSON.stringify([3]),
+              moduleId: 2,
+            },
+            params: { limit: 20, offset: 0 },
+          }
+        );
+
+        const pts = pRes.data?.data || [];
+        setLoyaltyPoints(
+          pts.reduce(
+            (sum, tx) =>
+              sum + Number(tx.credit || 0) - Number(tx.debit || 0),
+            0
+          )
+        );
       } catch (err) {
-        console.error("Orders count error:", err);
+        console.error(err);
       }
     };
 
-    fetchTotalOrders();
+    fetchProfile();
+    fetchStats();
   }, []);
 
-  /* ================= LOYALTY POINTS ================= */
-useEffect(() => {
-  const fetchLoyaltyPoints = async () => {
+  /* ================= UPDATE PROFILE ================= */
+  const handleProfileUpdate = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      if (!token) return;
 
-      const res = await api.get(
-        "/api/v1/customer/loyalty-point/transactions",
+      const formData = new FormData();
+      formData.append("name", user.name);
+      formData.append("email", user.email);
+      formData.append("f_name", user.f_name || user.name.split(" ")[0]);
+      formData.append("l_name", user.l_name || user.name.split(" ")[1] || "");
+      formData.append("phone", user.phone || "");
+      formData.append("button_type", "profile");
+      if (profileImage) formData.append("image", profileImage);
+
+      const res = await api.post(
+        "/api/v1/customer/update-profile",
+        formData,
         {
-          params: {
-            limit: 20,
-            offset: 0, // first page
-          },
           headers: {
             Authorization: `Bearer ${token}`,
             zoneId: JSON.stringify([3]),
             moduleId: 2,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      console.log("🟢 LOYALTY API RESPONSE:", res.data);
-
-      const transactions = res.data?.data || [];
-
-      // ✅ CORRECT TOTAL CALCULATION
-      const totalPoints = transactions.reduce(
-        (sum, tx) =>
-          sum + Number(tx.credit || 0) - Number(tx.debit || 0),
-        0
-      );
-
-      console.log("🟣 TOTAL LOYALTY POINTS:", totalPoints);
-
-      setLoyaltyPoints(totalPoints);
+      toast.success(res.data?.message || "Profile updated");
+      setEditing(false);
     } catch (err) {
-      console.error("❌ Loyalty fetch error:", err);
-      setLoyaltyPoints(0);
+      toast.error(
+        err?.response?.data?.errors?.[0]?.message || "Update failed"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  fetchLoyaltyPoints();
-}, []);
+  /* ================= RENDER GUARDS ================= */
 
+  // ⛔ Prevent flicker
+  if (initialLoading) return null;
 
-
-  /* ================= UPDATE PROFILE ================= */
-  const handleProfileUpdate = async () => {
-  try {
-    setLoading(true);
-    const token = localStorage.getItem("token");
-
-    const firstName =
-      user.f_name || user.name?.split(" ")[0] || "";
-    const lastName =
-      user.l_name || user.name?.split(" ").slice(1).join(" ") || "";
-
-    const fullName = `${firstName} ${lastName}`.trim();
-
-    const formData = new FormData();
-
-    // ✅ REQUIRED BY BACKEND
-    formData.append("name", fullName);
-    formData.append("email", user.email);
-      {user.phone && (
-    <p className="text-sm text-gray-600">{user.phone}</p>
-  )}
-
-    // ✅ PROFILE FIELDS
-    formData.append("f_name", firstName);
-    formData.append("l_name", lastName);
-    formData.append("phone", user.phone || "");
-    formData.append("button_type", "profile");
-
-    if (profileImage) {
-      formData.append("image", profileImage);
-    }
-
-    const res = await api.post(
-      "/api/v1/customer/update-profile",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-
-    const updatedImage =
-      res.data?.image_full_url ||
-      res.data?.data?.image_full_url;
-
-    const updatedUser = {
-      ...user,
-      name: fullName,
-      f_name: firstName,
-      l_name: lastName,
-      image: updatedImage || user.image,
-    };
-
-    setUser(updatedUser);
-    setPreviewImage(cleanImageUrl(updatedUser.image));
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-
-    toast.success(res.data?.message || "Profile updated");
-    setEditing(false);
-    setProfileImage(null);
-  } catch (err) {
-    toast.error(
-      err?.response?.data?.errors?.[0]?.message ||
-      "Profile update failed"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  const handleChangePassword = async () => {
-  if (!newPassword || !confirmPassword) {
-    toast.error("All fields are required");
-    return;
+  // 🔐 Not logged in
+  if (!user && showLogin) {
+    return <LoginModal open onClose={() => navigate("/")} />;
   }
 
-  if (newPassword !== confirmPassword) {
-    toast.error("Passwords do not match");
-    return;
-  }
-
-  try {
-    setLoading(true);
-    const token = localStorage.getItem("token");
-
-    const res = await api.post(
-      "/api/v1/customer/update-profile",
-      {
-        // ✅ REQUIRED FIELDS
-        name: user.name,
-        email: user.email,
-
-        // ✅ PASSWORD CHANGE
-        password: newPassword,
-        button_type: "change_password",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
-      }
-    );
-
-    console.log("🟢 CHANGE PASSWORD RESPONSE:", res.data);
-
-    toast.success(res.data?.message || "Password updated successfully");
-
-    setShowChangePassword(false);
-    setNewPassword("");
-    setConfirmPassword("");
-  } catch (err) {
-    console.error("❌ Change password error:", err);
-    toast.error(
-      err?.response?.data?.message ||
-        err?.response?.data?.errors?.[0]?.message ||
-        "Failed to update password"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-useEffect(() => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    setShowLogin(true);
-  }
-}, []);
-
-
-if (!user) {
+  /* ================= UI ================= */
   return (
-    <>
-      <LoginModal
-        open={showLogin}
-        onClose={() => {
-          setShowLogin(false);
-          navigate("/", { replace: true }); // optional
-        }}
-      />
-    </>
-  );
-}
+    <div className="premium-profile-page">
+      <div className="premium-hero-header" />
 
+      <div className="premium-container">
+        <div className="premium-main-card">
+          <div className="premium-avatar-box">
+            <div className="premium-avatar-outline">
+              <img
+                src={previewImage || "https://via.placeholder.com/150"}
+                alt="User"
+                className="premium-img"
+              />
 
-
-  return (
-    <div className="max-w-4xl mx-auto p-4">
-      {/* ===== PROFILE HEADER ===== */}
-      <div className="bg-teal-50 rounded-2xl p-6 flex justify-between items-center mb-6">
-        <div className="flex gap-4 items-center">
-          <div className="relative">
-            <img
-  src={
-    previewImage
-      ? cleanImageUrl(previewImage)
-      : "https://via.placeholder.com/150?text=User"
-  }
-  alt="Profile"
-  className="w-16 h-16 rounded-full object-cover border"
-/>
-            {editing && (
-              <label className="absolute -bottom-1 -right-1 bg-teal-600 p-1 rounded-full cursor-pointer">
-                <Pencil size={14} className="text-white" />
-                <input
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    setProfileImage(file);
-                    setPreviewImage(URL.createObjectURL(file));
-                  }}
-                />
-              </label>
-            )}
+              {editing && (
+                <label className="premium-camera-fab">
+                  <Camera size={16} />
+                  <input
+                    type="file"
+                    hidden
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setProfileImage(file);
+                        setPreviewImage(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                </label>
+              )}
+            </div>
           </div>
-          <div>
-            <h2 className="font-semibold">{user.name}</h2>
-            <p className="text-sm text-gray-600">{user.email}</p>
-              {user.phone && (
-    <p className="text-sm text-gray-600">{user.phone}</p>
-  )}
+
+          {!editing ? (
+            <div className="premium-user-meta">
+              <h2 className="premium-display-name">{user.name}</h2>
+              <div className="premium-contact-info">
+                <span>
+                  <Mail size={14} /> {user.email}
+                </span>
+                {user.phone && (
+                  <span>
+                    <Phone size={14} /> {user.phone}
+                  </span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="premium-edit-form">
+              <input
+                value={user.name}
+                onChange={(e) =>
+                  setUser({ ...user, name: e.target.value })
+                }
+                placeholder="Full Name"
+              />
+              <input
+                value={user.email}
+                onChange={(e) =>
+                  setUser({ ...user, email: e.target.value })
+                }
+                placeholder="Email"
+              />
+              <input
+                value={user.phone || ""}
+                onChange={(e) =>
+                  setUser({ ...user, phone: e.target.value })
+                }
+                placeholder="Phone"
+              />
+            </div>
+          )}
+
+          <div className="premium-stats-bar">
+            <div className="p-stat-box">
+              <span className="p-stat-val">{loyaltyPoints}</span>
+              <span className="p-stat-lbl">Loyalty Points</span>
+            </div>
+            <div className="p-stat-divider" />
+            <div className="p-stat-box">
+              <span className="p-stat-val">{totalOrders}</span>
+              <span className="p-stat-lbl">Total Orders</span>
+            </div>
+            <div className="p-stat-divider" />
+            <div className="p-stat-box">
+              <span className="p-stat-val">₹{balance}</span>
+              <span className="p-stat-lbl">Wallet Balance</span>
+            </div>
+          </div>
+
+          <div className="premium-footer-btns">
+            {!editing ? (
+              <button
+                className="premium-action-btn"
+                onClick={() => setEditing(true)}
+              >
+                <Pencil size={18} /> Edit Profile
+              </button>
+            ) : (
+              <button
+                className="premium-action-btn save"
+                onClick={handleProfileUpdate}
+                disabled={loading}
+              >
+                {loading ? "Saving..." : <><Save size={18}/> Save Changes</>}
+              </button>
+            )}
           </div>
         </div>
 
-        <button
-          onClick={() => setEditing(true)}
-          className="bg-white p-2 rounded-full shadow"
-        >
-          <Pencil size={18} />
-        </button>
-      </div>
-      {/* ===== STATS ===== */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <StatCard title="Loyalty Points" value={loyaltyPoints} />
-        <StatCard title="Total Orders" value={totalOrders} />
-        <StatCard title="Wallet Balance" value={`₹${balance}`} />
-      </div>
-      {/* ===== PROFILE DETAILS ===== */}
-      <div className="bg-white p-6 rounded-2xl shadow mb-6">
-        {editing ? (
-          <>
-            <Input label="Name" value={user.name}
-              onChange={(e) => setUser({ ...user, name: e.target.value })} />
-            <Input label="Email" value={user.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })} />
-            <Input label="Phone" value={user.phone || ""}
-              onChange={(e) => setUser({ ...user, phone: e.target.value })} />
+        <div className="premium-menu-stack">
+          <div className="premium-menu-link">
+            <div className="premium-menu-left">
+              <div className="p-icon-circle">
+                <ShieldCheck size={20} />
+              </div>
+              <span>Change Password</span>
+            </div>
+            <ChevronRight size={18} className="opacity-40" />
+          </div>
 
-            <button
-              onClick={handleProfileUpdate}
-              disabled={loading}
-              className="bg-teal-600 text-white px-4 py-2 rounded-lg"
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
-          </>
-        ) : (
-          <p><strong>Email:</strong> {user.email}</p>
-        )}
+          <div
+            className="premium-menu-link danger"
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
+          >
+            <div className="premium-menu-left">
+              <div className="p-icon-circle-red">
+                <LogOut size={20} />
+              </div>
+              <span>Logout Account</span>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* ===== ACTIONS ===== */}
-      <div className="bg-white rounded-2xl shadow divide-y">
-        <SettingItem label="Change Password" onClick={() => setShowChangePassword(true)} />
-        <SettingItem
-          label="Logout"
-          onClick={() => {
-  localStorage.clear();
-  navigate("/", { replace: true });
-}}
-        />
-      </div>
-      
-    </div>
-  );
-}
-/* ===== HELPERS ===== */
-function StatCard({ title, value }) {
-  return (
-    <div className="bg-white p-4 rounded-xl shadow text-center">
-      <p className="text-sm text-gray-500">{title}</p>
-      <p className="font-bold text-lg">{value}</p>
-    </div>
-  );
-}
-function Input({ label, ...props }) {
-  return (
-    <div className="mb-3">
-      <label className="text-sm font-medium">{label}</label>
-      <input {...props} className="w-full border rounded-lg px-3 py-2" />
-    </div>
-  );
-}
-function SettingItem({ label, onClick }) {
-  return (
-    <div onClick={onClick} className="p-4 cursor-pointer font-medium">
-      {label}
     </div>
   );
 }

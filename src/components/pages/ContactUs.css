@@ -1,209 +1,177 @@
-/* ================= PREMIUM CONTACT US PAGE (TEAL & GOLD THEME) ================= */
+/* ================= PREMIUM CONTACT US (GOGENRIC THEME) ================= */
 
 .contact-page {
   padding: 80px 20px;
-  background: var(--white);
+  background: linear-gradient(to bottom, #fff, #fdf5f5); /* Subtle brand tint */
   min-height: 90vh;
 }
 
 .contact-title {
-  font-size: 48px;
-  font-weight: 800;
+  font-size: 44px;
+  font-weight: 900;
   color: var(--text-dark);
-  letter-spacing: -2px;
-  margin-bottom: 12px;
+  letter-spacing: -1.5px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
 .contact-sub {
   color: var(--text-body);
-  font-size: 18px;
+  font-size: 17px;
   margin-bottom: 60px;
   text-align: center;
-  max-width: 600px;
+  max-width: 550px;
   margin-left: auto;
   margin-right: auto;
-  font-weight: 500;
+  opacity: 0.8;
 }
 
 /* 🔹 MAIN WRAPPER GRID */
 .contact-wrapper {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 50px;
   align-items: start;
 }
 
-/* 🔹 LEFT SIDE: INFO CARDS */
+/* 🔹 LEFT SIDE: INFO BOXES (Matching Category Palette) */
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .info-box {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 28px;
-  border-radius: 28px; /* Premium Squircle */
+  gap: 18px;
+  padding: 24px;
+  border-radius: 24px;
   background: var(--white);
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 10px 20px rgba(18, 38, 32, 0.03);
+  transition: all 0.4s ease;
+  border: 1.5px solid rgba(107, 63, 105, 0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
 }
 
-.info-box.clickable:hover {
-  transform: translateX(12px);
-  background: var(--soft-cream);
-  border-color: var(--deep-teal);
-  box-shadow: 0 20px 40px rgba(0, 126, 110, 0.08);
+/* Color cycling logic for boxes to match your brand colors */
+.info-box:nth-child(1) { background: #fdf5f5; }
+.info-box:nth-child(2) { background: #f8f0f7; }
+.info-box:nth-child(3) { background: #fce7ea; }
+.info-box:nth-child(4) { background: #eeccea; }
+
+.info-box:hover {
+  transform: translateX(10px);
+  background: var(--white);
+  border-color: var(--deep-plum);
+  box-shadow: 0 15px 30px rgba(107, 63, 105, 0.1);
 }
 
 .info-box svg {
-  color: var(--deep-teal);
-  background: rgba(0, 126, 110, 0.08);
+  color: var(--deep-plum);
+  background: var(--white);
   padding: 12px;
-  width: 54px;
-  height: 54px;
-  border-radius: 18px;
-  transition: 0.3s;
-}
-
-/* WhatsApp Specific Styling (Keeping the brand green but softening it) */
-.info-box.whatsapp {
-  border: 1px solid rgba(37, 211, 102, 0.15);
-}
-
-.info-box.whatsapp svg {
-  color: #128c7e;
-  background: rgba(37, 211, 102, 0.08);
-}
-
-.info-box.whatsapp:hover {
-  border-color: #25d366;
-  background: #f0fff4;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .info-box h4 {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 
 .info-box p {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-body);
-  line-height: 1.5;
+  line-height: 1.4;
   font-weight: 500;
 }
 
-/* 🔹 RIGHT SIDE: CONTACT FORM */
+/* 🔹 RIGHT SIDE: CONTACT FORM (Deep Plum Gradient) */
 .contact-form {
   background: var(--white);
-  padding: 45px;
-  border-radius: 40px; /* Luxury Curve */
-  box-shadow: 0 30px 60px rgba(18, 38, 32, 0.05);
-  border: 1px solid var(--sand-beige);
+  padding: 40px;
+  border-radius: 35px;
+  box-shadow: 0 25px 50px rgba(107, 63, 105, 0.06);
+  border: 1.5px solid rgba(107, 63, 105, 0.05);
 }
 
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--text-dark);
-  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--deep-plum);
+  margin-bottom: 8px;
   display: block;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 16px 20px;
-  border-radius: 18px;
-  border: 1.5px solid var(--sand-beige);
-  background: var(--soft-cream);
+  padding: 15px 18px;
+  border-radius: 15px;
+  border: 1.5px solid #eee;
+  background: #fafafa;
   font-size: 15px;
   color: var(--text-dark);
   transition: all 0.3s ease;
-  font-weight: 500;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   background: var(--white);
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
   outline: none;
-  box-shadow: 0 0 0 5px rgba(0, 126, 110, 0.1);
+  box-shadow: 0 0 0 4px rgba(107, 63, 105, 0.08);
 }
 
-/* 🔹 SUBMIT BUTTON (DEEP TEAL GRADIENT) */
+/* 🔹 SUBMIT BUTTON (The Signature Move) */
 .submit-btn {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  background: var(--deep-teal);
+  gap: 10px;
+  background: var(--deep-plum);
   color: var(--white);
-  padding: 18px;
-  border-radius: 20px;
+  padding: 16px;
+  border-radius: 15px;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 15px;
   border: none;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.2);
+  transition: all 0.4s ease;
+  box-shadow: 0 10px 20px rgba(107, 63, 105, 0.2);
   text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 .submit-btn:hover {
-  background: var(--text-dark);
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(18, 38, 32, 0.3);
+  background: #4a2b49;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(107, 63, 105, 0.3);
 }
 
 .submit-btn:disabled {
-  background: var(--sand-beige);
-  color: var(--text-body);
+  background: #ccc;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
-/* ---------------- DARK MODE Support ---------------- */
-body.dark .contact-form,
-body.dark .info-box {
-  background: #0d1a17;
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark .contact-title,
-body.dark .info-box h4 {
-  color: var(--white);
-}
-
-/* 📱 RESPONSIVE DESIGN */
-@media (max-width: 1024px) {
-  .contact-wrapper {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-
-@media (max-width: 640px) {
-  .contact-page { padding: 40px 15px; }
-  .contact-title { font-size: 34px; letter-spacing: -1px; }
-  .contact-form { padding: 30px 20px; border-radius: 30px; }
-  .info-box { padding: 22px; border-radius: 22px; }
+/* 📱 RESPONSIVE */
+@media (max-width: 900px) {
+  .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
+  .contact-title { font-size: 32px; }
+  .contact-form { padding: 25px; border-radius: 25px; }
+  .info-box:hover { transform: none; } /* Disable translate on mobile for better UX */
 }

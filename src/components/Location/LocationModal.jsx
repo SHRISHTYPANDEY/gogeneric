@@ -16,7 +16,7 @@ export default function LocationModal({ onClose, onPickLocation }) {
   const [loading, setLoading] = useState(false);
   const autocompleteRef = useRef(null);
 
-  /* ✅ SET DEFAULT LOCATION */
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -104,18 +104,14 @@ export default function LocationModal({ onClose, onPickLocation }) {
   value={query}
   onChange={(e) => setQuery(e.target.value)}
 />
-
   </Autocomplete>
 </div>
-
-
         <div className="map-box">
           <GoogleMapPicker
             position={position}
             setPosition={setPosition}
           />
         </div>
-
         <button
           className="pick-btn"
           onClick={handleConfirm}

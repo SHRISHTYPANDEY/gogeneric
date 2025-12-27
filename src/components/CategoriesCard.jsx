@@ -28,8 +28,6 @@ export default function CategoryCards() {
     state: { categoryName: cat.name },
   });
 };
-
-
   const scrollLeft = () => {
     scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
   };

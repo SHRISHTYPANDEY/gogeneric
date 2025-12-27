@@ -5,16 +5,6 @@
 :root {
   --font-primary: "Poppins", sans-serif;
   --font-secondary: "Inter", sans-serif;
-
-  /* New Color Variables - Easy to change later */
-  --bg-primary: #FFFFFF;           /* Main background */
-  --bg-light: #F8FAFC;              /* Cards / sections */
-  --text-primary: #1E293B;          /* Main text */
-  --text-secondary: #475569;        /* Subtext */
-  --primary: #00796B;              /* Teal Green - links, icons */
-  --accent: #F57C00;               /* Orange - buttons, CTAs */
-  --success: #E8F5E9;               /* Light green backgrounds */
-  --border: #E2E8F0;               /* Subtle borders */
 }
 
 body {

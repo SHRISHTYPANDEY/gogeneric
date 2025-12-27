@@ -4,9 +4,10 @@ import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import "./CategoryItems.css";
 import { Plus, Search } from "lucide-react";
-import { addToCart } from "../../utils/cartHelper";
 import Loader from "../Loader";
 import WishlistButton from "../WishlistButton";
+import AddToCartButton from "../CartButton";
+
 
 export default function CategoryItems() {
   const { id } = useParams();
@@ -150,16 +151,7 @@ export default function CategoryItems() {
               }
             >
               <WishlistButton item={item} />
-
-              <div
-                className="add-cart-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart({ item, navigate, location });
-                }}
-              >
-                <Plus size={18} />
-              </div>
+              <AddToCartButton item={item} />
               <img
                 src={cleanImageUrl(item.image_full_url)}
                 alt={item.name}

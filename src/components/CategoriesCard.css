@@ -1,16 +1,44 @@
+/* ================= TOP CATEGORIES (SPECIFIC LIGHT COLORS) ================= */
+
+/* 1. Essential Root Variables (Already defined in your App.css) */
+:root {
+  --deep-plum: #6B3F69;
+  --text-dark: #331d32;
+  --text-body: #5a4159;
+  --white: #ffffff;
+  --dusty-rose: #DDC3C3;
+}
+
+/* 2. Category Section Container */
 .category-section {
   position: relative;
-  margin-top: 40px;
+  margin-top: 50px;
   padding: 20px 0;
 }
 
+/* 3. Typography */
+.cate-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-dark) !important; 
+  letter-spacing: -0.6px;
+  margin-bottom: 4px;
+}
+
+.cate-subtitle {
+  font-size: 15px;
+  color: var(--text-body);
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+/* 4. Scrollable Wrapper */
 .category-wrapper {
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 15px 5px;
+  padding: 20px 5px;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 .category-wrapper::-webkit-scrollbar {
@@ -19,42 +47,39 @@
 
 .category-scroll {
   display: flex;
-  gap: 18px;
-  padding: 10px 0;
+  gap: 20px;
   width: max-content;
 }
 
-.cate-title {
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--text-dark);
-  margin-bottom: 4px;
-}
-
+/* 5. Premium Category Card Design */
 .category-card {
-  width: 160px;
-  height: 180px;
-  padding: 15px;
-  border-radius: 28px;
+  width: 170px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   cursor: pointer;
-  background: var(--white);
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 4px 15px rgba(18, 38, 32, 0.05);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-  overflow: visible;
+  border: 1px solid var(--mauve);; 
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.04);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
 }
 
+/* 🎨 YOUR SPECIFIC 4-COLOR PALETTE FOR CATEGORIES */
+.category-card:nth-child(4n + 1) { background: #fdf5f5; } /* Tint of Dusty Rose */
+.category-card:nth-child(4n + 2) { background: #f8f0f7; } /* Tint of Mauve */
+.category-card:nth-child(4n + 3) { background: #fce7ea; } /* Very Light Sand */
+.category-card:nth-child(4n + 4) { background: #eeccea; } /* Soft Purple Tint */
+
 .category-card img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
-  padding: 5px;
-  background: transparent;
   transition: all 0.4s ease;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.06));
   z-index: 2;
 }
 
@@ -63,71 +88,56 @@
   font-weight: 700;
   color: var(--text-dark);
   text-align: center;
-  margin-top: 5px;
-  width: 100%;
-  white-space: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin-top: 15px;
+  line-height: 1.3;
 }
 
+/* 6. Hover Animations */
 .category-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--deep-teal);
-  background: var(--white) !important;
-  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.15);
+  transform: translateY(-12px);
+  background: var(--white) !important; 
+  border-color: var(--deep-plum);
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.12);
 }
 
 .category-card:hover img {
-  transform: scale(1.15) translateY(-5px);
+  transform: scale(1.1);
 }
 
 .category-card:hover p {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
 
-.category-card:nth-child(4n + 1) { background: var(--soft-cream); }
-.category-card:nth-child(4n + 2) { background: #f9f6e5; }
-.category-card:nth-child(4n + 3) { background: var(--sand-beige); }
-.category-card:nth-child(4n + 4) { background: #fdfbf0; }
-
+/* 7. Scroll Buttons */
 .scroll-btn {
   position: absolute;
-  top: 60%;
-  transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
+  top: 55%;
+  width: 46px;
+  height: 46px;
   background: var(--white);
-  color: var(--deep-teal);
-  border: 1px solid var(--sand-beige);
+  color: var(--deep-plum);
+  border: 1px solid var(--dusty-rose);
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(18, 38, 32, 0.1);
+  box-shadow: 0 6px 15px rgba(107, 63, 105, 0.12);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.3s;
+  transition: 0.3s ease;
+  cursor: pointer;
 }
 
 .scroll-btn:hover {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: var(--white);
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
 }
 
+.scroll-btn.left { left: -23px; }
+.scroll-btn.right { right: -23px; }
+
+/* 8. Mobile View */
 @media (max-width: 768px) {
-  .cate-title {
-    font-size: 24px;
-  }
-  .category-card {
-    width: 130px;
-    height: 150px;
-    border-radius: 22px;
-  }
-  .category-card img {
-    width: 75px;
-    height: 75px;
-  }
+  .category-card { width: 140px; height: 170px; }
   .scroll-btn { display: none; }
 }

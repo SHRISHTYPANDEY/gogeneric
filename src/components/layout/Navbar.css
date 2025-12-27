@@ -1,11 +1,11 @@
 .navbar {
-  background: var(--glass) !important;
+  background: var(--glass-bg) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 2000;
-  border-bottom: 1px solid var(--soft-cream);
+  z-index: 999;
+  border-bottom: 1px solid var(--dusty-rose);
   padding: 10px 0 !important;
   height: 75px;
   display: flex;
@@ -57,13 +57,13 @@
   height: 2.5px;
   bottom: 0;
   left: 0;
-  background-color: var(--deep-teal);
+  background-color: var(--deep-plum);
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 2px;
 }
 
 .nav-links li a:hover {
-  color: var(--deep-teal) !important;
+  color: var(--deep-plum) !important;
 }
 
 .nav-links li a:hover::after {
@@ -81,19 +81,19 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--soft-cream);
-  color: var(--deep-teal);
+  background: var(--dusty-rose);
+  color: var(--deep-plum);
   font-size: 20px;
   transition: all 0.2s;
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--mauve);
 }
 
 .notification-icon:hover,
 .cart-icon:hover,
 .hamburger:hover {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: white;
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
 }
 
 .notification-badge,
@@ -113,7 +113,6 @@
   border: 2px solid white;
 }
 
-/* ===== SIDE MENU UPDATED WITH SCROLLER ===== */
 .side-menu {
   position: fixed;
   top: 0;
@@ -123,10 +122,10 @@
   background: #ffffff;
   z-index: 9999;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: -15px 0 40px rgba(18, 38, 32, 0.15);
+  box-shadow: -15px 0 40px rgba(107, 63, 105, 0.15);
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Scroller Enabled */
+  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -135,7 +134,7 @@
 }
 
 .side-header {
-  position: sticky; /* Header fixed while scrolling */
+  position: sticky;
   top: 0;
   z-index: 10;
   display: flex;
@@ -145,8 +144,8 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--text-dark);
-  border-bottom: 1px solid var(--sand-beige);
-  background: var(--soft-cream);
+  border-bottom: 1px solid var(--mauve);
+  background: var(--dusty-rose);
 }
 
 .close-btn {
@@ -180,25 +179,25 @@
   border-radius: 14px;
   font-size: 15px;
   font-weight: 700;
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--mauve);
   transition: all 0.2s ease;
 }
 
 .side-links li a:hover {
-  background: var(--soft-cream);
-  color: var(--deep-teal);
-  border-color: var(--deep-teal);
+  background: var(--dusty-rose);
+  color: var(--deep-plum);
+  border-color: var(--deep-plum);
   transform: translateX(5px);
 }
 
 .side-links li a svg {
   font-size: 18px;
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
 
 .wishlist-badge {
   margin-left: auto;
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: white;
   font-size: 11px;
   padding: 2px 8px;
@@ -206,14 +205,13 @@
 }
 
 .overlay {
-  background: rgba(18, 38, 32, 0.5);
+  background: rgba(107, 63, 105, 0.5);
   backdrop-filter: blur(4px);
   position: fixed;
   inset: 0;
   z-index: 2500;
 }
 
-/* Custom Scroller Styling */
 .side-menu::-webkit-scrollbar {
   width: 6px;
 }
@@ -223,12 +221,12 @@
 }
 
 .side-menu::-webkit-scrollbar-thumb {
-  background: var(--sand-beige);
+  background: var(--mauve);
   border-radius: 10px;
 }
 
 .side-menu::-webkit-scrollbar-thumb:hover {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
 }
 
 @media (max-width: 1024px) {

@@ -1,4 +1,4 @@
-/* ================= PREMIUM STORES SECTION (TEAL & GOLD THEME) ================= */
+/* ================= PREMIUM STORES SECTION (PURPLE THEME) ================= */
 
 .stores-page {
   padding: 40px 0;
@@ -8,7 +8,7 @@
 .stores-heading {
   font-size: 30px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-dark) !important;
   margin-bottom: 4px;
 }
 
@@ -42,7 +42,7 @@
 .filter-btn {
   padding: 8px 22px;
   border-radius: 12px;
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--dusty-rose); /* Updated */
   background: var(--white);
   font-size: 14px;
   font-weight: 700;
@@ -53,26 +53,10 @@
 }
 
 .filter-btn.active {
-  background: var(--deep-teal);
+  background: var(--deep-plum); /* Updated */
   color: var(--white);
-  border-color: var(--deep-teal);
-  box-shadow: 0 8px 15px rgba(0, 126, 110, 0.2);
-}
-
-.view-more-btn {
-  background: var(--text-dark);
-  color: var(--white);
-  padding: 10px 24px;
-  border-radius: 12px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.view-more-btn:hover {
-  background: var(--deep-teal);
-  transform: translateY(-2px);
+  border-color: var(--deep-plum);
+  box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
 }
 
 /* 🔹 STORES GRID */
@@ -83,30 +67,29 @@
   margin-top: 10px;
 }
 
-/* 🔹 PREMIUM STORE CARD (DYNAMIC COLORS) */
+/* 🔹 PREMIUM STORE CARD (4-COLOR PALETTE) */
 .store-card-6am {
   position: relative;
   border-radius: 28px; 
   padding: 18px;
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 4px 15px rgba(18, 38, 32, 0.05);
+  border: 1px solid rgba(163, 118, 162, 0.15);
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
-  background-color: var(--white);
 }
 
-/* Color Rotation (Using Palette Shades) */
-.stores-grid > .store-card-6am:nth-child(4n+1) { background-color: var(--soft-cream); }
-.stores-grid > .store-card-6am:nth-child(4n+2) { background-color: #f9f6e5; }
-.stores-grid > .store-card-6am:nth-child(4n+3) { background-color: var(--sand-beige); }
-.stores-grid > .store-card-6am:nth-child(4n+4) { background-color: #fdfbf0; }
+/* Specific 4-Color Palette Implementation */
+.stores-grid > .store-card-6am:nth-child(4n+1) { background-color: #fdf5f5; }
+.stores-grid > .store-card-6am:nth-child(4n+2) { background-color: #f8f0f7; }
+.stores-grid > .store-card-6am:nth-child(4n+3) { background-color: #fce7ea; }
+.stores-grid > .store-card-6am:nth-child(4n+4) { background-color: #eeccea; }
 
 .store-card-6am:hover {
   transform: translateY(-8px);
   background: var(--white) !important;
-  border-color: var(--deep-teal);
-  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.15);
+  border-color: var(--deep-plum);
+  box-shadow: 0 15px 30px rgba(107, 63, 105, 0.15);
 }
 
 /* 🔹 IMAGE WRAPPER */
@@ -121,7 +104,7 @@
   align-items: center;
   justify-content: center;
   padding: 12px;
-  border: 1px solid var(--soft-cream);
+  border: 1px solid rgba(163, 118, 162, 0.1);
 }
 
 .store-image-wrapper img {
@@ -148,17 +131,13 @@
 }
 
 .store-card-6am:hover .store-name {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
 
 .store-address {
   font-size: 13px;
   color: var(--text-body);
   margin-top: 5px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   font-weight: 600;
 }
 
@@ -168,7 +147,7 @@
   align-items: center;
   margin-top: 15px;
   padding-top: 12px;
-  border-top: 1px dashed var(--sand-beige);
+  border-top: 1px dashed var(--dusty-rose);
 }
 
 .store-distance {
@@ -182,7 +161,7 @@
 
 .store-rating {
   color: var(--white);
-  background: var(--moss-green);
+  background: var(--deep-plum); /* Updated from moss-green to match brand */
   padding: 4px 10px;
   border-radius: 8px;
   display: flex;
@@ -197,14 +176,14 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: var(--white);
   padding: 4px 10px;
   border-radius: 10px;
   font-size: 11px;
   font-weight: 800;
   z-index: 2;
-  box-shadow: 0 4px 10px rgba(0, 126, 110, 0.2);
+  box-shadow: 0 4px 10px rgba(107, 63, 105, 0.2);
 }
 
 /* 📱 RESPONSIVE */
@@ -219,8 +198,44 @@
   .filter-row { flex-direction: column; align-items: flex-start; }
   .store-image-wrapper { height: 140px; }
 }
+/* 🔹 VIEW MORE BUTTON (PREMIUM COLOR UPDATE) */
+.view-more-btn {
+  background: var(--deep-plum); /* Updated to Brand Color */
+  color: var(--white);
+  padding: 12px 30px; /* Slightly more padding for a premium feel */
+  border-radius: 14px;
+  border: none;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.view-more-btn:hover {
+  background: var(--text-dark); /* Darker on hover */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.3);
+}
+
+.view-more-btn:active {
+  transform: translateY(-1px);
+}
+
+/* 🔹 VIEW MORE CONTAINER (CENTERING) */
 .view-more-bottom {
   display: flex;
   justify-content: center;
-  margin: 24px 0 40px;
+  align-items: center;
+  margin: 40px 0 60px; /* Added more space at the bottom */
+  width: 100%;
+}
+
+/* Small Fix for the Top Filter View More Button */
+.filter-row .view-more-btn {
+  padding: 10px 24px;
+  font-size: 14px;
 }

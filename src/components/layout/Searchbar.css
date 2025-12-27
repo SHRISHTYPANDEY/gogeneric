@@ -2,7 +2,7 @@
   width: 100%;
   background: var(--white);
   padding: 10px 0;
-  border-bottom: 1px solid var(--soft-cream);
+  border-bottom: 1px solid var(--dusty-rose);
 }
 
 .header-container {
@@ -35,8 +35,8 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  background: var(--soft-cream);
-  border: 1px solid var(--sand-beige);
+  background: var(--dusty-rose);
+  border: 1px solid var(--mauve);
   border-radius: 12px;
   padding: 0 16px;
   height: 48px;
@@ -45,12 +45,12 @@
 
 .search-bar:focus-within {
   background: var(--white);
-  border-color: var(--deep-teal);
-  box-shadow: 0 4px 15px rgba(0, 126, 110, 0.15);
+  border-color: var(--deep-plum);
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.15);
 }
 
 .search-bar svg {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
   flex-shrink: 0;
 }
 
@@ -76,11 +76,11 @@
   right: 0;
   background: var(--white);
   border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(18, 38, 32, 0.15);
+  box-shadow: 0 10px 30px rgba(107, 63, 105, 0.15);
   max-height: 400px;
   overflow-y: auto;
   z-index: 9999;
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--mauve);
   padding: 8px;
 }
 
@@ -96,7 +96,7 @@
 
 .search-item:hover, 
 .search-item.active {
-  background: var(--soft-cream);
+  background: var(--dusty-rose);
 }
 
 .search-item img {
@@ -104,8 +104,8 @@
   height: 42px;
   border-radius: 8px;
   object-fit: cover;
-  background: var(--soft-cream);
-  border: 1px solid var(--sand-beige);
+  background: var(--dusty-rose);
+  border: 1px solid var(--mauve);
 }
 
 .search-info p {
@@ -126,12 +126,12 @@
 }
 
 .search-type.medicine {
-  background: var(--moss-green);
+  background: var(--muted-purple);
   color: var(--white);
 }
 
 .search-type.store {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: var(--white);
 }
 
@@ -148,7 +148,7 @@
 }
 
 .search-dropdown::-webkit-scrollbar-thumb {
-  background: var(--sand-beige);
+  background: var(--mauve);
   border-radius: 10px;
 }
 
@@ -159,6 +159,6 @@
   }
 
   .search-bar {
-    background: var(--soft-cream);
+    background: var(--dusty-rose);
   }
 }

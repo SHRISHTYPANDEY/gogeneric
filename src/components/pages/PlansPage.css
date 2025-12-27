@@ -1,252 +1,221 @@
-/* ================= PREMIUM PLANS & SUBSCRIPTION (TEAL & GOLD THEME) ================= */
+/* ================= PLANS SECTION ================= */
 
-/* Layout & Typography */
 .plans-section {
-  background-color: var(--white);
   padding: 80px 20px;
-  font-family: 'Inter', sans-serif;
+  background-color: #fdfafb;
+  min-height: 100vh;
 }
 
 .plans-wrapper {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
 }
 
 .plans-heading {
-  font-size: 2.8rem;
-  font-weight: 800;
+  font-size: 42px;
+  font-weight: 900;
   color: var(--text-dark);
-  margin-bottom: 12px;
-  letter-spacing: -1px;
+  margin-bottom: 15px;
+  letter-spacing: -1.5px;
 }
 
 .plans-heading .highlight {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
+  background: linear-gradient(to bottom, transparent 70%, var(--dusty-rose) 70%);
 }
 
 .plans-subheading {
-  color: var(--text-body);
-  margin-bottom: 60px;
-  font-size: 1.15rem;
+  color: var(--text-secondary);
+  font-size: 18px;
+  margin-bottom: 50px;
   font-weight: 500;
 }
 
-/* Grid System */
+/* ================= PLANS GRID ================= */
+
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 35px;
-  align-items: stretch;
-  padding: 20px 0;
+  gap: 30px;
+  align-items: center;
 }
 
-/* 🔹 BASE CARD STYLING (SQUIRCLE) */
 .plan-card {
   background: var(--white);
-  border-radius: 35px; 
-  padding: 45px 35px;
-  border: 1px solid var(--sand-beige);
-  cursor: pointer;
+  padding: 40px 30px;
+  border-radius: 32px;
+  border: 1px solid var(--dusty-rose);
   position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  justify-content: space-between;
+  height: 100%;
 }
 
-/* Hover Effect (Non-Selected) */
-.plan-card:hover:not(.active-highlight) {
+.plan-card:hover {
   transform: translateY(-10px);
-  border-color: var(--deep-teal);
-  box-shadow: 0 20px 40px rgba(18, 38, 32, 0.05);
+  box-shadow: var(--premium-shadow);
 }
 
-/* 🔹 ACTIVE SELECTION (PREMIUM POP) */
-.active-highlight {
-  background: var(--white);
-  border: 2.5px solid var(--deep-teal) !important;
-  transform: scale(1.05) !important;
-  box-shadow: 0 30px 60px -12px rgba(0, 126, 110, 0.15);
-  z-index: 10;
+/* Featured Card Styling (The Middle One) */
+.featured-card {
+  border: 2px solid var(--deep-plum);
+  background: #ffffff;
+  transform: scale(1.05);
+  z-index: 2;
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.12);
 }
 
-/* 🔹 BADGE STYLING (GOLDEN TOUCH) */
+.featured-card:hover {
+  transform: scale(1.07) translateY(-10px);
+}
+
 .popular-badge {
   position: absolute;
-  top: -18px;
+  top: -15px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--deep-teal);
-  color: var(--white);
-  padding: 8px 24px;
+  background: var(--deep-plum);
+  color: white;
+  padding: 6px 20px;
   border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  box-shadow: 0 8px 15px rgba(0, 126, 110, 0.2);
-}
-
-.plan-header { margin-bottom: 35px; }
-
-.plan-title {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--text-body);
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+/* Card Header */
+.plan-header {
+  margin-bottom: 30px;
+}
+
+.plan-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--mauve);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.plan-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 15px;
 }
 
 .plan-price {
-  font-size: 3.8rem;
+  font-size: 48px;
   font-weight: 900;
   color: var(--text-dark);
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  letter-spacing: -2px;
+  margin: 0;
 }
 
-/* 🔹 FEATURES LIST */
+/* Features List */
 .plan-features {
   list-style: none;
   padding: 0;
-  margin: 0 0 45px 0;
+  margin: 0 0 35px 0;
   text-align: left;
-  flex-grow: 1;
 }
 
 .feature-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(221, 195, 195, 0.3);
+  font-size: 15px;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
-  margin-bottom: 18px;
-  color: var(--text-body);
-  font-size: 1rem;
-  font-weight: 600;
+  gap: 10px;
+  font-weight: 500;
 }
 
-.check-mark {
-  color: var(--white);
-  background: var(--moss-green);
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  margin-right: 15px;
-  font-size: 0.8rem;
+.feature-item:last-child {
+  border-bottom: none;
 }
 
-/* 🔹 BUTTONS */
+/* Buttons */
 .plan-button {
   width: 100%;
-  padding: 18px;
-  border-radius: 18px;
+  padding: 16px;
+  border-radius: 50px;
   font-weight: 800;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: none;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 1px;
-}
-
-.btn-primary {
-  background: var(--deep-teal);
-  color: var(--white);
-  box-shadow: 0 10px 20px rgba(0, 126, 110, 0.2);
-}
-
-.btn-primary:hover {
-  background: var(--text-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  cursor: pointer;
 }
 
 .btn-outline {
-  background: var(--soft-cream);
-  color: var(--text-dark);
-  border: 1px solid var(--sand-beige);
+  background: transparent;
+  border: 2px solid var(--deep-plum);
+  color: var(--deep-plum);
 }
 
 .btn-outline:hover {
-  background: var(--sand-beige);
-  color: var(--text-dark);
+  background: var(--deep-plum);
+  color: white;
 }
 
-/* 🔹 MODAL STYLING (GLASSMORPHISM) */
+.btn-primary {
+  background: linear-gradient(45deg, var(--deep-plum), var(--muted-purple));
+  border: none;
+  color: white;
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.2);
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 25px rgba(107, 63, 105, 0.3);
+}
+
+/* ================= MODAL STYLING ================= */
+
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(18, 38, 32, 0.6);
-  backdrop-filter: blur(12px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
+  background: rgba(51, 29, 50, 0.6); /* Your text-dark color with opacity */
+  backdrop-filter: blur(8px);
 }
 
 .modal-box {
   background: var(--white);
-  padding: 45px 35px;
-  border-radius: 35px;
-  width: 95%;
-  max-width: 400px;
+  padding: 40px;
+  border-radius: 32px;
+  max-width: 500px;
+  width: 90%;
   position: relative;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--sand-beige);
+  box-shadow: var(--premium-shadow);
+  border: 1px solid var(--dusty-rose);
+  animation: modalIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.close-modal-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--soft-cream);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-dark);
-  transition: 0.3s;
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .modal-title {
-  font-size: 1.4rem;
+  font-size: 24px;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.option-row {
-  display: flex;
-  align-items: center;
-  padding: 18px;
-  background: var(--soft-cream);
-  border: 1px solid var(--sand-beige);
-  border-radius: 18px;
-  margin-bottom: 12px;
-  transition: all 0.3s ease;
+.modal-title span {
+  color: var(--deep-plum);
 }
 
-.option-row:hover {
-  border-color: var(--deep-teal);
-  background: var(--white);
-  transform: translateX(5px);
-}
-
-.option-title {
-  font-weight: 800;
-  color: var(--text-dark);
-}
-
-/* 📱 MOBILE RESPONSIVE */
+/* Responsive */
 @media (max-width: 768px) {
-  .active-highlight { transform: scale(1.02) !important; }
-  .plans-heading { font-size: 2.2rem; }
-  .plan-price { font-size: 3rem; }
+  .featured-card {
+    transform: scale(1);
+  }
+  .plans-heading {
+    font-size: 32px;
+  }
 }

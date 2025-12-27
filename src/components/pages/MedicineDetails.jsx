@@ -15,7 +15,7 @@ export default function MedicineDetails() {
 
   const [medicine, setMedicine] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [fetched, setFetched] = useState(false); // 🔥 KEY FIX
+  const [fetched, setFetched] = useState(false);
 
   const passedPrice = location.state?.price || null;
 
@@ -53,41 +53,53 @@ export default function MedicineDetails() {
       ) {
         return;
       }
+
       console.error("Medicine fetch error:", err);
       toast.error("Failed to load medicine details");
       setMedicine(null);
     } finally {
-      setFetched(true);   // ✅ API attempt completed
-      setLoading(false);  // ✅ loader OFF only after that
+      setFetched(true);
+      setLoading(false);
     }
   };
 
-  const price =
+  /* ================= PRICE RESOLUTION ================= */
+  const rawPrice =
     passedPrice ||
     medicine?.price ||
     medicine?.unit_price ||
     medicine?.variations?.[0]?.price ||
     null;
 
-  const handleAddToCart = () => {
-    if (!price) {
-      toast.error("Price not available");
-      return;
-    }
+  const price = Number(rawPrice);
 
-    addToCart({
-      item: {
-        id: medicine.id,
-        name: medicine.name,
-        price,
-        image:
-          medicine.image_full_url ||
-          medicine.image ||
-          "/no-image.jpg",
-      },
-    });
-  };
+  const isValidPrice = price && !isNaN(price) && price > 0;
 
+  /* ================= ADD TO CART ================= */
+  const handleAddToCart = async () => {
+  if (!medicine) return;
+
+  if (!isValidPrice) {
+    toast.error("This product cannot be added to cart");
+    return;
+  }
+
+  // ✅ IMPORTANT: await
+  await addToCart({
+    item: {
+      id: medicine.id,
+      name: medicine.name,
+      price,
+      image:
+        medicine.image_full_url ||
+        medicine.image ||
+        "/no-image.jpg",
+      quantity: 1,
+    },
+  });
+};
+
+  /* ================= UI ================= */
   return (
     <div className="medicine-page">
       {loading ? (
@@ -117,7 +129,7 @@ export default function MedicineDetails() {
           <div className="medicine-info">
             <h1>{medicine.name}</h1>
 
-            {price ? (
+            {isValidPrice ? (
               <p className="medicine-price">₹{price}</p>
             ) : (
               <p className="medicine-price unavailable">
@@ -133,11 +145,11 @@ export default function MedicineDetails() {
 
             <div className="medicine-actions">
               <button
-                className="add-cart-btn1"
+                className="add-to-cart-btn"
                 onClick={handleAddToCart}
-                disabled={!price}
+                disabled={!isValidPrice}
               >
-                Add to Cart
+                {isValidPrice ? "Add to Cart" : "Unavailable"}
               </button>
             </div>
           </div>

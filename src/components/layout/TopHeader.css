@@ -1,6 +1,6 @@
 .topheader-wrapper {
   background: var(--white);
-  border-bottom: 1px solid var(--soft-cream);
+  border-bottom: 1px solid var(--dusty-rose);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -8,25 +8,26 @@
 
 .location-trigger {
   display: flex;
-  align-items: center;
+  align-items: center;  
   cursor: pointer;
   padding: 6px 12px;
   border-radius: 12px;
   transition: all 0.3s ease;
   color: var(--text-dark);
+  width: 600px;
 }
 
 .location-trigger:hover {
-  background: var(--soft-cream);
-  color: var(--deep-teal);
+  background: var(--dusty-rose);
+  color: var(--deep-plum);
 }
 
 .location-trigger svg {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
 
 .download-pill {
-  background: linear-gradient(135deg, var(--deep-teal) 0%, var(--moss-green) 100%);
+  background: linear-gradient(135deg, var(--deep-plum) 0%, var(--muted-purple) 100%);
   color: white;
   padding: 8px 20px;
   border-radius: 100px;
@@ -34,12 +35,12 @@
   font-size: 13px;
   border: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(0, 126, 110, 0.2);
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.2);
 }
 
 .download-pill:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 126, 110, 0.35);
+  box-shadow: 0 6px 20px rgba(107, 63, 105, 0.35);
   filter: brightness(1.1);
 }
 
@@ -51,23 +52,24 @@
   cursor: pointer;
   padding: 8px 14px;
   border-radius: 12px;
-  background: var(--soft-cream);
-  border: 1px solid var(--sand-beige);
+  background: var(--dusty-rose);
+  border: 1px solid var(--mauve);
   color: var(--text-dark);
   transition: all 0.2s ease;
 }
 
 .lang-selector-premium:hover,
 .profile-trigger-premium:hover {
-  background: var(--sand-beige);
-  border-color: var(--deep-teal);
+  background: var(--mauve);
+  border-color: var(--deep-plum);
+  color: var(--white);
 }
 
 .dropdown-animate {
   background: var(--white);
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--mauve);
   border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(18, 38, 32, 0.15);
+  box-shadow: 0 10px 30px rgba(107, 63, 105, 0.15);
   animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   padding: 6px;
 }
@@ -85,14 +87,14 @@
 }
 
 .lang-item:hover {
-  background: var(--sand-beige);
-  color: var(--deep-teal);
+  background: var(--dusty-rose);
+  color: var(--deep-plum);
 }
 
 .avatar-placeholder {
   width: 32px;
   height: 32px;
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -103,11 +105,11 @@
 .lang-item img, 
 .lang-selector-premium img {
   border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(18, 38, 32, 0.1);
+  box-shadow: 0 1px 3px rgba(107, 63, 105, 0.1);
 }
 
 .shadow-premium {
-  box-shadow: 0 10px 25px -5px rgba(18, 38, 32, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(107, 63, 105, 0.1);
 }
 
 @keyframes slideUp {

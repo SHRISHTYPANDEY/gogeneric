@@ -15,7 +15,7 @@ import {
   Navigation,
   Plus,
 } from "lucide-react";
-
+import AddToCartButton from "../CartButton";
 import "./StoreDetails.css";
 import Loader from "../Loader";
 
@@ -249,20 +249,8 @@ export default function StoreDetails() {
                   })
                 }
               >
-                <div className="sd-wishlist-pos">
                   <WishlistButton item={p} />
-                </div>
-
-                <div
-                  className="sd-prod-add"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addToCart({ item: p, navigate, location });
-                  }}
-                >
-                  <Plus size={18} />
-                </div>
-
+                  <AddToCartButton item={p} />
                 <div className="sd-prod-img-box">
                   <img
                     src={cleanImageUrl(p.image_full_url)}

@@ -277,7 +277,6 @@
   font-weight: 500;
 }
 
-/* 🔹 Return to Shop Button */
 .empty-cart-state.medical .cta-button {
   background: var(--deep-teal);
   color: var(--white);
@@ -302,7 +301,6 @@
   box-shadow: 0 15px 35px rgba(18, 38, 32, 0.25);
 }
 
-/* 📱 MOBILE VIEW */
 @media (max-width: 640px) {
   .empty-cart-state.medical {
     padding: 60px 20px;

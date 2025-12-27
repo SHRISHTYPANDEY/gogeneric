@@ -1,14 +1,14 @@
-/* ================= NEARBY STORES (TEAL & GOLD THEME) ================= */
+/* ================= NEARBY STORES (PREMIUM PURPLE IMPLEMENTATION) ================= */
 
 .nearby-section {
-  padding: 40px 0;
+  padding: 0;
   position: relative;
 }
 
 .nearby-title {
   font-size: 30px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-dark) !important; /* Fixed color */
   margin-bottom: 4px;
 }
 
@@ -19,7 +19,6 @@
   margin-bottom: 25px;
 }
 
-/* 🔹 FILTERS (SQUIRCLE STYLE) */
 .nearby-filters {
   display: flex;
   gap: 12px;
@@ -34,7 +33,7 @@
 .nearby-filter-btn {
   padding: 8px 22px;
   border-radius: 12px;
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--dusty-rose); /* Changed to dusty-rose */
   background: var(--white);
   font-weight: 700;
   color: var(--text-body);
@@ -44,13 +43,13 @@
 }
 
 .nearby-filter-btn.active {
-  background: var(--deep-teal);
+  background: var(--deep-plum); /* Changed to deep-plum */
   color: var(--white);
-  border-color: var(--deep-teal);
-  box-shadow: 0 8px 15px rgba(0, 126, 110, 0.2);
+  border-color: var(--deep-plum);
+  box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
 }
 
-/* 🔹 HORIZONTAL SCROLL WRAPPER */
+/* 🔹 HORIZONTAL SCROLL WRAPPER (NO CHANGES) */
 .nearby-wrapper {
   display: flex;
   gap: 20px;
@@ -68,7 +67,7 @@
   gap: 20px;
 }
 
-/* 🔹 CARD DESIGN */
+/* 🔹 CARD DESIGN (COLOR UPDATE) */
 .store-card {
   position: relative;
   min-width: 170px;
@@ -82,19 +81,19 @@
   align-items: center;
   justify-content: flex-end;
   cursor: pointer;
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 4px 15px rgba(18, 38, 32, 0.05);
+  border: 1px solid var(--mauve); /* Changed to mauve */
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   box-sizing: border-box;
   background: var(--white);
   overflow: visible;
 }
 
-/* 🔹 DYNAMIC BACKGROUNDS */
-.store-card:nth-child(4n+1) { background: var(--soft-cream); }
-.store-card:nth-child(4n+2) { background: #f9f6e5; }
-.store-card:nth-child(4n+3) { background: var(--sand-beige); }
-.store-card:nth-child(4n+4) { background: #fdfbf0; }
+/* 🔹 DYNAMIC BACKGROUNDS (Using Palette Tints) */
+.store-card:nth-child(4n+1) { background: #fdf5f5; } /* Tint of Dusty Rose */
+.store-card:nth-child(4n+2) { background: #f8f0f7; } /* Tint of Mauve */
+.store-card:nth-child(4n+3) { background: #fce7ea; } /* Very Light Sand */
+.store-card:nth-child(4n+4) { background: #eeccea; }
 
 /* 🔹 IMAGE PLACEMENT */
 .store-card img {
@@ -127,54 +126,18 @@
   max-height: 36px;
   transition: color 0.3s ease;
 }
-
-/* 🔹 ACTION BUTTONS */
-.add-cart-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: var(--deep-teal);
-  color: var(--white);
-  border-radius: 10px;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  transition: 0.3s;
-  border: none;
-}
-
-.store-card .wishlist-btn-container {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 10;
-}
-
-/* 🔹 HOVER EFFECTS */
+/* 🔹 HOVER EFFECTS (COLOR UPDATE) */
 .store-card:hover {
   transform: translateY(-8px);
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
   background: var(--white) !important;
-  box-shadow: 0 15px 30px rgba(0, 126, 110, 0.15);
+  box-shadow: 0 15px 30px rgba(107, 63, 105, 0.15);
 }
 
 .store-card:hover h4 {
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
-
-.store-card:hover img {
-  transform: scale(1.15) translateY(-5px);
-}
-
-.add-cart-btn:hover {
-  background: var(--text-dark);
-  transform: scale(1.1) rotate(90deg);
-}
-
-/* 🔹 NAVIGATION BUTTONS */
+/* 🔹 NAVIGATION BUTTONS (COLOR UPDATE) */
 .nearby-btn {
   position: absolute;
   top: 60%;
@@ -182,10 +145,10 @@
   width: 42px;
   height: 42px;
   background: var(--white);
-  color: var(--deep-teal);
-  border: 1px solid var(--sand-beige);
+  color: var(--deep-plum); /* Changed to deep-plum */
+  border: 1px solid var(--mauve); /* Changed to mauve */
   border-radius: 50%;
-  box-shadow: 0 4px 12px rgba(18, 38, 32, 0.1);
+  box-shadow: 0 4px 12px rgba(107, 63, 105, 0.1);
   z-index: 20;
   display: flex;
   align-items: center;
@@ -194,32 +157,21 @@
   transition: 0.3s;
 }
 
-.nearby-btn.left { left: -10px; }
-.nearby-btn.right { right: -10px; }
-
 .nearby-btn:hover {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: var(--white);
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
 }
 
-/* 📱 MOBILE OPTIMIZATION */
+/* 📱 MOBILE OPTIMIZATION (COLOR UPDATE) */
 @media (max-width: 768px) {
   .nearby-title { font-size: 24px; }
-  .nearby-wrapper { gap: 15px; }
-  .store-card {
-    min-width: 145px;
-    max-width: 145px;
-    height: 185px;
-    border-radius: 22px;
-  }
-  .store-card img {
-    width: 70px;
-    height: 70px;
-  }
-  .store-card h4 {
-    font-size: 12px;
-    min-height: 32px;
-  }
-  .nearby-btn { display: none; }
-} 
+  .store-card:hover { border-color: var(--mauve); }
+}
+
+.store-card .price{
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--deep-plum);
+  margin-top: 6px;
+}

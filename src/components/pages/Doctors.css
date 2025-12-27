@@ -1,158 +1,134 @@
-/* ================= PREMIUM DOCTORS DIRECTORY (TEAL & GOLD THEME) ================= */
-
-:root {
-  --primary-teal: var(--deep-teal); /* Consistent with your brand */
-  --accent-gold: var(--sand-beige);
-  --bg-organic: var(--white);
-  --text-dark: #122620; /* Deep Midnight Teal */
-  --text-gray: #51635f;
-  --white: #ffffff;
-  --shadow-premium: 0 20px 40px rgba(18, 38, 32, 0.06);
-}
+/* ================= DOCTORS SECTION (PREMIUM PLUM THEME) ================= */
 
 .doctors-container {
-  background-color: var(--bg-organic);
+  background-color: #fdfafb; /* Subtle pinkish tint for luxury feel */
+  padding: 60px 20px;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
-  color: var(--text-dark);
 }
 
 .doctors-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 80px 20px;
 }
 
 .doctors-title {
-  font-size: 2.8rem;
+  font-size: 38px;
   font-weight: 800;
   text-align: center;
-  margin-bottom: 50px;
-  letter-spacing: -0.03em;
   color: var(--text-dark);
+  margin-bottom: 50px;
+  letter-spacing: -1px;
 }
 
-.doctors-title::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 5px;
-  background: var(--accent-gold);
-  margin: 15px auto 0;
-  border-radius: 10px;
-}
-
+/* Grid Layout */
 .doctors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 280px));
-  gap: 40px;
-  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
 }
 
-/* 🔹 DOCTOR CARD (PREMIUM SQUIRCLE) */
+/* Doctor Card - Glassmorphism Style */
 .doctor-card {
-  background: var(--white);
-  border-radius: 32px;
-  border: 1px solid var(--accent-gold);
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--dusty-rose);
+  border-radius: 24px;
+  padding: 20px;
+  text-align: center;
   cursor: pointer;
-  overflow: hidden;
-  position: relative;
-  box-shadow: var(--shadow-premium);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--premium-shadow);
 }
 
 .doctor-card:hover {
-  transform: translateY(-12px);
-  border-color: var(--primary-teal);
-  box-shadow: 0 30px 60px rgba(0, 126, 110, 0.12);
+  transform: translateY(-10px);
+  border-color: var(--mauve);
+  box-shadow: 0 15px 40px rgba(107, 63, 105, 0.12);
 }
 
-/* 🔹 IMAGE WRAPPER */
+/* Image Wrapper with Soft Glow */
 .doctor-image-wrapper {
-  height: 260px;
-  margin: 15px;
-  border-radius: 24px;
-  background: var(--soft-cream);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid rgba(212, 196, 145, 0.2);
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(45deg, var(--dusty-rose), var(--mauve));
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.1);
 }
 
 .doctor-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Changed to cover for a more professional 'portrait' look */
-  transition: transform 0.5s ease;
+  border-radius: 50%;
+  object-fit: cover;
+  background: white;
+  border: 3px solid white;
 }
 
-.doctor-card:hover .doctor-image {
-  transform: scale(1.1);
-}
-
-/* 🔹 INFO SECTION */
+/* Info Styling */
 .doctor-info {
-  padding: 10px 24px 30px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .doctor-name {
-  font-size: 1.3rem;
+  font-size: 20px;
   font-weight: 800;
-  margin-bottom: 8px;
   color: var(--text-dark);
+  margin: 0;
 }
 
 .doctor-specialty {
-  font-size: 0.8rem;
+  color: var(--deep-plum);
   font-weight: 700;
-  color: var(--primary-teal);
-  background: rgba(0, 126, 110, 0.08);
-  padding: 6px 16px;
-  border-radius: 100px;
-  display: inline-block;
-  margin-bottom: 12px;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .doctor-exp {
-  font-size: 0.9rem;
-  color: var(--text-gray);
+  font-size: 13px;
+  color: var(--muted-purple);
   font-weight: 500;
+  background: rgba(221, 195, 195, 0.2);
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 50px;
+  width: fit-content;
+  margin: 5px auto;
 }
 
-/* 🔹 BUTTON (GOLD TO TEAL TRANSITION) */
+/* View Profile Button - Capsule Design */
 .view-profile-btn {
-  margin-top: 20px;
-  padding: 14px;
-  background: var(--text-dark);
-  color: var(--white);
-  border-radius: 16px;
-  text-align: center;
-  font-size: 0.95rem;
+  margin-top: 15px;
+  padding: 12px 24px;
+  background: white;
+  color: var(--deep-plum);
+  border: 1.5px solid var(--deep-plum);
+  border-radius: 50px;
   font-weight: 700;
+  font-size: 14px;
   transition: all 0.3s ease;
-  letter-spacing: 0.5px;
 }
 
 .doctor-card:hover .view-profile-btn {
-  background: var(--primary-teal);
-  box-shadow: 0 10px 20px rgba(0, 126, 110, 0.2);
+  background: linear-gradient(45deg, var(--deep-plum), var(--muted-purple));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(107, 63, 105, 0.2);
 }
 
-
-/* 📱 MOBILE RESPONSIVE */
-@media (max-width: 900px) {
-  .doctors-grid {
-    grid-template-columns: repeat(auto-fit, minmax(260px, 260px));
-    gap: 25px;
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .doctors-title {
+    font-size: 28px;
   }
-}
-
-@media (max-width: 500px) {
-  .doctors-wrapper { padding: 40px 15px; }
-  .doctors-title { font-size: 2.2rem; }
-  .doctors-grid { grid-template-columns: 1fr; }
+  
+  .doctors-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
 }

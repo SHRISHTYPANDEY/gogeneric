@@ -1,87 +1,150 @@
-/* ================= PREMIUM HOME BANNER DESIGN ================= */
+/* ================= 30:70 PROFESSIONAL RATIO ================= */
 
-.hero-banner {
-  width: 100%;
-  max-width: 1280px;
-  height: 380px;
-  margin: 20px auto;
+.hero-container {
+  max-width: 1300px;
+  margin: 10px auto;
+  padding: 0 15px;
+}
+
+.hero-main-layout {
+  display: flex;
+  height: 320px; /* Reduced height to prevent excessive scrolling */
+  background: #ffffff;
+  border-radius: 28px;
   overflow: hidden;
-  border-radius: 20px;
-  background: #f8fafc;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(107, 63, 105, 0.05);
+}
+
+/* 🔹 30% TEXT SECTION */
+.hero-text-section {
+  flex: 0 0 32%; /* Approx 30% width */
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  z-index: 10;
+  animation: fadeInRight 0.6s ease-out;
+}
+
+.hero-badge {
+  color: var(--deep-plum);
+  background: rgba(107, 63, 105, 0.08);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 50px;
+  width: fit-content;
+  margin-bottom: 12px;
+}
+
+.hero-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1a0f1a;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.hero-title span {
+  color: var(--deep-plum);
+}
+
+.hero-desc {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.hero-button {
+  background: #1a0f1a;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  width: fit-content;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.hero-button:hover {
+  background: var(--deep-plum);
+  transform: translateY(-2px);
+}
+
+/* 🔹 70% IMAGE SECTION */
+.hero-image-section {
+  flex: 0 0 68%; /* Approx 70% width */
   position: relative;
-  transition: all 0.4s ease;
+  overflow: hidden;
 }
 
-/* Hover lift */
-.hero-banner:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px -15px rgba(245, 124, 0, 0.2);
+.image-wrapper {
+  height: 100%;
+  width: 100%;
+  animation: imageReveal 0.8s ease-out;
 }
 
-/* Banner Images */
-.hero-slide {
-  position: absolute;
-  inset: 0;
+.hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  border-radius: 20px;
-  transition: 
-    opacity 0.8s ease-in-out,
-    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.5s ease;
-  filter: brightness(0.95);
+  object-position: center;
 }
 
-/* Active Slide */
-.hero-slide.active {
-  opacity: 1;
-  animation: premiumFade 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+/* 🔹 CREATIVE OVERLAYS */
+.hero-edge-fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, #ffffff 0%, transparent 100%);
+  z-index: 5;
 }
 
-/* Hover zoom */
-.hero-banner:hover .hero-slide.active {
-  transform: scale(1.05);
-  filter: brightness(1);
-  cursor: pointer;
-}
-
-/* Fade animation */
-@keyframes premiumFade {
-  from {
-    opacity: 0;
-    transform: scale(1.02);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Loader */
-.loader {
-  height: 380px;
+/* 🔹 PAGINATION (DOTS) */
+.hero-pagination {
+  margin-top: 25px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f1f5f9;
-  border-radius: 20px;
-  color: #94a3b8;
-  font-weight: 500;
-  letter-spacing: 1px;
+  gap: 8px;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .hero-banner {
-    height: 200px;
-    border-radius: 12px;
-    margin: 10px auto;
-  }
+.pagi-dot {
+  width: 8px;
+  height: 8px;
+  background: #eee;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-  .hero-slide {
-    border-radius: 12px;
-  }
+.pagi-dot.active {
+  width: 22px;
+  border-radius: 10px;
+  background: var(--deep-plum);
+}
+
+/* Animations */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(-15px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes imageReveal {
+  from { transform: scale(1.05); opacity: 0.8; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 📱 MOBILE VIEW */
+@media (max-width: 768px) {
+  .hero-main-layout { flex-direction: column; height: auto; border-radius: 20px; }
+  .hero-text-section { flex: none; padding: 25px 20px; text-align: center; align-items: center; }
+  .hero-image-section { flex: none; height: 180px; order: -1; }
+  .hero-edge-fade { display: none; }
+  .hero-title { font-size: 26px; }
 }

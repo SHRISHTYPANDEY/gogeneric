@@ -1,144 +1,114 @@
-/* ================= PREMIUM NOTIFICATIONS PAGE (TEAL & GOLD THEME) ================= */
+/* ================= NOTIFICATIONS PAGE ================= */
 
 .notifications-page {
-  max-width: 750px;
-  margin: 40px auto;
-  padding: 30px;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--white);
-  border-radius: 28px;
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 0 20px;
   min-height: 80vh;
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 10px 30px rgba(18, 38, 32, 0.05);
+  font-family: var(--font-main);
 }
 
 .notifications-page h2 {
-  color: var(--text-dark);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  margin-bottom: 24px;
-  border-bottom: 2px solid var(--soft-cream);
-  padding-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  letter-spacing: -0.5px;
+  color: var(--text-dark);
+  margin-bottom: 40px;
+  letter-spacing: -1px;
 }
 
-/* 🔹 NOTIFICATION CARD */
+/* Empty State Styling */
+.notifications-page .empty {
+  text-align: center;
+  padding: 60px;
+  background: var(--white);
+  border-radius: 24px;
+  border: 1px dashed var(--dusty-rose);
+  color: var(--muted-purple);
+  font-weight: 600;
+}
+
+/* ================= NOTIFICATION CARD ================= */
+
 .notification-card {
   background: var(--white);
   border-radius: 20px;
   padding: 20px 24px;
   margin-bottom: 16px;
-  border: 1px solid var(--sand-beige);
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid var(--dusty-rose);
+  transition: all 0.3s ease;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(107, 63, 105, 0.04);
 }
 
 .notification-card:hover {
-  transform: translateX(5px);
-  background: var(--soft-cream);
-  border-color: var(--deep-teal);
-  box-shadow: 0 8px 20px rgba(0, 126, 110, 0.08);
+  transform: translateX(8px);
+  border-color: var(--mauve);
+  box-shadow: var(--premium-shadow);
 }
 
-/* 🔹 UNREAD STATE (Premium Gold Accent) */
+/* Unread State - Soft Gradient Background */
 .notification-card.unread {
-  background: #fdfbf0; /* Very light gold tint */
-  border-left: 5px solid var(--deep-teal);
+  background: linear-gradient(90deg, #fffcfd 0%, rgba(221, 195, 195, 0.1) 100%);
+  border-left: 5px solid var(--deep-plum);
 }
 
+/* Pulse dot for Unread messages */
 .notification-card.unread::after {
   content: '';
   position: absolute;
-  top: 22px;
+  top: 20px;
   right: 20px;
   width: 10px;
   height: 10px;
-  background-color: var(--deep-teal);
+  background: var(--deep-plum);
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 126, 110, 0.4);
+  box-shadow: 0 0 0 4px rgba(107, 63, 105, 0.1);
 }
 
-/* 🔹 CARD CONTENT */
+/* Text Elements */
 .notification-card h4 {
-  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--text-dark);
-  font-size: 1.15rem;
-  font-weight: 800;
+  margin: 0 0 8px 0;
 }
 
 .notification-card p {
-  margin: 0 0 14px 0;
+  font-size: 14px;
   color: var(--text-body);
-  line-height: 1.6;
-  font-size: 0.95rem;
-  font-weight: 500;
+  line-height: 1.5;
+  margin-bottom: 12px;
 }
 
 .notification-card span {
-  display: inline-block;
-  font-size: 0.8rem;
-  color: var(--deep-teal);
-  background: rgba(0, 126, 110, 0.08);
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-weight: 700;
-  width: fit-content;
-}
-
-/* 🔹 EMPTY STATE */
-.notifications-page .empty {
-  text-align: center;
-  color: var(--text-body);
-  margin-top: 80px;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.notifications-page .empty::before {
-  content: "🔔";
+  font-size: 12px;
+  color: var(--muted-purple);
+  font-weight: 500;
   display: block;
-  font-size: 50px;
-  margin-bottom: 15px;
-  opacity: 0.4;
 }
 
-/* 🔹 DARK MODE SUPPORT */
-body.dark .notifications-page {
-  background-color: #0d1a17;
-  border-color: rgba(255, 255, 255, 0.1);
+/* ================= LOADING STATE ================= */
+
+.text-center.mt-10 {
+  text-align: center;
+  margin-top: 100px;
+  font-weight: 700;
+  color: var(--deep-plum);
+  font-size: 18px;
 }
 
-body.dark .notification-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-body.dark .notification-card h4 {
-  color: var(--white);
-}
-
-body.dark .notification-card p {
-  color: #a3b1af;
-}
-
-body.dark .notification-card.unread {
-  background: rgba(0, 126, 110, 0.1);
-}
-
-/* 📱 RESPONSIVE */
-@media (max-width: 640px) {
+/* Responsive */
+@media (max-width: 600px) {
   .notifications-page {
-    margin: 15px;
-    padding: 20px;
-    border-radius: 20px;
+    margin: 30px auto;
   }
   
-  .notifications-page h2 {
-    font-size: 22px;
+  .notification-card {
+    padding: 16px;
+  }
+  
+  .notification-card h4 {
+    font-size: 16px;
   }
 }

@@ -4,9 +4,10 @@ import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { Plus } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { addToCart } from "../utils/cartHelper";
+import AddToCartButton from "./CartButton";
 import Loader from "./Loader";
 import WishlistButton from "./WishlistButton";
+
 
 export default function NearbyStores() {
   const [stores, setStores] = useState([]);
@@ -145,21 +146,7 @@ export default function NearbyStores() {
                     {/* ❤️ Wishlist */}
                     <div onClick={(e) => e.stopPropagation()}>
                       <WishlistButton item={store} />
-                    </div>
-
-                    {/* ➕ Add to Cart */}
-                    <div
-                      className="add-cart-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart({
-                          item: store,
-                          navigate,
-                          location,
-                        });
-                      }}
-                    >
-                      <Plus size={18} />
+                      <AddToCartButton item={store} />
                     </div>
 
                     <img

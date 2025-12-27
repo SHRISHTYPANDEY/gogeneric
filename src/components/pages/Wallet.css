@@ -1,100 +1,181 @@
-/* ================= PREMIUM WALLET PAGE (TEAL & GOLD THEME) ================= */
+/* ================= PREMIUM WALLET DASHBOARD (BRAND SYNC) ================= */
 
 .wallet-page {
-  max-width: 900px;
+  max-width: 800px;
   margin: 40px auto;
   padding: 0 20px;
   font-family: 'Inter', sans-serif;
+  min-height: 80vh;
 }
 
 .wallet-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 25px;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.wallet-header h2 {
+  font-size: 28px;
+  font-weight: 850;
   color: var(--text-dark);
+  letter-spacing: -1px;
 }
 
 .wallet-icon {
-  color: var(--deep-teal);
-  background: var(--soft-cream);
-  padding: 10px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--deep-plum);
+  background: #f8f0f7; /* Matching your Category Card Color 2 */
+  padding: 12px;
+  border-radius: 16px;
+  font-size: 45px; /* Adjusting for FaWallet size */
 }
 
-/* 🔹 BALANCE CARD (MODERN GRADIENT) */
+/* 🔹 BALANCE CARD: LUXURY PLUM GRADIENT */
 .wallet-balance-card {
-  background: linear-gradient(135deg, var(--deep-teal), #004d43);
-  padding: 35px;
-  border-radius: 28px; /* Premium Squircle */
-  margin-bottom: 40px;
+  background: linear-gradient(135deg, var(--deep-plum) 0%, #4a2b49 100%);
+  padding: 40px;
+  border-radius: 32px; /* Premium Squircle */
+  margin-bottom: 45px;
   color: var(--white);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 126, 110, 0.25);
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.wallet-balance-card::after {
+/* Decorative glass circle */
+.wallet-balance-card::before {
   content: "";
   position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: rgba(255, 255, 255, 0.05);
+  top: -20px;
+  right: -20px;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
+  filter: blur(20px);
 }
 
 .balance-label {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  opacity: 0.8;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
 }
 
 .balance-amount {
-  font-size: 42px;
-  font-weight: 800;
-  margin-top: 10px;
+  font-size: 48px;
+  font-weight: 900;
+  margin-top: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  letter-spacing: -1px;
+}
+/* ================= PREMIUM WALLET DASHBOARD (BRAND SYNC) ================= */
+
+.wallet-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Inter', sans-serif;
+  min-height: 80vh;
 }
 
-/* 🔹 TRANSACTION SECTION */
+.wallet-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.wallet-header h2 {
+  font-size: 28px;
+  font-weight: 850;
+  color: var(--text-dark);
+  letter-spacing: -1px;
+}
+
+.wallet-icon {
+  color: var(--deep-plum);
+  background: #f8f0f7; /* Matching your Category Card Color 2 */
+  padding: 12px;
+  border-radius: 16px;
+  font-size: 45px; /* Adjusting for FaWallet size */
+}
+
+/* 🔹 BALANCE CARD: LUXURY PLUM GRADIENT */
+.wallet-balance-card {
+  background: linear-gradient(135deg, var(--deep-plum) 0%, #4a2b49 100%);
+  padding: 40px;
+  border-radius: 32px; /* Premium Squircle */
+  margin-bottom: 45px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Decorative glass circle */
+.wallet-balance-card::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.balance-label {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+}
+
+.balance-amount {
+  font-size: 48px;
+  font-weight: 900;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -1px;
+}
+
+/* 🔹 TRANSACTIONS SECTION */
 .wallet-transactions h3 {
   font-size: 20px;
   font-weight: 800;
   color: var(--text-dark);
   margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .transaction-list {
   list-style: none;
   padding: 0;
   background: var(--white);
-  border-radius: 24px;
-  border: 1px solid var(--sand-beige);
+  border-radius: 28px;
+  border: 1.5px solid rgba(107, 63, 105, 0.08);
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
 }
 
 .transaction-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 25px;
-  border-bottom: 1px solid var(--soft-cream);
-  transition: background 0.3s ease;
+  padding: 22px 28px;
+  border-bottom: 1.5px solid #f8f0f7; /* Very light plum tint */
+  transition: all 0.3s ease;
 }
 
 .transaction-item:last-child {
@@ -102,55 +183,73 @@
 }
 
 .transaction-item:hover {
-  background: var(--soft-cream);
-}
-
-.tx-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  background: #fffcfd; /* Subtle brand hover */
+  transform: scale(1.01);
 }
 
 .tx-title {
   font-weight: 700;
   color: var(--text-dark);
   font-size: 16px;
+  margin-bottom: 4px;
 }
 
 .tx-date {
   font-size: 13px;
-  color: var(--text-body);
+  color: #888;
   font-weight: 500;
 }
 
 .tx-amount {
-  font-weight: 800;
-  font-size: 17px;
+  font-weight: 850;
+  font-size: 18px;
+  padding: 8px 16px;
+  border-radius: 12px;
 }
 
+/* Green for wallet additions */
 .tx-amount.credit {
-  color: var(--moss-green);
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
 }
 
+/* Red for wallet spendings */
 .tx-amount.debit {
-  color: #ef4444; /* Alert Red */
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
 
-/* 🔹 EMPTY STATE */
-.empty-text {
-  color: var(--text-body);
-  text-align: center;
-  padding: 40px;
-  font-weight: 600;
-  font-size: 15px;
+/* 🔹 LOADER BOX */
+.wallet-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
 }
 
-
-/* 📱 MOBILE VIEW */
+/* 📱 MOBILE OPTIMIZATION */
 @media (max-width: 600px) {
   .wallet-page { margin: 20px auto; }
-  .wallet-header { font-size: 22px; }
-  .wallet-balance-card { padding: 25px; border-radius: 24px; }
-  .balance-amount { font-size: 32px; }
-  .transaction-item { padding: 15px 20px; }
+  .wallet-header h2 { font-size: 24px; }
+  .wallet-balance-card { padding: 30px; border-radius: 24px; }
+  .balance-amount { font-size: 36px; }
+  .transaction-item { padding: 18px 20px; }
+  .tx-amount { font-size: 16px; padding: 6px 12px; }
+} 
+/* 🔹 LOADER BOX */
+.wallet-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+/* 📱 MOBILE OPTIMIZATION */
+@media (max-width: 600px) {
+  .wallet-page { margin: 20px auto; }
+  .wallet-header h2 { font-size: 24px; }
+  .wallet-balance-card { padding: 30px; border-radius: 24px; }
+  .balance-amount { font-size: 36px; }
+  .transaction-item { padding: 18px 20px; }
+  .tx-amount { font-size: 16px; padding: 6px 12px; }
 }

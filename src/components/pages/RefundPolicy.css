@@ -1,103 +1,113 @@
-/* ================= PREMIUM POLICY PAGE (TEAL & GOLD THEME) ================= */
+/* ================= REFUND & RETURN POLICY ================= */
 
 .policy-page {
-  /* background: var(--white); */
-  /* padding: 60px 20px; */
+  background-color: #fdfafb;
+  padding: 60px 20px;
   min-height: 100vh;
+  font-family: var(--font-main);
 }
 
 .policy-container {
   max-width: 900px;
-  margin: auto;
-  /* background: var(--white); */
+  margin: 0 auto;
+  background: var(--white);
   padding: 50px;
-  border-radius: 35px; /* Premium Squircle */
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 20px 50px rgba(18, 38, 32, 0.05);
+  border-radius: 40px;
+  border: 1px solid var(--dusty-rose);
+  box-shadow: var(--premium-shadow);
 }
 
 .policy-container h1 {
-  text-align: center;
-  margin-bottom: 40px;
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 38px;
+  font-weight: 900;
   color: var(--text-dark);
+  text-align: center;
+  margin-bottom: 50px;
   letter-spacing: -1px;
-  position: relative;
 }
 
-.policy-container h1::after {
-  content: "";
-  position: absolute;
-  bottom: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 4px;
-  background: var(--deep-teal);
-  border-radius: 10px;
+/* Section Headings */
+.policy-container section {
+  margin-bottom: 45px;
 }
 
 .policy-container h2 {
-  margin-top: 35px;
-  margin-bottom: 12px;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 800;
-  color: var(--deep-teal); /* Replaced Blue with Deep Teal */
-  letter-spacing: -0.3px;
+  color: var(--deep-plum);
+  margin-bottom: 15px;
+  border-left: 5px solid var(--mauve);
+  padding-left: 15px;
 }
 
 .policy-container p {
   font-size: 16px;
   line-height: 1.8;
   color: var(--text-body);
-  margin-bottom: 15px;
-  font-weight: 500;
 }
 
-.policy-container ul,
-.policy-container ol {
-  margin-left: 20px;
+/* Specific Notes Style */
+.note {
+  background: rgba(163, 118, 162, 0.1);
+  padding: 15px 20px;
+  border-radius: 12px;
+  border-left: 4px solid var(--deep-plum);
+  font-weight: 600;
+  color: var(--text-dark) !important;
   margin-top: 15px;
-  margin-bottom: 15px;
+}
+
+/* ================= LISTS STYLING ================= */
+
+.policy-container ul, 
+.policy-container ol {
+  padding-left: 20px;
+  margin-top: 15px;
 }
 
 .policy-container li {
-  margin-bottom: 10px;
   font-size: 15px;
-  color: var(--text-dark);
+  color: var(--text-body);
+  margin-bottom: 12px;
   line-height: 1.6;
   font-weight: 500;
 }
 
-/* 🔹 PREMIUM NOTE (GOLDEN ALERT) */
-.note {
-  background: var(--soft-cream);
-  border-left: 5px solid var(--sand-beige);
-  padding: 18px 22px;
-  margin-top: 20px;
-  font-size: 15px;
-  color: var(--text-dark);
-  border-radius: 0 16px 16px 0;
-  font-weight: 600;
-  font-style: italic;
+/* Bullet styling for UL */
+.policy-container ul li::marker {
+  color: var(--mauve);
+  font-size: 1.2em;
 }
 
-/* 📱 RESPONSIVE */
-@media (max-width: 768px) {
-  .policy-page {
-    padding: 30px 15px;
-  }
+/* Number styling for OL (Process steps) */
+.policy-container ol li::marker {
+  color: var(--deep-plum);
+  font-weight: 800;
+}
 
+/* ================= HIGHLIGHTED BOXES ================= */
+
+/* Process sections look better in a subtle box */
+section:nth-of-type(5), 
+section:nth-of-type(6) {
+  background: #fff9fa;
+  padding: 30px;
+  border-radius: 24px;
+  border: 1px solid rgba(221, 195, 195, 0.5);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
   .policy-container {
     padding: 30px 20px;
-    border-radius: 25px;
+    border-radius: 24px;
   }
 
   .policy-container h1 {
     font-size: 28px;
   }
-  
+
   .policy-container h2 {
     font-size: 20px;
   }

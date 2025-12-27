@@ -1,4 +1,4 @@
-/* ================= PREMIUM HIGHLIGHTS BANNERS (TEAL & GOLD THEME) ================= */
+/* ================= PREMIUM HIGHLIGHTS BANNERS (PURPLE THEME) ================= */
 
 .highlight-section {
   position: relative;
@@ -9,7 +9,7 @@
 .highlight-title {
   font-size: 30px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-dark) !important;
   margin-bottom: 20px;
   letter-spacing: -0.5px;
 }
@@ -42,14 +42,14 @@
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 10px 25px rgba(18, 38, 32, 0.08);
-  border: 1px solid var(--sand-beige);
+  box-shadow: 0 10px 25px rgba(107, 63, 105, 0.05); /* Soft Plum Shadow */
+  border: 1px solid var(--dusty-rose); /* Updated border */
 }
 
 .highlight-card:hover {
   transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 126, 110, 0.15);
-  border-color: var(--deep-teal);
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.15);
+  border-color: var(--deep-plum); /* Updated hover border */
 }
 
 .highlight-card img,
@@ -78,15 +78,16 @@
 }
 
 .highlight-card:hover .highlight-name {
-  color: var(--deep-teal);
+  color: var(--deep-plum); /* Text changes to plum on hover */
 }
 
+/* 🔹 NAVIGATION BUTTONS (PURPLE THEME) */
 .scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: var(--white);
-  border: 1px solid var(--sand-beige);
+  border: 1px solid var(--dusty-rose);
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -95,33 +96,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(18, 38, 32, 0.15);
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.12);
   transition: 0.3s;
-  color: var(--deep-teal);
+  color: var(--deep-plum);
 }
 
 .scroll-btn.left { left: -20px; }
 .scroll-btn.right { right: -20px; }
 
 .scroll-btn:hover {
-  background: var(--deep-teal);
+  background: var(--deep-plum);
   color: var(--white);
-  border-color: var(--deep-teal);
+  border-color: var(--deep-plum);
   transform: translateY(-50%) scale(1.1);
 }
 
+/* 🔹 HEALTH QUOTE (PREMIUM GRADIENT) */
 .health-quote {
   margin-top: 30px;
   padding: 25px;
-  background: linear-gradient(135deg, var(--soft-cream) 0%, var(--white) 100%);
+  /* Updated to very light mauve/plum gradient */
+  background: linear-gradient(135deg, #f8f0f7 0%, var(--white) 100%);
   border-radius: 16px;
   font-size: 16px;
   font-weight: 700;
   color: var(--text-dark);
   font-style: italic;
   text-align: center;
-  border: 1px solid var(--sand-beige);
-  box-shadow: inset 0 2px 4px rgba(18, 38, 32, 0.02);
+  border: 1px solid var(--dusty-rose);
+  box-shadow: inset 0 2px 4px rgba(107, 63, 105, 0.02);
 }
 
 @media (max-width: 768px) {

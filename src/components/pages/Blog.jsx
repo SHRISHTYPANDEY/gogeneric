@@ -42,11 +42,6 @@ export default function Blog(){
       </div>
 
       <div className="blog-page">
-        {/* Go Back Icon */}
-        <div className="go-back" onClick={() => navigate(-1)}>
-          <FaArrowLeft />
-        </div>
-
         <header className="blog-header">
           <h1 style={{ fontWeight: "100" }}>
             GoGeneric - Affordable Healthcare for Everyone

@@ -1,10 +1,13 @@
 import "./Loader.css";
 
-export default function Loader({ text = "Loading..." }) {
+export default function Loader({ text = "Preparing your wellness..." }) {
   return (
-    <div className="global-loader">
-      <span className="spinner"></span>
-      <p>{text}</p>
+    <div className="loader-container">
+      <div className="medical-spinner">
+        <div className="inner-circle"></div>
+        <div className="orbit-ring"></div>
+      </div>
+      <p className="loader-text">{text}</p>
     </div>
   );
 }

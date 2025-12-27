@@ -3,11 +3,9 @@ import "./CommonConcern.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import toast from "react-hot-toast";
-import { Plus } from "lucide-react";
-import { addToCart } from "../utils/cartHelper";
 import { useNavigate, useLocation } from "react-router-dom";
 import WishlistButton from "./WishlistButton";
-
+import AddToCartButton from "./CartButton";
 export default function CommonConcern() {
   const [concerns, setConcerns] = useState([]);
   const [activeFilter, setActiveFilter] = useState(null);
@@ -167,21 +165,7 @@ export default function CommonConcern() {
               }
             >
               <WishlistButton item={item} />
-
-              {/* ➕ ADD TO CART */}
-              <div
-                className="add-cart-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart({
-                    item,
-                    navigate,
-                    location,
-                  });
-                }}
-              >
-                <Plus size={18} />
-              </div>
+               <AddToCartButton item={item} />
 
               <img
                 src={

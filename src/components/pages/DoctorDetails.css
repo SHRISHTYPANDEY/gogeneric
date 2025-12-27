@@ -1,173 +1,184 @@
-/* ================= PREMIUM PROFESSIONAL DETAILS PAGE (TEAL & GOLD) ================= */
+/* ================= DOCTOR DETAILS (PREMIUM PLUM THEME) ================= */
 
-/* Container & Background */
 .details-page {
-  background: var(--white);
+  background-color: #fdfafb;
   min-height: 100vh;
-  padding: 80px 20px;
-  font-family: 'Inter', sans-serif;
+  padding: 60px 20px;
+  font-family: var(--font-main);
 }
 
 .details-container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
-  display: flex;
-  gap: 50px;
-  background: var(--white);
-  padding: 50px;
-  border-radius: 40px; /* Luxury Squircle */
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 30px 60px rgba(18, 38, 32, 0.05);
+  display: grid;
+  grid-template-columns: 350px 1fr; /* Sidebar and Content */
+  gap: 40px;
+  align-items: start;
 }
 
-/* Sidebar Styling */
+/* ================= LEFT SIDEBAR ================= */
+
 .profile-sidebar {
-  flex: 0 0 320px;
+  background: var(--white);
+  padding: 40px 30px;
+  border-radius: 32px;
+  border: 1px solid var(--dusty-rose);
+  box-shadow: var(--premium-shadow);
   text-align: center;
+  position: sticky;
+  top: 100px; /* Navbar height ke hisaab se adjust karein */
 }
 
 .img-container {
-  width: 280px;
-  height: 350px;
-  margin: 0 auto 24px;
-  border-radius: 32px;
-  overflow: hidden;
-  border: 1px solid var(--sand-beige);
-  box-shadow: 0 15px 35px rgba(18, 38, 32, 0.1);
-  background: var(--soft-cream);
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+  padding: 6px;
+  background: linear-gradient(135deg, var(--dusty-rose), var(--mauve));
+  box-shadow: 0 10px 25px rgba(107, 63, 105, 0.15);
 }
 
 .profile-img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.img-container:hover .profile-img {
-  transform: scale(1.08);
+  border: 4px solid var(--white);
 }
 
 .profile-name {
-  font-size: 2rem;
+  font-size: 26px;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 8px;
-  letter-spacing: -1px;
+  margin-bottom: 10px;
 }
 
 .profile-badge {
   display: inline-block;
-  background: rgba(0, 126, 110, 0.08);
-  color: var(--deep-teal);
-  padding: 8px 20px;
-  border-radius: 100px;
+  padding: 6px 18px;
+  background: rgba(163, 118, 162, 0.15);
+  color: var(--deep-plum);
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 13px;
+  border-radius: 50px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 35px;
-  border: 1px solid rgba(0, 126, 110, 0.1);
+  letter-spacing: 0.5px;
+  margin-bottom: 30px;
 }
 
-/* Content Area Styling */
+.cta-button {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(45deg, var(--deep-plum), var(--muted-purple));
+  color: var(--white);
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.2);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(107, 63, 105, 0.3);
+  background: linear-gradient(45deg, var(--muted-purple), var(--mauve));
+}
+
+/* ================= RIGHT CONTENT AREA ================= */
+
 .content-area {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .info-section {
-  margin-bottom: 40px;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 32px;
+  border: 1px solid var(--dusty-rose);
+  box-shadow: var(--premium-shadow);
 }
 
 .section-title {
-  font-size: 1.4rem;
+  font-size: 22px;
   font-weight: 800;
   color: var(--text-dark);
-  margin-bottom: 15px;
-  border-left: 5px solid var(--deep-teal);
-  padding-left: 15px;
-  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 4px;
+  background: var(--mauve);
+  border-radius: 10px;
 }
 
 .section-text {
-  color: var(--text-body);
+  font-size: 16px;
   line-height: 1.8;
-  font-size: 1.05rem;
-  font-weight: 500;
+  color: var(--text-body);
 }
 
-/* List Styling (Gold Accents) */
+/* Approach List Styles */
 .approach-list {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two column list */
+  gap: 15px;
 }
 
 .approach-item {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
-  color: var(--text-dark);
-  font-size: 1rem;
-  font-weight: 600;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text-body);
+  font-weight: 500;
+  background: #ffffff;
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(221, 195, 195, 0.4);
 }
 
 .check-icon {
-  color: var(--white);
-  background: var(--moss-green);
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  margin-right: 15px;
-  font-size: 0.75rem;
+  color: var(--deep-plum);
   font-weight: 900;
+  font-size: 18px;
 }
 
-/* Premium Button Styling */
-.cta-button {
-  width: 100%;
-  background: var(--deep-teal);
-  color: var(--white);
-  border: none;
-  padding: 18px;
-  border-radius: 20px;
-  font-weight: 800;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 12px 25px rgba(0, 126, 110, 0.25);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.error-msg {
+  text-align: center;
+  padding: 100px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--deep-plum);
 }
 
-.cta-button:hover {
-  background: var(--text-dark);
-  transform: translateY(-5px);
-  box-shadow: 0 20px 35px rgba(18, 38, 32, 0.3);
-}
+/* ================= RESPONSIVE ================= */
 
-/* Responsive for Mobile */
-@media (max-width: 768px) {
-  .details-page { padding: 40px 15px; }
-  
+@media (max-width: 992px) {
   .details-container {
-    flex-direction: column;
-    padding: 30px 20px;
-    gap: 35px;
-    border-radius: 30px;
+    grid-template-columns: 1fr;
   }
   
   .profile-sidebar {
-    flex: none;
-    width: 100%;
+    position: relative;
+    top: 0;
   }
   
-  .img-container {
-    width: 100%;
-    max-width: 280px;
+  .approach-list {
+    grid-template-columns: 1fr;
   }
-  
-  .profile-name { font-size: 1.75rem; }
 }

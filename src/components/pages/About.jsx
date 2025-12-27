@@ -1,31 +1,34 @@
-import React from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
 import "./About.css";
 import Footer from "../Footer";
 
-const statsData = [
-  { number: "500", label: "Verified Stores" },
-  { number: "50k", label: "Happy Customers" },
-  { number: "100%", label: "Quality Assurance" },
-  { number: "24/7", label: "Support" },
-];
+const Counter = ({ target, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
 
-const features = [
-  "Affordable Generic Medicines",
-  "Verified & Licensed Partner Stores",
-  "Fast & Safe Delivery",
-  "Trusted Quality Products",
-  "User-Friendly Platform",
-];
+  useEffect(() => {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      setCount(Math.floor(progress * target));
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }, [target, duration]);
+
+  return <span>{count}+</span>;
+};
 
 const About = () => {
   return (
     <>
- <section class="about-section">
-  <h2 class="about-title">ABOUT GOGENERIC</h2>
-  <h3 class="subtitle">A Comprehensive Directory For Your Health Care</h3>
+      <section className="about-section">
+        <h2 className="about-title">ABOUT GOGENERIC</h2>
+        <h3 className="subtitle">A Comprehensive Directory For Your Health Care</h3>
 
-  <p class="about-text">
+        <p class="about-text">
     Go Generic Pharma, an initiative by Singhaniya Med Private Limited,
     is a pioneering digital healthcare platform dedicated to making
     medicines affordable, accessible, and trustworthy for every household
@@ -42,34 +45,32 @@ const About = () => {
     delivery is handled with utmost care.
   </p>
 
-  <div class="stats-container">
-    <div class="stat-box">
-      <h3>100+</h3>
-      <p>Total Cities</p>
-    </div>
-    <div class="stat-box">
-      <h3>529+</h3>
-      <p>Total Experts</p>
-    </div>
-    <div class="stat-box">
-      <h3>310+</h3>
-      <p>Total Awards</p>
-    </div>
-  </div>
+        <div className="stats-container">
+          <div className="stat-box">
+            <h3><Counter target={100} /></h3>
+            <p>Total Cities</p>
+          </div>
+          <div className="stat-box">
+            <h3><Counter target={529} /></h3>
+            <p>Total Experts</p>
+          </div>
+          <div className="stat-box">
+            <h3><Counter target={310} /></h3>
+            <p>Total Awards</p>
+          </div>
+        </div>
 
-  <div class="features">
-    <div class="feature-item">
-      <span>✔</span> Enjoy Many Discounts In Fees
-    </div>
-    <div class="feature-item">
-      <span>✔</span> Growing Listings Of Clinics
-    </div>
-  </div>
-</section>
-<Footer />
-</>
-
-
+        <div className="features">
+          <div className="feature-item">
+            <span>✔</span> Enjoy Many Discounts In Fees
+          </div>
+          <div className="feature-item">
+            <span>✔</span> Growing Listings Of Clinics
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </>
   );
 };
 

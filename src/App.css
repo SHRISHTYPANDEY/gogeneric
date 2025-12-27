@@ -1,47 +1,92 @@
+/* 1. Root Variables Update for Premium Feel */
 :root {
-  /* Palette Colors */
-  --deep-teal: #007E6E;      /* Primary Action / Logo / Buttons */
-  --moss-green: #73AF6F;     /* Secondary / Success / Accents */
-  --soft-cream: #E7DEAF;     /* Background Highlights / Borders */
-  --sand-beige: #D7C097;     /* Subtle Backgrounds / Cards */
-  
-  /* Text Colors (Readability ke liye extra dark) */
-  --text-dark: #122620;      /* Darkest Teal-Black for headings */
-  --text-body: #243B33;      /* Dark Forest for body text */
-  
-  /* Utility */
-  --white: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.96);
+  --deep-plum: #6B3F69;
+  --muted-purple: #8D5F8C;
+  --mauve: #A376A2;
+  --dusty-rose: #DDC3C3;
+  --text-dark: #331d32;
+  --glass: rgba(255, 255, 255, 0.85);
+  --premium-shadow: 0 8px 32px 0 rgba(107, 63, 105, 0.08);
 }
 
-body {
-  margin: 0;
-  background-color: #fffaf5; 
-  color: var(--dark-text);
-}
-/* Sabhi headings ko ekdum dark aur readable banane ke liye */
-h1, h2, h3, h4, .cate-title, .concern-heading, .nearby-title, .logo {
-  color: var(--text-dark) !important;
+/* 2. Top Header - Isse ultra-slim aur subtle rakhenge */
+.topheader-wrapper {
+  background: #fdfafb;
+  border-bottom: 1px solid rgba(163, 118, 162, 0.1);
+  padding: 6px 0 !important;
 }
 
-/* Paragraphs aur links */
-p, a, li, input {
-  color: var(--text-body);
+.location-trigger {
+  background: var(--white);
+  border: 1px solid var(--dusty-rose);
+  padding: 4px 12px;
+  border-radius: 50px; /* Capsule shape looks premium */
 }
 
-/* Primary Button Style (Uniformity ke liye) */
-.primary-btn-new {
-  background: var(--deep-teal);
-  color: var(--white);
-  transition: 0.3s;
+/* 3. Main Navbar - Glassmorphism Effect */
+.navbar {
+  background: var(--glass) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--premium-shadow);
+  height: 70px;
 }
 
-.primary-btn-new:hover {
-  background: var(--moss-green);
+.nav-links li a {
+  color: #4a3048; /* Softer dark */
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.8px;
 }
 
-/* Badges across site */
-.badge-new {
-  background: var(--deep-teal);
-  color: var(--white);
+.nav-links li a::after {
+  height: 3px;
+  background: linear-gradient(90deg, var(--deep-plum), var(--mauve));
+}
+
+/* 4. Search Bar - Modern Rounded Design */
+.search-bar {
+  background: #ffffff !important;
+  border: 2px solid var(--dusty-rose); /* Thick border looks cleaner */
+  border-radius: 50px !important; /* Fully rounded */
+  padding: 0 20px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.search-bar:focus-within {
+  border-color: var(--deep-plum);
+  transform: scale(1.01);
+}
+
+.search-bar button {
+  background: var(--deep-plum) !important;
+  color: white;
+  border-radius: 50px;
+  margin: 4px;
+  padding: 0 15px;
+}
+
+/* 5. Icons Design (Notification/Cart) */
+.notification-icon, .cart-icon, .hamburger {
+  background: #ffffff;
+  border: 1.5px solid var(--dusty-rose);
+  border-radius: 12px;
+  color: var(--deep-plum);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.notification-icon:hover, .cart-icon:hover {
+  background: var(--deep-plum);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* 6. Download Pill - High Contrast */
+.download-pill {
+  background: var(--deep-plum);
+  background-image: linear-gradient(45deg, #6B3F69, #8D5F8C);
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.25);
+  border: none;
 }
