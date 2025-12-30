@@ -217,7 +217,6 @@ export default function Navbar() {
 
           {user && (
             <li>
-              <li>
                 <Link
                   to="#"
                   onClick={(e) => {
@@ -228,7 +227,6 @@ export default function Navbar() {
                   <FaShoppingBag /> My Orders
                 </Link>
               </li>
-            </li>
           )}
 
           {user && (

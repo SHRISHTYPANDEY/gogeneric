@@ -1,0 +1,145 @@
+/* ================= BLOG DETAILS ================= */
+
+.blog-details {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 20px 20px;
+}
+
+/* Blog Title */
+.blog-details h1 {
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--deep-plum);
+  margin-bottom: 32px;
+  letter-spacing: -0.7px;
+}
+
+/* Main Content */
+.blog-content {
+  font-size: 16.5px;
+  line-height: 1.85;
+  color: #4a3048;
+}
+
+/* Paragraphs */
+.blog-content p {
+  margin-bottom: 22px;
+}
+
+/* Headings inside content */
+.blog-details .blog-content h2{
+  font-size: 28px;
+  font-weight: 700;
+  color: #4E2A4F;
+  margin: 52px 0 18px;
+}
+
+.blog-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--muted-purple);
+  margin: 38px 0 14px;
+}
+
+/* Lists */
+.blog-content ul {
+    list-style-type: disc;
+  padding-left: 24px;
+  margin: 22px 0;
+}
+.blog-content ol{
+    list-style-type: decimal;
+    padding-left: 24px;
+  margin: 22px 0;
+}
+.blog-content li {
+  margin-bottom: 10px;
+  list-style-position: outside;
+}
+
+/* Links */
+.blog-content a {
+  color: var(--deep-plum);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--dusty-rose);
+  text-underline-offset: 4px;
+}
+
+.blog-content a:hover {
+  color: var(--muted-purple);
+}
+
+/* Images inside blog HTML */
+.blog-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  margin: 44px 0;
+  box-shadow: var(--premium-shadow);
+}
+
+/* Blockquote */
+.blog-content blockquote {
+  margin: 44px 0;
+  padding: 26px 30px;
+  background: rgba(221, 195, 195, 0.28);
+  border-left: 5px solid var(--deep-plum);
+  border-radius: 14px;
+  font-style: italic;
+  color: #5a3b58;
+}
+
+/* Code blocks */
+.blog-content pre {
+  background: #f8f5f8;
+  padding: 22px;
+  border-radius: 16px;
+  overflow-x: auto;
+  margin: 34px 0;
+}
+
+.blog-content code {
+  font-family: "Fira Code", monospace;
+  font-size: 14px;
+  color: var(--deep-plum);
+}
+
+/* Horizontal rule */
+.blog-content hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--dusty-rose),
+    transparent
+  );
+  margin: 50px 0;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .blog-details {
+    padding: 60px 16px;
+  }
+
+  .blog-details h1 {
+    font-size: 32px;
+  }
+
+  .blog-content {
+    font-size: 15.5px;
+  }
+
+  .blog-content h2 {
+    font-size: 23px;
+  }
+
+  .blog-content h3 {
+    font-size: 19px;
+  }
+}

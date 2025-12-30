@@ -5,7 +5,6 @@ import Navbar from "./components/layout/Navbar.jsx";
 import Home from "./components/pages/Home.jsx";
 import { Route, Routes } from "react-router-dom";
 import About from "./components/pages/About.jsx";
-import Blog from "./components/pages/Blog.jsx";
 import Doctors from "./components/pages/Doctors.jsx";
 import Profile from "./components/pages/Profile.jsx";
 // import Searchbar from "./components/layout/Searchbar.jsx";
@@ -37,6 +36,8 @@ import Cancellation from "./components/pages/Cancellation.jsx";
 import Coupon from "./components/pages/Coupon.jsx";
 import AutomatedMessage from "./components/pages/AutomatedMessage.jsx";
 import Shipping from "./components/pages/Shipping.jsx";
+import BlogDetails from "./components/pages/BlogDetails.jsx";
+import BlogList from "./components/pages/BlogList.jsx";
 function AppLayout() {
   const { showLoginModal, setShowLoginModal } = useAuth();
 
@@ -53,7 +54,7 @@ function AppLayout() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog" element={<BlogList />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/doctors/:id/plans" element={<DoctorPlans />} />
@@ -87,6 +88,8 @@ function AppLayout() {
         <Route path="/coupon" element={<Coupon />} />
         <Route path="/help" element={<AutomatedMessage />} />
         <Route path="/shipping" element={<Shipping />} />
+         <Route path="/blog" element={<BlogList />} />
+  <Route path="/blog/:slug" element={<BlogDetails />} />
 
       </Routes>
       {/* ✅ GLOBAL LOGIN MODAL */}

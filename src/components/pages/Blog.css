@@ -1,117 +1,130 @@
-/* ================= BLOG PAGE CONTAINER ================= */
+/* ================= BLOG LIST PAGE ================= */
 
 .blog-page {
-  max-width: 1100px;
+  max-width: 1000px; /* Reduced for better focus */
   margin: 0 auto;
   padding: 80px 20px;
-  font-family: var(--font-main);
-  background-color: #fdfafb;
-}
-/* ================= HEADER SECTION ================= */
-.blog-header {
-  text-align: center;
-  margin-bottom: 80px;
 }
 
-.blog-header h1 {
+.blog-title {
   font-size: 42px;
-  color: var(--text-dark);
-  margin-bottom: 20px;
-  letter-spacing: -1px;
-}
-
-.blog-header p {
-  font-size: 18px;
-  color: var(--text-secondary);
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-/* ================= BLOG SECTIONS (ZIG-ZAG) ================= */
-
-.blog-content {
-  display: flex;
-  flex-direction: column;
-  gap: 100px; /* Space between blog topics */
-}
-
-.blog-section {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-  opacity: 0;
-  animation: fadeIn 0.8s forwards;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
-  from { opacity: 0; transform: translateY(30px); }
-}
-
-/* Alternating Layout */
-.blog-section.reverse {
-  flex-direction: row-reverse;
-}
-
-/* Image Styling */
-.blog-img {
-  flex: 1;
-  position: relative;
-}
-
-.blog-img img {
-  width: 100%;
-  border-radius: 32px;
-  box-shadow: var(--premium-shadow);
-  transition: 0.5s ease;
-  border: 1px solid var(--dusty-rose);
-}
-
-.blog-section:hover .blog-img img {
-  transform: scale(1.03);
-}
-
-/* Text Content */
-.blog-text {
-  flex: 1;
-}
-
-.blog-text h2 {
-  font-size: 30px;
   font-weight: 800;
   color: var(--deep-plum);
-  margin-bottom: 20px;
-  position: relative;
+  margin-bottom: 60px;
+  letter-spacing: -1px;
+  text-align: center;
 }
 
-.blog-text p {
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* --- Single Blog Card --- */
+.blog-card {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(163, 118, 162, 0.1);
+}
+
+/* --- Image Section --- */
+.blog-image {
+  width: 320px;
+  height: 200px;
+  border-radius: 20px; 
+  overflow: hidden;
+  background: var(--dusty-rose);
+  flex-shrink: 0;
+  box-shadow: 0 10px 30px rgba(107, 63, 105, 0.08);
+}
+
+.blog-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Hover Animation: Only Image */
+.blog-image:hover img {
+  transform: scale(1.1);
+}
+
+/* --- Content Area --- */
+.blog-content {
+  flex: 1;
+}
+
+.blog-heading-link {
+  text-decoration: none;
+}
+
+.blog-content h2 {
+  margin-top: 0;
+  font-size: 26px; /* Bigger & bolder */
+  font-weight: 800;
+  color: #4a3048;
+  margin-bottom: 12px;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+}
+
+.blog-heading-link h2:hover {
+  color: var(--deep-plum);
+}
+
+.blog-content p {
   font-size: 16px;
-  line-height: 1.8;
-  color: var(--text-body);
-  text-align: justify;
+  color: var(--muted-purple);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 10; /* Limit text to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* ================= VISI DECORATION ================= */
-.visi {
-  height: 5px;
-  background: linear-gradient(90deg, var(--deep-plum), var(--mauve), var(--dusty-rose));
+/* --- THE PREMIUM BUTTON (Fixing your "Read More") --- */
+.read-more {
+  display: inline-block;
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff !important; /* Force white text */
+  background: var(--deep-plum);
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(107, 63, 105, 0.2);
+  border: none;
+}
+
+.read-more:hover {
+  background: var(--muted-purple);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.3);
+  text-decoration: none;
 }
 
 /* ================= RESPONSIVE ================= */
 
-@media (max-width: 992px) {
-  .blog-section, .blog-section.reverse {
+@media (max-width: 850px) {
+  .blog-card {
     flex-direction: column;
-    gap: 30px;
-    text-align: center;
+    gap: 20px;
+    align-items: flex-start;
   }
-  
-  .blog-header h1 {
-    font-size: 32px;
+
+  .blog-image {
+    width: 100%;
+    height: 250px;
   }
-  
-  .blog-text h2 {
-    font-size: 26px;
+
+  .blog-content h2 {
+    font-size: 22px;
   }
 }

@@ -94,18 +94,17 @@ export default function ContactUs() {
 
           {/* WHATSAPP */}
           <a
-  href="https://wa.me/919211510600"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="info-box clickable whatsapp"
->
-  <Phone size={20} />
-  <div>
-    <h4>WhatsApp</h4>
-    <p>Chat with us on WhatsApp</p>
-  </div>
-</a>
-
+            href="https://wa.me/919211510600"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="info-box clickable whatsapp"
+          >
+            <Phone size={20} />
+            <div>
+              <h4>WhatsApp</h4>
+              <p>Chat with us on WhatsApp</p>
+            </div>
+          </a>
         </div>
 
         {/* RIGHT FORM */}
@@ -143,9 +142,25 @@ export default function ContactUs() {
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "Sending..." : <><Send size={16} /> Send Message</>}
+            {loading ? (
+              "Sending..."
+            ) : (
+              <>
+                <Send size={16} /> Send Message
+              </>
+            )}
           </button>
         </form>
+      </div>
+      {/* ===== MAP SECTION ===== */}
+      <div className="contact-map-section">
+        <iframe
+          title="GoGeneric Location"
+          src="https://www.google.com/maps?q=Blossom+Compound+Industrial+Area+Site+4+Sahibabad+Ghaziabad+201010&output=embed"
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   );

@@ -102,7 +102,7 @@ useEffect(() => {
 
             {/* DOWNLOAD */}
             <a
-              href="https://play.google.com/store/apps"
+              href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
               target="_blank"
               rel="noreferrer"
               className="download-pill"
