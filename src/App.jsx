@@ -7,7 +7,6 @@ import { Route, Routes } from "react-router-dom";
 import About from "./components/pages/About.jsx";
 import Doctors from "./components/pages/Doctors.jsx";
 import Profile from "./components/pages/Profile.jsx";
-// import Searchbar from "./components/layout/Searchbar.jsx";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import { WalletProvider } from "./context/WalletContext.jsx";
 import StoreDetails from "./components/pages/StoreDetails.jsx";
@@ -25,8 +24,6 @@ import DoctorDetails from "./components/pages/DoctorDetails.jsx";
 import DoctorPlans from "./components/pages/PlansPage.jsx";
 import RefundPolicy from "./components/pages/RefundPolicy.jsx";
 import PrivacyPolicy from "./components/pages/PrivacyPolicy.jsx";
-import Checkout from "./components/pages/Checkout.jsx";
-import AddAddress from "./components/pages/AddAddress.jsx";
 import Orders from "./components/pages/Orders.jsx";
 import TrackOrder from "./components/orders/TrackOrder.jsx";
 import Wallet from "./components/pages/Wallet.jsx";
@@ -49,7 +46,6 @@ function AppLayout() {
       />
       <TopHeader />
       <Navbar />
-      {/* <Searchbar /> */}
       <WhatsAppChat />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -77,8 +73,6 @@ function AppLayout() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/refund" element={<RefundPolicy />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/add-address" element={<AddAddress />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/orders/:id/track" element={<TrackOrder />} />
