@@ -13,8 +13,14 @@ export default function AddressSection({ deliveryType, onSelect }) {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (deliveryType === "delivery") fetchAddresses();
-  }, [deliveryType]);
+  if (deliveryType === "delivery") {
+    fetchAddresses();
+  } else {
+    setAddresses([]);
+    setSelectedId(null);
+  }
+}, [deliveryType]);
+
 
   const fetchAddresses = async () => {
     try {
@@ -28,7 +34,7 @@ export default function AddressSection({ deliveryType, onSelect }) {
       const def = list.find((a) => a.is_default);
       if (def) {
         setSelectedId(def.id);
-        onSelect(def.id);
+        onSelect(def);
       }
     } catch {
       toast.error("Failed to load addresses");
@@ -61,7 +67,7 @@ if (!lat || !lng) {
           className={`address-card ${selectedId === addr.id ? "active" : ""}`}
           onClick={() => {
             setSelectedId(addr.id);
-            onSelect(addr.id);
+            onSelect(addr);
           }}
         >
           <div>

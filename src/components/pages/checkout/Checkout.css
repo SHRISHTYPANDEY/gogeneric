@@ -1,100 +1,124 @@
-/* Container Layout */
+/* Container styling */
 .checkout-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #faf8f9; /* Extremely light mauve background */
+  padding: 40px 20px;
+  background-color: #f8f9fa;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif; /* Clean font */
 }
 
 .checkout-title {
-  color: #63445D;
-  font-size: 1.8rem;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  color: #1a1a1a;
   text-align: left;
 }
 
-/* Grid System */
+/* Flexbox layout for Left and Right columns */
 .checkout-layout {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr; /* Left side wider */
-  gap: 25px;
+  display: flex;
+  gap: 30px;
   align-items: flex-start;
 }
 
-/* Left Column Styling */
+/* Left Section: Information cards */
 .checkout-left {
+  flex: 1; /* Occupies 70% space */
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-/* Right Column Styling */
-.checkout-right {
-  position: sticky; /* Summary stays visible while scrolling items */
-  top: 20px;
-}
-
-/* Place Order Button - Main */
-.place-order-btn {
-  display: block;
-  width: 100%;
-  max-width: 400px;
-  margin: 30px auto; /* Centers the button */
-  background-color: #9E768F;
-  color: white;
-  padding: 16px 30px;
-  border: none;
+/* Common Card Styling for all sub-components */
+.checkout-left > div {
+  background: #ffffff;
+  padding: 24px;
   border-radius: 12px;
-  font-size: 1.1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+/* Right Section: Bill Summary (Sticky) */
+.checkout-right {
+  width: 380px; /* Fixed width for summary */
+  position: sticky;
+  top: 20px; /* Keeps summary visible while scrolling */
+}
+
+/* Pay Using Button */
+.pay-using-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(158, 118, 143, 0.3);
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  margin-top: 15px;
 }
 
-.place-order-btn:hover:not(:disabled) {
-  background-color: #8A647B;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(158, 118, 143, 0.4);
+.pay-using-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Policy Consent Section */
+.policy-consent {
+  margin-top: 25px;
+  padding: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+.policy-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.policy-checkbox input {
+  margin-top: 3px;
+}
+
+.policy-checkbox a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Place Order Button (Big & Bold) */
+.place-order-btn {
+  width: 100%;
+  padding: 18px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.3s ease;
 }
 
 .place-order-btn:disabled {
-  background-color: #C1B0BD;
+  background-color: #94d3a2;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* Loading State */
-.loading-checkout {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  color: #9E768F;
-  font-weight: 600;
-}
-
-/* Responsive Design for Mobile */
-@media (max-width: 850px) {
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
   .checkout-layout {
-    grid-template-columns: 1fr; /* Stack columns on top of each other */
+    flex-direction: column;
   }
-
+  
   .checkout-right {
+    width: 100%;
     position: static;
-    order: 2; /* Bill summary below cart items on mobile */
-  }
-
-  .checkout-left {
-    order: 1;
-  }
-
-  .checkout-title {
-    font-size: 1.5rem;
-    text-align: center;
   }
 }

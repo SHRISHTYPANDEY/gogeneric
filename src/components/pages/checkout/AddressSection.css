@@ -1,141 +1,100 @@
-/* Container styling */
-.checkout-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(158, 118, 143, 0.1); /* Subtle mauve shadow */
-  max-width: 500px;
-  margin: 20px auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.checkout-card h4 {
-  color: #63445D;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  border-left: 4px solid #9E768F;
-  padding-left: 12px;
-}
-
-/* Address Card Individual */
+/* --- ADDRESS CARD LIST --- */
 .address-card {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  margin-bottom: 12px;
-  border: 2px solid #F3EBF0;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
+  margin-bottom: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  background-color: #fafafa;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #fff;
 }
 
 .address-card:hover {
-  background-color: #F3EBF0;
-  border-color: #D8C4D1;
+  border-color: #007bff;
+  background-color: #f8fbff;
 }
 
-/* Selected/Active State */
 .address-card.active {
-  border-color: #9E768F;
-  background-color: #FDF7FA;
-  box-shadow: 0 0 0 1px #9E768F;
+  border-color: #007bff;
+  background-color: #f0f7ff;
+  border-width: 2px;
 }
 
 .address-card strong {
   display: block;
-  color: #63445D;
-  text-transform: capitalize;
-  margin-bottom: 4px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #007bff;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
 }
 
 .address-card p {
   margin: 2px 0;
-  color: #7a6e77;
-  font-size: 0.9rem;
+  font-size: 14px;
+  color: #444;
   line-height: 1.4;
 }
 
-/* Buttons */
 .edit-btn {
   background: transparent;
-  color: #9E768F;
-  border: 1px solid #9E768F;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  color: #007bff;
+  border: 1px solid #007bff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
 .edit-btn:hover {
-  background: #9E768F;
-  color: white;
+  background: #007bff;
+  color: #fff;
 }
 
 .add-address-btn {
   width: 100%;
-  background-color: #F3EBF0;
-  color: #63445D;
-  border: 2px dashed #D8C4D1;
   padding: 12px;
+  border: 2px dashed #ccc;
   border-radius: 12px;
+  background: transparent;
+  color: #666;
   font-weight: 600;
   cursor: pointer;
   margin-top: 10px;
-  transition: all 0.2s;
+  transition: 0.2s;
 }
 
 .add-address-btn:hover {
-  background-color: #9E768F;
-  color: white;
-  border-style: solid;
-  border-color: #9E768F;
+  border-color: #007bff;
+  color: #007bff;
+  background: #f0f7ff;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  .address-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  
-  .edit-btn {
-    align-self: flex-end;
-  }
-}
-/* Address Form Container (Modal overlay look) */
+/* --- ADDRESS FORM --- */
 .address-form {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 16px;
   margin-top: 20px;
-  border: 1px solid #D8C4D1;
-  box-shadow: 0 10px 25px rgba(99, 68, 93, 0.1);
-  animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  padding: 20px;
+  border-top: 2px solid #f0f0f0;
+  background: #fafafa;
+  border-radius: 12px;
 }
 
 .address-form h4 {
-  color: #63445D;
-  margin-bottom: 20px;
-  font-size: 1.1rem;
-  text-align: center;
+  margin-bottom: 15px;
+  color: #333;
 }
 
-/* Address Type Selector */
+/* Address Type Selection Row */
 .address-type-row {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  justify-content: space-between;
 }
 
 .type-btn {
@@ -143,96 +102,71 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   padding: 10px;
-  border: 1px solid #D8C4D1;
-  background: white;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  color: #7a6e77;
+  background: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  font-size: 14px;
+  color: #666;
 }
 
 .type-btn.active {
-  background-color: #9E768F;
-  color: white;
-  border-color: #9E768F;
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
 }
 
-.type-btn:hover:not(.active) {
-  background-color: #F3EBF0;
-  border-color: #9E768F;
-}
-
-/* Inputs Styling */
+/* Form Inputs Styling */
 .address-form input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px;
   margin-bottom: 12px;
-  border: 1px solid #E5D9E2;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  outline: none;
-  box-sizing: border-box; /* Taaki padding width ke bahar na jaye */
-  transition: border-color 0.3s, box-shadow 0.3s;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box; /* Padding handling */
 }
 
 .address-form input:focus {
-  border-color: #9E768F;
-  box-shadow: 0 0 0 3px rgba(158, 118, 143, 0.1);
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-.address-form input::placeholder {
-  color: #C1B0BD;
-}
-
-/* Two Column Layout for City/State */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* Form Action Buttons */
+/* Action Buttons (Save/Cancel) */
 .form-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 12px;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 .form-actions button {
+  flex: 1;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
   border: none;
 }
 
-/* Cancel Button */
 .form-actions button:first-child {
-  background: #F3EBF0;
-  color: #63445D;
+  background: #eee;
+  color: #444;
 }
 
-.form-actions button:first-child:hover {
-  background: #E5D9E2;
-}
-
-/* Save/Update Button */
 .form-actions button:last-child {
-  background: #9E768F;
-  color: white;
-  box-shadow: 0 4px 10px rgba(158, 118, 143, 0.3);
+  background: #28a745;
+  color: #fff;
 }
 
-.form-actions button:last-child:hover {
-  background: #8A647B;
-  transform: translateY(-1px);
-}
-
-.form-actions button:active {
-  transform: translateY(0);
+.form-actions button:hover {
+  opacity: 0.9;
 }

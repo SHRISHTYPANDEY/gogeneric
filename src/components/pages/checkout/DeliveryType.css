@@ -1,64 +1,60 @@
-/* Container styling matching other cards */
 .delivery-type-card {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(158, 118, 143, 0.08);
-  margin-bottom: 20px;
-}
-
-.section-title {
-  color: #63445D;
-  margin-bottom: 18px;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-/* Button Group Wrapper */
-.delivery-options {
-  display: flex;
-  gap: 12px;
-  background-color: #F8F4F7; /* Light mauve-tinted grey */
-  padding: 6px;
   border-radius: 12px;
 }
 
-/* Individual Option Button */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.delivery-options {
+  display: flex;
+  gap: 16px;
+}
+
 .delivery-option {
-  flex: 1;
-  padding: 12px 10px;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  background: transparent;
-  color: #7a6e77;
-  transition: all 0.3s ease;
+  flex: 1; /* Dono buttons barabar width ke honge */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 16px;
+  border: 2px solid #f0f0f0; /* Default border color */
+  border-radius: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.2s ease-in-out;
 }
 
-/* Hover effect for inactive button */
-.delivery-option:hover:not(.active) {
-  color: #63445D;
-  background-color: rgba(158, 118, 143, 0.05);
+.delivery-option:hover {
+  background-color: #f9f9f9;
+  border-color: #ddd;
 }
 
-/* Active State - Selected Option */
+/* Active State Styling */
 .delivery-option.active {
-  background-color: #ffffff;
-  color: #9E768F;
+  background-color: #f0f7ff; /* Halka blue tint */
+  border-color: #007bff;     /* Primary blue color */
+  color: #007bff;
   font-weight: 600;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(158, 118, 143, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 400px) {
+/* Icons styling (Emojis or SVG) */
+.delivery-option span {
+  font-size: 18px;
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
   .delivery-options {
     flex-direction: column;
+    gap: 10px;
   }
 }
