@@ -1,54 +1,150 @@
+/* ================= BOOKING MODAL/CONTAINER STYLING ================= */
+
+:root {
+  --ba-plum: #6b3f69;
+  --ba-plum-light: #8e5a8a;
+  --ba-mauve-bg: #fdf6f6;
+  --ba-soft-pink: #fcefee;
+  --ba-text: #331d32;
+  --ba-text-grey: #636e72;
+  --ba-white: #ffffff;
+  --ba-shadow: 0 10px 25px rgba(107, 63, 105, 0.1);
+}
+
 .booking-container {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 30px;
+  background: var(--ba-white);
+  border-radius: 28px;
+  box-shadow: var(--ba-shadow);
+  font-family: 'Inter', sans-serif;
+}
+
+.booking-container .section {
+  margin-bottom: 25px;
+}
+
+.booking-container h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ba-text);
+  margin-bottom: 15px;
+  letter-spacing: -0.2px;
+}
+
+/* ================= DATE & TIME BUTTONS ================= */
+
+.options-row, .slots-grid {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.section h4 {
-  margin-bottom: 8px;
-}
-
-.options-row {
-  display: flex;
-  gap: 10px;
-}
-
-.option-btn,
-.slot-btn {
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background: #fff;
-  cursor: pointer;
-}
-
-.option-btn.active,
-.slot-btn.active {
-  background: #16a34a;
-  color: white;
-  border-color: #16a34a;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .slots-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
 }
 
-.book-btn {
-  background: #2563eb;
-  color: white;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
+.option-btn, .slot-btn {
+  padding: 12px 20px;
+  border-radius: 14px;
+  border: 1.5px solid #f0f0f0;
+  background: #fafafa;
+  color: var(--ba-text-grey);
+  font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover State */
+.option-btn:hover, .slot-btn:hover {
+  border-color: var(--ba-plum-light);
+  background: var(--ba-mauve-bg);
+  color: var(--ba-plum);
+}
+
+/* Active State (Selection) */
+.option-btn.active, .slot-btn.active {
+  background: var(--ba-plum) !important;
+  color: var(--ba-white) !important;
+  border-color: var(--ba-plum) !important;
+  box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ================= ACTION BUTTONS ================= */
+
+.book-btn {
+  width: 100%;
+  padding: 16px;
+  margin-top: 10px;
+  background: var(--ba-plum);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(107, 63, 105, 0.15);
+}
+
+.book-btn:hover {
+  background: var(--ba-plum-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(107, 63, 105, 0.25);
 }
 
 .pay-btn {
-  background: #f59e0b;
+  width: 100%;
+  padding: 16px;
+  margin-top: 15px;
+  background: #ffffff;
+  color: #27ae60; /* Green for Payment Success/Action */
+  border: 2px solid #27ae60;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: slideUp 0.4s ease-out;
+}
+
+.pay-btn:hover {
+  background: #27ae60;
   color: white;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  font-weight: 600;
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= MOBILE VIEW ================= */
+
+@media (max-width: 480px) {
+  .booking-container {
+    padding: 20px;
+    border-radius: 20px;
+    margin: 10px;
+  }
+  
+  .slots-grid {
+    grid-template-columns: 1fr; /* Single column on very small screens */
+  }
+
+  .option-btn, .slot-btn {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
 }

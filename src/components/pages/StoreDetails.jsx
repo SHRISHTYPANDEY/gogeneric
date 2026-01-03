@@ -80,7 +80,7 @@ export default function StoreDetails() {
       params: {
         store_id: id,
         category_id: store.category_details?.[0]?.id || 1,
-        search: keyword || undefined,   // 🔥 SERVER-SIDE SEARCH
+        search: keyword || undefined,   
         limit: 20,
         offset: pageNumber,
       },

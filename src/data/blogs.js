@@ -1249,7 +1249,7 @@ faqs : [
     title: "Boost Your Local Pharmacy’s Visibility with GoGeneric App",
    excerpt:
   "Discover how the GoGeneric app helps local pharmacies increase visibility, attract nearby customers, accept online medicine orders, and grow their business digitally across India.",
-    image: "/public/insight2.png",
+    image: "/public/boost_local_pharm.png",
     content: `
 <p>
   In today’s <strong>fast-paced digital era</strong>, having an online presence is no longer
@@ -1736,7 +1736,7 @@ slug: "buy-medicines-online-from-local-pharmacy-gogeneric",
 title: "Buy Medicines Easily from Your Local Pharmacy Using GoGeneric App",
 excerpt:
   "Order medicines easily from your trusted local pharmacy using the GoGeneric Healthcare App. Enjoy online ordering, nearby pharmacy access, secure payments, and convenient home delivery.",
-image: "/public/insight1.jpg",
+image: "/public/buy_medi.png",
 content:`
 <p>
   In today’s <strong>fast-paced world</strong>, convenience is key — especially when it
