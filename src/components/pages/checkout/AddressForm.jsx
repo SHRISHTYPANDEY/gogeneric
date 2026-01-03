@@ -3,6 +3,7 @@ import api from "../../../api/axiosInstance";
 import toast from "react-hot-toast";
 import { Home, Briefcase, MapPin } from "lucide-react";
 import "./AddressSection.css"
+import { useLocation } from "../../../context/LocationContext";
 
 export default function AddressForm({ initialData, onClose, onSuccess }) {
   const [addressType, setAddressType] = useState("Home");
@@ -19,6 +20,7 @@ export default function AddressForm({ initialData, onClose, onSuccess }) {
   });
 
   const token = localStorage.getItem("token");
+const { location } = useLocation();
 
   // ✅ PREFILL (EDIT MODE)
   useEffect(() => {
@@ -45,10 +47,7 @@ export default function AddressForm({ initialData, onClose, onSuccess }) {
   };
 
   const handleSubmit = async () => {
-  const latitude = localStorage.getItem("latitude");
-  const longitude = localStorage.getItem("longitude");
-
-  if (!latitude || !longitude) {
+  if (!location?.lat || !location?.lng) {
     toast.error("Select delivery location from top first");
     return;
   }
@@ -65,15 +64,17 @@ export default function AddressForm({ initialData, onClose, onSuccess }) {
     form.city,
     form.state,
     form.pincode,
-  ].filter(Boolean).join(", ");
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   const payload = {
     contact_person_name: form.contact_name,
     contact_person_number: form.phone,
     address_type: addressType,
     address,
-    latitude,
-    longitude,
+    latitude: location.lat,
+    longitude: location.lng,
   };
 
   try {
@@ -99,6 +100,7 @@ export default function AddressForm({ initialData, onClose, onSuccess }) {
     toast.error("Failed to save address");
   }
 };
+
 
 
   return (

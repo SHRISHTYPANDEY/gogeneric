@@ -18,10 +18,12 @@ export default function LocationModal({ onClose, onPickLocation,initialPosition 
 
 
   useEffect(() => {
-  if (initialPosition) {
-    console.log("Initial Position:", initialPosition);
-    setPosition(initialPosition);
-  } else {
+  if (initialPosition?.lat && initialPosition?.lng) {
+  setPosition({
+    lat: initialPosition.lat,
+    lng: initialPosition.lng,
+  });
+} else {
     
     navigator.geolocation.getCurrentPosition(
       (pos) => {

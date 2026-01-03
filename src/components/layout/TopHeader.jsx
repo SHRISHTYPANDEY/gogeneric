@@ -11,38 +11,28 @@ import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
 import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
-
+import { useLocation } from "../../context/LocationContext";
 
 export default function TopHeader() {
   const { t } = useTranslation();
+  const { location, setLocation } = useLocation();
 
   const [open, setOpen] = useState(false);
   const [openLocationModal, setOpenLocationModal] = useState(false);
-  const [location, setLocation] = useState("");
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
   const { user } = useAuth();
   const navigate = useNavigate();
   const langRef = useRef(null);
-  const [savedCoords, setSavedCoords] = useState(null);
-
-useEffect(() => {
-  const stored = localStorage.getItem("user_location");
-  if (stored) {
-    setSavedCoords(JSON.parse(stored));
-  }
-}, []);
-
 
   const languages = [
     { name: "English", code: "en", flag: "https://flagcdn.com/w20/us.png" },
-    { name: "हिन्दी", code: "hi", flag: "https://flagcdn.com/w20/in.png" }
+    { name: "हिन्दी", code: "hi", flag: "https://flagcdn.com/w20/in.png" },
   ];
 
-  // ✅ Default language from localStorage or English
   const [language, setLanguage] = useState(() => {
     const savedLang = localStorage.getItem("lang") || "en";
-    return languages.find(l => l.code === savedLang) || languages[0];
+    return languages.find((l) => l.code === savedLang) || languages[0];
   });
 
   useEffect(() => {
@@ -54,23 +44,12 @@ useEffect(() => {
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
   }, []);
-  useEffect(() => {
-  const savedLocation = localStorage.getItem("userLocation");
-  if (savedLocation) {
-    setLocation(savedLocation);
-  }
-}, []);
-
 
   const handleProfileClick = () => {
-    if (user) {
-      navigate("/profile");
-    } else {
-      setOpenLoginModal(true);
-    }
+    if (user) navigate("/profile");
+    else setOpenLoginModal(true);
   };
 
-  // ✅ Change language globally
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
     i18n.changeLanguage(lang.code);
@@ -82,7 +61,6 @@ useEffect(() => {
     <>
       <nav className="topheader-wrapper w-full">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-
           {/* 📍 LOCATION */}
           <div
             className="location-trigger group"
@@ -90,11 +68,9 @@ useEffect(() => {
           >
             <MdLocationOn size={20} className="text-orange-500" />
             <div className="ml-2">
-              <span className="text-xs text-gray-400">
-                {t("location")}
-              </span>
+              <span className="text-xs text-gray-400">{t("location")}</span>
               <div className="text-sm font-semibold">
-                {location || t("selectLocation")}
+                {location?.address || t("selectLocation")}
               </div>
             </div>
             <IoMdArrowDropdown />
@@ -102,8 +78,6 @@ useEffect(() => {
 
           {/* RIGHT */}
           <div className="flex items-center gap-8">
-
-            {/* DOWNLOAD */}
             <a
               href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
               target="_blank"
@@ -124,11 +98,11 @@ useEffect(() => {
                   alt="flag"
                   className="w-5 h-3.5 object-cover rounded-sm"
                 />
-                <span className="text-sm font-medium">
-                  {language.name}
-                </span>
+                <span className="text-sm font-medium">{language.name}</span>
                 <IoMdArrowDropdown
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
+                  className={`transition-transform ${
+                    open ? "rotate-180" : ""
+                  }`}
                 />
               </div>
 
@@ -152,7 +126,7 @@ useEffect(() => {
               )}
             </div>
 
-            {/* 👤 PROFILE */}
+            {/* PROFILE */}
             <div
               className="profile-trigger-premium cursor-pointer"
               onClick={handleProfileClick}
@@ -166,59 +140,67 @@ useEffect(() => {
         </div>
       </nav>
 
-      {/* LOGIN MODAL */}
       {openLoginModal && (
         <LoginModal onClose={() => setOpenLoginModal(false)} />
       )}
 
       {/* LOCATION MODAL */}
-     {openLocationModal && (
-  <LocationModal
-  initialPosition={savedCoords}
-    onClose={() => setOpenLocationModal(false)}
-  onPickLocation={async (loc) => {
-  const lat = Number(loc.lat);
-  const lng = Number(loc.lng);
-  const address = loc.address;
+      {openLocationModal && (
+        <LocationModal
+          initialPosition={location}
+          onClose={() => setOpenLocationModal(false)}
+          onPickLocation={async (loc) => {
+            const payload = {
+              lat: Number(loc.lat),
+              lng: Number(loc.lng),
+              address: loc.address,
+            };
 
-  localStorage.setItem("latitude", lat);
-  localStorage.setItem("longitude", lng);
-  localStorage.setItem("formatted_address", address);
+            // 🔥 EXISTING BEHAVIOR (unchanged)
+            setLocation(payload);
+            localStorage.setItem("user_location", JSON.stringify(payload));
 
-  setLocation(address);
+            // ✅ SAFE BACKEND SAVE (no duplicates)
+            try {
+              const token = localStorage.getItem("token");
+              if (!token) return;
 
-  try {
-    const token = localStorage.getItem("token");
+              const res = await api.get(
+                "/api/v1/customer/address/list",
+                { headers: { Authorization: `Bearer ${token}` } }
+              );
+              console.log("ADDress list", res.data);
+              const addresses = res.data?.addresses || [];
 
-    if (!token) return;
+              const alreadyExists = addresses.find(
+                (a) =>
+                  Number(a.latitude) === payload.lat &&
+                  Number(a.longitude) === payload.lng
+              );
 
-    const payload = {
-      contact_person_name: user?.name || "Customer",
-      contact_person_number: user?.phone || "",
-      address_type: "Home",
-      address,
-      latitude: lat,
-      longitude: lng,
-    };
+              if (!alreadyExists) {
+                await api.post(
+                  "/api/v1/customer/address/add",
+                  {
+                    contact_person_name: user?.name || "Customer",
+                    contact_person_number: user?.phone || "",
+                    address_type: "Home",
+                    address: payload.address,
+                    latitude: payload.lat,
+                    longitude: payload.lng,
+                  },
+                  { headers: { Authorization: `Bearer ${token}` } }
+                );
+              }
 
-    console.log("📍 TopHeader Address Payload", payload);
+              toast.success("Delivery location updated");
+            } catch (err) {
+              console.error(err);
+            }
 
-    await api.post("/api/v1/customer/address/add", payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    toast.success("Delivery location updated");
-  } catch (err) {
-    console.error("❌ Location save failed", err);
-  }
-
-  setOpenLocationModal(false);
-}}
-
-
-
-/>
-
+            setOpenLocationModal(false);
+          }}
+        />
       )}
     </>
   );

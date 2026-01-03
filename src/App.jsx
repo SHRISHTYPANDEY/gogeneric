@@ -36,8 +36,46 @@ import Shipping from "./components/pages/Shipping.jsx";
 import BlogDetails from "./components/pages/BlogDetails.jsx";
 import BlogList from "./components/pages/BlogList.jsx";
 import Checkout from "./components/pages/checkout/Checkout.jsx";
+import { LocationProvider } from "./context/LocationContext.jsx";
+import { useEffect } from "react";
+import { useLocation } from "./context/LocationContext";
+
+
+const fetchAddress = async (lat, lng) => {
+  try {
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`
+    );
+    const data = await res.json();
+    return data.results?.[0]?.formatted_address || "";
+  } catch {
+    return "";
+  }
+};
+
 function AppLayout() {
   const { showLoginModal, setShowLoginModal } = useAuth();
+  const { location, setLocation } = useLocation();
+  useEffect(() => {
+    if (location) return; // already set
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const address = await fetchAddress(lat, lng);
+
+        setLocation({ lat, lng, address });
+      },
+      () => {
+        setLocation({
+          lat: 28.6139,
+          lng: 77.209,
+          address: "New Delhi, India",
+        });
+      }
+    );
+  }, []);
 
   return (
     <>
@@ -100,7 +138,9 @@ export default function App() {
   return (
     <AuthProvider>
       <WalletProvider>
+        <LocationProvider>
         <AppLayout />
+        </LocationProvider>
       </WalletProvider>
     </AuthProvider>
   );

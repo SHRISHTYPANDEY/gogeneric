@@ -3,16 +3,19 @@ import api from "../../../api/axiosInstance";
 import toast from "react-hot-toast";
 import AddressForm from "./AddressForm";
 import "./AddressSection.css";
+import { useLocation } from "../../../context/LocationContext";
 
 export default function AddressSection({ deliveryType, onSelect }) {
   const [addresses, setAddresses] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
-
+  const { location } = useLocation();
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    console.log("Delivery type", deliveryType); 
+    console.log("Token", token);    
   if (deliveryType === "delivery") {
     fetchAddresses();
   } else {
@@ -28,8 +31,9 @@ export default function AddressSection({ deliveryType, onSelect }) {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const list = res.data?.addresses || [];
-      setAddresses(list);
+     const list = res.data?.data?.addresses || res.data?.addresses || [];
+setAddresses(list);
+
       console.log("Address List", list)
       const def = list.find((a) => a.is_default);
       if (def) {
@@ -41,19 +45,16 @@ export default function AddressSection({ deliveryType, onSelect }) {
     }
   };
 
-  const handleAddNew = () => {
-    const lat = localStorage.getItem("latitude");
-const lng = localStorage.getItem("longitude");
+const handleAddNew = () => {
+  if (!location?.lat || !location?.lng) {
+    toast.error("Please select delivery location first");
+    return;
+  }
 
-if (!lat || !lng) {
-  toast.error("Please select delivery location first");
-  return;
-}
+  setEditingAddress(null);
+  setShowForm(true);
+};
 
-
-    setEditingAddress(null);
-    setShowForm(true);
-  };
 
   if (deliveryType === "takeaway") return null;
 

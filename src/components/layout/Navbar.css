@@ -24,9 +24,14 @@
 
 .nav-logo img {
   height: 45px;
-  width: auto;
-  cursor: pointer;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
+
+.nav-logo img:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
 
 .nav-links {
   display: flex !important;

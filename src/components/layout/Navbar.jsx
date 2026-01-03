@@ -22,7 +22,6 @@ import {
   FaShippingFast,
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
-
 import api from "../../api/axiosInstance";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
@@ -115,9 +114,19 @@ export default function Navbar() {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-container max-w-7xl mx-auto px-4 py-3">
-          <div className="nav-logo">
-            <img src="/gogenlogo.png" alt="GoGeneric Logo" />
-          </div>
+        <div className="nav-logo">
+  <Link
+    to="/"
+    onClick={() => {
+      closeMenu();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }}
+  >
+    <img src="/gogenlogo.png" alt="GoGeneric Logo" />
+  </Link>
+</div>
+
+
 
           <div className="flex items-center gap-6">
             {/* DESKTOP LINKS */}
