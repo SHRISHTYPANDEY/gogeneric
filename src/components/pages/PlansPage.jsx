@@ -1,122 +1,111 @@
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { doctors } from "../../data/Doctor";
 import "./PlansPage.css";
-import { useState } from "react";
 import BookAppointment from "./BookAppointment";
 
-export default function DoctorPlans({ doctor }) {
+export default function PlansPage() {
+  const { id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  const handleBook = (price) => {
-     console.log("BOOK CLICKED", price);
-    setSelectedPlan(price);
+  const doctor = doctors.find((d) => d.id === id);
+
+  if (!doctor) return <div className="error-msg">Doctor not found</div>;
+
+  const handleBook = (plan) => {
+    setSelectedPlan(plan);
     setShowModal(true);
   };
 
   return (
-    <>
-      <div className="plans-section">
-        <div className="plans-wrapper">
+    <section className="plans-section">
+      <div className="plans-wrapper">
+        <div className="plans-header-content">
           <h2 className="plans-heading">
             Choose Your <span className="highlight">Diet Plan</span>
           </h2>
-          <p className="plans-subheading">
-            Personalized nutrition coaching tailored to your lifestyle.
-          </p>
+          <p className="plans-subheading">Simple, sustainable, and effective nutrition coaching.</p>
+        </div>
 
-          <div className="plans-grid">
-            <PlanCard
-              title="Essential"
-              subtitle="Start your journey"
-              price="₹0"
-              features={[
-                "Health Assessment",
-                "Goal Setting",
-                "Basic Diet Tips",
-              ]}
-              onBook={handleBook}
-            />
+        <div className="plans-grid">
+          {doctor.plans.map((plan) => (
+            <div 
+              key={plan.id} 
+              className={`plan-card ${plan.featured ? "featured-card" : ""}`}
+            >
+             
+              <div className="popular-badge">Recommended</div>
+              
+              <div className="plan-header">
+                <span className="plan-title">{plan.title}</span>
+                <p className="plan-subtitle">{plan.subtitle}</p>
+                
+                <div className="plan-price-row">
+                  <span className="price-amt">{plan.price}</span>
+                  {plan.id === "monthly" && <span className="price-tenure">/ month</span>}
+                </div>
 
-            <PlanCard
-              title="Standard"
-              subtitle="Per Appointment"
-              price="₹199"
-              featured
-              features={[
-                "Custom Diet Plan",
-                "Basic Progress Tracking",
-                "WhatsApp Support",
-              ]}
-              onBook={handleBook}
-            />
+                {plan.price === "₹99" && (
+                  <div className="refundable-info">
+                    <span className="info-icon">!</span>
+                    100% Refundable after consultation
+                  </div>
+                )}
+              </div>
 
-            <PlanCard
-              title="Premium"
-              subtitle="Monthly Access"
-              price="₹499"
-              features={[
-                "Weekly Diet Plans",
-                "Full WhatsApp Support",
-                "Recipes & Motivation",
-              ]}
-              onBook={handleBook}
-            />
-          </div>
+              <div className="divider" />
+
+              <ul className="plan-features">
+                {Object.entries(plan.features).map(([key, value], index) => {
+                  if (value === false) return (
+                    <li key={index} className="feature-item disabled">
+                      <span className="icon">✕</span> 
+                      <span className="label">{key}</span>
+                    </li>
+                  );
+                  return (
+                    <li key={index} className="feature-item">
+                      <span className="icon check">✓</span>
+                      <div className="feature-text">
+                        <span className="label">{key}</span>
+                        {typeof value === "string" && <span className="value">{value}</span>}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <button 
+                className="plan-button"
+                onClick={() => handleBook(plan)}
+              >
+                Get Started
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* ===== MODAL ===== */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            <h3 className="modal-title">
-              Selected Plan: <span>{selectedPlan}</span>
-            </h3>
-
-            <BookAppointment
-              phone="919211510600"
-              whatsapp="919211510600"
-              onClose={() => setShowModal(false)}
+            <div className="modal-header-box">
+               <h3 className="modal-title">Confirm Booking</h3>
+            </div>
+            
+            <BookAppointment 
+              phone={doctor.phone} 
+              whatsapp={doctor.whatsapp} 
+              planName={selectedPlan?.title}
+              planPrice={selectedPlan?.price}
+              onClose={() => setShowModal(false)} 
             />
+
+            <button className="close-x" onClick={() => setShowModal(false)}>×</button>
           </div>
         </div>
       )}
-    </>
-  );
-}
-
-/* ================= PLAN CARD ================= */
-
-function PlanCard({ title, subtitle, price, features, featured, onBook }) {
-  return (
-    <div
-      className={`plan-card ${featured ? "featured-card" : ""}`}
-      onClick={() => onBook(price)}
-    >
-      {featured && <div className="popular-badge">Most Popular</div>}
-
-      <div className="plan-header">
-        <span className="plan-title">{title}</span>
-        <p className="plan-subtitle">{subtitle}</p>
-        <h3 className="plan-price">{price}</h3>
-      </div>
-
-      <ul className="plan-features">
-        {features.map((f, i) => (
-          <li key={i} className="feature-item">
-            ✓ {f}
-          </li>
-        ))}
-      </ul>
-
-      <button
-        className={`plan-button ${featured ? "btn-primary" : "btn-outline"}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          onBook(price);
-        }}
-      >
-        Book Appointment
-      </button>
-    </div>
+    </section>
   );
 }

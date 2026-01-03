@@ -111,27 +111,40 @@ export default function Searchbar() {
     }
   };
   const handleKeyDown = (e) => {
-    if (!showDropdown || results.length === 0) return;
+  if (e.key === "Enter") {
+    e.preventDefault();
 
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => (i + 1) % results.length);
-    }
+    const trimmedQuery = query.trim();
+    if (trimmedQuery.length < 2) return;
 
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
-    }
+    // 🔥 Instant navigation (no dependency on API / dropdown)
+    setShowDropdown(false);
+    setIsMobileOpen(false);
+    setActiveIndex(-1);
 
-    if (e.key === "Enter" && activeIndex >= 0) {
-      handleSelect(results[activeIndex]);
-    }
+    navigate(`/searchlist?query=${encodeURIComponent(trimmedQuery)}`);
+    return;
+  }
 
-    if (e.key === "Escape") {
-      setShowDropdown(false);
-      setActiveIndex(-1);
-    }
-  };
+  // 👇 Arrow navigation ONLY when dropdown is visible
+  if (!showDropdown || results.length === 0) return;
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    setActiveIndex((i) => (i + 1) % results.length);
+  }
+
+  if (e.key === "ArrowUp") {
+    e.preventDefault();
+    setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
+  }
+
+  if (e.key === "Escape") {
+    setShowDropdown(false);
+    setActiveIndex(-1);
+  }
+};
+
 
   const handleSelect = (item) => {
     setShowDropdown(false);

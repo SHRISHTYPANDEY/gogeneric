@@ -39,7 +39,7 @@ import Checkout from "./components/pages/checkout/Checkout.jsx";
 import { LocationProvider } from "./context/LocationContext.jsx";
 import { useEffect } from "react";
 import { useLocation } from "./context/LocationContext";
-
+import SearchList from "./components/pages/SearchList.jsx";
 
 const fetchAddress = async (lat, lng) => {
   try {
@@ -124,6 +124,8 @@ function AppLayout() {
          <Route path="/blog" element={<BlogList />} />
   <Route path="/blog/:slug" element={<BlogDetails />} />
   <Route path="/checkout" element={<Checkout />} />
+  <Route path="/searchlist" element={<SearchList />} />
+
 
 
       </Routes>

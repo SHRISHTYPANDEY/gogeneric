@@ -1,170 +1,54 @@
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(51, 29, 50, 0.65);
-  backdrop-filter: blur(10px);
-  z-index: 99999;
-  animation: fadeIn 0.25s ease-in-out;
-}
-
-.modal-box {
-  background: #ffffff;
-  padding: 34px 32px 28px;
-  border-radius: 26px;
-  max-width: 520px;
-  width: 92%;
-  position: relative;
-
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
-  border: 1px solid #ead7e6;
-
-  animation: modalIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.2);
-}
-
-.modal-title {
-  font-size: 24px;
-  font-weight: 800;
-  color: #2c1b2b;
-  margin-bottom: 26px;
-  letter-spacing: -0.3px;
-}
-
-.modal-title span {
-  color: #6b2d5c;
-}
-
-.booking-options {
+.booking-container {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
-.option-row {
+.section h4 {
+  margin-bottom: 8px;
+}
+
+.options-row {
   display: flex;
-  align-items: center;
-  gap: 16px;
-
-  padding: 18px 20px;
-  border-radius: 18px;
-  text-decoration: none;
-
-  background: #faf7f9;
-  border: 1px solid #eee1ea;
-  color: #2b1a29;
-
-  transition: all 0.25s ease;
+  gap: 10px;
 }
 
-.option-row:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
-}
-
-.option-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 22px;
-  background: rgba(107, 45, 92, 0.1);
-}
-
-.option-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.option-title {
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.option-subtitle {
-  font-size: 14px;
-  color: #6b6b6b;
-  line-height: 1.3;
-}
-
-.arrow-right {
-  font-size: 20px;
-  color: #6b2d5c;
-  transition: transform 0.25s ease;
-}
-
-.option-row:hover .arrow-right {
-  transform: translateX(6px);
-}
-
-.call-row {
-  border-left: 5px solid #6b2d5c;
-}
-
-.call-row .option-icon {
-  background: rgba(46, 125, 50, 0.15);
-}
-
-.whatsapp-row {
-  border-left: 5px solid #25d366;
-}
-
-.whatsapp-row .option-icon {
-  background: rgba(37, 211, 102, 0.15);
-}
-
-.modal-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-
-  background: rgba(0, 0, 0, 0.06);
-  font-size: 18px;
+.option-btn,
+.slot-btn {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
   cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition: all 0.25s ease;
 }
 
-.modal-close:hover {
-  background: #6b2d5c;
-  color: #ffffff;
-  transform: rotate(90deg);
+.option-btn.active,
+.slot-btn.active {
+  background: #16a34a;
+  color: white;
+  border-color: #16a34a;
 }
 
-/* ================= ANIMATIONS ================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92) translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+.book-btn {
+  background: #2563eb;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+}
+
+.pay-btn {
+  background: #f59e0b;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
 }

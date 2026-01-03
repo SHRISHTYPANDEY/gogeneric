@@ -56,7 +56,7 @@ export default function Navbar() {
 
       setNotificationCount(res.data.filter((n) => !n.read).length);
     } catch (err) {
-      console.error("Notification error", err);
+      // console.error("Notification error", err);
     }
   };
   const handleNavigate = (path) => {
@@ -80,7 +80,7 @@ export default function Navbar() {
 
       setCartCount(Array.isArray(res.data) ? res.data.length : 0);
     } catch (error) {
-      console.error("Cart count error:", error);
+      // console.error("Cart count error:", error);
     }
   };
 

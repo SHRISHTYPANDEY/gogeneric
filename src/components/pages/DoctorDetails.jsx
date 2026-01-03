@@ -12,13 +12,15 @@ export default function DoctorDetails() {
   return (
     <div className="details-page">
       <div className="details-container">
-        {/* Left Side: Profile Image & Basic Info */}
+ 
         <div className="profile-sidebar">
           <div className="img-container">
             <img src={doctor.image} alt={doctor.name} className="profile-img" />
           </div>
           <h2 className="profile-name">{doctor.name}</h2>
           <span className="profile-badge">{doctor.specialization}</span>
+          
+        
           <button
             onClick={() => navigate(`/doctors/${id}/plans`)}
             className="cta-button"
@@ -27,11 +29,18 @@ export default function DoctorDetails() {
           </button>
         </div>
 
-        {/* Right Side: Detailed Content */}
         <div className="content-area">
           <section className="info-section">
             <h3 className="section-title">About the Doctor</h3>
             <p className="section-text">{doctor.about}</p>
+          </section>
+
+          <section className="info-section">
+            <h3 className="section-title">Experience</h3>
+            <p className="section-text">
+              <strong>{doctor.experience}</strong>
+            </p>
+            <p className="section-text">{doctor.experienceDetail}</p>
           </section>
 
           <section className="info-section">
