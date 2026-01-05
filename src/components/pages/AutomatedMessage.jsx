@@ -3,6 +3,7 @@ import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./AutomatedMessage.css"
+import Footer from "../Footer";
 
 export default function AutomatedMessage() {
   const [messages, setMessages] = useState([]);
@@ -22,8 +23,6 @@ export default function AutomatedMessage() {
       });
 
       console.log("AUTOMATED MESSAGE 👉", res.data);
-
-      // ✅ Correct data extraction
       setMessages(res.data?.data || []);
     } catch (err) {
       console.error(err);
@@ -36,6 +35,7 @@ export default function AutomatedMessage() {
   if (loading) return <Loader text="Loading..." />;
 
   return (
+    <>
     <div className="policy-page">
       <h1 className="policy-title">Automated Messages</h1>
 
@@ -51,5 +51,7 @@ export default function AutomatedMessage() {
         </ul>
       )}
     </div>
+    <Footer />
+    </>
   );
 }

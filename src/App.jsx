@@ -41,11 +41,15 @@ import { useEffect } from "react";
 import { useLocation } from "./context/LocationContext";
 import SearchList from "./components/pages/SearchList.jsx";
 import LabsPage from "./components/pages/LabsPage.jsx";
+import Pharmacy from "./components/pages/Pharmacy.jsx";
+import MyAddress from "./components/pages/MyAddress.jsx";
 
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${
+        import.meta.env.VITE_GOOGLE_MAPS_KEY
+      }`
     );
     const data = await res.json();
     return data.results?.[0]?.formatted_address || "";
@@ -58,7 +62,7 @@ function AppLayout() {
   const { showLoginModal, setShowLoginModal } = useAuth();
   const { location, setLocation } = useLocation();
   useEffect(() => {
-    if (location) return; // already set
+    if (location) return; 
 
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -122,14 +126,13 @@ function AppLayout() {
         <Route path="/coupon" element={<Coupon />} />
         <Route path="/help-and-support" element={<AutomatedMessage />} />
         <Route path="/shipping-policy" element={<Shipping />} />
-         <Route path="/blog" element={<BlogList />} />
-  <Route path="/blog/:slug" element={<BlogDetails />} />
-  <Route path="/checkout" element={<Checkout />} />
-  <Route path="/searchlist" element={<SearchList />} />
-  <Route path="/labs" element={<LabsPage />} />
-
-
-
+        <Route path="/blog" element={<BlogList />} />
+        <Route path="/blog/:slug" element={<BlogDetails />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/searchlist" element={<SearchList />} />
+        <Route path="/labs" element={<LabsPage />} />
+        <Route path="/pharmacy" element={<Pharmacy />} />
+        <Route path="/my-address" element={<MyAddress />} />
       </Routes>
       {/* ✅ GLOBAL LOGIN MODAL */}
       {showLoginModal && (
@@ -143,7 +146,7 @@ export default function App() {
     <AuthProvider>
       <WalletProvider>
         <LocationProvider>
-        <AppLayout />
+          <AppLayout />
         </LocationProvider>
       </WalletProvider>
     </AuthProvider>

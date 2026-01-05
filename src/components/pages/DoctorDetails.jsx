@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { doctors } from "../../data/Doctor";
 import "./DoctorDetails.css";
+import Footer from "../Footer";
 
 export default function DoctorDetails() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ export default function DoctorDetails() {
   if (!doctor) return <div className="error-msg">Doctor not found</div>;
 
   return (
+    <>
     <div className="details-page">
       <div className="details-container">
  
@@ -56,5 +58,7 @@ export default function DoctorDetails() {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

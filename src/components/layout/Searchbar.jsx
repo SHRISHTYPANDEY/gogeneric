@@ -116,8 +116,6 @@ export default function Searchbar() {
 
     const trimmedQuery = query.trim();
     if (trimmedQuery.length < 2) return;
-
-    // 🔥 Instant navigation (no dependency on API / dropdown)
     setShowDropdown(false);
     setIsMobileOpen(false);
     setActiveIndex(-1);
@@ -126,7 +124,6 @@ export default function Searchbar() {
     return;
   }
 
-  // 👇 Arrow navigation ONLY when dropdown is visible
   if (!showDropdown || results.length === 0) return;
 
   if (e.key === "ArrowDown") {
@@ -144,8 +141,6 @@ export default function Searchbar() {
     setActiveIndex(-1);
   }
 };
-
-
   const handleSelect = (item) => {
     setShowDropdown(false);
     setIsMobileOpen(false);

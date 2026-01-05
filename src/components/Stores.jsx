@@ -13,7 +13,6 @@ export default function Stores() {
   const [showAll, setShowAll] = useState(false);
   const canShowViewMore = filteredStores.length > 9;
 
-
   const [userCoords, setUserCoords] = useState(null); // ✅ STATE
 
   const abortRef = useRef(null);
@@ -166,23 +165,21 @@ export default function Stores() {
                     </div>
                   </div>
                 </div>
-                
               );
             }
           )}
         </div>
-        
       )}
       {!loading && canShowViewMore && (
-  <div className="view-more-bottom">
-    <button
-      className="view-more-btn"
-      onClick={() => setShowAll(!showAll)}
-    >
-      {showAll ? "View Less" : "View More"}
-    </button>
-  </div>
-)}
+        <div className="view-more-bottom">
+          <button
+            className="view-more-btn"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? "View Less" : "View More"}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

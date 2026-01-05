@@ -13,8 +13,6 @@ export default function Cart() {
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
-
-
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -48,7 +46,7 @@ export default function Cart() {
 
       setCart(res.data || []);
     } catch (err) {
-      console.error("Cart fetch error:", err);
+      // console.error("Cart fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -76,7 +74,7 @@ export default function Cart() {
       );
       fetchCart();
     } catch (err) {
-      console.error("Update error:", err);
+      // console.error("Update error:", err);
     }
   };
 
@@ -96,7 +94,7 @@ export default function Cart() {
         },
       });
     } catch (err) {
-      console.error("Remove error:", err);
+      // console.error("Remove error:", err);
       fetchCart();
     }
   };
@@ -130,7 +128,7 @@ export default function Cart() {
 
     setSuggested(res.data?.products || []);
   } catch (err) {
-    console.error("Suggested error:", err);
+    // console.error("Suggested error:", err);
   } finally {
     setSuggestedLoading(false);
   }
@@ -143,7 +141,7 @@ export default function Cart() {
       });
       fetchCart();
     } catch (err) {
-      console.error("Add suggested error:", err);
+      // console.error("Add suggested error:", err);
     }
   };
 
@@ -219,8 +217,6 @@ export default function Cart() {
                 );
               })}
             </div>
-
-            {/* SUMMARY */}
             <div className="cart-summary">
               <h3>Summary</h3>
               <div className="summary-row">

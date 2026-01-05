@@ -29,19 +29,17 @@ export default function StoreDetails() {
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-  if (!store?.id) return;
+    if (!store?.id) return;
 
-  if (searchTerm.trim() === "") return;
-  const delay = setTimeout(() => {
-    setPage(1);
-    setHasMore(true);
-    fetchProducts(1, searchTerm.trim());
-  }, 400); // debounce
+    if (searchTerm.trim() === "") return;
+    const delay = setTimeout(() => {
+      setPage(1);
+      setHasMore(true);
+      fetchProducts(1, searchTerm.trim());
+    }, 400); 
 
-  return () => clearTimeout(delay);
-}, [searchTerm, store?.id]);
-
-  /* ================= FETCH STORE ================= */
+    return () => clearTimeout(delay);
+  }, [searchTerm, store?.id]);
   useEffect(() => {
     fetchStoreDetails();
   }, [id]);
@@ -70,72 +68,62 @@ export default function StoreDetails() {
       setLoading(false);
     }
   };
-
-  /* ================= FETCH PRODUCTS ================= */
   const fetchProducts = async (pageNumber = 1, keyword = "") => {
-  try {
-    setProductsLoading(true);
+    try {
+      setProductsLoading(true);
 
-    const res = await api.get("/api/v1/items/latest", {
-      params: {
-        store_id: id,
-        category_id: store.category_details?.[0]?.id || 1,
-        search: keyword || undefined,   
-        limit: 20,
-        offset: pageNumber,
-      },
-      headers: {
-        zoneId: JSON.stringify([3]),
-        moduleId: 2,
-      },
-    });
+      const res = await api.get("/api/v1/items/latest", {
+        params: {
+          store_id: id,
+          category_id: store.category_details?.[0]?.id || 1,
+          search: keyword || undefined,
+          limit: 20,
+          offset: pageNumber,
+        },
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      });
 
-    const newProducts = res.data.products || res.data.items || [];
+      const newProducts = res.data.products || res.data.items || [];
 
-    if (pageNumber === 1) {
-      setProducts(newProducts);
-    } else {
-      setProducts((prev) => [...prev, ...newProducts]);
-    }
-
-    setHasMore(newProducts.length === 20);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setProductsLoading(false);
-  }
-};
-
-
-  /* ================= INFINITE SCROLL ================= */
-  useEffect(() => {
-  if (
-    activeTab !== "products" ||
-    !hasMore ||
-    productsLoading
-  )
-    return;
-
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        setPage((prev) => {
-          const next = prev + 1;
-          fetchProducts(next, searchTerm.trim()); // 🔥 SEARCH KE SAATH
-          return next;
-        });
+      if (pageNumber === 1) {
+        setProducts(newProducts);
+      } else {
+        setProducts((prev) => [...prev, ...newProducts]);
       }
-    },
-    { threshold: 0.3 }
-  );
 
-  const sentinel = document.getElementById("scroll-sentinel");
-  if (sentinel) observer.observe(sentinel);
+      setHasMore(newProducts.length === 20);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
 
-  return () => observer.disconnect();
-}, [hasMore, productsLoading, activeTab, searchTerm]);
+  useEffect(() => {
+    if (activeTab !== "products" || !hasMore || productsLoading) return;
 
-  /* ================= FETCH REVIEWS ================= */
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setPage((prev) => {
+            const next = prev + 1;
+            fetchProducts(next, searchTerm.trim()); 
+            return next;
+          });
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const sentinel = document.getElementById("scroll-sentinel");
+    if (sentinel) observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, [hasMore, productsLoading, activeTab, searchTerm]);
+
   const fetchReviews = async () => {
     try {
       setReviewsLoading(true);
@@ -153,10 +141,6 @@ export default function StoreDetails() {
       setReviewsLoading(false);
     }
   };
-
-  /* ================= FILTERS ================= */
-  
-
   const filteredReviews = reviews.filter(
     (r) =>
       r.comment?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -170,7 +154,6 @@ export default function StoreDetails() {
     <div className="sd-main-container">
       <p className="sd-breadcrumb">Home / Stores / {store.name}</p>
 
-      {/* ===== HEADER ===== */}
       <div className="sd-header-box">
         <div>
           <h1 className="sd-store-title">{store.name}</h1>
@@ -188,7 +171,6 @@ export default function StoreDetails() {
         </div>
       </div>
 
-      {/* ===== TABS + SEARCH ===== */}
       <div className="sd-tabs-nav">
         <div className="sd-tabs-list">
           {["products", "overview", "reviews"].map((tab) => (
@@ -217,7 +199,6 @@ export default function StoreDetails() {
         )}
       </div>
 
-      {/* ================= PRODUCTS ================= */}
       {activeTab === "products" && (
         <>
           <div className="sd-products-grid">
@@ -226,9 +207,9 @@ export default function StoreDetails() {
             ) : products.length === 0 ? (
               <p>No products found</p>
             ) : (
-              products.map((p) => (
+              products.map((p, index) => (
                 <div
-                  key={p.id}
+                  key={`product-${p.id}-${index}`}
                   className="sd-prod-card"
                   onClick={() =>
                     navigate(`/medicine/${p.id}`, {
@@ -238,17 +219,13 @@ export default function StoreDetails() {
                 >
                   <WishlistButton item={p} />
                   <AddToCartButton item={p} />
-
                   <div className="sd-prod-img-box">
                     <img
                       src={cleanImageUrl(p.image_full_url)}
                       alt={p.name}
-                      onError={(e) =>
-                        (e.currentTarget.src = "/no-image.jpg")
-                      }
+                      onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
                     />
                   </div>
-
                   <h4 className="sd-prod-name">{p.name}</h4>
                   <p className="sd-prod-price">₹{p.price}</p>
                 </div>
@@ -263,15 +240,17 @@ export default function StoreDetails() {
         </>
       )}
 
-      {/* ================= OVERVIEW ================= */}
       {activeTab === "overview" && (
         <div className="sd-content-section">
-          <p><Phone size={16} /> {store.phone || "N/A"}</p>
-          <p><Mail size={16} /> {store.email || "N/A"}</p>
+          <p>
+            <Phone size={16} /> {store.phone || "N/A"}
+          </p>
+          <p>
+            <Mail size={16} /> {store.email || "N/A"}
+          </p>
         </div>
       )}
 
-      {/* ================= REVIEWS ================= */}
       {activeTab === "reviews" && (
         <div className="sd-reviews-list">
           {reviewsLoading ? (
@@ -287,7 +266,6 @@ export default function StoreDetails() {
         </div>
       )}
 
-      {/* ===== PRESCRIPTION BUTTON ===== */}
       <div
         className="sd-floating-prescription"
         onClick={() =>

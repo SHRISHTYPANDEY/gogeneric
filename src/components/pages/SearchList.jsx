@@ -59,86 +59,93 @@ export default function SearchList() {
   };
 
   return (
-    <section className="gs-search-container">
-      <div className="gs-search-wrapper">
-        {/* Header Section */}
-        <div className="gs-search-header">
-          <h2 className="gs-result-title">
-            Search results for <span className="gs-highlight">"{query}"</span>
-          </h2>
+    <>
+      <section className="gs-search-container">
+        <div className="gs-search-wrapper">
+          {/* Header Section */}
+          <div className="gs-search-header">
+            <h2 className="gs-result-title">
+              Search results for <span className="gs-highlight">"{query}"</span>
+            </h2>
+            {!loading && medicines.length > 0 && (
+              <p className="gs-result-count">{medicines.length} items found</p>
+            )}
+          </div>
+
+          {/* Loading State */}
+          {loading && (
+            <div className="gs-status-box">
+              <div className="gs-spinner"></div>
+              <p className="gs-loader-text">Finding the best results...</p>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && medicines.length === 0 && (
+            <div className="gs-status-box">
+              <div className="gs-empty-icon">🔍</div>
+              <p className="gs-no-results">No medicines found in your area.</p>
+              <button
+                className="gs-retry-btn"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {/* Results Grid */}
           {!loading && medicines.length > 0 && (
-            <p className="gs-result-count">{medicines.length} items found</p>
+            <div className="gs-medicine-grid">
+              {medicines.map((item) => (
+                <div
+                  key={item.id}
+                  className="gs-medicine-card"
+                  onClick={() => navigate(`/medicine/${item.id}`)}
+                >
+                  {/* Wishlist */}
+                  <div
+                    className="gs-wishlist"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <WishlistButton item={item} />
+                  </div>
+
+                  {/* Image */}
+                  <div className="gs-img-box">
+                    <img
+                      src={cleanImageUrl(item.image_full_url || item.image)}
+                      alt={item.name}
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Info */}
+                  <div className="gs-card-info">
+                    <div className="gs-text-group">
+                      <h4 className="gs-med-name">{item.name}</h4>
+                      <p className="gs-med-store">
+                        {item.store_name || "Certified Store"}
+                      </p>
+                    </div>
+
+                    <button
+                      className="gs-view-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/medicine/${item.id}`);
+                      }}
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="gs-status-box">
-            <div className="gs-spinner"></div>
-            <p className="gs-loader-text">Finding the best results...</p>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && medicines.length === 0 && (
-          <div className="gs-status-box">
-            <div className="gs-empty-icon">🔍</div>
-            <p className="gs-no-results">No medicines found in your area.</p>
-            <button className="gs-retry-btn" onClick={() => window.location.reload()}>Try Again</button>
-          </div>
-        )}
-
-        {/* Results Grid */}
-        {!loading && medicines.length > 0 && (
-  <div className="gs-medicine-grid">
-    {medicines.map((item) => (
-      <div
-        key={item.id}
-        className="gs-medicine-card"
-        onClick={() => navigate(`/medicine/${item.id}`)}
-      >
-        {/* Wishlist */}
-        <div
-          className="gs-wishlist"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <WishlistButton item={item} />
-        </div>
-
-        {/* Image */}
-        <div className="gs-img-box">
-          <img
-            src={cleanImageUrl(item.image_full_url || item.image)}
-            alt={item.name}
-            loading="lazy"
-          />
-        </div>
-
-        {/* Info */}
-        <div className="gs-card-info">
-          <div className="gs-text-group">
-            <h4 className="gs-med-name">{item.name}</h4>
-            <p className="gs-med-store">
-              {item.store_name || "Certified Store"}
-            </p>
-          </div>
-
-          <button
-            className="gs-view-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/medicine/${item.id}`);
-            }}
-          >
-            View Details
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
-)}
-
-      </div>
-    </section>
+      </section>
+      <Footer />
+    </>
   );
 }

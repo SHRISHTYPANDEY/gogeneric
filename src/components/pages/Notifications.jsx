@@ -3,6 +3,7 @@ import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
 import "./Notifications.css";
+import Footer from "../Footer";
 
 export default function Notifications() {
   const { user } = useAuth();
@@ -44,6 +45,7 @@ export default function Notifications() {
   }
 
   return (
+    <>
     <div className="notifications-page">
       <h2>Notifications</h2>
 
@@ -64,5 +66,7 @@ export default function Notifications() {
         </div>
       ))}
     </div>
+    <Footer />
+    </>
   );
 }

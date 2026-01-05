@@ -43,14 +43,13 @@ export default function Orders() {
         },
       });
 
-      // ✅ ALWAYS pick orders array safely
       const ordersArray = Array.isArray(res.data?.orders)
         ? res.data.orders
         : [];
 
       setOrders(ordersArray);
     } catch (error) {
-      console.error("❌ Fetch orders failed:", error);
+      console.error("Fetch orders failed:", error);
 
       if (error?.response?.status === 401) {
         setShowLogin(true);

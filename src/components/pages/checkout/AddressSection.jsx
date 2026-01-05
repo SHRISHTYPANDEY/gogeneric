@@ -14,8 +14,8 @@ export default function AddressSection({ deliveryType, onSelect }) {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    console.log("Delivery type", deliveryType); 
-    console.log("Token", token);    
+    // console.log("Delivery type", deliveryType); 
+    // console.log("Token", token);    
   if (deliveryType === "delivery") {
     fetchAddresses();
   } else {
@@ -34,7 +34,7 @@ export default function AddressSection({ deliveryType, onSelect }) {
      const list = res.data?.data?.addresses || res.data?.addresses || [];
 setAddresses(list);
 
-      console.log("Address List", list)
+      // console.log("Address List", list)
       const def = list.find((a) => a.is_default);
       if (def) {
         setSelectedId(def.id);

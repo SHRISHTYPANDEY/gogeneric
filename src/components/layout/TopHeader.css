@@ -1,12 +1,3 @@
-/* --- MAIN WRAPPER --- */
-.topheader-wrapper {
-  background: var(--white);
-  border-bottom: 1px solid var(--dusty-rose);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  width: 100%;
-}
 
 .topheader-wrapper .max-w-7xl {
   display: flex;

@@ -4,7 +4,7 @@ export const doctors = [
     name: "Dietician Sangita Raj",
     specialization: "Lifestyle & Weight Management",
     experience: "12+ Years",
-    image: "/public/sangeeta.jpeg",
+    image: "/src/assets/doctor_img/sangeeta.jpeg",
     phone: "919211510600",
     whatsapp: "919211510600",
 

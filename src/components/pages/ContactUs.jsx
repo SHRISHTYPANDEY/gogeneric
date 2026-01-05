@@ -3,6 +3,7 @@ import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { toast } from "react-hot-toast";
 // import api from "../api/axiosInstance";
 import "./ContactUs.css";
+import Footer from "../Footer";
 
 export default function ContactUs() {
   const [form, setForm] = useState({
@@ -45,6 +46,7 @@ export default function ContactUs() {
   };
 
   return (
+    <>
     <div className="contact-page max-w-7xl mx-auto">
       <h2 className="contact-title">Get in touch</h2>
       <p className="contact-sub">
@@ -163,5 +165,7 @@ export default function ContactUs() {
         ></iframe>
       </div>
     </div>
+    <Footer />
+    </>
   );
 }

@@ -29,7 +29,7 @@ export default function FeaturedStoreDetails() {
       });
       // console.log("Recommended API full response:", res.data);
       
-      console.log("Store ID from URL:", id);
+      // console.log("Store ID from URL:", id);
 
 
       setItems(res.data?.data?.items || []);

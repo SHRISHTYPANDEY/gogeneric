@@ -1,5 +1,3 @@
-/* ================= BOOKING MODAL/CONTAINER STYLING ================= */
-
 :root {
   --ba-plum: #6b3f69;
   --ba-plum-light: #8e5a8a;
@@ -33,8 +31,6 @@
   letter-spacing: -0.2px;
 }
 
-/* ================= DATE & TIME BUTTONS ================= */
-
 .options-row, .slots-grid {
   display: flex;
   gap: 12px;
@@ -58,14 +54,11 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Hover State */
 .option-btn:hover, .slot-btn:hover {
   border-color: var(--ba-plum-light);
   background: var(--ba-mauve-bg);
   color: var(--ba-plum);
 }
-
-/* Active State (Selection) */
 .option-btn.active, .slot-btn.active {
   background: var(--ba-plum) !important;
   color: var(--ba-white) !important;
@@ -74,7 +67,6 @@
   transform: translateY(-2px);
 }
 
-/* ================= ACTION BUTTONS ================= */
 
 .book-btn {
   width: 100%;
@@ -102,7 +94,7 @@
   padding: 16px;
   margin-top: 15px;
   background: #ffffff;
-  color: #27ae60; /* Green for Payment Success/Action */
+  color: #27ae60; 
   border: 2px solid #27ae60;
   border-radius: 16px;
   font-size: 16px;
@@ -116,8 +108,14 @@
   background: #27ae60;
   color: white;
 }
+.slot-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #eee;
+  color: #888;
+}
 
-/* ================= ANIMATIONS ================= */
+
 
 @keyframes slideUp {
   from {

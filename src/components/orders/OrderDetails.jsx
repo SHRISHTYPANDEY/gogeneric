@@ -40,7 +40,7 @@ export default function OrderDetails() {
         },
       });
 
-      console.log("ORDER DETAILS RESPONSE 👉", res.data);
+      // console.log("ORDER DETAILS RESPONSE 👉", res.data);
       setDetails(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Order details error:", err);
@@ -123,7 +123,7 @@ const store = details[0]?.item_details?.store;
   alt={store?.name || "Store"}
   className="store-logo"
   onError={(e) => {
-    console.error("STORE IMAGE FAILED 👉", store?.logo_full_url);
+    // console.error("STORE IMAGE FAILED 👉", store?.logo_full_url);
     e.currentTarget.src = "/images/store-placeholder.png";
   }}
 />

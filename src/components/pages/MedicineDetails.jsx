@@ -12,10 +12,10 @@ export default function MedicineDetails() {
   const { id } = useParams();
   const location = useLocation();
   const abortRef = useRef(null);
+  const hasLoadedRef = useRef(false);
 
   const [medicine, setMedicine] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [fetched, setFetched] = useState(false);
 
   const passedPrice = location.state?.price || null;
 
@@ -34,7 +34,7 @@ export default function MedicineDetails() {
     abortRef.current = controller;
 
     setLoading(true);
-    setFetched(false);
+    setMedicine(null);
 
     try {
       const res = await api.get(`/api/v1/items/details/${id}`, {
@@ -45,18 +45,16 @@ export default function MedicineDetails() {
         signal: controller.signal,
       });
 
-      setMedicine(res.data || null);
-    } catch (err) {
-      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") {
-        return;
+      if (!controller.signal.aborted) {
+        setMedicine(res.data || null);
       }
-
-      console.error("Medicine fetch error:", err);
+    } catch (err) {
+      if (err.code === "ERR_CANCELED") return;
       toast.error("Failed to load medicine details");
-      setMedicine(null);
     } finally {
-      setFetched(true);
-      setLoading(false);
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
   };
   const rawPrice =
@@ -88,16 +86,19 @@ export default function MedicineDetails() {
       },
     });
   };
-
   return (
     <div className="medicine-page">
-      {loading ? (
+      {loading && (
         <div className="medicine-loader">
           <Loader text="Loading medicine details..." />
         </div>
-      ) : fetched && !medicine ? (
+      )}
+
+      {!loading && hasLoadedRef.current && !medicine && (
         <p className="text-center">Medicine not found</p>
-      ) : (
+      )}
+
+      {!loading && medicine && (
         <div className="medicine-card">
           <div className="medicine-image">
             <div className="medicine-wishlist">

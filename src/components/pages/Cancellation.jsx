@@ -3,6 +3,7 @@ import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./Cancellation.css";
+import Footer from "../Footer";
 
 export default function Cancellation() {
   const [content, setContent] = useState("");
@@ -21,7 +22,7 @@ export default function Cancellation() {
         },
       });
 
-      console.log("CANCELLATION HTML 👉", res.data);
+      // console.log("CANCELLATION HTML 👉", res.data);
       setContent(res.data); 
     } catch (err) {
       console.error(err);
@@ -34,6 +35,7 @@ export default function Cancellation() {
   if (loading) return <Loader text="Loading Cancellation Policy..." />;
 
   return (
+    <>
     <div className="cancel-page">
       <h1 className="cancel-title">Cancellation Policy</h1>
 
@@ -46,5 +48,7 @@ export default function Cancellation() {
         <p>No content available.</p>
       )}
     </div>
+    <Footer />
+    </>
   );
 }

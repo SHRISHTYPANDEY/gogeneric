@@ -19,7 +19,7 @@
 }
 
 .wishlist-heading svg {
-  color: #ef4444; /* Heart icon red for classic feel */
+  color: #6B3F69; /* Heart icon red for classic feel */
   fill: rgba(239, 68, 68, 0.1);
 }
 
@@ -115,7 +115,7 @@
 }
 
 .remove-btn:hover {
-  background: #ef4444;
+  background: #6B3F69;
   color: white;
   transform: rotate(90deg);
 }

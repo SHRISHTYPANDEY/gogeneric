@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../api/axiosInstance";
+import Loader from "../Loader";
 import {
   ShieldCheck,
   LogOut,
@@ -17,6 +18,7 @@ import { useWallet } from "../../context/WalletContext";
 import { cleanImageUrl } from "../../utils";
 import LoginModal from "../auth/LoginModal";
 import "./Profile.css";
+import Footer from "../Footer";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -189,214 +191,223 @@ export default function Profile() {
       setLoading(false);
     }
   };
-  if (initialLoading) return null;
+  if (initialLoading) {
+  return (
+    <div className="profile-loader">
+      <Loader text="Loading profile..." />
+    </div>
+  );
+}
+
 
   if (!user && showLogin) {
     return <LoginModal open onClose={() => navigate("/")} />;
   }
 
   return (
-    <div className="premium-profile-page">
-      <div className="premium-hero-header" />
+    <>
+      <div className="premium-profile-page">
+        <div className="premium-hero-header" />
 
-      <div className="premium-container">
-        <div className="premium-main-card">
-          <div className="premium-avatar-box">
-            <div className="premium-avatar-outline">
-              <img
-                src={previewImage || "https://via.placeholder.com/150"}
-                alt="User"
-                className="premium-img"
-              />
+        <div className="premium-container">
+          <div className="premium-main-card">
+            <div className="premium-avatar-box">
+              <div className="premium-avatar-outline">
+                <img
+                  src={previewImage || "https://via.placeholder.com/150"}
+                  alt="User"
+                  className="premium-img"
+                />
 
-              {editing && (
-                <label className="premium-camera-fab">
-                  <Camera size={16} />
-                  <input
-                    type="file"
-                    hidden
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        setProfileImage(file);
-                        setPreviewImage(URL.createObjectURL(file));
-                      }
-                    }}
-                  />
-                </label>
+                {editing && (
+                  <label className="premium-camera-fab">
+                    <Camera size={16} />
+                    <input
+                      type="file"
+                      hidden
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          setProfileImage(file);
+                          setPreviewImage(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+            </div>
+
+            {!editing ? (
+              <div className="premium-user-meta">
+                <h2 className="premium-display-name">{user.name}</h2>
+                <div className="premium-contact-info">
+                  <span>
+                    <Mail size={14} /> {user.email}
+                  </span>
+                  {user.phone && (
+                    <span>
+                      <Phone size={14} /> {user.phone}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="premium-edit-form">
+                <input
+                  value={user.name}
+                  onChange={(e) => setUser({ ...user, name: e.target.value })}
+                  placeholder="Full Name"
+                />
+                <input
+                  value={user.email}
+                  onChange={(e) => setUser({ ...user, email: e.target.value })}
+                  placeholder="Email"
+                />
+                <input
+                  value={user.phone || ""}
+                  onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                  placeholder="Phone"
+                />
+              </div>
+            )}
+
+            <div className="premium-stats-bar">
+              <div className="p-stat-box">
+                <span className="p-stat-val">{loyaltyPoints}</span>
+                <span className="p-stat-lbl">Loyalty Points</span>
+              </div>
+              <div className="p-stat-divider" />
+              <div className="p-stat-box">
+                <span className="p-stat-val">{totalOrders}</span>
+                <span className="p-stat-lbl">Total Orders</span>
+              </div>
+              <div className="p-stat-divider" />
+              <div className="p-stat-box">
+                <span className="p-stat-val">₹{balance}</span>
+                <span className="p-stat-lbl">Wallet Balance</span>
+              </div>
+            </div>
+
+            <div className="premium-footer-btns">
+              {!editing ? (
+                <button
+                  className="premium-action-btn"
+                  onClick={() => setEditing(true)}
+                >
+                  <Pencil size={18} /> Edit Profile
+                </button>
+              ) : (
+                <button
+                  className="premium-action-btn save"
+                  onClick={handleProfileUpdate}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    "Saving..."
+                  ) : (
+                    <>
+                      <Save size={18} /> Save Changes
+                    </>
+                  )}
+                </button>
               )}
             </div>
           </div>
 
-          {!editing ? (
-            <div className="premium-user-meta">
-              <h2 className="premium-display-name">{user.name}</h2>
-              <div className="premium-contact-info">
-                <span>
-                  <Mail size={14} /> {user.email}
-                </span>
-                {user.phone && (
-                  <span>
-                    <Phone size={14} /> {user.phone}
-                  </span>
-                )}
+          <div className="premium-menu-stack">
+            <div
+              className="premium-menu-link"
+              onClick={() => setShowPasswordModal(true)}
+            >
+              <div className="premium-menu-left">
+                <div className="p-icon-circle">
+                  <ShieldCheck size={20} />
+                </div>
+                <span>Change Password</span>
               </div>
+              <ChevronRight size={18} className="opacity-40" />
             </div>
-          ) : (
-            <div className="premium-edit-form">
-              <input
-                value={user.name}
-                onChange={(e) => setUser({ ...user, name: e.target.value })}
-                placeholder="Full Name"
-              />
-              <input
-                value={user.email}
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
-                placeholder="Email"
-              />
-              <input
-                value={user.phone || ""}
-                onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                placeholder="Phone"
-              />
-            </div>
-          )}
-
-          <div className="premium-stats-bar">
-            <div className="p-stat-box">
-              <span className="p-stat-val">{loyaltyPoints}</span>
-              <span className="p-stat-lbl">Loyalty Points</span>
-            </div>
-            <div className="p-stat-divider" />
-            <div className="p-stat-box">
-              <span className="p-stat-val">{totalOrders}</span>
-              <span className="p-stat-lbl">Total Orders</span>
-            </div>
-            <div className="p-stat-divider" />
-            <div className="p-stat-box">
-              <span className="p-stat-val">₹{balance}</span>
-              <span className="p-stat-lbl">Wallet Balance</span>
-            </div>
-          </div>
-
-          <div className="premium-footer-btns">
-            {!editing ? (
-              <button
-                className="premium-action-btn"
-                onClick={() => setEditing(true)}
-              >
-                <Pencil size={18} /> Edit Profile
-              </button>
-            ) : (
-              <button
-                className="premium-action-btn save"
-                onClick={handleProfileUpdate}
-                disabled={loading}
-              >
-                {loading ? (
-                  "Saving..."
-                ) : (
-                  <>
-                    <Save size={18} /> Save Changes
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="premium-menu-stack">
-          <div
-            className="premium-menu-link"
-            onClick={() => setShowPasswordModal(true)}
-          >
-            <div className="premium-menu-left">
-              <div className="p-icon-circle">
-                <ShieldCheck size={20} />
-              </div>
-              <span>Change Password</span>
-            </div>
-            <ChevronRight size={18} className="opacity-40" />
-          </div>
-          {showPassword && (
-            <div className="password-box">
-              <input
-                type="password"
-                placeholder="New Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button
-                onClick={async () => {
-                  try {
-                    const token = localStorage.getItem("token");
-                    await api.post(
-                      "/api/v1/customer/update-profile",
-                      {
-                        name: user.name,
-                        email: user.email,
-                        phone: user.phone || "",
-                        password,
-                        button_type: "change_password",
-                      },
-                      {
-                        headers: {
-                          Authorization: `Bearer ${token}`,
-                          zoneId: JSON.stringify([3]),
-                          moduleId: 2,
+            {showPassword && (
+              <div className="password-box">
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  onClick={async () => {
+                    try {
+                      const token = localStorage.getItem("token");
+                      await api.post(
+                        "/api/v1/customer/update-profile",
+                        {
+                          name: user.name,
+                          email: user.email,
+                          phone: user.phone || "",
+                          password,
+                          button_type: "change_password",
                         },
-                      }
-                    );
-                    toast.success("Password updated successfully");
-                    setPassword("");
-                    setShowPassword(false);
-                  } catch (e) {
-                    console.log(e.response?.data);
-                    toast.error(
-                      e?.response?.data?.errors?.[0]?.message ||
-                        "Password update failed"
-                    );
-                  }
-                }}
-              >
-                Update Password
-              </button>
+                        {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            zoneId: JSON.stringify([3]),
+                            moduleId: 2,
+                          },
+                        }
+                      );
+                      toast.success("Password updated successfully");
+                      setPassword("");
+                      setShowPassword(false);
+                    } catch (e) {
+                      console.log(e.response?.data);
+                      toast.error(
+                        e?.response?.data?.errors?.[0]?.message ||
+                          "Password update failed"
+                      );
+                    }
+                  }}
+                >
+                  Update Password
+                </button>
+              </div>
+            )}
+            {/* LOGOUT */}
+            <div
+              className="premium-menu-link danger"
+              onClick={() => {
+                localStorage.clear();
+                navigate("/");
+              }}
+            >
+              <div className="premium-menu-left">
+                <div className="p-icon-circle-red">
+                  <LogOut size={20} />
+                </div>
+                <span>Logout Account</span>
+              </div>
+              <ChevronRight size={18} className="opacity-40" />
             </div>
-          )}
-          {/* LOGOUT */}
-<div
-  className="premium-menu-link danger"
-  onClick={() => {
-    localStorage.clear();
-    navigate("/");
-  }}
->
-  <div className="premium-menu-left">
-    <div className="p-icon-circle-red">
-      <LogOut size={20} />
-    </div>
-    <span>Logout Account</span>
-  </div>
-  <ChevronRight size={18} className="opacity-40" />
-</div>
 
-{/* DELETE ACCOUNT */}
-<div
-  className="premium-menu-link danger"
-  onClick={handleDeleteAccount}
->
-  <div className="premium-menu-left">
-    <div className="p-icon-circle-red">
-      <FaUserAltSlash size={18} />
-    </div>
-    <span>Delete Account</span>
-  </div>
-  <ChevronRight size={18} className="opacity-40" />
-</div>
-
+            {/* DELETE ACCOUNT */}
+            <div
+              className="premium-menu-link danger"
+              onClick={handleDeleteAccount}
+            >
+              <div className="premium-menu-left">
+                <div className="p-icon-circle-red">
+                  <FaUserAltSlash size={18} />
+                </div>
+                <span>Delete Account</span>
+              </div>
+              <ChevronRight size={18} className="opacity-40" />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

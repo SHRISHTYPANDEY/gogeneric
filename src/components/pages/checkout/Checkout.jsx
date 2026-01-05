@@ -54,7 +54,7 @@ export default function Checkout() {
   }, []);
 
   useEffect(() => {
-    console.log("CART ITEMS FOR PRESCRIPTION", cartItems);
+    // console.log("CART ITEMS FOR PRESCRIPTION", cartItems);
   }, [cartItems]);
 
   const fetchCart = async () => {
@@ -67,7 +67,7 @@ export default function Checkout() {
         },
         params: !token ? { guest_id: guestId } : {},
       });
-      console.log("Full cartt api response", res);
+      // console.log("Full cartt api response", res);
       const items = res.data || [];
       setCartItems(items);
 
@@ -183,7 +183,7 @@ export default function Checkout() {
   };
 
   const handlePlaceOrder = async () => {
-    console.log("SELECTED ADDRESS FULL OBJECT", selectedAddress);
+    // console.log("SELECTED ADDRESS FULL OBJECT", selectedAddress);
 
     if (!paymentMethod || !paymentReady) {
       toast.error("Complete payment first");

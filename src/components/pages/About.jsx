@@ -3,7 +3,7 @@ import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./About.css";
-
+import Footer from "../Footer";
 export default function AboutUs() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -21,8 +21,8 @@ export default function AboutUs() {
         },
       });
 
-      console.log("ABOUT US HTML 👉", res.data); // ✅ DEBUG
-      setContent(res.data); // 🔥 MUST
+      // console.log("ABOUT US HTML 👉", res.data); 
+      setContent(res.data);
     } catch (err) {
       console.error(err);
       toast.error("Failed to load About Us");
@@ -34,6 +34,7 @@ export default function AboutUs() {
   if (loading) return <Loader text="Loading About Us..." />;
 
   return (
+    <>
     <div className="about-page">
       <h1 className="about-title">About Us</h1>
 
@@ -45,6 +46,9 @@ export default function AboutUs() {
       ) : (
         <p>No content available.</p>
       )}
+   
     </div>
+    <Footer />
+    </>
   );
 }

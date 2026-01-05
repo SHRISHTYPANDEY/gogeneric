@@ -16,8 +16,8 @@ import SearchBar from "../layout/Searchbar";
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
-  const routerLocation = useRouterLocation(); // route change
-  const { location } = useLocation(); // 📍 user selected location
+  const routerLocation = useRouterLocation(); 
+  const { location } = useLocation();
 
   const reloadHome = () => {
     setLoading(true);
@@ -29,13 +29,11 @@ export default function Home() {
     return () => clearTimeout(timer);
   };
 
-  /* 🔁 Route change (logo click / navigation) */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     reloadHome();
   }, [routerLocation.key]);
 
-  /* 📍 Location change trigger */
   useEffect(() => {
     if (!location?.lat || !location?.lng) return;
 

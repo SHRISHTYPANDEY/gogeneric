@@ -93,6 +93,7 @@ export default function Navbar() {
 
   /* ---------------- ACTIONS ---------------- */
   const handleProfileClick = () => {
+    closeMenu();
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -114,19 +115,17 @@ export default function Navbar() {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-container max-w-7xl mx-auto px-4 py-3">
-        <div className="nav-logo">
-  <Link
-    to="/"
-    onClick={() => {
-      closeMenu();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }}
-  >
-    <img src={LogoImg} alt="GoGeneric Logo" />
-  </Link>
-</div>
-
-
+          <div className="nav-logo">
+            <Link
+              to="/"
+              onClick={() => {
+                closeMenu();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              <img src={LogoImg} alt="GoGeneric Logo" />
+            </Link>
+          </div>
 
           <div className="flex items-center gap-6">
             {/* DESKTOP LINKS */}
@@ -136,6 +135,9 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to="/aboutus">About</Link>
+              </li>
+              <li>
+                <Link to="/pharmacy">Pharmacy</Link>
               </li>
               <li>
                 <Link to="/labs">Labs</Link>
@@ -148,6 +150,9 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to="/contactus">Contact Us</Link>
+              </li>
+              <li>
+                <Link to="/whoweare">Who We Are</Link>
               </li>
             </ul>
 
@@ -197,15 +202,62 @@ export default function Navbar() {
 
         <ul className="side-links">
           <li>
-           <Link
-  to="#"
-  onClick={(e) => {
-    e.preventDefault();
-    handleProfileClick();
-  }}
->
-  <FaUser /> Profile
-</Link>
+            <Link to="/" onClick={() => handleNavigate("/")}>
+              Home
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/aboutus" onClick={() => handleNavigate("/aboutus")}>
+              About
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/pharmacy" onClick={() => handleNavigate("/pharmacy")}>
+              Pharmacy
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/labs" onClick={() => handleNavigate("/labs")}>
+              Labs
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/doctors" onClick={() => handleNavigate("/doctors")}>
+              Doctors
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/blog" onClick={() => handleNavigate("/blog")}>
+              Blog
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/contactus" onClick={() => handleNavigate("/contactus")}>
+              Contact Us
+            </Link>
+          </li>
+
+          <li>
+            <Link to="/whoweare" onClick={() => handleNavigate("/whoweare")}>
+              Who We Are
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleProfileClick();
+              }}
+            >
+              <FaUser /> Profile
+            </Link>
           </li>
 
           <li>
@@ -226,16 +278,16 @@ export default function Navbar() {
 
           {user && (
             <li>
-                <Link
-                  to="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavigate("/orders");
-                  }}
-                >
-                  <FaShoppingBag /> My Orders
-                </Link>
-              </li>
+              <Link
+                to="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigate("/orders");
+                }}
+              >
+                <FaShoppingBag /> My Orders
+              </Link>
+            </li>
           )}
 
           {user && (
@@ -257,7 +309,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/address");
+                handleNavigate("/my-address");
               }}
             >
               <FaMapMarkedAlt /> My Address
@@ -275,7 +327,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-          <Link
+            <Link
               to="#"
               onClick={(e) => {
                 e.preventDefault();
@@ -286,7 +338,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-           <Link
+            <Link
               to="#"
               onClick={(e) => {
                 e.preventDefault();
@@ -308,7 +360,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-           <Link
+            <Link
               to="#"
               onClick={(e) => {
                 e.preventDefault();
@@ -337,7 +389,8 @@ export default function Navbar() {
                 handleNavigate("/cancellation-policy");
               }}
             >
-              <FaTimesCircle />Cancellation Policy
+              <FaTimesCircle />
+              Cancellation Policy
             </Link>
           </li>
           <li>
@@ -348,7 +401,8 @@ export default function Navbar() {
                 handleNavigate("/terms-and-conditions");
               }}
             >
-              <FaFileContract />Terms and Conditions
+              <FaFileContract />
+              Terms and Conditions
             </Link>
           </li>
           <li>
@@ -359,7 +413,8 @@ export default function Navbar() {
                 handleNavigate("/shipping-policy");
               }}
             >
-              <FaShippingFast />Shipping Policy
+              <FaShippingFast />
+              Shipping Policy
             </Link>
           </li>
 

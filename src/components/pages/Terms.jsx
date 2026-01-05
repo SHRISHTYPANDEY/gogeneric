@@ -3,6 +3,7 @@ import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./Terms.css";
+import Footer from "../Footer";
 
 export default function Terms() {
   const [content, setContent] = useState("");
@@ -20,8 +21,7 @@ export default function Terms() {
           moduleId: 2,
         },
       });
-      console.log("Terms data", res.data);
-      // Content ko set karte waqt hum ensure karenge ki ye string hai
+      // console.log("Terms data", res.data);
       setContent(res.data);
     } catch (err) {
       console.error(err);
@@ -31,18 +31,11 @@ export default function Terms() {
     }
   };
 
-  /**
-   * Helper function to clean the API content.
-   * 1. Yeh "----" jaise bikhre hue dashes ko elegant <hr> lines mein badal deta hai.
-   * 2. Extra empty lines ko trim karta hai.
-   */
   const getFormattedContent = (rawHtml) => {
     if (!rawHtml) return "";
     
-    // Regex: 3 ya usse zyada dashes (---) ko <hr class="divider-line"> se replace karega
     let processed = rawHtml.replace(/[-]{3,}/g, '<hr class="divider-line" />');
     
-    // Regex: Same logic underscores (___) ke liye agar API mein wo bhi aa rahe ho
     processed = processed.replace(/[_]{3,}/g, '<hr class="divider-line" />');
     
     return processed;
@@ -51,6 +44,7 @@ export default function Terms() {
   if (loading) return <Loader text="Loading Terms & Conditions..." />;
 
   return (
+    <>
     <div className="terms-page">
       <header className="terms-header">
         <h1 className="terms-title">Terms & Conditions</h1>
@@ -70,5 +64,7 @@ export default function Terms() {
         </div>
       )}
     </div>
+    <Footer />
+    </>
   );
 }

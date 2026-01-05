@@ -5,7 +5,7 @@ export const blogs = [
     title: "Why GoGeneric Is the Best Pharmacy Software in India",
     excerpt:
       "Running a pharmacy in India today requires smarter billing, inventory management, GST compliance, and online integration. GoGeneric provides an all-in-one solution...",
-    image: "/public/insight1.jpg",
+    image: "/src/assets/blogs_img/why_generic.jpg",
     content: `
      <p>
     In today’s fast-changing healthcare industry, every pharmacy in India is looking
@@ -1241,7 +1241,7 @@ Let GoGeneric transform your local pharmacy into a
     title: "Boost Your Local Pharmacy’s Visibility with GoGeneric App",
     excerpt:
       "Discover how the GoGeneric app helps local pharmacies increase visibility, attract nearby customers, accept online medicine orders, and grow their business digitally across India.",
-    image: "/public/boost_local_pharm.png",
+    image: "/src/assets/blogs_img/boost_your_local.png",
     content: `
 <p>
   In today’s <strong>fast-paced digital era</strong>, having an online presence is no longer
@@ -1727,7 +1727,7 @@ Let GoGeneric transform your local pharmacy into a
     title: "Buy Medicines Easily from Your Local Pharmacy Using GoGeneric App",
     excerpt:
       "Order medicines easily from your trusted local pharmacy using the GoGeneric Healthcare App. Enjoy online ordering, nearby pharmacy access, secure payments, and convenient home delivery.",
-    image: "/public/buy_medi.png",
+    image: "/src/assets/blogs_img/buy_med.png",
     content: `
 <p>
   In today’s <strong>fast-paced world</strong>, convenience is key — especially when it
@@ -1775,7 +1775,11 @@ Let GoGeneric transform your local pharmacy into a
 
 <p>
   Gone are the days of visiting multiple pharmacies to find the medicines you need.
-  With the <strong>GoGeneric App</strong>, you can search, compare, and order medicines
+  With the <a
+    href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
+    target="_blank"
+    rel="noopener noreferrer"
+  ><strong>GoGeneric App</strong></a>, you can search, compare, and order medicines
   from your nearby pharmacy directly from your smartphone.
 </p>
 
@@ -1866,7 +1870,11 @@ Let GoGeneric transform your local pharmacy into a
 <p>
   The GoGeneric App is available for both <strong>Android</strong> and
   <strong>iOS</strong> devices. Simply visit the Google Play Store or Apple App
-  Store, search for <strong>“GoGeneric Healthcare”</strong>, and download the app.
+  Store, search for <a
+    href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
+    target="_blank"
+    rel="noopener noreferrer"
+  ><strong>“GoGeneric Healthcare”</strong></a>, and download the app.
 </p>
 
 <p>

@@ -1,0 +1,176 @@
+:root {
+  --deep-plum: #6B3F69;
+  --muted-purple: #8D5F8C;
+  --mauve: #A376A2;
+  --dusty-rose: #DDC3C3;
+  --text-dark: #331d32;
+  --white: #ffffff;
+  --bg-light: #fdfafc;
+  --premium-shadow: 0 8px 32px rgba(107, 63, 105, 0.08);
+}
+
+.myaddress-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background-color: var(--bg-light);
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 2.2rem;
+  color: var(--deep-plum);
+  font-weight: 800;
+  margin-bottom: 35px;
+  letter-spacing: -0.5px;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.address-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid rgba(221, 195, 195, 0.3);
+  box-shadow: var(--premium-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s ease;
+}
+
+.address-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--mauve);
+  box-shadow: 0 12px 40px rgba(107, 63, 105, 0.12);
+}
+
+.address-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.address-header h3 {
+  color: var(--deep-plum);
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.default-badge {
+  background: #f4effc;
+  color: var(--deep-plum);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  border: 1px solid var(--mauve);
+}
+
+.address-text {
+  color: #665c66;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  min-height: 50px;
+}
+
+.address-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  border-top: 1px solid #f5f0f5;
+  padding-top: 20px;
+}
+
+.address-actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.address-actions button:first-child {
+  background: var(--white);
+  color: var(--deep-plum);
+  border: 1.5px solid var(--deep-plum);
+}
+
+.address-actions button:first-child:hover {
+  background: var(--deep-plum);
+  color: var(--white);
+}
+
+.address-actions button:last-child {
+  background: #fff0f0;
+  color: #d32f2f;
+}
+
+.address-actions button:last-child:hover {
+  background: #d32f2f;
+  color: #ffffff;
+}
+
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(51, 29, 50, 0.6);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.edit-modal {
+  background: var(--white);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 24px;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  animation: modalSlideUp 0.3s ease-out;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.edit-modal::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edit-modal {
+    max-height: 95vh;
+  }
+}

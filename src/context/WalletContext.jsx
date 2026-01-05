@@ -45,11 +45,11 @@ export const WalletProvider = ({ children }) => {
       }
     );
 
-    console.log(" WALLET RAW DATA:", res.data);
+    // console.log(" WALLET RAW DATA:", res.data);
 
     const txs = res.data?.data || [];
 
-    console.log(" WALLET TXs:", txs);
+    // console.log(" WALLET TXs:", txs);
 
     const latestBalance =
       txs.length > 0 ? Number(txs[0].balance || 0) : 0;
@@ -57,7 +57,7 @@ export const WalletProvider = ({ children }) => {
     setTransactions(txs);
     setBalance(latestBalance);
   } catch (err) {
-    console.error("Wallet fetch error", err);
+    // console.error("Wallet fetch error", err);
     setBalance(0);
     setTransactions([]);
   } finally {

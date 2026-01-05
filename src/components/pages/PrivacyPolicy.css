@@ -1,144 +1,98 @@
-/* ================= PRIVACY POLICY PAGE ================= */
+:root {
+  --deep-plum: #6B3F69;
+  --muted-purple: #8D5F8C;
+  --mauve: #A376A2;
+  --dusty-rose: #DDC3C3;
+  --text-dark: #331d32;
+  --white: #ffffff;
+  --bg-light: #fdfafc;
+  --premium-shadow: 0 8px 32px 0 rgba(107, 63, 105, 0.08);
+}
 
 .privacy-page {
   max-width: 950px;
-  margin: 60px auto;
-  padding: 0 24px;
-  min-height: 80vh;
-  font-family: var(--font-main);
+  margin: 50px auto;
+  padding: 60px;
+  background-color: var(--white);
+  border-radius: 30px;
+  box-shadow: var(--premium-shadow);
+  border: 1px solid rgba(221, 195, 195, 0.3);
 }
 
 .privacy-title {
-  font-size: 42px;
+  font-size: 2.6rem;
+  color: var(--deep-plum);
   font-weight: 800;
-  color: var(--text-dark);
-  margin-bottom: 40px;
-  letter-spacing: -1.5px;
   text-align: center;
-  position: relative;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--dusty-rose);
+  padding-bottom: 20px;
 }
-
-/* Luxury accent line under title */
-.privacy-title::after {
-  content: '';
-  display: block;
-  width: 80px;
-  height: 5px;
-  background: linear-gradient(to right, var(--deep-plum), var(--mauve));
-  margin: 15px auto 0;
-  border-radius: 10px;
-}
-
-/* ================= CONTENT CARD ================= */
 
 .privacy-content {
-  background: var(--white);
-  padding: 60px;
-  border-radius: 32px;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: var(--premium-shadow);
-  line-height: 1.9;
-  color: var(--text-body);
-  word-wrap: break-word;
-}
-
-/* ================= TYPOGRAPHY (HTML FROM API) ================= */
-
-.privacy-content h1, 
-.privacy-content h2, 
-.privacy-content h3 {
-  color: var(--deep-plum);
-  margin-top: 40px;
-  margin-bottom: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-/* Section Sidebar Accent for H2 */
-.privacy-content h2 {
-  font-size: 26px;
-  border-left: 5px solid var(--mauve);
-  padding-left: 20px;
+  color: var(--text-dark);
+  line-height: 1.8;
+  font-size: 1.05rem;
 }
 
 .privacy-content p {
-  margin-bottom: 25px;
-  font-size: 16px;
-  text-align: justify;
+  margin-bottom: 20px;
 }
 
-/* Divider Line (Fix for dashes from API) */
-.privacy-content hr {
-  border: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--dusty-rose), var(--mauve), var(--dusty-rose), transparent);
-  margin: 40px 0;
-  opacity: 0.7;
-}
-
-/* Lists styling */
-.privacy-content ul, 
-.privacy-content ol {
-  padding-left: 25px;
-  margin-bottom: 30px;
-}
-
-.privacy-content li {
-  margin-bottom: 15px;
-}
-
-/* Links & Bold Text */
 .privacy-content strong {
+  font-weight: 400 !important;
   color: var(--text-dark);
-  font-weight: 700;
 }
 
-.privacy-content a {
-  color: var(--mauve);
-  text-decoration: none;
-  font-weight: 600;
-  border-bottom: 1.5px dashed var(--dusty-rose);
-  transition: 0.3s;
+.policy-main-heading {
+  display: block !important;
+  color: var(--deep-plum) !important;
+  font-weight: 800 !important;
+  font-size: 1.4rem !important;
+  margin-top: 40px !important;
+  margin-bottom: 15px !important;
+  border-left: 5px solid var(--mauve);
+  padding-left: 15px;
 }
 
-.privacy-content a:hover {
-  color: var(--deep-plum);
-  border-bottom-style: solid;
-  border-color: var(--deep-plum);
+.policy-sub-heading {
+  display: block !important;
+  color: var(--muted-purple) !important;
+  font-weight: 700 !important;
+  font-size: 1.2rem !important;
+  margin-top: 30px !important;
+  margin-bottom: 10px !important;
 }
 
-/* ================= EMPTY STATE ================= */
-
-.privacy-page > p {
+.no-data-text {
   text-align: center;
   color: var(--muted-purple);
   font-weight: 600;
-  margin-top: 50px;
-  font-size: 18px;
 }
 
-/* ================= RESPONSIVE ================= */
+.privacy-page::-webkit-scrollbar {
+  width: 8px;
+}
 
-@media (max-width: 768px) {
+.privacy-page::-webkit-scrollbar-thumb {
+  background: var(--dusty-rose);
+  border-radius: 10px;
+}
+
+@media (max-width: 850px) {
   .privacy-page {
-    margin: 30px auto;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 20px;
   }
   
   .privacy-title {
-    font-size: 32px;
-  }
-  
-  .privacy-content {
-    padding: 35px 20px;
-    border-radius: 24px;
+    font-size: 1.8rem;
   }
 
-  .privacy-content h2 {
-    font-size: 22px;
-    padding-left: 15px;
-  }
-
-  .privacy-content p {
-    text-align: left;
+  .policy-main-heading {
+    font-size: 1.2rem !important;
   }
 }
