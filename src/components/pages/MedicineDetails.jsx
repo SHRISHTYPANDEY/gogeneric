@@ -47,10 +47,7 @@ export default function MedicineDetails() {
 
       setMedicine(res.data || null);
     } catch (err) {
-      if (
-        err.name === "CanceledError" ||
-        err.code === "ERR_CANCELED"
-      ) {
+      if (err.name === "CanceledError" || err.code === "ERR_CANCELED") {
         return;
       }
 
@@ -62,8 +59,6 @@ export default function MedicineDetails() {
       setLoading(false);
     }
   };
-
-  /* ================= PRICE RESOLUTION ================= */
   const rawPrice =
     passedPrice ||
     medicine?.price ||
@@ -75,31 +70,25 @@ export default function MedicineDetails() {
 
   const isValidPrice = price && !isNaN(price) && price > 0;
 
-  /* ================= ADD TO CART ================= */
   const handleAddToCart = async () => {
-  if (!medicine) return;
+    if (!medicine) return;
 
-  if (!isValidPrice) {
-    toast.error("This product cannot be added to cart");
-    return;
-  }
+    if (!isValidPrice) {
+      toast.error("This product cannot be added to cart");
+      return;
+    }
 
-  // ✅ IMPORTANT: await
-  await addToCart({
-    item: {
-      id: medicine.id,
-      name: medicine.name,
-      price,
-      image:
-        medicine.image_full_url ||
-        medicine.image ||
-        "/no-image.jpg",
-      quantity: 1,
-    },
-  });
-};
+    await addToCart({
+      item: {
+        id: medicine.id,
+        name: medicine.name,
+        price,
+        image: medicine.image_full_url || medicine.image || "/no-image.jpg",
+        quantity: 1,
+      },
+    });
+  };
 
-  /* ================= UI ================= */
   return (
     <div className="medicine-page">
       {loading ? (
@@ -116,13 +105,9 @@ export default function MedicineDetails() {
             </div>
 
             <img
-              src={cleanImageUrl(
-                medicine.image_full_url || medicine.image
-              )}
+              src={cleanImageUrl(medicine.image_full_url || medicine.image)}
               alt={medicine.name}
-              onError={(e) =>
-                (e.currentTarget.src = "/no-image.jpg")
-              }
+              onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
             />
           </div>
 
@@ -132,15 +117,11 @@ export default function MedicineDetails() {
             {isValidPrice ? (
               <p className="medicine-price">₹{price}</p>
             ) : (
-              <p className="medicine-price unavailable">
-                Price unavailable
-              </p>
+              <p className="medicine-price unavailable">Price unavailable</p>
             )}
 
             {medicine.description && (
-              <p className="medicine-desc">
-                {medicine.description}
-              </p>
+              <p className="medicine-desc">{medicine.description}</p>
             )}
 
             <div className="medicine-actions">

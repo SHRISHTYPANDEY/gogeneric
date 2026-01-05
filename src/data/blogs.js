@@ -1180,75 +1180,67 @@ Let GoGeneric transform your local pharmacy into a
 <strong>modern, efficient, and profitable business</strong>.
 </p>
     `,
-faqs : [
-  {
-    question: "What is GoGeneric Pharmacy Software?",
-    answer:
-       "GoGeneric is a complete digital pharmacy solution designed for Indian pharmacies. It helps manage billing, inventory, GST-compliant invoices, and online medicine orders from a single platform."
+    faqs: [
+      {
+        question: "What is GoGeneric Pharmacy Software?",
+        answer:
+          "GoGeneric is a complete digital pharmacy solution designed for Indian pharmacies. It helps manage billing, inventory, GST-compliant invoices, and online medicine orders from a single platform.",
+      },
+      {
+        question:
+          "Why is GoGeneric considered the best pharmacy software in India",
+        answer:
+          "GoGeneric combines GST-compliant billing, real-time inventory and expiry alerts, automated reports, online ordering with local delivery integration, and affordable Android-based access.",
+      },
+      {
+        question: "Can small local pharmacies use GoGeneric?",
+        answer:
+          "Yes, GoGeneric is ideal for both single-store owners and multi-branch pharmacies. Its simple interface, regional language support, and low-cost Android access make it accessible for all.",
+      },
+      {
+        question: "Does GoGeneric support online medicine orders?",
+        answer:
+          "Yes, GoGeneric integrates with the GoGeneric Healthcare App for customers and the GoGeneric Delivery App for deliveries, allowing pharmacies to manage online orders efficiently.",
+      },
+      {
+        question: "Is GoGeneric GST-compliant?",
+        answer:
+          "Yes, all invoices and reports generated through GoGeneric are fully GST-compliant and audit-ready.",
+      },
+      {
+        question: "How does GoGeneric help increase pharmacy sales?",
 
-  },
-  {
-    question: "Why is GoGeneric considered the best pharmacy software in India",
-    answer:
-      "GoGeneric combines GST-compliant billing, real-time inventory and expiry alerts, automated reports, online ordering with local delivery integration, and affordable Android-based access."
-
-  },
-  {
-    question: "Can small local pharmacies use GoGeneric?",
-    answer:
-       "Yes, GoGeneric is ideal for both single-store owners and multi-branch pharmacies. Its simple interface, regional language support, and low-cost Android access make it accessible for all."
-  },
-  {
-    question: "Does GoGeneric support online medicine orders?",
-    answer:
-     "Yes, GoGeneric integrates with the GoGeneric Healthcare App for customers and the GoGeneric Delivery App for deliveries, allowing pharmacies to manage online orders efficiently."
-
-  },
-   {
-    question: "Is GoGeneric GST-compliant?",
-    answer:
-     "Yes, all invoices and reports generated through GoGeneric are fully GST-compliant and audit-ready."
-
-  },
-   {
-    question: "How does GoGeneric help increase pharmacy sales?",
-
-    answer:
-     "GoGeneric helps increase pharmacy sales by accepting online orders 24/7, tracking customer preferences, reducing manual errors, and ensuring popular medicines are always in stock."
-
-  },
-   {
-    question: "Can GoGeneric manage inventory and expiry tracking?",
-    answer:
-      "Yes, GoGeneric provides real-time stock management and alerts for low stock or soon-to-expire medicines, helping prevent losses."
-
-  },
-   {
-    question: "Is GoGeneric easy to use for non-technical staff?",
-    answer:
-      "Yes, the interface is simple, intuitive, supports regional languages, and requires minimal training."
-
-  },
-   {
-    question:"Can GoGeneric work on smartphones and tablets?",
-    answer:
-      "Yes, GoGeneric is Android-based and works smoothly on smartphones and tablets without expensive POS systems."
-
-  },
-   {
-    question:"Where can I download GoGeneric apps?",
-    answer:
-     "GoGeneric Pharmacy App, GoGeneric Healthcare App, and GoGeneric Delivery App are available on the Google Play Store."
-
-  }
-]
+        answer:
+          "GoGeneric helps increase pharmacy sales by accepting online orders 24/7, tracking customer preferences, reducing manual errors, and ensuring popular medicines are always in stock.",
+      },
+      {
+        question: "Can GoGeneric manage inventory and expiry tracking?",
+        answer:
+          "Yes, GoGeneric provides real-time stock management and alerts for low stock or soon-to-expire medicines, helping prevent losses.",
+      },
+      {
+        question: "Is GoGeneric easy to use for non-technical staff?",
+        answer:
+          "Yes, the interface is simple, intuitive, supports regional languages, and requires minimal training.",
+      },
+      {
+        question: "Can GoGeneric work on smartphones and tablets?",
+        answer:
+          "Yes, GoGeneric is Android-based and works smoothly on smartphones and tablets without expensive POS systems.",
+      },
+      {
+        question: "Where can I download GoGeneric apps?",
+        answer:
+          "GoGeneric Pharmacy App, GoGeneric Healthcare App, and GoGeneric Delivery App are available on the Google Play Store.",
+      },
+    ],
   },
   {
     id: 2,
     slug: "gogeneric-app-for-local-pharmacy-growth",
     title: "Boost Your Local Pharmacy’s Visibility with GoGeneric App",
-   excerpt:
-  "Discover how the GoGeneric app helps local pharmacies increase visibility, attract nearby customers, accept online medicine orders, and grow their business digitally across India.",
+    excerpt:
+      "Discover how the GoGeneric app helps local pharmacies increase visibility, attract nearby customers, accept online medicine orders, and grow their business digitally across India.",
     image: "/public/boost_local_pharm.png",
     content: `
 <p>
@@ -1675,69 +1667,68 @@ faqs : [
 
 
 `,
-faqs: [
-  {
-    question: "What is the GoGeneric App for pharmacies?",
-    answer:
-      "The GoGeneric Healthcare App is a digital platform that helps local pharmacies increase visibility, attract new customers, and manage orders efficiently by connecting them with nearby customers searching for medicines."
-  },
-  {
-    question: "How can my pharmacy join GoGeneric?",
-    answer:
-      "Pharmacies can register on GoGeneric through the app or website. After approval, they can create a digital profile, list medicines, update inventory, and start receiving online orders from local customers."
-  },
-  {
-    question: "Does joining GoGeneric cost money?",
-    answer:
-      "GoGeneric offers flexible plans, including free basic listings and paid options with advanced features such as promotions, analytics, and priority visibility."
-  },
-  {
-    question: "How does GoGeneric help attract local customers?",
-    answer:
-      "The app shows your pharmacy to nearby users searching for medicines. Features like digital listings, customer reviews, and promotions help attract both new and returning customers."
-  },
-  {
-    question: "Can I manage my stock and inventory through GoGeneric?",
-    answer:
-      "Yes. GoGeneric allows pharmacies to update stock in real time so customers always see accurate availability, reducing order cancellations and improving reliability."
-  },
-  {
-    question: "How can my pharmacy accept payments through the app?",
-    answer:
-      "GoGeneric provides secure digital payment options for online payments. Pharmacies can also offer cash on delivery based on their preferences."
-  },
-  {
-    question: "Can customer reviews help my pharmacy grow?",
-    answer:
-      "Yes. Positive reviews build trust and credibility, encouraging more customers to choose your pharmacy. Responding to feedback also strengthens your reputation for good customer service."
-  },
-  {
-    question: "How can I maximize my pharmacy’s visibility on GoGeneric?",
-    answer:
-      "By keeping inventory updated, uploading high-quality photos, highlighting offers, responding to reviews promptly, and maintaining accurate contact information."
-  },
-  {
-    question: "Will joining GoGeneric improve my pharmacy’s community presence?",
-    answer:
-      "Yes. Online visibility makes your pharmacy more accessible and positions it as a trusted healthcare resource in your neighbourhood while increasing sales."
-  },
-  {
-    question: "Can GoGeneric help my pharmacy compete with larger chains?",
-    answer:
-      "Absolutely. GoGeneric’s digital tools allow local pharmacies to offer online orders, delivery, and modern services, helping them compete with larger chains while maintaining a community-focused approach."
-  }
-]
-
-
+    faqs: [
+      {
+        question: "What is the GoGeneric App for pharmacies?",
+        answer:
+          "The GoGeneric Healthcare App is a digital platform that helps local pharmacies increase visibility, attract new customers, and manage orders efficiently by connecting them with nearby customers searching for medicines.",
+      },
+      {
+        question: "How can my pharmacy join GoGeneric?",
+        answer:
+          "Pharmacies can register on GoGeneric through the app or website. After approval, they can create a digital profile, list medicines, update inventory, and start receiving online orders from local customers.",
+      },
+      {
+        question: "Does joining GoGeneric cost money?",
+        answer:
+          "GoGeneric offers flexible plans, including free basic listings and paid options with advanced features such as promotions, analytics, and priority visibility.",
+      },
+      {
+        question: "How does GoGeneric help attract local customers?",
+        answer:
+          "The app shows your pharmacy to nearby users searching for medicines. Features like digital listings, customer reviews, and promotions help attract both new and returning customers.",
+      },
+      {
+        question: "Can I manage my stock and inventory through GoGeneric?",
+        answer:
+          "Yes. GoGeneric allows pharmacies to update stock in real time so customers always see accurate availability, reducing order cancellations and improving reliability.",
+      },
+      {
+        question: "How can my pharmacy accept payments through the app?",
+        answer:
+          "GoGeneric provides secure digital payment options for online payments. Pharmacies can also offer cash on delivery based on their preferences.",
+      },
+      {
+        question: "Can customer reviews help my pharmacy grow?",
+        answer:
+          "Yes. Positive reviews build trust and credibility, encouraging more customers to choose your pharmacy. Responding to feedback also strengthens your reputation for good customer service.",
+      },
+      {
+        question: "How can I maximize my pharmacy’s visibility on GoGeneric?",
+        answer:
+          "By keeping inventory updated, uploading high-quality photos, highlighting offers, responding to reviews promptly, and maintaining accurate contact information.",
+      },
+      {
+        question:
+          "Will joining GoGeneric improve my pharmacy’s community presence?",
+        answer:
+          "Yes. Online visibility makes your pharmacy more accessible and positions it as a trusted healthcare resource in your neighbourhood while increasing sales.",
+      },
+      {
+        question: "Can GoGeneric help my pharmacy compete with larger chains?",
+        answer:
+          "Absolutely. GoGeneric’s digital tools allow local pharmacies to offer online orders, delivery, and modern services, helping them compete with larger chains while maintaining a community-focused approach.",
+      },
+    ],
   },
   {
     id: 3,
-slug: "buy-medicines-online-from-local-pharmacy-gogeneric",
-title: "Buy Medicines Easily from Your Local Pharmacy Using GoGeneric App",
-excerpt:
-  "Order medicines easily from your trusted local pharmacy using the GoGeneric Healthcare App. Enjoy online ordering, nearby pharmacy access, secure payments, and convenient home delivery.",
-image: "/public/buy_medi.png",
-content:`
+    slug: "buy-medicines-online-from-local-pharmacy-gogeneric",
+    title: "Buy Medicines Easily from Your Local Pharmacy Using GoGeneric App",
+    excerpt:
+      "Order medicines easily from your trusted local pharmacy using the GoGeneric Healthcare App. Enjoy online ordering, nearby pharmacy access, secure payments, and convenient home delivery.",
+    image: "/public/buy_medi.png",
+    content: `
 <p>
   In today’s <strong>fast-paced world</strong>, convenience is key — especially when it
   comes to healthcare. Gone are the days of long queues at local pharmacies
@@ -2191,54 +2182,52 @@ content:`
 <p>
   Take control of your health — <strong>anytime, anywhere</strong>.
 </p>`,
-faqs: [
-  {
-    question: "What is the GoGeneric Healthcare App?",
-    answer:
-      "The GoGeneric Healthcare App is a digital platform that allows users to buy medicines easily from their local pharmacies. It connects customers with verified nearby pharmacies, supports digital prescription uploads, and offers home delivery or pickup options."
+    faqs: [
+      {
+        question: "What is the GoGeneric Healthcare App?",
+        answer:
+          "The GoGeneric Healthcare App is a digital platform that allows users to buy medicines easily from their local pharmacies. It connects customers with verified nearby pharmacies, supports digital prescription uploads, and offers home delivery or pickup options.",
+      },
+      {
+        question: "How can I download the GoGeneric App?",
+        answer:
+          "The GoGeneric App is available on both Android and iOS devices. You can download it for free from the Google Play Store or Apple App Store by searching for 'GoGeneric Healthcare'.",
+      },
+      {
+        question: "Can I buy prescription medicines using the GoGeneric App?",
+        answer:
+          "Yes, you can upload your prescription digitally while placing an order. This ensures that prescription medicines are dispensed safely and approved by registered pharmacists.",
+      },
+      {
+        question: "How do I know if the pharmacy listed on the app is genuine?",
+        answer:
+          "GoGeneric partners only with verified local pharmacies. Each pharmacy profile includes ratings, reviews, and contact details to help users verify authenticity and trust.",
+      },
+      {
+        question: "What types of medicines are available on GoGeneric?",
+        answer:
+          "GoGeneric offers a wide range of medicines, including prescription drugs, over-the-counter medicines, vitamins, supplements, and wellness products from trusted local pharmacies.",
+      },
+      {
+        question: "Can I choose home delivery for my order?",
+        answer:
+          "Yes, GoGeneric provides flexible options including home delivery and pharmacy pickup. You can choose the option that best suits your convenience.",
+      },
+      {
+        question: "How can I track my order?",
+        answer:
+          "After placing your order, you can track it in real-time through the app. You will receive updates from order confirmation to dispatch and delivery.",
+      },
+      {
+        question: "Is it safe to make payments through the app?",
+        answer:
+          "Yes, GoGeneric provides secure digital payment options including online payments and cash on delivery. All transactions are encrypted for safety and reliability.",
+      },
+      {
+        question: "Does GoGeneric support local pharmacies?",
+        answer:
+          "Absolutely. GoGeneric connects customers with nearby pharmacies, helping local businesses increase visibility, manage inventory, and grow sustainably while serving their community.",
+      },
+    ],
   },
-  {
-    question: "How can I download the GoGeneric App?",
-    answer:
-      "The GoGeneric App is available on both Android and iOS devices. You can download it for free from the Google Play Store or Apple App Store by searching for 'GoGeneric Healthcare'."
-  },
-  {
-    question: "Can I buy prescription medicines using the GoGeneric App?",
-    answer:
-      "Yes, you can upload your prescription digitally while placing an order. This ensures that prescription medicines are dispensed safely and approved by registered pharmacists."
-  },
-  {
-    question: "How do I know if the pharmacy listed on the app is genuine?",
-    answer:
-      "GoGeneric partners only with verified local pharmacies. Each pharmacy profile includes ratings, reviews, and contact details to help users verify authenticity and trust."
-  },
-  {
-    question: "What types of medicines are available on GoGeneric?",
-    answer:
-      "GoGeneric offers a wide range of medicines, including prescription drugs, over-the-counter medicines, vitamins, supplements, and wellness products from trusted local pharmacies."
-  },
-  {
-    question: "Can I choose home delivery for my order?",
-    answer:
-      "Yes, GoGeneric provides flexible options including home delivery and pharmacy pickup. You can choose the option that best suits your convenience."
-  },
-  {
-    question: "How can I track my order?",
-    answer:
-      "After placing your order, you can track it in real-time through the app. You will receive updates from order confirmation to dispatch and delivery."
-  },
-  {
-    question: "Is it safe to make payments through the app?",
-    answer:
-      "Yes, GoGeneric provides secure digital payment options including online payments and cash on delivery. All transactions are encrypted for safety and reliability."
-  },
-  {
-    question: "Does GoGeneric support local pharmacies?",
-    answer:
-      "Absolutely. GoGeneric connects customers with nearby pharmacies, helping local businesses increase visibility, manage inventory, and grow sustainably while serving their community."
-  }
-]
-    
-  }
-
 ];

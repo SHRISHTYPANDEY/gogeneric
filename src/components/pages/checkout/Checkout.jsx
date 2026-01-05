@@ -31,10 +31,15 @@ export default function Checkout() {
   const [deliveryType, setDeliveryType] = useState(
     localStorage.getItem("delivery_type") || "delivery"
   );
-  const orderAmount = cartItems.reduce(
+  const cartAmount = cartItems.reduce(
     (sum, item) => sum + Number(item.price) * Number(item.quantity),
     0
   );
+
+  const deliveryCharge = deliveryType === "delivery" ? 50 : 0;
+  const platformFee = 2;
+
+  const totalPayable = cartAmount + deliveryCharge + platformFee;
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -44,7 +49,6 @@ export default function Checkout() {
     (ci) => ci.item?.is_prescription_required == 1
   );
 
-  // ---------------- FETCH CART ----------------
   useEffect(() => {
     fetchCart();
   }, []);
@@ -75,13 +79,11 @@ export default function Checkout() {
     }
   };
 
-  // ---------------- DELIVERY TYPE ----------------
   const handleDeliveryTypeChange = (type) => {
     setDeliveryType(type);
     localStorage.setItem("delivery_type", type);
   };
 
-  // ---------------- PAYMENT ----------------
   const handlePaymentSelect = (method) => {
     setPaymentMethod(method);
 
@@ -92,28 +94,91 @@ export default function Checkout() {
     }
   };
 
-  const handleDigitalPayment = async () => {
+  const handleDigitalPayment = () => {
+    if (deliveryType === "delivery" && !selectedAddress) {
+      toast.error("Please select delivery address");
+      return;
+    }
+
+    if (!policyAccepted) {
+      toast.error("Please accept policies");
+      return;
+    }
+
+    if (isPrescriptionRequired && !prescriptionFile) {
+      toast.error("Please upload prescription");
+      return;
+    }
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: totalPayable * 100,
+      currency: "INR",
+      name: "Your App Name",
+      description: "Order Payment",
+      handler: function (response) {
+        placeOrderAfterPayment(response);
+      },
+      prefill: {
+        name: selectedAddress?.name || "",
+        contact: selectedAddress?.phone || "",
+      },
+      theme: {
+        color: "#0d6efd",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
+  const placeOrderAfterPayment = async (paymentResponse) => {
     try {
-      const res = await api.post(
-        "/api/v1/payment/request",
-        {
-          amount: orderAmount,
-          payment_method: "razor_pay",
-        },
-        {
-          headers: {
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        }
-      );
+      setPlacingOrder(true);
 
-      const paymentId = res.data.payment_id;
+      const storeId = cartItems?.[0]?.item?.store_id;
+      const formData = new FormData();
 
-      window.location.href = `${
-        import.meta.env.VITE_API_BASE_URL
-      }/razor-pay?payment_id=${paymentId}`;
+      formData.append("order_type", deliveryType);
+      formData.append("delivery_type", deliveryType);
+      formData.append("payment_method", "digital_payment");
+      formData.append("payment_status", "paid");
+      formData.append("transaction_id", paymentResponse.razorpay_payment_id);
+      formData.append("order_amount", totalPayable);
+      formData.append("store_id", storeId);
+
+      if (deliveryType === "delivery") {
+        formData.append("address_id", selectedAddress.id);
+        formData.append("address", selectedAddress.address);
+        formData.append("latitude", selectedAddress.latitude);
+        formData.append("longitude", selectedAddress.longitude);
+        formData.append("distance", selectedAddress.distance || 1);
+      }
+
+      if (!token) {
+        formData.append("guest_id", guestId);
+      }
+
+      if (isPrescriptionRequired && prescriptionFile) {
+        formData.append("order_attachment", prescriptionFile);
+      }
+
+      const headers = {
+        zoneId: JSON.stringify([3]),
+        moduleId: "2",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+
+      const res = await api.post("/api/v1/customer/order/place", formData, {
+        headers,
+      });
+
+      toast.success("Payment successful & Order placed 🎉");
+      navigate(`/orders/${res.data?.order_id}`);
     } catch (err) {
-      toast.error("Unable to initiate payment");
+      toast.error("Order placement failed");
+    } finally {
+      setPlacingOrder(false);
     }
   };
 
@@ -150,7 +215,7 @@ export default function Checkout() {
       const storeId = cartItems?.[0]?.item?.store_id;
 
       if (paymentMethod === "wallet") {
-        if (walletBalance < orderAmount) {
+        if (walletBalance < totalPayable) {
           toast.error(
             `Insufficient wallet balance. Available ₹${walletBalance}`
           );
@@ -158,15 +223,12 @@ export default function Checkout() {
           return;
         }
       }
-
-      // ✅ 1. CREATE FORM DATA FIRST
       const formData = new FormData();
 
-      // ✅ 2. APPEND NORMAL FIELDS
       formData.append("order_type", deliveryType);
       formData.append("delivery_type", deliveryType);
       formData.append("payment_method", paymentMethod);
-      formData.append("order_amount", orderAmount);
+      formData.append("order_amount", totalPayable);
       formData.append("store_id", storeId);
 
       if (deliveryType === "delivery") {
@@ -180,13 +242,10 @@ export default function Checkout() {
       if (!token) {
         formData.append("guest_id", guestId);
       }
-
-      // ✅ 3. APPEND PRESCRIPTION AFTER FORM DATA EXISTS
       if (isPrescriptionRequired && prescriptionFile) {
         formData.append("order_attachment", prescriptionFile);
       }
 
-      // 🔍 optional debug (once)
       for (let pair of formData.entries()) {
         console.log(pair[0], pair[1]);
       }
@@ -212,14 +271,13 @@ export default function Checkout() {
       setPlacingOrder(false);
     }
   };
-if (loading) {
-  return (
-    <div style={{ minHeight: "70vh" }}>
-      <Loader />
-    </div>
-  );
-}
-
+  if (loading) {
+    return (
+      <div style={{ minHeight: "70vh" }}>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="checkout-container">
@@ -261,8 +319,9 @@ if (loading) {
             value={paymentMethod}
             onChange={handlePaymentSelect}
             walletBalance={walletBalance}
-            orderAmount={orderAmount}
+            orderAmount={totalPayable}
           />
+
           {paymentMethod === "wallet" && (
             <p
               style={{
@@ -282,7 +341,11 @@ if (loading) {
         </div>
 
         <div className="checkout-right">
-          <BillSummary cartItems={cartItems} deliveryType={deliveryType} />
+          <BillSummary
+            cartItems={cartItems}
+            deliveryType={deliveryType}
+            totalPayable={totalPayable}
+          />
         </div>
       </div>
 
@@ -295,15 +358,15 @@ if (loading) {
           />
           <span>
             I agree to the{" "}
-            <a href="/privacy-policy" target="_blank">
+            <a href="/privacy" target="_blank">
               Privacy Policy
             </a>
             ,{" "}
-            <a href="/terms-and-conditions" target="_blank">
+            <a href="/terms" target="_blank">
               Terms & Conditions
             </a>{" "}
             and{" "}
-            <a href="/refund-policy" target="_blank">
+            <a href="/refund" target="_blank">
               Refund Policy
             </a>
           </span>
@@ -312,7 +375,7 @@ if (loading) {
 
       <button
         className="place-order-btn"
-        disabled={placingOrder || !policyAccepted }
+        disabled={placingOrder || !policyAccepted}
         onClick={() => {
           if (paymentMethod === "digital_payment") {
             handleDigitalPayment();
@@ -324,13 +387,11 @@ if (loading) {
         {placingOrder ? "Placing Order..." : "Place Order"}
       </button>
       {placingOrder && (
-  <div className="checkout-loader-overlay">
-    <Loader />
-    <p>Placing your order...</p>
-  </div>
-)}
-
+        <div className="checkout-loader-overlay">
+          <Loader />
+          <p>Placing your order...</p>
+        </div>
+      )}
     </div>
-    
   );
 }
