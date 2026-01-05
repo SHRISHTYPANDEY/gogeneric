@@ -17,7 +17,7 @@ export default function MyAddress() {
       setLoading(true);
       const res = await api.get("/api/v1/customer/address/list");
       setAddresses(res.data.addresses || []);
-    } catch (err) {
+    } catch {
       toast.error("Failed to load addresses");
     } finally {
       setLoading(false);
@@ -30,6 +30,11 @@ export default function MyAddress() {
 
   const handleEdit = (address) => {
     setSelectedAddress(address);
+    setShowForm(true);
+  };
+
+  const handleAddNew = () => {
+    setSelectedAddress(null);
     setShowForm(true);
   };
 
@@ -49,7 +54,31 @@ export default function MyAddress() {
 
   return (
     <div className="myaddress-page">
-      <h1 className="page-title">My Addresses</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "30px",
+        }}
+      >
+        <h1 className="page-title">My Addresses</h1>
+
+        <button
+          onClick={handleAddNew}
+          style={{
+            padding: "12px 20px",
+            borderRadius: "50px",
+            background: "#6B3F69",
+            color: "#fff",
+            border: "none",
+            fontWeight: "700",
+            cursor: "pointer",
+          }}
+        >
+          + Add New Address
+        </button>
+      </div>
 
       {loading && <Loader text="Loading addresses..." />}
 
@@ -88,6 +117,8 @@ export default function MyAddress() {
           <div className="edit-modal">
             <AddressForm
               initialData={selectedAddress}
+              addAddressUri="/api/v1/customer/address/add"
+              updateAddressUri="/api/v1/customer/address/update/"
               onClose={() => {
                 setShowForm(false);
                 setSelectedAddress(null);
