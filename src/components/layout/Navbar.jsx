@@ -135,7 +135,7 @@ export default function Navbar() {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
+                <Link to="/aboutus">About</Link>
               </li>
               <li>
                 <Link to="/labs">Labs</Link>
@@ -290,7 +290,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/help");
+                handleNavigate("/help-and-support");
               }}
             >
               <FaHeadset /> Help and Support
@@ -312,7 +312,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/refund");
+                handleNavigate("/refund-policy");
               }}
             >
               <FaUndo /> Refund Policy
@@ -323,7 +323,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/privacy");
+                handleNavigate("/privacy-policy");
               }}
             >
               <MdPrivacyTip /> Privacy Policy
@@ -334,7 +334,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/cancel");
+                handleNavigate("/cancellation-policy");
               }}
             >
               <FaTimesCircle />Cancellation Policy
@@ -345,7 +345,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/terms");
+                handleNavigate("/terms-and-conditions");
               }}
             >
               <FaFileContract />Terms and Conditions
@@ -356,7 +356,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/shipping");
+                handleNavigate("/shipping-policy");
               }}
             >
               <FaShippingFast />Shipping Policy

@@ -295,15 +295,15 @@ if (loading) {
           />
           <span>
             I agree to the{" "}
-            <a href="/privacy" target="_blank">
+            <a href="/privacy-policy" target="_blank">
               Privacy Policy
             </a>
             ,{" "}
-            <a href="/terms" target="_blank">
+            <a href="/terms-and-conditions" target="_blank">
               Terms & Conditions
             </a>{" "}
             and{" "}
-            <a href="/refund" target="_blank">
+            <a href="/refund-policy" target="_blank">
               Refund Policy
             </a>
           </span>
@@ -312,7 +312,7 @@ if (loading) {
 
       <button
         className="place-order-btn"
-        disabled={placingOrder || !policyAccepted}
+        disabled={placingOrder || !policyAccepted }
         onClick={() => {
           if (paymentMethod === "digital_payment") {
             handleDigitalPayment();

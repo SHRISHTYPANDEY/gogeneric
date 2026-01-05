@@ -49,7 +49,7 @@ const Footer = () => {
               <h3 className="ak-footer-widget-heading">Navigate</h3>
               <ul className="ak-footer-links">
                 <li><Link to="/">Home</Link></li>
-                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/aboutus">About Us</Link></li>
                 <li><Link to="/labs">Labs</Link></li>
                 <li><Link to="/doctors">Doctors</Link></li>
               </ul>
@@ -60,8 +60,8 @@ const Footer = () => {
               <ul className="ak-footer-links">
                 <li><Link to="/blog">Our Blog</Link></li>
                 <li><Link to="/contactus">Contact Support</Link></li>
-                <li><Link to="/privacy">Privacy Policy</Link></li>
-                <li><Link to="/terms">Terms & Conditions</Link></li>
+                <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link to="/terms-and-conditions">Terms & Conditions</Link></li>
               </ul>
             </div>
             {/* RIGHT : App Download */}

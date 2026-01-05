@@ -89,7 +89,7 @@ function AppLayout() {
       <WhatsAppChat />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/aboutus" element={<About />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
@@ -111,17 +111,17 @@ function AppLayout() {
         <Route path="/medicine/:id" element={<MedicineDetails />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/refund" element={<RefundPolicy />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/wallet" element={<Wallet />} />
         <Route path="/orders/:id/track" element={<TrackOrder />} />
         <Route path="/orders/:orderId" element={<OrderDetails />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/cancel" element={<Cancellation />} />
+        <Route path="/terms-and-conditions" element={<Terms />} />
+        <Route path="/cancellation-policy" element={<Cancellation />} />
         <Route path="/coupon" element={<Coupon />} />
-        <Route path="/help" element={<AutomatedMessage />} />
-        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/help-and-support" element={<AutomatedMessage />} />
+        <Route path="/shipping-policy" element={<Shipping />} />
          <Route path="/blog" element={<BlogList />} />
   <Route path="/blog/:slug" element={<BlogDetails />} />
   <Route path="/checkout" element={<Checkout />} />
