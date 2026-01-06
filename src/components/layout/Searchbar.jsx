@@ -4,8 +4,16 @@ import api from "../../api/axiosInstance";
 import "./Searchbar.css";
 import { cleanImageUrl } from "../../utils";
 import { useNavigate } from "react-router-dom";
+import Fuse from "fuse.js";
 
 export default function Searchbar() {
+  const fuseOptions = {
+  keys: ["name"],
+  threshold: 0.4,   // 🔥 typo tolerance (0 = exact, 1 = loose)
+  distance: 100,
+  minMatchCharLength: 2,
+};
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -19,6 +27,7 @@ export default function Searchbar() {
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
   const cacheRef = useRef({});
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -62,54 +71,58 @@ export default function Searchbar() {
 
   /* 🔍 Fetch API */
   const fetchResults = async (searchText) => {
-    // Cache hit
-    if (cacheRef.current[searchText]) {
-      setResults(cacheRef.current[searchText]);
-      setShowDropdown(true);
-      return;
-    }
+  try {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
+    setLoading(true);
 
-    try {
-      abortRef.current?.abort();
-      abortRef.current = new AbortController();
+    const safeQuery = searchText.slice(0, 3); // ✅ CORRECT PLACE
 
-      setLoading(true);
+    const res = await api.get("/api/v1/items/item-or-store-search", {
+      params: { name: safeQuery },
+      headers: {
+        zoneId: "[3]",
+        moduleId: 2,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+      signal: abortRef.current.signal,
+    });
 
-      const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: searchText },
-        headers: {
-          zoneId: "[3]",
-          moduleId: 2,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        signal: abortRef.current.signal,
-      });
+    const rawData = [
+      ...(res.data?.items || []).map((i) => ({
+        id: `item-${i.id}`,
+        type: "medicine",
+        name: i.name,
+        image: i.image_full_url || i.image,
+      })),
+      ...(res.data?.stores || []).map((s) => ({
+        id: `store-${s.id}`,
+        type: "store",
+        name: s.name,
+        image: s.logo || s.image_full_url,
+      })),
+    ];
 
-      const data = [
-        ...(res.data?.items || []).map((i) => ({
-          id: `item-${i.id}`,
-          type: "medicine",
-          name: i.name,
-          image: i.image_full_url || i.image,
-        })),
-        ...(res.data?.stores || []).map((s) => ({
-          id: `store-${s.id}`,
-          type: "store",
-          name: s.name,
-          image: s.logo || s.image_full_url,
-        })),
-      ];
+    const fuse = new Fuse(rawData, {
+      keys: ["name"],
+      threshold: 0.45,
+      ignoreLocation: true,
+    });
 
-      cacheRef.current[searchText] = data;
-      setResults(data);
-      setShowDropdown(true);
-    } catch (err) {
-      if (err.name !== "CanceledError") console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const finalResults = fuse.search(searchText).map(r => r.item);
+
+    setResults(finalResults);
+    setShowDropdown(true);
+  } catch (err) {
+    if (err.name !== "CanceledError") console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
   const handleKeyDown = (e) => {
   if (e.key === "Enter") {
     e.preventDefault();

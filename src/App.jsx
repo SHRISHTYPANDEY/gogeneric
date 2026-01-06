@@ -40,9 +40,11 @@ import { LocationProvider } from "./context/LocationContext.jsx";
 import { useEffect } from "react";
 import { useLocation } from "./context/LocationContext";
 import SearchList from "./components/pages/SearchList.jsx";
-import LabsPage from "./components/pages/LabsPage.jsx";
+
 import Pharmacy from "./components/pages/Pharmacy.jsx";
 import MyAddress from "./components/pages/MyAddress.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import Labs from "./components/pages/Labs.jsx";
 
 const fetchAddress = async (lat, lng) => {
   try {
@@ -91,6 +93,7 @@ function AppLayout() {
       <TopHeader />
       <Navbar />
       <WhatsAppChat />
+    <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<About />} />
@@ -130,7 +133,7 @@ function AppLayout() {
         <Route path="/blog/:slug" element={<BlogDetails />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/searchlist" element={<SearchList />} />
-        <Route path="/labs" element={<LabsPage />} />
+        <Route path="/labs" element={<Labs />} />
         <Route path="/pharmacy" element={<Pharmacy />} />
         <Route path="/my-address" element={<MyAddress />} />
       </Routes>

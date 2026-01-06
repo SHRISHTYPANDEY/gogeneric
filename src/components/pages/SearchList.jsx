@@ -5,6 +5,7 @@ import { cleanImageUrl } from "../../utils";
 import "./SearchList.css";
 import WishlistButton from "../WishlistButton";
 import Footer from "../Footer";
+import Fuse from "fuse.js";
 export default function SearchList() {
   const [params] = useSearchParams();
   const query = params.get("query");
@@ -16,7 +17,14 @@ export default function SearchList() {
   const abortRef = useRef(null);
   const navigate = useNavigate();
 
-  // 📍 Location Logic
+  const fuseOptions = {
+  keys: ["name"],
+  threshold: 0.45,
+  ignoreLocation: true,
+  minMatchCharLength: 2,
+};
+
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -28,37 +36,42 @@ export default function SearchList() {
     );
   }, []);
 
-  // 🔍 Fetch Logic
   useEffect(() => {
     if (!query || query.trim().length < 2 || !location) return;
     fetchMedicines(query.trim());
   }, [query, location]);
 
-  const fetchMedicines = async (searchText) => {
-    try {
-      if (abortRef.current) abortRef.current.abort();
-      abortRef.current = new AbortController();
-      setLoading(true);
+ const fetchMedicines = async (searchText) => {
+  try {
+    if (abortRef.current) abortRef.current.abort();
+    abortRef.current = new AbortController();
+    setLoading(true);
 
-      const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: searchText },
-        headers: {
-          zoneId: "[3]",
-          moduleId: 2,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        signal: abortRef.current.signal,
-      });
+    const safeQuery = searchText.slice(0, 3);
 
-      setMedicines(res.data?.items || []);
-    } catch (err) {
-      if (err.name !== "CanceledError") console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const res = await api.get("/api/v1/items/item-or-store-search", {
+      params: { name: safeQuery },
+      headers: {
+        zoneId: "[3]",
+        moduleId: 2,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+      signal: abortRef.current.signal,
+    });
 
+    const rawItems = res.data?.items || [];
+
+    const fuse = new Fuse(rawItems, fuseOptions);
+    const fuzzyResults = fuse.search(searchText).map(r => r.item);
+
+    setMedicines(fuzzyResults);
+  } catch (err) {
+    if (err.name !== "CanceledError") console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <>
       <section className="gs-search-container">

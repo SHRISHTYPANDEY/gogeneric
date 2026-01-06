@@ -5,6 +5,7 @@ import "./BlogDetails.css";
 import FAQ from "./Faq.jsx";
 import BlogCTA from "./BlogCTA.jsx";
 import Footer from "../../components/Footer.jsx";
+import BackToTop from "../BackToTop.jsx";
 export default function BlogDetails() {
   const { slug } = useParams();
   const blog = blogs.find((b) => b.slug === slug);
@@ -49,6 +50,7 @@ export default function BlogDetails() {
 <BlogCTA />
     </div>
     <Footer />
+    <BackToTop />
     </>
   );
 }
