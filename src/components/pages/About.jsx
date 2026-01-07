@@ -4,6 +4,7 @@ import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./About.css";
 import Footer from "../Footer";
+import BackToTop from "../BackToTop";
 export default function AboutUs() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ export default function AboutUs() {
       )}
    
     </div>
+    <BackToTop />
     <Footer />
     </>
   );

@@ -127,11 +127,6 @@ export default function NearbyStores() {
             ))}
           </div>
 
-          {/* ⬅️ */}
-          <button className="nearby-btn left" onClick={scrollLeft}>
-            ❮
-          </button>
-
           <div className="nearby-wrapper" ref={scrollRef}>
             <div className="nearby-scroll">
               {filteredStores.length === 0 ? (
@@ -143,7 +138,7 @@ export default function NearbyStores() {
                     key={store.id}
                     onClick={() => navigate(`/medicine/${store.id}`)}
                   >
-                    {/* ❤️ Wishlist */}
+                
                     <div onClick={(e) => e.stopPropagation()}>
                       <WishlistButton item={store} />
                       <AddToCartButton item={store} />
@@ -172,10 +167,6 @@ export default function NearbyStores() {
             </div>
           </div>
 
-          {/* ➡️ */}
-          <button className="nearby-btn right" onClick={scrollRight}>
-            ❯
-          </button>
         </>
       )}
     </div>

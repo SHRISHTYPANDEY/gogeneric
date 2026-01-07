@@ -4,7 +4,7 @@ import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./PrivacyPolicy.css";
 import Footer from "../Footer";
-
+import BackToTop from "../BackToTop";
 export default function PrivacyPolicy() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -72,6 +72,7 @@ export default function PrivacyPolicy() {
           <p className="no-data-text">No privacy policy available.</p>
         )}
       </div>
+      <BackToTop />
       <Footer />
     </>
   );

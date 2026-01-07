@@ -24,7 +24,6 @@ export default function CategoryItems() {
   const categoryName =
     location.state?.categoryName || "Category Products";
 
-  /* 🧹 Cleanup */
   useEffect(() => {
     return () => {
       abortRef.current?.abort();
@@ -32,7 +31,6 @@ export default function CategoryItems() {
     };
   }, []);
 
-  /* 🔁 Reset on category change */
   useEffect(() => {
     setItems([]);
     setFilteredItems([]);
@@ -40,7 +38,6 @@ export default function CategoryItems() {
     setIsLoading(true);
   }, [id]);
 
-  /* 📦 Fetch items */
  const requestIdRef = useRef(0);
 
 const fetchCategoryItems = useCallback(async () => {
@@ -76,14 +73,10 @@ const fetchCategoryItems = useCallback(async () => {
     }
   }
 }, [id]);
-
-
-  /* 🔁 Load data */
   useEffect(() => {
     fetchCategoryItems();
   }, [fetchCategoryItems]);
 
-  /* 🔍 Search */
   useEffect(() => {
     clearTimeout(debounceRef.current);
 
@@ -104,7 +97,6 @@ const fetchCategoryItems = useCallback(async () => {
     return () => clearTimeout(debounceRef.current);
   }, [search, items]);
 
-  /* 🔴 LOADER — INITIAL & CATEGORY CHANGE */
   if (isLoading) {
     return (
       <div className="category-items-page">

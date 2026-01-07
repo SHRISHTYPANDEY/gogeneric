@@ -4,7 +4,7 @@ import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./Terms.css";
 import Footer from "../Footer";
-
+import BackToTop from "../BackToTop";
 export default function Terms() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -64,7 +64,9 @@ export default function Terms() {
         </div>
       )}
     </div>
+    <BackToTop />
     <Footer />
+
     </>
   );
 }

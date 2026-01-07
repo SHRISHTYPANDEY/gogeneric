@@ -7,6 +7,7 @@ import Loader from "../Loader";
 import { MdLocationOn } from "react-icons/md";
 import { AiFillStar } from "react-icons/ai";
 import Footer from "../Footer";
+import BackToTop from "../../components/BackToTop"
 
 export default function Pharmacy() {
   const navigate = useNavigate();
@@ -54,15 +55,18 @@ export default function Pharmacy() {
     }
   };
 
-  const filteredStores = stores.filter((store) =>
+  const filteredStores = stores.filter((store) => store?.id !== 74 &&
     (store?.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading) {
     return (
+ 
       <div className="pharmacy-loader">
         <Loader />
       </div>
+    
+     
     );
   }
 
@@ -137,6 +141,7 @@ export default function Pharmacy() {
       </div>
     
     </div>
+    <BackToTop />
     <Footer />
     </>
   );

@@ -5,6 +5,7 @@ import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import "./Labs.css";
 import Loader from "../Loader";
+import BackToTop from "../BackToTop";
 
 export default function Labs() {
   const [lab, setLab] = useState(null);
@@ -69,6 +70,7 @@ export default function Labs() {
     : null;
 
   return (
+    <>
     <div className="labs-page max-w-7xl mx-auto px-4">
       <h2 className="labs-heading">Our Partner Lab</h2>
       <p className="labs-sub">Trusted diagnostic partner</p>
@@ -126,5 +128,7 @@ export default function Labs() {
         </div>
       </div>
     </div>
+    <BackToTop />
+    </>
   );
 }

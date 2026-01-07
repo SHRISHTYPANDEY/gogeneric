@@ -3,7 +3,7 @@ import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./Shipping.css"
-
+import BackToTop from "../BackToTop";
 export default function Shipping() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -22,8 +22,6 @@ export default function Shipping() {
       });
 
       // console.log("SHIPPING POLICY 👉", res.data);
-
-      // ✅ API returns HTML string
       setContent(res.data || "");
     } catch (err) {
       console.error(err);
@@ -36,6 +34,7 @@ export default function Shipping() {
   if (loading) return <Loader text="Loading Shipping Policy..." />;
 
   return (
+    <>
     <div className="policy-page">
       <h1 className="policy-title">Shipping Policy</h1>
 
@@ -48,5 +47,7 @@ export default function Shipping() {
         <p>No content available</p>
       )}
     </div>
+    <BackToTop />
+    </>
   );
 }

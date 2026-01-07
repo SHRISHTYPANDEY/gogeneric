@@ -4,7 +4,7 @@ export const doctors = [
     name: "Dietician Sangita Raj",
     specialization: "Lifestyle & Weight Management",
     experience: "12+ Years",
-    image: "/public/doctor_img/sangeeta.jpeg",
+    image: "doctor_img/sangeeta.jpeg",
     phone: "919211510600",
     whatsapp: "919211510600",
 
@@ -74,4 +74,98 @@ export const doctors = [
       },
     ],
   },
+  {
+  id: "dr-shashi",
+  name: "Dr. Shashi",
+  specialization: "Ayurvedic Gynaecology Specialist",
+  image: "doctor_img/shashi.png", 
+  experience: "20 Years",
+  phone: "01234567890", 
+  whatsapp: "01234567890",
+  location: "Meerut, Uttar Pradesh",
+
+  qualification: "BAMS (Ayurvedacharya – Bachelor of Ayurvedic Medicine & Surgery)",
+  university: "Chhatrapati Shahu Ji Maharaj University, Kanpur",
+  yearOfPassing: "2002",
+
+  registration: {
+    council: "Bharatiya Chikitsa Parishad, Uttar Pradesh",
+    number: "49267",
+    date: "23 June 2004",
+    status: "Active",
+  },
+
+  about: `Dr. Shashi is a qualified & experienced Ayurvedic Physician (BAMS) with specialization in Gynaecology (Stree Rog & Prasuti Tantra). She is dedicated to Providing safe, effective, and holistic Ayurvedic treatment for women's health using classical Ayurvedic principles combined with modern clinical understanding`,
+
+  approach: [
+    "Root-cause based Ayurvedic treatment",
+    "Personalized Ayurvedic medicines",
+    "Diet & lifestyle correction",
+    "Safe, natural & long-term wellness care without harmful side effects",
+    "Focused on natural healing, hormaonal balance, and overall women's well-being",
+  ],
+  specialisation: [
+    "Menstrual disorders (Irregular / Painfull periods",
+    "Leucorrhoea (White discharge)",
+    "PCOD / PCOS (Ayurvedic management)",
+    "Hormonal imbalance",
+    "Female infertility",
+    "Pregnancy care (Antenatal Ayurvedic care",
+    "Post-natal care",
+    "Menopause-related problems",
+    "General women's health disorders"
+  ],
+
+  languages: ["Hindi", "English"],
+
+  consultation: {
+    type: "OPD / Clinic Consultation",
+    mode: ["In-person / Offline"],
+    prescription: "Ayurvedic Medicines",
+  },
+
+  plans: [
+    {
+      id: "single-consultation",
+      title: "Single Consultation Plan",
+      subtitle: "One-Time Visit",
+      price: "₹299",
+      features: {
+        "Detailed Case History": true,
+        "Ayurvedic Diagnosis": true,
+        "Treatment Guidance": true,
+        "Diet & Lifestyle Advice": true,
+        "Follow-up Support": false,
+        "WhatsApp Support": false,
+      },
+    },
+    {
+      id: "monthly-care",
+      title: "Monthly Care Plan",
+      subtitle: "1 Month (2–3 Visits)",
+      price: "₹999 / Month",
+      features: {
+        "Regular Follow-ups": true,
+        "Medicine & Dose Adjustment": true,
+        "Hormonal Balance Support": true,
+        "Diet & Lifestyle Correction": true,
+        "24×7 WhatsApp Support": true,
+      },
+    },
+    {
+      id: "pregnancy-care",
+      title: "Complete Pregnancy Care Plan",
+      subtitle: "Up to 9 Months (trimester-wise visits)",
+      price: "₹4,999",
+      features: {
+        "Antenatal Ayurvedic Care": true,
+        "Garbh Sanskar Guidance": true,
+        "Nutrition Planning": true,
+        "Mother & Baby Wellness Support": true,
+        "24×7 WhatsApp Help": true,
+      },
+    },
+  ],
+}
+
 ];

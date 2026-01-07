@@ -4,7 +4,7 @@ import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
 import "./RefundPolicy.css";
 import Footer from "../Footer";
-
+import BackToTop from "../BackToTop";
 export default function RefundPolicy() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
@@ -71,7 +71,9 @@ export default function RefundPolicy() {
           <p className="no-data-text">No refund policy available.</p>
         )}
       </div>
+      <BackToTop />
       <Footer />
+
     </>
   );
 }
