@@ -21,7 +21,7 @@ export default function Coupon() {
         },
       });
 
-      console.log("COUPONS ", res.data);
+      // console.log("COUPONS ", res.data);
       setCoupons(res.data || []);
     } catch (err) {
       console.error(err);

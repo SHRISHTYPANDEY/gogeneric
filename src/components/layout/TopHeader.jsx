@@ -163,7 +163,7 @@ export default function TopHeader() {
               const res = await api.get("/api/v1/customer/address/list", {
                 headers: { Authorization: `Bearer ${token}` },
               });
-              console.log("ADDress list", res.data);
+              // console.log("ADDress list", res.data);
               const addresses = res.data?.addresses || [];
 
               const alreadyExists = addresses.find(

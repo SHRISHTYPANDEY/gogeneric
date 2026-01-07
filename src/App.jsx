@@ -40,7 +40,6 @@ import { LocationProvider } from "./context/LocationContext.jsx";
 import { useEffect } from "react";
 import { useLocation } from "./context/LocationContext";
 import SearchList from "./components/pages/SearchList.jsx";
-
 import Pharmacy from "./components/pages/Pharmacy.jsx";
 import MyAddress from "./components/pages/MyAddress.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";

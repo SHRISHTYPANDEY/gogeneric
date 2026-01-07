@@ -22,7 +22,7 @@ export default function AutomatedMessage() {
         },
       });
 
-      console.log("AUTOMATED MESSAGE 👉", res.data);
+      // console.log("AUTOMATED MESSAGE 👉", res.data);
       setMessages(res.data?.data || []);
     } catch (err) {
       console.error(err);

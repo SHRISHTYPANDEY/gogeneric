@@ -96,7 +96,7 @@ export const addToCart = async ({ item }) => {
   } catch (err) {
     console.error("Add to cart error:", err?.response?.data);
 
-    // ✅ HANDLE BACKEND OUT-OF-STOCK MESSAGE
+    // HANDLE BACKEND OUT-OF-STOCK MESSAGE
     if (
       err?.response?.data?.message ===
       "Product out of stock warning"
