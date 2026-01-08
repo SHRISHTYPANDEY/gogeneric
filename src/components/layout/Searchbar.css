@@ -166,11 +166,11 @@
 @media (min-width: 769px) {
   .logo { 
     display: block; 
-    margin-left: 80px; /* Applied only on Desktop */
+    margin-left: 80px; 
   }
   
   .search-wrapper {
-    margin-right: 80px; /* Applied only on Desktop */
+    margin-right: 80px; 
   }
 
   .search-bar { height: 48px; }

@@ -7,7 +7,7 @@ import Loader from "../Loader";
 import { MdLocationOn } from "react-icons/md";
 import { AiFillStar } from "react-icons/ai";
 import Footer from "../Footer";
-import BackToTop from "../../components/BackToTop"
+import BackToTop from "../../components/BackToTop";
 
 export default function Pharmacy() {
   const navigate = useNavigate();
@@ -46,6 +46,7 @@ export default function Pharmacy() {
           Accept: "application/json",
         },
       });
+      console.log("pharmacy data", res.data);
       const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
       setStores(storeList);
     } catch (error) {
@@ -55,94 +56,102 @@ export default function Pharmacy() {
     }
   };
 
-  const filteredStores = stores.filter((store) => store?.id !== 74 &&
-    (store?.name || "").toLowerCase().includes(search.toLowerCase())
+  const filteredStores = stores.filter(
+    (store) =>
+      store?.id !== 74 &&
+      (store?.name || "").toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading) {
     return (
- 
       <div className="pharmacy-loader">
         <Loader />
       </div>
-    
-     
     );
   }
 
   return (
     <>
-    <div className="pharmacy-page">
-      {/* --- Updated Header Section --- */}
-      <div className="pharmacy-header">
-        <h1 className="pharmacy-title">Pharmacies</h1>
-        <input
-          type="text"
-          placeholder="Search pharmacy..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pharmacy-search"
-        />
-      </div>
+      <div className="pharmacy-page">
+        {/* --- Updated Header Section --- */}
+        <div className="pharmacy-header">
+          <h1 className="pharmacy-title">Pharmacies</h1>
+          <input
+            type="text"
+            placeholder="Search pharmacy..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pharmacy-search"
+          />
+        </div>
 
-      <div className="pharmacy-grid">
-        {filteredStores.length > 0 ? (
-          filteredStores.map((store, index) => {
-            const showDistance = hasUserLocation && typeof store.distance === "number";
-            const distance = showDistance ? `${(store.distance / 1000).toFixed(1)} km` : null;
+        <div className="pharmacy-grid">
+          {filteredStores.length > 0 ? (
+            filteredStores.map((store, index) => {
+              const showDistance =
+                hasUserLocation && typeof store.distance === "number";
+              const distance = showDistance
+                ? `${(store.distance / 1000).toFixed(1)} km`
+                : null;
+              const isOpen = store.open === 1;
 
-            return (
-              <div
-                className="pharmacy-card"
-                key={store.id || index}
-                onClick={() => navigate(`/view-stores/${store.id}`)}
-              >
-                <img
-                  src={cleanImageUrl(store.logo_full_url)}
-                  alt={store.name}
-                  className="pharmacy-image"
-                />
+              return (
+                <div
+                  className="pharmacy-card"
+                  key={store.id || index}
+                  onClick={() => navigate(`/view-stores/${store.id}`)}
+                >
+                  <img
+                    src={cleanImageUrl(store.logo_full_url)}
+                    alt={store.name}
+                    className="pharmacy-image"
+                  />
 
-                <div className="pharmacy-info">
-                  <h3 className="pharmacy-name">{store.name || "Unnamed Pharmacy"}</h3>
-                  <p className="pharmacy-address">{store.address || "Address not available"}</p>
+                  <div className="pharmacy-info">
+                    <h3 className="pharmacy-name">
+                      {store.name || "Unnamed Pharmacy"}
+                    </h3>
+                    <p className="pharmacy-address">
+                      {store.address || "Address not available"}
+                    </p>
 
-                  <div className="pharmacy-meta">
-                    <span className="pharmacy-rating">
-                      <AiFillStar size={14} /> {store.rating || "N/A"}
-                    </span>
-                    {distance && (
-                      <span className="pharmacy-distance">
-                        <MdLocationOn size={14} /> {distance}
+                    <div className="pharmacy-meta">
+                      <span className="pharmacy-rating">
+                        <AiFillStar size={14} /> {store.rating || "N/A"}
                       </span>
-                    )}
-                    <span className={store.isOpen ? "status-open" : "status-closed"}>
-                      {store.isOpen ? "Open" : "Closed"}
-                    </span>
-                  </div>
+                      {distance && (
+                        <span className="pharmacy-distance">
+                          <MdLocationOn size={14} /> {distance}
+                        </span>
+                      )}
 
-                  <button
-                    className="visit-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/view-stores/${store.id}`);
-                    }}
-                  >
-                    Visit Store <span>→</span>
-                  </button>
+                      <span
+                        className={isOpen ? "status-open" : "status-closed"}
+                      >
+                        {isOpen ? "Open" : "Closed"}
+                      </span>
+                    </div>
+
+                    <button
+                      className="visit-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/view-stores/${store.id}`);
+                      }}
+                    >
+                      Visit Store <span>→</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        ) : (
-          <p className="no-data">No pharmacies found</p>
-        )}
-       
+              );
+            })
+          ) : (
+            <p className="no-data">No pharmacies found</p>
+          )}
+        </div>
       </div>
-    
-    </div>
-    <BackToTop />
-    <Footer />
+      <BackToTop />
+      <Footer />
     </>
   );
 }

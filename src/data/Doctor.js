@@ -4,7 +4,7 @@ export const doctors = [
     name: "Dietician Sangita Raj",
     specialization: "Lifestyle & Weight Management",
     experience: "12+ Years",
-    image: "doctor_img/sangeeta.jpeg",
+    image: "/doctor_img/sangeeta.jpeg",
     phone: "919211510600",
     whatsapp: "919211510600",
 
@@ -78,7 +78,7 @@ export const doctors = [
   id: "dr-shashi",
   name: "Dr. Shashi",
   specialization: "Ayurvedic Gynaecology Specialist",
-  image: "doctor_img/shashi.png", 
+  image: "/doctor_img/shashi.png", 
   experience: "20 Years",
   phone: "01234567890", 
   whatsapp: "01234567890",

@@ -6,6 +6,12 @@ import "./LocationModal.css";
 const libraries = ["places"];
 
 export default function LocationModal({ onClose, onPickLocation,initialPosition }) {
+
+  const handleLocationFromMap = async (lat, lng) => {
+  const address = await fetchAddress(lat, lng);
+  setQuery(address); 
+};
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
     libraries,
@@ -115,10 +121,12 @@ export default function LocationModal({ onClose, onPickLocation,initialPosition 
   </Autocomplete>
 </div>
         <div className="map-box">
-          <GoogleMapPicker
-            position={position}
-            setPosition={setPosition}
-          />
+         <GoogleMapPicker
+  position={position}
+  setPosition={setPosition}
+  onLocationFetch={handleLocationFromMap}
+/>
+
         </div>
         <button
           className="pick-btn"

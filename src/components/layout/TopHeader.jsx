@@ -154,7 +154,10 @@ export default function TopHeader() {
             };
 
             setLocation(payload);
-            localStorage.setItem("user_location", JSON.stringify(payload));
+localStorage.setItem("user_location", JSON.stringify(payload));
+localStorage.setItem("location_allowed", "true");
+
+
 
             try {
               const token = localStorage.getItem("token");

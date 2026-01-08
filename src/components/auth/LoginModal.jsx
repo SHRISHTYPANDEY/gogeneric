@@ -109,6 +109,7 @@ if (errors?.length) {
       const normalizedUser = { id: apiUser?.id, name: apiUser?.name || "", email: apiUser?.email, phone: apiUser?.phone || null };
       login(normalizedUser, res.data?.token);
       toast.success(`Welcome ${normalizedUser.name}`);
+      localStorage.setItem("location_allowed", "true");
       onClose();
     } catch (err) {
       toast.error(err?.response?.data?.message || "Login failed");

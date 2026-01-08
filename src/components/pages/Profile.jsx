@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import api from "../../api/axiosInstance";
 import Loader from "../Loader";
+import { useAuth } from "../../context/AuthContext";
+import { useLocation } from "../../context/LocationContext";
+
 import {
   ShieldCheck,
   LogOut,
@@ -43,6 +46,9 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
+
+  const { logout } = useAuth();
+  const { resetLocation } = useLocation();
 
   /* ================= FETCH PROFILE ================= */
   useEffect(() => {
@@ -192,13 +198,12 @@ export default function Profile() {
     }
   };
   if (initialLoading) {
-  return (
-    <div className="profile-loader">
-      <Loader text="Loading profile..." />
-    </div>
-  );
-}
-
+    return (
+      <div className="profile-loader">
+        <Loader text="Loading profile..." />
+      </div>
+    );
+  }
 
   if (!user && showLogin) {
     return <LoginModal open onClose={() => navigate("/")} />;
@@ -378,7 +383,8 @@ export default function Profile() {
             <div
               className="premium-menu-link danger"
               onClick={() => {
-                localStorage.clear();
+                resetLocation();
+                logout();
                 navigate("/");
               }}
             >

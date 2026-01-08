@@ -142,9 +142,59 @@
 
 /* 📱 MOBILE VIEW */
 @media (max-width: 768px) {
-  .hero-main-layout { flex-direction: column; height: auto; border-radius: 20px; }
-  .hero-text-section { flex: none; padding: 25px 20px; text-align: center; align-items: center; }
-  .hero-image-section { flex: none; height: 180px; order: -1; }
-  .hero-edge-fade { display: none; }
-  .hero-title { font-size: 26px; }
+
+  .hero-container {
+    margin: 8px auto;
+  }
+
+  .hero-main-layout {
+    flex-direction: column;
+    height: auto;                 /* 🔥 remove fixed height */
+    border-radius: 18px;
+  }
+
+  /* IMAGE FIRST */
+  .hero-image-section {
+    width: 100%;
+    height: auto;                 /* 🔥 auto height */
+    aspect-ratio: 16 / 9;         /* 🔥 keeps banner ratio */
+    order: -1;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;          /* 🔥 NO CROPPING */
+    background: #f8f8f8;          /* soft fallback */
+  }
+
+  /* TEXT SECTION */
+  .hero-text-section {
+    flex: none;
+    padding: 22px 18px;
+    text-align: center;
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .hero-desc {
+    font-size: 13px;
+  }
+
+  .hero-edge-fade {
+    display: none;
+  }
+
+  .hero-pagination {
+    justify-content: center;
+  }
 }

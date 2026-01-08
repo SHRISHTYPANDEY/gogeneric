@@ -35,6 +35,8 @@ import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
 import LoginModal from "../auth/LoginModal";
 import LogoImg from "../../assets/gogenlogo.png";
+import { useLocation } from "../../context/LocationContext";
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
@@ -44,6 +46,8 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
+  const { resetLocation } = useLocation();
+
 
   /* ---------------- COMMON CLOSE ---------------- */
   const closeMenu = () => setOpen(false);
@@ -115,6 +119,7 @@ export default function Navbar() {
   const handleLogout = () => {
     closeMenu();
     logout();
+    resetLocation();
     navigate("/");
   };
 
