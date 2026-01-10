@@ -200,45 +200,52 @@ export default function StoreDetails() {
       </div>
 
       {activeTab === "products" && (
-        <>
-          <div className="sd-products-grid">
-            {productsLoading && page === 1 ? (
-              <Loader text="Loading products..." />
-            ) : products.length === 0 ? (
-              <p>No products found</p>
-            ) : (
-              products.map((p, index) => (
-                <div
-                  key={`product-${p.id}-${index}`}
-                  className="sd-prod-card"
-                  onClick={() =>
-                    navigate(`/medicine/${p.id}`, {
-                      state: { price: p.price, store_id: store.id },
-                    })
-                  }
-                >
-                  <WishlistButton item={p} />
-                  <AddToCartButton item={p} />
-                  <div className="sd-prod-img-box">
-                    <img
-                      src={cleanImageUrl(p.image_full_url)}
-                      alt={p.name}
-                      onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
-                    />
-                  </div>
-                  <h4 className="sd-prod-name">{p.name}</h4>
-                  <p className="sd-prod-price">₹{p.price}</p>
+  <>
+    {productsLoading && page === 1 ? (
+      <div className="sd-loader-center">
+        <Loader text="Loading products..." />
+      </div>
+    ) : (
+      <>
+        <div className="sd-products-grid">
+          {products.length === 0 ? (
+            <p>No products found</p>
+          ) : (
+            products.map((p, index) => (
+              <div
+                key={`product-${p.id}-${index}`}
+                className="sd-prod-card"
+                onClick={() =>
+                  navigate(`/medicine/${p.id}`, {
+                    state: { price: p.price, store_id: store.id },
+                  })
+                }
+              >
+                <WishlistButton item={p} />
+                <AddToCartButton item={p} />
+                <div className="sd-prod-img-box">
+                  <img
+                    src={cleanImageUrl(p.image_full_url)}
+                    alt={p.name}
+                    onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
+                  />
                 </div>
-              ))
-            )}
-          </div>
-
-          {hasMore && <div id="scroll-sentinel" />}
-          {productsLoading && page > 1 && (
-            <Loader text="Loading more products..." />
+                <h4 className="sd-prod-name">{p.name}</h4>
+                <p className="sd-prod-price">₹{p.price}</p>
+              </div>
+            ))
           )}
-        </>
-      )}
+        </div>
+
+        {hasMore && <div id="scroll-sentinel" />}
+        {productsLoading && page > 1 && (
+          <Loader text="Loading more products..." />
+        )}
+      </>
+    )}
+  </>
+)}
+
 
       {activeTab === "overview" && (
         <div className="sd-content-section">

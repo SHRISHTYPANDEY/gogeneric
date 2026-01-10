@@ -49,8 +49,6 @@ export default function HomeBanner() {
             ))}
           </div>
         </div>
-
-        {/* 70% Image Area */}
         <div className="hero-image-section">
           <div className="image-wrapper" key={`img-${index}`}>
             <img
@@ -58,7 +56,6 @@ export default function HomeBanner() {
               alt="Banner"
               className="hero-img"
             />
-            {/* Soft Overlay to blend with text section */}
             <div className="hero-edge-fade"></div>
           </div>
         </div>

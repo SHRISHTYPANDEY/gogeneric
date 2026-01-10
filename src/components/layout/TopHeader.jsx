@@ -75,7 +75,6 @@ export default function TopHeader() {
             <IoMdArrowDropdown />
           </div>
 
-          {/* RIGHT */}
           <div className="flex items-center gap-8">
             <a
               href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
@@ -86,7 +85,6 @@ export default function TopHeader() {
               {t("downloadApp")}
             </a>
 
-            {/* LANGUAGE */}
             <div className="relative" ref={langRef}>
               <div
                 className="lang-selector-premium"
@@ -122,8 +120,6 @@ export default function TopHeader() {
                 </div>
               )}
             </div>
-
-            {/* PROFILE */}
             <div
               className="profile-trigger-premium cursor-pointer"
               onClick={handleProfileClick}
@@ -141,7 +137,6 @@ export default function TopHeader() {
         <LoginModal onClose={() => setOpenLoginModal(false)} />
       )}
 
-      {/* LOCATION MODAL */}
       {openLocationModal && (
         <LocationModal
           initialPosition={location}
@@ -156,9 +151,6 @@ export default function TopHeader() {
             setLocation(payload);
 localStorage.setItem("user_location", JSON.stringify(payload));
 localStorage.setItem("location_allowed", "true");
-
-
-
             try {
               const token = localStorage.getItem("token");
               if (!token) return;

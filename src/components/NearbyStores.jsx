@@ -21,14 +21,12 @@ export default function NearbyStores() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* ❌ Cleanup */
   useEffect(() => {
     return () => {
       abortRef.current?.abort();
     };
   }, []);
 
-  /* 📦 Fetch basic medicines (Abort-safe) */
   const fetchBasicMedicines = useCallback(async () => {
     try {
       abortRef.current?.abort();
@@ -72,18 +70,15 @@ export default function NearbyStores() {
     }
   }, []);
 
-  /* 🔁 Initial load */
   useEffect(() => {
     fetchBasicMedicines();
   }, [fetchBasicMedicines]);
 
-  /* 🔍 Derived filter */
   const filteredStores =
     activeFilter === "All"
       ? stores
       : stores.filter((p) => p.category_id === activeFilter);
 
-  /* ⬅️➡️ Scroll controls */
   const scrollLeft = () => {
     scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
@@ -103,7 +98,6 @@ export default function NearbyStores() {
         <Loader text="Loading medicines..." />
       ) : (
         <>
-          {/* 🟦 FILTERS */}
           <div className="nearby-filters">
             <button
               className={`nearby-filter-btn ${

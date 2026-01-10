@@ -7,6 +7,7 @@ import WishlistButton from "../WishlistButton";
 import Footer from "../Footer";
 import Fuse from "fuse.js";
 import AddToCartButton from "../CartButton";
+import Loader from "../Loader";
 export default function SearchList() {
   const [params] = useSearchParams();
   const query = params.get("query");
@@ -60,6 +61,7 @@ export default function SearchList() {
       },
       signal: abortRef.current.signal,
     });
+    console.log("Search API response:", res.data);
 
     const rawItems = res.data?.items || [];
 
@@ -88,12 +90,12 @@ export default function SearchList() {
           </div>
 
           {/* Loading State */}
-          {loading && (
-            <div className="gs-status-box">
-              <div className="gs-spinner"></div>
-              <p className="gs-loader-text">Finding the best results...</p>
-            </div>
-          )}
+        {loading && (
+  <div className="gs-loader-center">
+    <Loader text="Finding the best results..." />
+  </div>
+)}
+
 
           {/* Empty State */}
           {!loading && medicines.length === 0 && (

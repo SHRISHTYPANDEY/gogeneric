@@ -7,6 +7,9 @@
   height: 75px;
   display: flex;
   align-items: center;
+  top: 0;
+  z-index: 999;
+  position: sticky;
 }
 
 .nav-container {

@@ -1,9 +1,7 @@
-/* ================= PREMIUM FLOATING WISHLIST ================= */
-
 .premium-wish-btn {
   position: absolute;
   top: 12px;
-  left: 12px; /* Cart button right mein hai, ye left mein mast lagega */
+  left: 12px; 
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -29,11 +27,10 @@
 }
 
 .heart-icon {
-  color: #a0aec0; /* Initial Muted Gray */
+  color: #a0aec0;
   transition: all 0.3s ease;
 }
 
-/* 🔹 HOVER STATE */
 .premium-wish-btn:hover {
   background: #ffffff;
   transform: translateY(-2px);
@@ -41,23 +38,21 @@
 }
 
 .premium-wish-btn:hover .heart-icon {
-  color: #ed64a6; /* Soft Pink on hover */
+  color: #ed64a6; 
   transform: scale(1.1);
 }
 
-/* 🔹 ACTIVE / ADDED STATE (The Magic) */
 .premium-wish-btn.active {
   background: #fff5f5;
   border-color: #feb2b2;
 }
 
 .premium-wish-btn.active .heart-icon {
-  color: #e53e3e; /* Premium Heart Red */
-  fill: #e53e3e; /* Solid Heart */
+  color: #e53e3e; 
+  fill: #e53e3e; 
   animation: heart-pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.5);
 }
 
-/* 🔹 RING EFFECT ANIMATION (Jab active ho) */
 .premium-wish-btn.active .ring-effect {
   position: absolute;
   width: 100%;
@@ -68,20 +63,17 @@
   opacity: 0;
 }
 
-/* Keyframes for Heart Pop */
 @keyframes heart-pop {
   0% { transform: scale(0.5); }
   50% { transform: scale(1.4); }
   100% { transform: scale(1); }
 }
 
-/* Keyframes for Ring Pulse */
 @keyframes ring-pulse {
   0% { transform: scale(1); opacity: 0.5; }
   100% { transform: scale(1.8); opacity: 0; }
 }
 
-/* 📱 Mobile Adjustments */
 @media (max-width: 768px) {
   .premium-wish-btn {
     width: 34px;

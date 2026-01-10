@@ -1,5 +1,3 @@
-/* ================= NEARBY STORES (PREMIUM PURPLE IMPLEMENTATION) ================= */
-
 .nearby-section {
   padding: 0;
   position: relative;
@@ -8,7 +6,7 @@
 .nearby-title {
   font-size: 30px;
   font-weight: 800;
-  color: var(--text-dark) !important; /* Fixed color */
+  color: var(--text-dark) !important; 
   margin-bottom: 4px;
 }
 
@@ -33,7 +31,7 @@
 .nearby-filter-btn {
   padding: 8px 22px;
   border-radius: 12px;
-  border: 1px solid var(--dusty-rose); /* Changed to dusty-rose */
+  border: 1px solid var(--dusty-rose); 
   background: var(--white);
   font-weight: 700;
   color: var(--text-body);
@@ -43,13 +41,12 @@
 }
 
 .nearby-filter-btn.active {
-  background: var(--deep-plum); /* Changed to deep-plum */
+  background: var(--deep-plum);
   color: var(--white);
   border-color: var(--deep-plum);
   box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
 }
 
-/* 🔹 HORIZONTAL SCROLL WRAPPER (NO CHANGES) */
 .nearby-wrapper {
   display: flex;
   gap: 20px;
@@ -67,7 +64,6 @@
   gap: 20px;
 }
 
-/* 🔹 CARD DESIGN (COLOR UPDATE) */
 .store-card {
   position: relative;
   min-width: 170px;
@@ -81,21 +77,18 @@
   align-items: center;
   justify-content: flex-end;
   cursor: pointer;
-  border: 1px solid var(--mauve); /* Changed to mauve */
+  border: 1px solid var(--mauve); 
   box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   box-sizing: border-box;
   background: var(--white);
   overflow: visible;
 }
-
-/* 🔹 DYNAMIC BACKGROUNDS (Using Palette Tints) */
-.store-card:nth-child(4n+1) { background: #fdf5f5; } /* Tint of Dusty Rose */
-.store-card:nth-child(4n+2) { background: #f8f0f7; } /* Tint of Mauve */
-.store-card:nth-child(4n+3) { background: #fce7ea; } /* Very Light Sand */
+.store-card:nth-child(4n+1) { background: #fdf5f5; } 
+.store-card:nth-child(4n+2) { background: #f8f0f7; } 
+.store-card:nth-child(4n+3) { background: #fce7ea; } 
 .store-card:nth-child(4n+4) { background: #eeccea; }
 
-/* 🔹 IMAGE PLACEMENT */
 .store-card img {
   width: 85px;
   height: 85px;
@@ -106,8 +99,6 @@
   transition: all 0.4s ease;
   z-index: 2;
 }
-
-/* 🔹 TEXT STYLING */
 .store-card h4 {
   font-size: 13.5px;
   font-weight: 700;
@@ -126,7 +117,6 @@
   max-height: 36px;
   transition: color 0.3s ease;
 }
-/* 🔹 HOVER EFFECTS (COLOR UPDATE) */
 .store-card:hover {
   transform: translateY(-8px);
   border-color: var(--deep-plum);
@@ -137,7 +127,6 @@
 .store-card:hover h4 {
   color: var(--deep-plum);
 }
-/* 🔹 NAVIGATION BUTTONS (COLOR UPDATE) */
 .nearby-btn {
   position: absolute;
   top: 60%;
@@ -145,8 +134,8 @@
   width: 42px;
   height: 42px;
   background: var(--white);
-  color: var(--deep-plum); /* Changed to deep-plum */
-  border: 1px solid var(--mauve); /* Changed to mauve */
+  color: var(--deep-plum); 
+  border: 1px solid var(--mauve); 
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(107, 63, 105, 0.1);
   z-index: 20;
@@ -165,14 +154,12 @@
 
 @media (max-width: 768px) {
 
-  /* SECTION PADDING */
   .nearby-section {
     padding: 0 2px;
   }
 
-  /* HEADING */
   .nearby-title {
-    font-size: 21px;        /* 🔥 reduced */
+    font-size: 21px;        
     line-height: 1.2;
     margin-bottom: 2px;
   }
@@ -182,19 +169,17 @@
     margin-bottom: 16px;
   }
 
-  /* FILTERS */
   .nearby-filters {
     gap: 8px;
     padding: 6px 0;
   }
 
   .nearby-filter-btn {
-    padding: 6px 16px;     /* 🔥 slimmer */
+    padding: 6px 16px;     
     font-size: 12.5px;
     border-radius: 10px;
   }
 
-  /* SCROLL WRAPPER */
   .nearby-wrapper {
     gap: 14px;
     padding: 12px 4px 24px;
@@ -204,11 +189,10 @@
     gap: 14px;
   }
 
-  /* CARD */
   .store-card {
     min-width: 145px;
     max-width: 145px;
-    height: 180px;         /* 🔥 compact */
+    height: 180px;         
     padding: 12px;
     border-radius: 22px;
   }
@@ -227,11 +211,10 @@
   }
 
   .store-card .price {
-    font-size: 15px;       /* 🔥 lighter */
+    font-size: 15px;      
     margin-top: 4px;
   }
 
-  /* MOBILE = NO HOVER ANIMATION */
   .store-card:hover {
     transform: none;
     box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);

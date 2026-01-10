@@ -6,7 +6,7 @@ import AddressForm from "./checkout/AddressForm";
 import "./MyAddress.css";
 import { useLocation } from "../../context/LocationContext";
 export default function MyAddress() {
-  const { location,addressVersion } = useLocation();
+  const { location, addressVersion } = useLocation();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,10 +27,8 @@ export default function MyAddress() {
 
   useEffect(() => {
     if (!location) return;
-      fetchAddresses(); 
-    
-  }, [location,addressVersion]);
-
+    fetchAddresses();
+  }, [location, addressVersion]);
 
   const handleEdit = (address) => {
     setSelectedAddress(address);
@@ -46,14 +44,24 @@ export default function MyAddress() {
     if (!window.confirm("Delete this address?")) return;
 
     try {
-      await api.delete(
-        `/api/v1/customer/address/delete?address_id=${id}`
-      );
+      await api.delete(`/api/v1/customer/address/delete?address_id=${id}`);
       toast.success("Address deleted");
       setAddresses((prev) => prev.filter((a) => a.id !== id));
     } catch {
       toast.error("Failed to delete address");
     }
+  };
+
+  const isDuplicateAddress = (newAddress, excludeId = null) => {
+    return addresses.some((addr) => {
+      if (excludeId && addr.id === excludeId) return false;
+
+      return (
+        addr.address.trim().toLowerCase() ===
+          newAddress.address.trim().toLowerCase() &&
+        addr.address_type === newAddress.address_type
+      );
+    });
   };
 
   return (
@@ -86,9 +94,7 @@ export default function MyAddress() {
 
       {loading && <Loader text="Loading addresses..." />}
 
-      {!loading && addresses.length === 0 && (
-        <p>No saved addresses</p>
-      )}
+      {!loading && addresses.length === 0 && <p>No saved addresses</p>}
 
       {!loading && (
         <div className="address-grid">
@@ -104,12 +110,8 @@ export default function MyAddress() {
               <p className="address-text">{addr.address}</p>
 
               <div className="address-actions">
-                <button onClick={() => handleEdit(addr)}>
-                  Edit
-                </button>
-                <button onClick={() => deleteAddress(addr.id)}>
-                  Delete
-                </button>
+                <button onClick={() => handleEdit(addr)}>Edit</button>
+                <button onClick={() => deleteAddress(addr.id)}>Delete</button>
               </div>
             </div>
           ))}
@@ -121,8 +123,7 @@ export default function MyAddress() {
           <div className="edit-modal">
             <AddressForm
               initialData={selectedAddress}
-              addAddressUri="/api/v1/customer/address/add"
-              updateAddressUri="/api/v1/customer/address/update/"
+              existingAddresses={addresses}
               onClose={() => {
                 setShowForm(false);
                 setSelectedAddress(null);

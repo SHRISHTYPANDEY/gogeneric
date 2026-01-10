@@ -102,7 +102,6 @@ export default function Navbar() {
     return () => window.removeEventListener("cart-updated", fetchCartCount);
   }, [user]);
 
-  /* ---------------- ACTIONS ---------------- */
   const handleProfileClick = () => {
     closeMenu();
     const token = localStorage.getItem("token");
@@ -124,7 +123,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* NAVBAR */}
+     
       <nav className="navbar">
         <div className="nav-container max-w-7xl mx-auto px-4 py-3">
           <div className="nav-logo">
@@ -140,7 +139,7 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-6">
-            {/* DESKTOP LINKS */}
+            
             <ul className="nav-links">
               <li>
                 <Link to="/">Home</Link>
@@ -168,7 +167,7 @@ export default function Navbar() {
               </li>
             </ul>
 
-            {/* NOTIFICATION */}
+            
             <div
               className="notification-icon"
               onClick={() => {
@@ -182,7 +181,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* CART */}
+            
             <div
               className="cart-icon"
               onClick={() => {
@@ -194,7 +193,7 @@ export default function Navbar() {
               {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
             </div>
 
-            {/* HAMBURGER */}
+           
             <div className="hamburger" onClick={() => setOpen(true)}>
               <HiBars3 />
             </div>
@@ -202,10 +201,8 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* OVERLAY */}
       {open && <div className="overlay" onClick={closeMenu} />}
 
-      {/* SIDE MENU */}
       <div className={`side-menu ${open ? "open" : ""}`}>
         <div className="side-header">
           Menu
@@ -256,7 +253,7 @@ export default function Navbar() {
           </li>
 
           <li>
-            <Link to="/whoweare" onClick={() => handleNavigate("/whoweare")}>
+            <Link to="/who-we-are" onClick={() => handleNavigate("/whoweare")}>
               <FaUsers /> Who We Are
             </Link>
           </li>
@@ -457,7 +454,6 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* LOGIN MODAL */}
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </>
   );

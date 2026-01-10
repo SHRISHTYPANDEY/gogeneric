@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import OrganizationSchema from "../../seo/OrganizationSchema";
 import { useLocation as useRouterLocation } from "react-router-dom";
 import { useLocation } from "../../context/LocationContext";
 
@@ -49,6 +50,8 @@ export default function Home() {
     );
   }
   return (
+    <>
+    <OrganizationSchema />
     <div className="home">
       <SearchBar />
       <HomeBanner />
@@ -60,5 +63,6 @@ export default function Home() {
       <Stores />
       <Footer />
     </div>
+    </>
   );
 }

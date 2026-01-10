@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import ProductSchema from "../../seo/ProductSchema";
 import { useParams, useLocation } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import "./MedicineDetails.css";
@@ -87,6 +88,8 @@ export default function MedicineDetails() {
     });
   };
   return (
+  <>
+    <ProductSchema medicine={medicine} price={isValidPrice ? price : null} />
     <div className="medicine-page">
       {loading && (
         <div className="medicine-loader">
@@ -138,5 +141,6 @@ export default function MedicineDetails() {
         </div>
       )}
     </div>
+    </>
   );
 }

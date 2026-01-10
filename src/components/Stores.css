@@ -1,10 +1,7 @@
-/* ================= PREMIUM STORES SECTION (PURPLE THEME) ================= */
-
 .stores-page {
   padding: 40px 0;
 }
 
-/* 🔹 HEADING STYLE */
 .stores-heading {
   font-size: 30px;
   font-weight: 800;
@@ -19,7 +16,6 @@
   margin-bottom: 25px;
 }
 
-/* 🔹 FILTER ROW & BUTTONS */
 .filter-row {
   display: flex;
   justify-content: space-between;
@@ -42,7 +38,7 @@
 .filter-btn {
   padding: 8px 22px;
   border-radius: 12px;
-  border: 1px solid var(--dusty-rose); /* Updated */
+  border: 1px solid var(--dusty-rose);
   background: var(--white);
   font-size: 14px;
   font-weight: 700;
@@ -53,13 +49,12 @@
 }
 
 .filter-btn.active {
-  background: var(--deep-plum); /* Updated */
+  background: var(--deep-plum); 
   color: var(--white);
   border-color: var(--deep-plum);
   box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
 }
 
-/* 🔹 STORES GRID */
 .stores-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -67,7 +62,6 @@
   margin-top: 10px;
 }
 
-/* 🔹 PREMIUM STORE CARD (4-COLOR PALETTE) */
 .store-card-6am {
   position: relative;
   border-radius: 28px; 
@@ -79,7 +73,6 @@
   flex-direction: column;
 }
 
-/* Specific 4-Color Palette Implementation */
 .stores-grid > .store-card-6am:nth-child(4n+1) { background-color: #fdf5f5; }
 .stores-grid > .store-card-6am:nth-child(4n+2) { background-color: #f8f0f7; }
 .stores-grid > .store-card-6am:nth-child(4n+3) { background-color: #fce7ea; }
@@ -92,7 +85,6 @@
   box-shadow: 0 15px 30px rgba(107, 63, 105, 0.15);
 }
 
-/* 🔹 IMAGE WRAPPER */
 .store-image-wrapper {
   width: 100%;
   height: 160px;
@@ -161,7 +153,7 @@
 
 .store-rating {
   color: var(--white);
-  background: var(--deep-plum); /* Updated from moss-green to match brand */
+  background: var(--deep-plum); 
   padding: 4px 10px;
   border-radius: 8px;
   display: flex;
@@ -171,7 +163,6 @@
   font-size: 12px;
 }
 
-/* 🔹 OFFER BADGE */
 .store-offer-badge {
   position: absolute;
   top: 10px;
@@ -186,7 +177,6 @@
   box-shadow: 0 4px 10px rgba(107, 63, 105, 0.2);
 }
 
-/* 📱 RESPONSIVE */
 @media (max-width: 1024px) {
   .stores-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -198,11 +188,10 @@
   .filter-row { flex-direction: column; align-items: flex-start; }
   .store-image-wrapper { height: 140px; }
 }
-/* 🔹 VIEW MORE BUTTON (PREMIUM COLOR UPDATE) */
 .view-more-btn {
-  background: var(--deep-plum); /* Updated to Brand Color */
+  background: var(--deep-plum); 
   color: var(--white);
-  padding: 12px 30px; /* Slightly more padding for a premium feel */
+  padding: 12px 30px; 
   border-radius: 14px;
   border: none;
   font-weight: 800;
@@ -216,7 +205,7 @@
 }
 
 .view-more-btn:hover {
-  background: var(--text-dark); /* Darker on hover */
+  background: var(--text-dark); 
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(107, 63, 105, 0.3);
 }
@@ -225,23 +214,20 @@
   transform: translateY(-1px);
 }
 
-/* 🔹 VIEW MORE CONTAINER (CENTERING) */
 .view-more-bottom {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 40px 0 60px; /* Added more space at the bottom */
+  margin: 40px 0 60px; 
   width: 100%;
 }
 
-/* Small Fix for the Top Filter View More Button */
 .filter-row .view-more-btn {
   padding: 10px 24px;
   font-size: 14px;
 }
 @media (max-width: 640px) {
 
-  /* ================= PAGE SPACING FIX ================= */
   .stores-page {
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -249,7 +235,6 @@
     padding-bottom: 24px;
   }
 
-  /* ================= HEADING ================= */
   .stores-heading {
     font-size: 22px;
     padding: 0 16px;
@@ -262,7 +247,6 @@
     margin-bottom: 18px;
   }
 
-  /* ================= FILTER ROW ================= */
   .filter-row {
     padding: 0 16px;
     gap: 12px;
@@ -278,21 +262,18 @@
     border-radius: 10px;
   }
 
-  /* ================= GRID ================= */
   .stores-grid {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 0 16px;
   }
 
-  /* ================= STORE CARD ================= */
   .store-card-6am {
     width: 100%;
     padding: 14px;
     border-radius: 20px;
   }
 
-  /* ================= IMAGE ================= */
   .store-image-wrapper {
     height: 130px;
     padding: 10px;
@@ -302,8 +283,6 @@
   .store-image-wrapper img {
     object-fit: contain;
   }
-
-  /* ================= CONTENT ================= */
   .store-name {
     font-size: 15px;
   }
@@ -313,7 +292,6 @@
     margin-top: 4px;
   }
 
-  /* ================= BOTTOM ROW ================= */
   .store-bottom-row {
     margin-top: 12px;
     padding-top: 10px;
@@ -329,7 +307,6 @@
     border-radius: 6px;
   }
 
-  /* ================= VIEW MORE ================= */
   .view-more-bottom {
     margin: 28px 0 40px;
   }

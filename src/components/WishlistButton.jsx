@@ -24,7 +24,6 @@ export default function WishlistButton({ item }) {
           strokeWidth={active ? 0 : 2.5} 
           className="heart-icon" 
         />
-        {/* Click par ek ring effect aayega */}
         <span className="ring-effect"></span>
       </div>
     </button>

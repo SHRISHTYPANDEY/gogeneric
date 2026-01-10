@@ -209,6 +209,63 @@ export default function Profile() {
     return <LoginModal open onClose={() => navigate("/")} />;
   }
 
+ const handleChangePassword = async () => {
+  if (!oldPassword || !newPassword || !confirmNewPassword) {
+    toast.error("All fields are required");
+    return;
+  }
+
+  if (newPassword !== confirmNewPassword) {
+    toast.error("Passwords do not match");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const token = localStorage.getItem("token");
+
+   const res = await api.put(
+  "/api/v1/auth/reset-password",
+  {
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    old_password: oldPassword,
+    password: newPassword,
+    password_confirmation: confirmNewPassword,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      zoneId: JSON.stringify([3]),
+      moduleId: 2,
+    },
+  }
+);
+
+    toast.success("Password changed successfully");
+
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+    setShowPasswordModal(false);
+
+    logout();
+    navigate("/login");
+
+  } catch (err) {
+    console.error(err);
+    toast.error(
+      err?.response?.data?.message ||
+      err?.response?.data?.errors?.[0]?.message ||
+      "Password update failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <>
       <div className="premium-profile-page">
@@ -414,6 +471,69 @@ export default function Profile() {
         </div>
       </div>
       <Footer />
+      {showPasswordModal && (
+  <div className="password-modal-overlay">
+    <div className="password-modal">
+      <h3>Change Password</h3>
+
+      <div className="password-input">
+        <input
+          type={showPwd ? "text" : "password"}
+          placeholder="Old Password"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="password-input">
+        <input
+          type={showPwd ? "text" : "password"}
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="password-input">
+        <input
+          type={showPwd ? "text" : "password"}
+          placeholder="Confirm New Password"
+          value={confirmNewPassword}
+          onChange={(e) => setConfirmNewPassword(e.target.value)}
+        />
+      </div>
+
+      <div className="password-actions">
+        <label className="show-password">
+          <input
+            type="checkbox"
+            checked={showPwd}
+            onChange={() => setShowPwd(!showPwd)}
+          />
+          Show Password
+        </label>
+
+        <div className="btn-group">
+          <button
+            className="btn-secondary"
+            onClick={() => setShowPasswordModal(false)}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="btn-primary"
+            onClick={handleChangePassword}
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update Password"}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </>
   );
 }

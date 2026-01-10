@@ -4,14 +4,12 @@ import "./CategoriesCard.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils"; 
-
+import CategorySchema from "../seo/CategorySchema";
 
 export default function CategoryCards() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
-
-
   useEffect(() => {
     api.get("/api/v1/categories")
       .then((res) => {
@@ -21,8 +19,6 @@ export default function CategoryCards() {
         console.error("Categories fetch error:", err);
       });
   }, []);
-
-  
   const handleCardClick = (cat) => {
   navigate(`/category/${cat.id}`, {
     state: { categoryName: cat.name },
@@ -37,13 +33,13 @@ export default function CategoryCards() {
   };
 
   return (
+    <>
+    <CategorySchema categories={categories} />
     <div className="category-section max-w-7xl mx-auto px-4 ">
       <h2 className="cate-title">Top Categories</h2>
 <p className="cate-subtitle">
   Browse medicines & health products by category
 </p>
-
-
       {/* LEFT BUTTON */}
       <button className="scroll-btn left" onClick={scrollLeft}>
         <ChevronLeft size={22} />
@@ -73,5 +69,6 @@ export default function CategoryCards() {
         <ChevronRight size={22} />
       </button>
     </div>
+    </>
   );
 }

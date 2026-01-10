@@ -13,21 +13,18 @@ export default function Stores() {
   const [showAll, setShowAll] = useState(false);
   const canShowViewMore = filteredStores.length > 9;
 
-  const [userCoords, setUserCoords] = useState(null); // ✅ STATE
+  const [userCoords, setUserCoords] = useState(null); 
 
   const abortRef = useRef(null);
   const navigate = useNavigate();
 
-  /* ================= USER LOCATION LISTENER ================= */
   useEffect(() => {
     const loadLocation = () => {
       const stored = localStorage.getItem("user_location");
       setUserCoords(stored ? JSON.parse(stored) : null);
     };
 
-    loadLocation(); // initial load
-
-    // 🔥 listen when location changes (custom event)
+    loadLocation();
     window.addEventListener("location-updated", loadLocation);
 
     return () => {
@@ -37,7 +34,6 @@ export default function Stores() {
 
   const hasUserLocation = userCoords?.lat && userCoords?.lng;
 
-  /* ================= FETCH STORES ================= */
   const fetchStoresByFilter = async (filter) => {
     if (abortRef.current) abortRef.current.abort();
 
@@ -78,13 +74,11 @@ export default function Stores() {
     }
   };
 
-  /* 🔁 Re-fetch when filter OR location changes */
   useEffect(() => {
     fetchStoresByFilter(activeFilter);
     return () => abortRef.current?.abort();
   }, [activeFilter, hasUserLocation]);
 
-  /* ================= UI ================= */
   return (
     <div className="stores-page max-w-7xl mx-auto px-4">
       <h2 className="stores-heading">Stores</h2>

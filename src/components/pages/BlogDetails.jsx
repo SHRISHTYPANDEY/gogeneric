@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import BlogSchema from "../../seo/BlogSchema.jsx";
 import { useEffect } from "react";
 import { blogs } from "../../data/blogs.js";
 import "./BlogDetails.css";
@@ -37,20 +38,19 @@ export default function BlogDetails() {
 
   return (
     <>
-    <div className="blog-details">
-      <h1 className="blog-title">{blog.title}</h1>
+      <BlogSchema blog={blog} />
+      <div className="blog-details">
+        <h1 className="blog-title">{blog.title}</h1>
 
-      <div
-        className="blog-content"
-        dangerouslySetInnerHTML={{ __html: blog.content }}
-      />
-      {blog?.faqs && (
-  <FAQ faqs={blog.faqs} />
-)}
-<BlogCTA />
-    </div>
-    <Footer />
-    <BackToTop />
+        <div
+          className="blog-content"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
+        {blog?.faqs && <FAQ faqs={blog.faqs} />}
+        <BlogCTA />
+      </div>
+      <Footer />
+      <BackToTop />
     </>
   );
 }

@@ -5,7 +5,22 @@ import { Home, Briefcase, MapPin } from "lucide-react";
 import "./AddressSection.css"
 import { useLocation } from "../../../context/LocationContext";
 
-export default function AddressForm({ initialData, onClose, onSuccess }) {
+export default function AddressForm({ initialData, onClose, onSuccess,existingAddresses = [],
+ }) {
+
+  const isDuplicateAddress = (finalAddress) => {
+  return existingAddresses.some((addr) => {
+    // Edit mode me same address ko ignore karo
+    if (initialData?.id && addr.id === initialData.id) return false;
+
+    return (
+      addr.address?.trim().toLowerCase() ===
+        finalAddress.trim().toLowerCase() &&
+      addr.address_type === addressType
+    );
+  });
+};
+
   const [addressType, setAddressType] = useState("Home");
 
   const [form, setForm] = useState({
@@ -67,6 +82,10 @@ const { location } = useLocation();
   ]
     .filter(Boolean)
     .join(", ");
+    if (isDuplicateAddress(address)) {
+  toast.error("This address already exists");
+  return;
+}
 
   const payload = {
     contact_person_name: form.contact_name,
@@ -96,13 +115,10 @@ const { location } = useLocation();
 
     onSuccess();
   } catch (err) {
-    console.error("❌ Address save error", err);
+    console.error("Address save error", err);
     toast.error("Failed to save address");
   }
 };
-
-
-
   return (
     <div className="address-form">
       <h4>{initialData ? "Edit Address" : "Add New Address"}</h4>

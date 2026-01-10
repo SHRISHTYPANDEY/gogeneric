@@ -1,9 +1,10 @@
 import "./WhoweAre.css";
 import Footer from "../Footer";
-
+import WhoWeAreSchema from "../../seo/WhoWeAreSchema";
 export default function WhoWeAre() {
   return (
     <>
+    <WhoWeAreSchema />
       <div className="who-we-are">
         {/* Hero */}
         <section className="who-hero">

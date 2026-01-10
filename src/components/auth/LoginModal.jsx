@@ -90,7 +90,7 @@ if (errors?.length) {
         guest_id: guestId,
       });
       const apiUser = res.data?.user || res.data;
-      const normalizedUser = { id: apiUser?.id, name: apiUser?.name || "", email: apiUser?.email, phone: apiUser?.phone || null };
+      const normalizedUser = { id: apiUser?.id, name: `${apiUser?.f_name || ""} ${apiUser?.l_name || ""}`.trim(), email: apiUser?.email, phone: apiUser?.phone || null };
       login(normalizedUser, res.data?.token);
       toast.success(`Welcome ${normalizedUser.name}`);
       localStorage.setItem("location_allowed", "true");
@@ -106,20 +106,19 @@ const handleForgotPassword = async () => {
     return;
   }
 
-  // ✅ Backend requires +91 format
   const phone = forgotValue.startsWith("+91")
     ? forgotValue
     : `+91${forgotValue}`;
 
   try {
     await api.post("/api/v1/auth/forgot-password", {
-      phone, // 🔥 THIS IS THE KEY FIX
+      phone, 
     });
 
     toast.success("OTP sent successfully 📩");
     setIsReset(true);
   } catch (err) {
-    console.log("FORGOT ERROR 👉", err.response?.data);
+    console.log("FORGOT ERROR ", err.response?.data);
     const errors = err?.response?.data?.errors;
 
     if (errors?.length) {
@@ -152,13 +151,13 @@ const handleResetPassword = async () => {
 
   try {
     await api.put("/api/v1/auth/reset-password", {
-      phone,                       // ✅ REQUIRED
-      reset_token: otp,            // ✅ REQUIRED
-      password: newPassword,       // ✅ FIXED
-      confirm_password: confirmNewPassword, // ✅ FIXED
+      phone,                       
+      reset_token: otp,         
+      password: newPassword,       
+      confirm_password: confirmNewPassword, 
     });
 
-    toast.success("Password reset successful 🔐");
+    toast.success("Password reset successful ");
 
     // reset states
     setIsReset(false);
@@ -178,16 +177,11 @@ const handleResetPassword = async () => {
     }
   }
 };
-
-
-
-
   return (
     <div className="login-overlay">
       <div className="login-card">
         <span className="close-icon" onClick={onClose}>×</span>
 
-        {/* 🔹 LEFT BRAND PANEL (Dribbble Inspired) */}
         <div className="login-left">
           <div className="brand-content">
             <h1>GoGeneric</h1>
@@ -196,7 +190,6 @@ const handleResetPassword = async () => {
           </div>
         </div>
 
-        {/* 🔹 RIGHT FORM PANEL */}
         <div className="login-right">
          {isForgot && !isReset ? (
   <div className="form-content">
