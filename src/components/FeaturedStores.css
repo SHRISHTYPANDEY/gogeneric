@@ -189,8 +189,60 @@
 .fs-right { right: -25px; }
 
 @media (max-width: 768px) {
-  .fs-main-title { font-size: 26px; }
-  .fs-card { width: 300px; padding: 20px; }
-  .fs-name { font-size: 19px; }
-  .fs-scroll-btn { display: none; }
-} 
+
+  .fs-header {
+    margin-bottom: 16px;
+    align-items: center;
+  }
+
+  .fs-main-title {
+    font-size: 21px;        /* 🔥 balanced */
+    line-height: 1.2;
+  }
+
+  .fs-see-all-btn {
+    font-size: 12.5px;
+    padding: 6px 12px;
+    border-radius: 10px;
+  }
+
+  .fs-wrapper {
+    padding: 12px 0 26px;   
+  }
+
+  .fs-scroll-content {
+    gap: 12px;
+    padding: 0 10px;          
+  }
+
+  .fs-card {
+    width: calc(100vw - 20px);   
+    max-width: none;
+    min-height: 200px;
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  /* IMAGE */
+  .fs-img-container img {
+    width: 78px;
+    height: 78px;
+  }
+
+  /* NAME */
+  .fs-name {
+    font-size: 15px;
+  }
+
+  /* ADDRESS */
+  .fs-address {
+    font-size: 12.5px;
+  }
+
+  /* META */
+  .fs-distance,
+  .fs-status {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}

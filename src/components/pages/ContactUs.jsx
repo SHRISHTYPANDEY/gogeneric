@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { toast } from "react-hot-toast";
-// import api from "../api/axiosInstance";
+import api from "../../api/axiosInstance";
 import "./ContactUs.css";
 import Footer from "../Footer";
 
@@ -11,34 +11,29 @@ export default function ContactUs() {
     email: "",
     message: "",
   });
-
   const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!form.name || !form.email || !form.message) {
       toast.error("Please fill all fields");
       return;
     }
-
     try {
       setLoading(true);
 
-      await api.post("/api/v1/contact", {
+      await api.post("/api/v1/customer/message/send", {
         name: form.name,
         email: form.email,
         message: form.message,
       });
 
-      toast.success("Message sent successfully ✅");
+      toast.success("Message sent successfully");
       setForm({ name: "", email: "", message: "" });
     } catch (err) {
-      toast.error("Failed to send message ❌");
+      toast.error("Failed to send message ");
       console.error("Contact error:", err);
     } finally {
       setLoading(false);

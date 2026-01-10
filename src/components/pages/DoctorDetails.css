@@ -1,5 +1,3 @@
-/* ================= DOCTOR DETAILS (PREMIUM PLUM THEME) ================= */
-
 .details-page {
   background-color: #fdfafb;
   min-height: 100vh;
@@ -11,12 +9,10 @@
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 350px 1fr; /* Sidebar and Content */
+  grid-template-columns: 350px 1fr; 
   gap: 40px;
   align-items: start;
 }
-
-/* ================= LEFT SIDEBAR ================= */
 
 .profile-sidebar {
   background: var(--white);
@@ -26,7 +22,7 @@
   box-shadow: var(--premium-shadow);
   text-align: center;
   position: sticky;
-  top: 100px; /* Navbar height ke hisaab se adjust karein */
+  top: 100px; 
 }
 
 .img-container {
@@ -87,8 +83,6 @@
   background: linear-gradient(45deg, var(--muted-purple), var(--mauve));
 }
 
-/* ================= RIGHT CONTENT AREA ================= */
-
 .content-area {
   display: flex;
   flex-direction: column;
@@ -130,12 +124,11 @@
   color: var(--text-body);
 }
 
-/* Approach List Styles */
 .approach-list {
   list-style: none;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Two column list */
+  grid-template-columns: 1fr 1fr; 
   gap: 15px;
 }
 
@@ -165,9 +158,6 @@
   font-weight: 700;
   color: var(--deep-plum);
 }
-
-/* ================= RESPONSIVE ================= */
-
 @media (max-width: 992px) {
   .details-container {
     grid-template-columns: 1fr;
@@ -180,5 +170,69 @@
   
   .approach-list {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .details-page {
+    padding: 30px 12px;
+    overflow-x: hidden;
+  }
+
+  .details-container {
+    width: 100%;
+    gap: 24px;
+  }
+
+  .profile-sidebar {
+    padding: 24px 18px;
+    border-radius: 24px;
+  }
+
+  .img-container {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 16px;
+  }
+
+  .profile-name {
+    font-size: 20px;
+  }
+
+  .profile-badge {
+    font-size: 11px;
+    padding: 5px 14px;
+    margin-bottom: 20px;
+  }
+
+  .cta-button {
+    padding: 14px;
+    font-size: 14px;
+  }
+  .content-area {
+    gap: 20px;
+  }
+
+  .info-section {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .section-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .approach-list {
+    grid-template-columns: 1fr; 
+    gap: 12px;
+  }
+
+  .approach-item {
+    font-size: 14px;
+    padding: 10px 14px;
   }
 }

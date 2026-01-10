@@ -163,15 +163,79 @@
   border-color: var(--deep-plum);
 }
 
-/* 📱 MOBILE OPTIMIZATION (COLOR UPDATE) */
 @media (max-width: 768px) {
-  .nearby-title { font-size: 24px; }
-  .store-card:hover { border-color: var(--mauve); }
-}
 
-.store-card .price{
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--deep-plum);
-  margin-top: 6px;
+  /* SECTION PADDING */
+  .nearby-section {
+    padding: 0 2px;
+  }
+
+  /* HEADING */
+  .nearby-title {
+    font-size: 21px;        /* 🔥 reduced */
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+
+  .nearby-subtitle {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  /* FILTERS */
+  .nearby-filters {
+    gap: 8px;
+    padding: 6px 0;
+  }
+
+  .nearby-filter-btn {
+    padding: 6px 16px;     /* 🔥 slimmer */
+    font-size: 12.5px;
+    border-radius: 10px;
+  }
+
+  /* SCROLL WRAPPER */
+  .nearby-wrapper {
+    gap: 14px;
+    padding: 12px 4px 24px;
+  }
+
+  .nearby-scroll {
+    gap: 14px;
+  }
+
+  /* CARD */
+  .store-card {
+    min-width: 145px;
+    max-width: 145px;
+    height: 180px;         /* 🔥 compact */
+    padding: 12px;
+    border-radius: 22px;
+  }
+
+  .store-card img {
+    width: 68px;
+    height: 68px;
+    margin-top: 2px;
+  }
+
+  .store-card h4 {
+    font-size: 12.5px;
+    line-height: 1.25;
+    min-height: 32px;
+    max-height: 32px;
+  }
+
+  .store-card .price {
+    font-size: 15px;       /* 🔥 lighter */
+    margin-top: 4px;
+  }
+
+  /* MOBILE = NO HOVER ANIMATION */
+  .store-card:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);
+    border-color: var(--mauve);
+    background: inherit;
+  }
 }

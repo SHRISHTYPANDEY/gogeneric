@@ -143,3 +143,91 @@
     font-size: 19px;
   }
 }
+@media (max-width: 600px) {
+
+  /* ===== GLOBAL SAFETY ===== */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ===== BLOG CONTAINER ===== */
+  .blog-details {
+    max-width: 100%;
+    padding: 40px 14px;
+    overflow-x: hidden;
+  }
+
+  /* ===== TITLE ===== */
+  .blog-details h1 {
+    font-size: 28px;
+    line-height: 1.25;
+    margin-bottom: 22px;
+    letter-spacing: -0.4px;
+  }
+
+  /* ===== CONTENT ===== */
+  .blog-content {
+    font-size: 15px;
+    line-height: 1.75;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .blog-content p {
+    margin-bottom: 18px;
+  }
+
+  /* ===== HEADINGS ===== */
+  .blog-content h2 {
+    font-size: 22px;
+    margin: 38px 0 14px;
+  }
+
+  .blog-content h3 {
+    font-size: 18px;
+    margin: 28px 0 12px;
+  }
+
+  /* ===== LISTS ===== */
+  .blog-content ul,
+  .blog-content ol {
+    padding-left: 18px;
+    margin: 18px 0;
+  }
+
+  /* ===== IMAGES ===== */
+  .blog-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 28px 0;
+    border-radius: 14px;
+  }
+
+  /* ===== BLOCKQUOTE ===== */
+  .blog-content blockquote {
+    padding: 18px 18px;
+    margin: 28px 0;
+    font-size: 14.5px;
+  }
+
+  /* ===== CODE BLOCK ===== */
+  .blog-content pre {
+    max-width: 100%;
+    padding: 16px;
+    margin: 26px 0;
+    overflow-x: auto;
+    border-radius: 12px;
+  }
+
+  .blog-content code {
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ===== HR ===== */
+  .blog-content hr {
+    margin: 32px 0;
+  }
+}

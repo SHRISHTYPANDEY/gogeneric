@@ -11,9 +11,6 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
-
-/* ================= HEADER ================= */
-
 .order-header {
   display: flex;
   justify-content: space-between;
@@ -24,9 +21,6 @@
   font-weight: 600;
   font-size: 14px;
 }
-
-/* ================= STATUS ================= */
-
 .status-badge {
   padding: 4px 10px;
   font-size: 12px;
@@ -34,8 +28,6 @@
   text-transform: capitalize;
   font-weight: 500;
 }
-
-/* STATUS COLORS */
 .status-badge.pending {
   background: #fff4cc;
   color: #b38f00;
@@ -66,8 +58,6 @@
   color: #b02a37;
 }
 
-/* ================= BODY ================= */
-
 .order-body {
   margin-top: 10px;
   display: flex;
@@ -88,8 +78,6 @@
 .order-price {
   font-weight: 600;
 }
-
-/* ================= FOOTER ================= */
 
 .order-footer {
   margin-top: 10px;
@@ -112,9 +100,6 @@
   color: #0d6efd;
   font-weight: 500;
 }
-
-/* ================= MOBILE ================= */
-
 @media (max-width: 600px) {
   .order-body {
     flex-direction: column;
@@ -126,15 +111,12 @@
     align-self: flex-end;
   }
 }
-/* ================= ACTION BUTTONS ================= */
-
 .order-actions {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-/* ---------- TRACK BUTTON ---------- */
 
 .track-btn {
   display: flex;
@@ -178,14 +160,12 @@
   transform: translateY(-1px);
 }
 
-/* ---------- DISABLED STATE ---------- */
 
 .cancel-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ================= MOBILE ACTIONS ================= */
 
 @media (max-width: 600px) {
   .order-actions {
@@ -199,4 +179,18 @@
     padding: 6px 10px;
     font-size: 11px;
   }
+}
+
+.invoice-btn {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.invoice-btn:hover {
+  background: #e5e7eb;
 }

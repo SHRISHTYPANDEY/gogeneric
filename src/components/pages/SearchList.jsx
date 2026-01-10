@@ -6,6 +6,7 @@ import "./SearchList.css";
 import WishlistButton from "../WishlistButton";
 import Footer from "../Footer";
 import Fuse from "fuse.js";
+import AddToCartButton from "../CartButton";
 export default function SearchList() {
   const [params] = useSearchParams();
   const query = params.get("query");
@@ -123,6 +124,7 @@ export default function SearchList() {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <WishlistButton item={item} />
+                    <AddToCartButton item={item} />
                   </div>
 
                   {/* Image */}

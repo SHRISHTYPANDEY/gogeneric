@@ -128,15 +128,76 @@
 }
 
 @media (max-width: 768px) {
-  .highlight-card {
-    width: 280px;
+
+  /* SECTION */
+  .highlight-section {
+    margin-top: 30px;
+    padding: 10px 0;
   }
+
+  /* HEADING */
+  .highlight-title {
+    font-size: 21px;       /* 🔥 balanced */
+    line-height: 1.25;
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
+  }
+
+  /* SCROLL WRAPPER */
+  .highlight-wrapper {
+    padding: 10px 4px 25px;
+  }
+
+  .highlight-scroll {
+    gap: 16px;
+  }
+
+  /* CARD */
+  .highlight-card {
+    width: 240px;         /* 🔥 compact */
+    border-radius: 18px;
+    box-shadow: 0 6px 16px rgba(107, 63, 105, 0.06);
+  }
+
   .highlight-card img,
   .highlight-card iframe {
-    height: 160px;
+    height: 135px;        /* 🔥 reduced */
   }
-  .highlight-title {
-    font-size: 24px;
+
+  /* TITLE */
+  .highlight-name {
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 600;
   }
-  .scroll-btn { display: none; } 
+
+  /* REMOVE HOVER EFFECTS (MOBILE) */
+  .highlight-card:hover {
+    transform: none;
+    box-shadow: 0 6px 16px rgba(107, 63, 105, 0.06);
+    border-color: var(--dusty-rose);
+  }
+
+  .highlight-card:hover img {
+    transform: none;
+  }
+
+  .highlight-card:hover .highlight-name {
+    color: var(--text-dark);
+  }
+
+  /* NAV BUTTONS */
+  .scroll-btn {
+    display: none;
+  }
+
+  /* QUOTE */
+  .health-quote {
+    margin-top: 20px;
+    padding: 14px;
+    font-size: 13.5px;
+    line-height: 1.4;
+    border-radius: 12px;
+  }
 }

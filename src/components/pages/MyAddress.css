@@ -174,3 +174,72 @@
     max-height: 95vh;
   }
 }
+@media (max-width: 768px) {
+
+  .myaddress-page {
+    padding: 20px 12px;
+  }
+  .myaddress-page > div:first-child {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 20px !important;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .myaddress-page button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .address-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .address-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .address-header h3 {
+    font-size: 15px;
+  }
+
+  .default-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .address-text {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .address-actions {
+    padding-top: 14px;
+    gap: 10px;
+  }
+
+  .address-actions button {
+    font-size: 12px;
+    padding: 10px;
+  }
+  .edit-modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .edit-modal {
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

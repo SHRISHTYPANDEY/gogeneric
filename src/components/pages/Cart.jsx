@@ -16,14 +16,12 @@ export default function Cart() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  // ---------------- GUEST ----------------
   let guestId = localStorage.getItem("guest_id");
   if (!token && !guestId) {
     guestId = crypto.randomUUID();
     localStorage.setItem("guest_id", guestId);
   }
 
-  // ---------------- INITIAL LOAD ----------------
   useEffect(() => {
     fetchCart();
   }, []);
@@ -32,7 +30,6 @@ export default function Cart() {
     if (cart.length) fetchSuggestedItems();
   }, [cart]);
 
-  // ---------------- CART ----------------
   const fetchCart = async () => {
     try {
       const res = await api.get("/api/v1/customer/cart/list", {
@@ -74,7 +71,7 @@ export default function Cart() {
       );
       fetchCart();
     } catch (err) {
-      // console.error("Update error:", err);
+      console.error("Update error:", err);
     }
   };
 
@@ -99,7 +96,6 @@ export default function Cart() {
     }
   };
 
-  // ---------------- SUGGESTED ITEMS ----------------
   const fetchSuggestedItems = async () => {
   const firstItem = cart[0];
   if (!firstItem) return;
@@ -267,7 +263,6 @@ export default function Cart() {
     </div>
   )}
 </div>
-  
           {showLogin && (
             <LoginModal
               onClose={() => {

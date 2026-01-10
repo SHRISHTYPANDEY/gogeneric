@@ -95,6 +95,9 @@ export default function Checkout() {
   };
 
   const handleDigitalPayment = () => {
+
+    if (!validateBeforeOrder()) return;
+
     if (deliveryType === "delivery" && !selectedAddress) {
       toast.error("Please select delivery address");
       return;
@@ -183,6 +186,8 @@ export default function Checkout() {
   };
 
   const handlePlaceOrder = async () => {
+    if (!validateBeforeOrder()) return;
+
     // console.log("SELECTED ADDRESS FULL OBJECT", selectedAddress);
 
     if (!paymentMethod || !paymentReady) {
@@ -279,6 +284,49 @@ export default function Checkout() {
     );
   }
 
+  const validateBeforeOrder = () => {
+  // 🔐 Login check
+  if (!token) {
+    toast.error("Please login first to place your order");
+    navigate("/login");
+    return false;
+  }
+
+  // 🚚 Address check
+  if (deliveryType === "delivery" && !selectedAddress) {
+    toast.error("Please select a delivery address");
+    return false;
+  }
+
+  // 💳 Payment method
+  if (!paymentMethod) {
+    toast.error("Please select a payment method");
+    return false;
+  }
+
+  // 💰 Wallet balance
+  if (paymentMethod === "wallet" && walletBalance < totalPayable) {
+    toast.error(
+      `Insufficient wallet balance. Available ₹${walletBalance}`
+    );
+    return false;
+  }
+
+  // 📄 Prescription
+  if (isPrescriptionRequired && !prescriptionFile) {
+    toast.error("Prescription is required for selected medicines");
+    return false;
+  }
+
+  // 📜 Policy
+  if (!policyAccepted) {
+    toast.error("Please accept Privacy Policy & Terms");
+    return false;
+  }
+
+  return true;
+};
+
   return (
     <div className="checkout-container">
       <h2 className="checkout-title">Checkout</h2>
@@ -374,18 +422,21 @@ export default function Checkout() {
       </div>
 
       <button
-        className="place-order-btn"
-        disabled={placingOrder || !policyAccepted}
-        onClick={() => {
-          if (paymentMethod === "digital_payment") {
-            handleDigitalPayment();
-          } else {
-            handlePlaceOrder();
-          }
-        }}
-      >
-        {placingOrder ? "Placing Order..." : "Place Order"}
-      </button>
+  className="place-order-btn"
+  disabled={placingOrder}
+  onClick={() => {
+    if (!validateBeforeOrder()) return;
+
+    if (paymentMethod === "digital_payment") {
+      handleDigitalPayment();
+    } else {
+      handlePlaceOrder();
+    }
+  }}
+>
+  {placingOrder ? "Placing Order..." : "Place Order"}
+</button>
+
       {placingOrder && (
         <div className="checkout-loader-overlay">
           <Loader />

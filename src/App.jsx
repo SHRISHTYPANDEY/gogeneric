@@ -44,6 +44,7 @@ import Pharmacy from "./components/pages/Pharmacy.jsx";
 import MyAddress from "./components/pages/MyAddress.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Labs from "./components/pages/Labs.jsx";
+import WhoWeAre from "./components/pages/WhoweAre.jsx";
 
 const fetchAddress = async (lat, lng) => {
   try {
@@ -126,7 +127,7 @@ function AppLayout() {
         <Route path="/terms-and-conditions" element={<Terms />} />
         <Route path="/cancellation-policy" element={<Cancellation />} />
         <Route path="/coupon" element={<Coupon />} />
-        <Route path="/help-and-support" element={<AutomatedMessage />} />
+        <Route path="/livechat" element={<AutomatedMessage />} />
         <Route path="/shipping-policy" element={<Shipping />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogDetails />} />
@@ -135,6 +136,7 @@ function AppLayout() {
         <Route path="/labs" element={<Labs />} />
         <Route path="/pharmacy" element={<Pharmacy />} />
         <Route path="/my-address" element={<MyAddress />} />
+        <Route path="/who-we-are" element={<WhoWeAre />} />
       </Routes>
       {/* ✅ GLOBAL LOGIN MODAL */}
       {showLoginModal && (

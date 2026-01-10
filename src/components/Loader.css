@@ -72,3 +72,44 @@
   from { opacity: 0.4; }
   to { opacity: 1; }
 }
+@media (max-width: 640px) {
+
+  /* ================= CONTAINER ================= */
+  .loader-container {
+    padding: 0 20px;
+    height: 100vh;
+    text-align: center;
+  }
+
+  /* ================= LOGO WRAPPER ================= */
+  .logo-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  /* ================= LOGO ================= */
+  .loader-logo {
+    width: 60px;
+  }
+
+  /* ================= PULSE RING ================= */
+  .pulse-ring {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ================= ORBIT RING ================= */
+  .orbit-ring {
+    width: 85px;
+    height: 85px;
+    border-width: 2px;
+  }
+
+  /* ================= TEXT ================= */
+  .loader-text {
+    margin-top: 16px;
+    font-size: 13px;
+    letter-spacing: 0.6px;
+    line-height: 1.4;
+  }
+}

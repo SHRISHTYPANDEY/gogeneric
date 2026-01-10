@@ -17,7 +17,6 @@
   min-height: 100vh;
 }
 
-/* Header Container: Title and Search in one row */
 .pharmacy-header {
   display: flex;
   justify-content: space-between;
@@ -36,7 +35,7 @@
 
 .pharmacy-search {
   width: 100%;
-  max-width: 350px; /* Sized for the row */
+  max-width: 350px;
   padding: 12px 22px;
   border: 1.5px solid var(--dusty-rose);
   border-radius: 50px;
@@ -179,8 +178,6 @@
   align-items: center;
   height: 80vh;
 }
-
-/* Mobile Responsive */
 @media (max-width: 850px) {
   .pharmacy-header {
     flex-direction: column;
@@ -195,5 +192,74 @@
   .pharmacy-image {
     width: 100%;
     height: 180px;
+  }
+}
+@media (max-width: 600px) {
+
+  .pharmacy-page {
+    padding: 16px 12px;
+    overflow-x: hidden;
+  }
+  .pharmacy-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .pharmacy-title {
+    font-size: 1.5rem;
+    text-align: left;
+  }
+
+  .pharmacy-search {
+    max-width: 100%;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .pharmacy-card {
+    flex-direction: column;
+    gap: 14px;
+    padding: 12px;
+    border-radius: 18px;
+  }
+  .pharmacy-image {
+    width: 100%;
+    height: 160px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .pharmacy-name {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+  }
+
+  .pharmacy-address {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+
+  .pharmacy-meta {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .pharmacy-rating,
+  .pharmacy-distance {
+    font-size: 0.8rem;
+  }
+
+  .status-open,
+  .status-closed {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+  .visit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 20px;
+    font-size: 0.85rem;
   }
 }

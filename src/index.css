@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @plugin 'lightswind/plugin';
-/* Ya @tailwind base; etc. agar full setup hai */
 
 :root {
   --font-primary: "Poppins", sans-serif;

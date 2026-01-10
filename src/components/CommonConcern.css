@@ -153,18 +153,71 @@
 }
 
 @media (max-width: 768px) {
-  .concern-heading {
-    font-size: 24px;
+
+  /* PAGE WRAP */
+  .concern-page {
+    padding: 0 2px;
   }
 
+  /* HEADING */
+  .concern-heading {
+    font-size: 21px;     /* 🔥 reduced */
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+
+  .concern-sub {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  /* FILTER BUTTONS */
+  .store-filters {
+    gap: 8px;
+    padding: 6px 0;
+  }
+
+  .filter-btn {
+    padding: 6px 16px;   /* 🔥 slimmer */
+    font-size: 12.5px;
+    border-radius: 10px;
+  }
+
+  /* GRID SCROLL */
+  .concern-grid {
+    gap: 14px;
+    padding: 12px 4px 24px;
+  }
+
+  /* CARD */
   .concern-card {
-    min-width: 155px;
-    max-width: 155px;
-    height: 195px;
+    min-width: 145px;
+    max-width: 145px;
+    height: 180px;       /* 🔥 shorter */
+    padding: 12px;
+    border-radius: 22px;
   }
 
   .concern-card img {
-    width: 75px;
-    height: 75px;
+    width: 68px;
+    height: 68px;
+    margin-top: 2px;
+  }
+
+  .concern-card h3 {
+    font-size: 12.5px;
+    line-height: 1.25;
+    min-height: 32px;
+  }
+
+  .concern-card .price {
+    font-size: 15px;  
+    margin-top: 4px;
+  }
+
+  .concern-card:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(107, 63, 105, 0.05);
+    border-color: var(--mauve);
   }
 }

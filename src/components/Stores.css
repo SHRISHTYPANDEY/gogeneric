@@ -239,3 +239,104 @@
   padding: 10px 24px;
   font-size: 14px;
 }
+@media (max-width: 640px) {
+
+  /* ================= PAGE SPACING FIX ================= */
+  .stores-page {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  /* ================= HEADING ================= */
+  .stores-heading {
+    font-size: 22px;
+    padding: 0 16px;
+    margin-bottom: 2px;
+  }
+
+  .stores-sub {
+    font-size: 13px;
+    padding: 0 16px;
+    margin-bottom: 18px;
+  }
+
+  /* ================= FILTER ROW ================= */
+  .filter-row {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .store-filters {
+    gap: 10px;
+  }
+
+  .filter-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  /* ================= GRID ================= */
+  .stores-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  /* ================= STORE CARD ================= */
+  .store-card-6am {
+    width: 100%;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  /* ================= IMAGE ================= */
+  .store-image-wrapper {
+    height: 130px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .store-image-wrapper img {
+    object-fit: contain;
+  }
+
+  /* ================= CONTENT ================= */
+  .store-name {
+    font-size: 15px;
+  }
+
+  .store-address {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* ================= BOTTOM ROW ================= */
+  .store-bottom-row {
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .store-distance {
+    font-size: 12px;
+  }
+
+  .store-rating {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  /* ================= VIEW MORE ================= */
+  .view-more-bottom {
+    margin: 28px 0 40px;
+  }
+
+  .view-more-btn {
+    font-size: 14px;
+    padding: 10px 26px;
+    border-radius: 12px;
+  }
+}

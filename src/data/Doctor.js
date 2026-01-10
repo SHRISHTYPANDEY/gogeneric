@@ -78,7 +78,7 @@ export const doctors = [
   id: "dr-shashi",
   name: "Dr. Shashi",
   specialization: "Ayurvedic Gynaecology Specialist",
-  image: "/doctor_img/shashi.png", 
+  image: "/doctor_img/shashi.jpeg", 
   experience: "20 Years",
   phone: "01234567890", 
   whatsapp: "01234567890",

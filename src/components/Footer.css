@@ -215,3 +215,97 @@
   max-height: 100%;
   object-fit: contain;
 }
+/* ================= FOOTER MOBILE FIX ================= */
+@media (max-width: 600px) {
+
+  /* Safety: horizontal scroll kill */
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .ak-footer-container {
+    padding: 70px 12px 30px;
+    overflow-x: hidden;
+  }
+
+  /* ===== CTA FIX ===== */
+  .ak-footer-cta {
+    margin-bottom: -30px;
+    padding: 0 10px;
+  }
+
+  .ak-footer-cta h2 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  .ak-footer-cta p {
+    font-size: 14px;
+  }
+
+  .cta-btn {
+    padding: 12px 26px;
+    font-size: 14px;
+  }
+
+  /* ===== FOOTER CARD ===== */
+  .ak-footer-card {
+    padding: 80px 18px 30px;
+    border-radius: 32px;
+    max-width: 100%;
+  }
+
+  /* ===== CONTENT GRID ===== */
+  .ak-footer-content {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    text-align: center;
+    padding-bottom: 35px;
+  }
+
+  /* Headings underline center */
+  .ak-footer-widget-heading::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ===== BRAND TEXT ===== */
+  .ak-footer-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ===== SOCIAL ICONS ===== */
+  .ak-footer-social-icon {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ===== APP BUTTON ===== */
+  .app-buttons img {
+    width: 160px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ===== BOTTOM BAR ===== */
+  .ak-bottom-bar {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .bottom-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  /* Logo size fix */
+  .ak-footer-logo-img {
+    width: 90px;
+    height: 90px;
+  }
+}

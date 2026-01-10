@@ -1,7 +1,5 @@
-/* ================= DOCTORS SECTION (PREMIUM PLUM THEME) ================= */
-
 .doctors-container {
-  background-color: #fdfafb; /* Subtle pinkish tint for luxury feel */
+  background-color: #fdfafb; 
   padding: 60px 20px;
   min-height: 100vh;
 }
@@ -15,19 +13,17 @@
   font-size: 38px;
   font-weight: 800;
   text-align: center;
-  color: var(--text-dark);
+  color: var(--deep-plum);
   margin-bottom: 50px;
   letter-spacing: -1px;
 }
 
-/* Grid Layout */
 .doctors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
 }
 
-/* Doctor Card - Glassmorphism Style */
 .doctor-card {
   background: var(--glass);
   backdrop-filter: blur(12px);
@@ -47,7 +43,6 @@
   box-shadow: 0 15px 40px rgba(107, 63, 105, 0.12);
 }
 
-/* Image Wrapper with Soft Glow */
 .doctor-image-wrapper {
   width: 130px;
   height: 130px;
@@ -67,7 +62,6 @@
   border: 3px solid white;
 }
 
-/* Info Styling */
 .doctor-info {
   display: flex;
   flex-direction: column;
@@ -101,7 +95,6 @@
   margin: 5px auto;
 }
 
-/* View Profile Button - Capsule Design */
 .view-profile-btn {
   margin-top: 15px;
   padding: 12px 24px;
@@ -121,7 +114,6 @@
   box-shadow: 0 4px 12px rgba(107, 63, 105, 0.2);
 }
 
-/* Responsive Fixes */
 @media (max-width: 768px) {
   .doctors-title {
     font-size: 28px;
@@ -130,5 +122,55 @@
   .doctors-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
+  }
+}
+@media (max-width: 600px) {
+
+  .doctors-container {
+    padding: 40px 14px;
+  }
+
+  .doctors-title {
+    font-size: 22px;
+    margin-bottom: 30px;
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr; 
+    gap: 18px;
+  }
+
+  .doctor-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .doctor-image-wrapper {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 14px;
+  }
+
+  .doctor-image {
+    border-width: 2px;
+  }
+
+  .doctor-name {
+    font-size: 17px;
+  }
+
+  .doctor-specialty {
+    font-size: 12px;
+  }
+
+  .doctor-exp {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .view-profile-btn {
+    margin-top: 12px;
+    padding: 10px 20px;
+    font-size: 13px;
   }
 }

@@ -27,7 +27,7 @@ import {
   FaUserMd,
   FaNewspaper,
   FaPhoneAlt,
-  FaUsers
+  FaUsers,
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
@@ -47,7 +47,6 @@ export default function Navbar() {
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
   const { resetLocation } = useLocation();
-
 
   /* ---------------- COMMON CLOSE ---------------- */
   const closeMenu = () => setOpen(false);
@@ -150,6 +149,9 @@ export default function Navbar() {
                 <Link to="/aboutus">About</Link>
               </li>
               <li>
+                <Link to="/who-we-are">Who We Are</Link>
+              </li>
+              <li>
                 <Link to="/pharmacy">Pharmacy</Link>
               </li>
               <li>
@@ -163,9 +165,6 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to="/contactus">Contact Us</Link>
-              </li>
-              <li>
-                <Link to="/whoweare">Who We Are</Link>
               </li>
             </ul>
 
@@ -216,49 +215,49 @@ export default function Navbar() {
         <ul className="side-links">
           <li>
             <Link to="/" onClick={() => handleNavigate("/")}>
-              <FaHome/> Home
+              <FaHome /> Home
             </Link>
           </li>
 
           <li>
             <Link to="/aboutus" onClick={() => handleNavigate("/aboutus")}>
-             <FaInfoCircle /> About
+              <FaInfoCircle /> About
             </Link>
           </li>
 
           <li>
             <Link to="/pharmacy" onClick={() => handleNavigate("/pharmacy")}>
-             <FaClinicMedical /> Pharmacy
+              <FaClinicMedical /> Pharmacy
             </Link>
           </li>
 
           <li>
             <Link to="/labs" onClick={() => handleNavigate("/labs")}>
-             <FaFlask /> Labs
+              <FaFlask /> Labs
             </Link>
           </li>
 
           <li>
             <Link to="/doctors" onClick={() => handleNavigate("/doctors")}>
-             <FaUserMd />  Doctors
+              <FaUserMd /> Doctors
             </Link>
           </li>
 
           <li>
             <Link to="/blog" onClick={() => handleNavigate("/blog")}>
-             <FaNewspaper /> Blog
+              <FaNewspaper /> Blog
             </Link>
           </li>
 
           <li>
             <Link to="/contactus" onClick={() => handleNavigate("/contactus")}>
-             <FaPhoneAlt /> Contact Us
+              <FaPhoneAlt /> Contact Us
             </Link>
           </li>
 
           <li>
             <Link to="/whoweare" onClick={() => handleNavigate("/whoweare")}>
-             <FaUsers /> Who We Are
+              <FaUsers /> Who We Are
             </Link>
           </li>
           <li>
@@ -355,7 +354,7 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/help-and-support");
+                handleNavigate("/contactus");
               }}
             >
               <FaHeadset /> Help and Support

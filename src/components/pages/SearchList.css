@@ -1,4 +1,3 @@
-/* ================= GS UNIQUE SEARCH & CATEGORY PALETTE ================= */
 :root {
   --gs-plum: #6b3f69;
   --gs-plum-light: #8e5a8a;
@@ -48,15 +47,11 @@
   font-size: 15px;
   font-weight: 500;
 }
-
-/* Medicine/Category Grid Layout */
 .gs-medicine-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 25px;
 }
-
-/* Premium Card Design */
 .gs-medicine-card {
   border-radius: var(--gs-card-radius);
   border: 1px solid rgba(107, 63, 105, 0.05);
@@ -68,30 +63,22 @@
   height: 100%;
   position: relative;
 }
-
-/* 🎨 4-COLOR ALTERNATING BACKGROUNDS (As per your Screenshot) */
-
-/* 1. Light Pink/Rose Tint */
 .gs-medicine-card:nth-child(4n + 1) { 
   background-color: #fdf2f2 !important; 
 }
 
-/* 2. Soft Lavender/Mauve Tint */
 .gs-medicine-card:nth-child(4n + 2) { 
   background-color: #f8f0f7 !important; 
 }
 
-/* 3. Pale Peach/Cream Tint */
 .gs-medicine-card:nth-child(4n + 3) { 
   background-color: #fef5ed !important; 
 }
 
-/* 4. Soft Lilac/Purple Tint */
 .gs-medicine-card:nth-child(4n + 4) { 
   background-color: #f2f0f9 !important; 
 }
 
-/* Hover Effect: Card turns White and lifts up */
 .gs-medicine-card:hover {
   transform: translateY(-12px);
   background-color: var(--gs-white) !important;
@@ -99,14 +86,13 @@
   box-shadow: 0 20px 40px rgba(107, 63, 105, 0.1);
 }
 
-/* Image Container */
 .gs-img-box {
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 25px;
-  background-color: transparent; /* Makes card color visible behind image */
+  background-color: transparent; 
 }
 
 .gs-img-box img {
@@ -121,7 +107,6 @@
   transform: scale(1.1);
 }
 
-/* Info Section */
 .gs-card-info {
   padding: 10px 24px 24px;
   flex-grow: 1;
@@ -136,7 +121,6 @@
   color: var(--gs-text);
   margin-bottom: 12px;
   line-height: 1.4;
-  /* Multi-line truncation */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -144,9 +128,8 @@
   height: 45px;
 }
 
-/* View Button */
 .gs-view-btn {
-  background: rgba(255, 255, 255, 0.5); /* Semi-transparent button on colored bg */
+  background: rgba(255, 255, 255, 0.5); 
   color: var(--gs-plum);
   border: 1px solid rgba(107, 63, 105, 0.1);
   padding: 12px;
@@ -165,7 +148,6 @@
   border-color: var(--gs-plum);
 }
 
-/* Mobile Adjustments */
 @media (max-width: 768px) {
   .gs-medicine-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -173,4 +155,77 @@
   }
   .gs-img-box { height: 160px; }
   .gs-medicine-card { border-radius: 20px; }
+}
+@media (max-width: 768px) {
+
+  .gs-search-container {
+    padding: 20px 12px;
+    overflow-x: hidden;
+  }
+
+  .gs-search-wrapper {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  .gs-search-header {
+    margin-bottom: 20px;
+  }
+
+  .gs-result-title {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .gs-result-title .gs-highlight {
+    padding: 2px 8px;
+    font-size: 16px;
+  }
+
+  .gs-result-count {
+    font-size: 13px;
+  }
+
+  .gs-medicine-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .gs-medicine-card {
+    border-radius: 18px;
+    width: 100%;
+  }
+  .gs-img-box {
+    height: 140px;
+    padding: 14px;
+  }
+
+  .gs-img-box img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .gs-card-info {
+    padding: 10px 12px 14px;
+  }
+
+  .gs-med-name {
+    font-size: 13px;
+    height: 38px;
+    -webkit-line-clamp: 2;
+  }
+
+  .gs-view-btn {
+    font-size: 11px;
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .gs-status-box {
+    padding: 30px 10px;
+  }
+
+  .gs-no-results {
+    font-size: 14px;
+  }
 }

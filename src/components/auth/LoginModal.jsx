@@ -76,22 +76,6 @@ if (errors?.length) {
     }
   };
 
-  const handleGuestLogin = async () => {
-    try {
-      const res = await api.post("/api/v1/auth/guest/request");
-      const guestId = res.data?.guest_id || res.data?.data?.guest_id || res.data?.id;
-      const token = res.data?.token || null;
-      if (!guestId) { toast.error("Guest login failed"); return; }
-      localStorage.setItem("guest_id", guestId);
-      const guestUser = { id: guestId, name: "Guest User", email: null, phone: null, isGuest: true };
-      login(guestUser, token);
-      toast.success("Logged in as Guest");
-      onClose();
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Guest login failed");
-    }
-  };
-
   const handleLogin = async () => {
     if (!identifier || !password) { toast.error("Email/Phone & Password required"); return; }
     const guestId = localStorage.getItem("guest_id");
@@ -340,8 +324,6 @@ const handleResetPassword = async () => {
               <p className="forgot-link" onClick={() => setIsForgot(true)}>Forgot Password?</p>
               
               <button className="submit-btn" onClick={handleLogin}>Login</button>
-              
-              <button className="guest-btn-outline" onClick={handleGuestLogin}>Continue as Guest</button>
 
               <p className="switch-text">New here? <span onClick={() => { setIsSignup(true); resetFields(); }}>Signup</span></p>
             </div>

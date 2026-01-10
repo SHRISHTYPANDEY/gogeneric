@@ -1,4 +1,3 @@
-/* ================= GLOBAL VARIABLES ================= */
 :root {
   --deep-plum: #6b3f69;
   --plum-light: #8e5a8a;
@@ -15,7 +14,6 @@
   --featured-shadow: 0 20px 40px rgba(107, 63, 105, 0.15);
 }
 
-/* ================= SECTION LAYOUT ================= */
 .plans-section {
   padding: 80px 20px;
   background-color: #fcfbfc;
@@ -28,7 +26,6 @@
   margin: 0 auto;
 }
 
-/* ================= HEADER STYLING ================= */
 .plans-header-content {
   text-align: center;
   margin-bottom: 60px;
@@ -60,7 +57,6 @@
   border-radius: 4px;
 }
 
-/* Updated Subheading Styling */
 .plans-subheading {
   font-size: 19px;
   color: var(--text-grey);
@@ -72,7 +68,6 @@
   padding-left: 15px;
 }
 
-/* ================= GRID & CARDS ================= */
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -92,7 +87,6 @@
   cursor: pointer;
 }
 
-/* HOVER LOGIC: All cards mimic Featured behavior on hover */
 .featured-card, 
 .plan-card:hover {
   border: 2.5px solid var(--deep-plum) !important;
@@ -101,7 +95,6 @@
   z-index: 5;
 }
 
-/* Popular Badge Logic */
 .popular-badge {
   position: absolute;
   top: -16px;
@@ -122,7 +115,6 @@
   opacity: 1;
 }
 
-/* ================= CARD HEADER ================= */
 .plan-header {
   text-align: center;
   margin-bottom: 25px;
@@ -138,7 +130,6 @@
   margin-bottom: 12px;
 }
 
-/* Subtitle styled as a soft badge */
 .plan-subtitle {
   font-size: 13px;
   color: var(--deep-plum);
@@ -175,7 +166,6 @@
   margin: 4px 0;
 }
 
-/* ================= REFUNDABLE INFO ================= */
 .refundable-info {
   display: inline-flex;
   align-items: center;
@@ -205,7 +195,6 @@
 .plan-features {
   list-style: none;
   padding: 0;
-  /* margin: 0 0 40px 0; */
   flex-grow: 1;
 }
 
@@ -303,4 +292,82 @@
   .featured-card { transform: scale(1); }
   .plans-heading { font-size: 32px; }
   .plan-card:hover { transform: translateY(-5px); }
+}
+@media (max-width: 600px) {
+
+  .plans-section {
+    padding: 40px 12px;
+    overflow-x: hidden;
+  }
+
+  .plans-wrapper {
+    width: 100%;
+  }
+  .plans-header-content {
+    margin-bottom: 35px;
+  }
+
+  .plans-heading {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  .plans-subheading {
+    font-size: 14px;
+    padding-left: 10px;
+  }
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .plan-card {
+    width: 100%;
+    padding: 20px 18px; 
+    border-radius: 22px;
+    transform: none !important;
+  }
+  .featured-card {
+    transform: none !important;
+  }
+  .plan-card:hover {
+    transform: none;
+  }
+  .popular-badge {
+    top: -12px;
+    font-size: 11px;
+    padding: 6px 18px;
+  }
+  .price-amt {
+    font-size: 40px;
+  }
+
+  .price-tenure {
+    font-size: 14px;
+  }
+  .feature-item {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .label {
+    font-size: 14px;
+  }
+
+  .value {
+    font-size: 10px;
+  }
+  .plan-button {
+    padding: 14px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+  .modal-box {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .close-x {
+    top: 10px;
+    right: 10px;
+  }
 }
