@@ -14,6 +14,25 @@ export default function Labs() {
 
   const navigate = useNavigate();
 
+//   useEffect(() => {
+//   const fetchDeliveryManStore = async () => {
+//     try {
+//       const res = await api.post("/api/v1/auth/delivery-man/store", {
+//         headers: {
+//           Accept: "application/json",
+//         },
+//       });
+
+//       console.log("Delivery Man Store API Response:", res.data);
+//     } catch (err) {
+//       console.error("Delivery Man Store API Error:", err);
+//     }
+//   };
+
+//   fetchDeliveryManStore();
+// }, []);
+
+
   useEffect(() => {
     let isMounted = true;
 

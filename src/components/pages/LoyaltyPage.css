@@ -1,0 +1,264 @@
+/* 🎨 MAUVE PLUM THEME - LoyaltyPage.css */
+:root {
+  --deep-plum: #4a2b49;
+  --rich-plum: #2d1a2c;
+  --soft-plum: #6b3f69;
+  --mauve-pink: #9d7a9b;
+  --light-mauve: #f8f5f8;
+  --white: #ffffff;
+  --success-green: #27ae60;
+  --danger-red: #eb5757;
+}
+
+.loyalty-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: var(--deep-plum);
+}
+
+.loyalty-page h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 30px;
+  text-align: center;
+  color: var(--deep-plum);
+}
+
+/* 🏆 TOTAL POINTS SECTION (Premium Card) */
+.loyalty-balance {
+  background: linear-gradient(135deg, var(--deep-plum) 0%, var(--soft-plum) 100%);
+  padding: 50px 20px;
+  border-radius: 30px;
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(45, 26, 44, 0.25);
+  margin-bottom: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle Glowing Orb behind points */
+.loyalty-balance::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(157, 122, 155, 0.4) 0%, transparent 70%);
+  filter: blur(30px);
+  z-index: 1;
+}
+
+.loyalty-balance h2 {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  color: var(--mauve-pink);
+  position: relative;
+  z-index: 2;
+}
+
+.loyalty-balance span {
+  font-size: 72px;
+  font-weight: 900;
+  display: block;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(to bottom, #ffffff 40%, #dec8de 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+  line-height: 1;
+}
+
+/* 📊 TRANSACTIONS SECTION */
+.loyalty-transactions {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--light-mauve);
+}
+
+.loyalty-transactions h2 {
+  font-size: 20px;
+  margin-bottom: 25px;
+  font-weight: 700;
+  color: var(--soft-plum);
+  border-left: 4px solid var(--mauve-pink);
+  padding-left: 15px;
+}
+
+/* 📱 TABLE STYLING */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+th {
+  text-align: left;
+  padding: 12px 15px;
+  color: var(--mauve-pink);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 20px 15px;
+  background: var(--light-mauve);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--deep-plum);
+}
+
+td:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+td:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+/* Hover effect on rows */
+tr:hover td {
+  background: #f1ebf1;
+  cursor: default;
+}
+
+/* Credit & Debit logic via classes */
+.credit {
+  color: var(--success-green) !important;
+  font-weight: 700;
+}
+
+.debit {
+  color: var(--danger-red) !important;
+  font-weight: 700;
+}
+
+/* ⏳ LOADING STATE */
+.loyalty-loading {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: var(--soft-plum);
+  font-weight: 600;
+  background-color: var(--white);
+}
+
+/* 📱 MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .loyalty-balance {
+    padding: 40px 15px;
+  }
+  
+  .loyalty-balance span {
+    font-size: 52px;
+  }
+
+  .loyalty-transactions {
+    padding: 20px 10px;
+  }
+
+  th {
+    padding: 10px 5px;
+    font-size: 10px;
+  }
+
+  td {
+    padding: 15px 5px;
+    font-size: 13px;
+  }
+}
+.convert-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #0ea5e9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.convert-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.hint-text {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ef4444;
+}
+
+/* MODAL */
+.convert-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.convert-modal {
+  background: #fff;
+  width: 90%;
+  max-width: 380px;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.convert-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.convert-row input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.conversion-note {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #e5e7eb;
+  border: none;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+}

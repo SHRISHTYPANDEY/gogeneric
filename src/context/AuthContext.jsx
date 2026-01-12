@@ -9,9 +9,14 @@ export const AuthProvider = ({ children }) => {
   });
 
   const login = (userData, token) => {
-    setUser(userData); // 🔥 triggers TopHeader update
+    setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
+  };
+
+   const updateUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
@@ -21,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout, setUser,updateUser  }}>
       {children}
     </AuthContext.Provider>
   );

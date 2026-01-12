@@ -95,8 +95,6 @@ export default function SearchList() {
     <Loader text="Finding the best results..." />
   </div>
 )}
-
-
           {/* Empty State */}
           {!loading && medicines.length === 0 && (
             <div className="gs-status-box">

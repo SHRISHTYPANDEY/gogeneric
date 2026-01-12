@@ -15,7 +15,7 @@ export default function PrescriptionUpload({ required, file, onChange }) {
 
       {file && (
         <p className="file-name">
-          📎 {file.name}
+          {file.name}
         </p>
       )}
 

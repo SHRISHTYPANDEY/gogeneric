@@ -45,6 +45,7 @@ import MyAddress from "./components/pages/MyAddress.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Labs from "./components/pages/Labs.jsx";
 import WhoWeAre from "./components/pages/WhoweAre.jsx";
+import LoyaltyPage from "./components/pages/LoyaltyPage.jsx";
 
 const fetchAddress = async (lat, lng) => {
   try {
@@ -122,6 +123,7 @@ function AppLayout() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/wallet" element={<Wallet />} />
+        <Route path="/loyalty-points" element={<LoyaltyPage />}/>
         <Route path="/orders/:id/track" element={<TrackOrder />} />
         <Route path="/orders/:orderId" element={<OrderDetails />} />
         <Route path="/terms-and-conditions" element={<Terms />} />

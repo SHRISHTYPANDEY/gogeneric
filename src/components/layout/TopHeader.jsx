@@ -21,7 +21,8 @@ export default function TopHeader() {
   const [openLocationModal, setOpenLocationModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
-  const { user } = useAuth();
+  const { user,logout } = useAuth();
+  const [currentUserName, setCurrentUserName] = useState("Login");
   const navigate = useNavigate();
   const langRef = useRef(null);
 

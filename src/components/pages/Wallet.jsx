@@ -5,6 +5,7 @@ import { useWallet } from "../../context/WalletContext";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Loader";
 import { openRazorpay } from "../../utils/razorpayPayment";
+import api from "../../api/axiosInstance";
 
 export default function Wallet() {
   const { user } = useAuth();
@@ -24,27 +25,49 @@ export default function Wallet() {
     }
   }, [user]);
 
-  const handleAddMoney = () => {
+
+const handleAddMoney = async () => {
   const numericAmount = Number(amount);
-    console.log("Clicked add money", numericAmount);
+
   if (!numericAmount || numericAmount < 10) {
     alert("Minimum amount to add is ₹10");
     return;
   }
 
-  openRazorpay({
-    amount: numericAmount, 
-    name: "GoGeneric Wallet",
-    description: `Wallet Top-up ₹${numericAmount}`,
-    phone: user?.phone,
-    onSuccess: () => {
-      alert("Wallet credited successfully");
-      setShowAddMoney(false);
-      setAmount("");
-      fetchWallet();
-    },
-  });
+  try {
+    const res = await api.post("/api/v1/customer/wallet/add-fund", {
+      amount: numericAmount,
+      payment_method: "razorpay",
+    });
+
+    const paymentData = res.data;
+
+    // 🔥 OPEN RAZORPAY MODAL
+    openRazorpay({
+      key: paymentData.razorpay_key,
+      amount: paymentData.amount * 100,
+      currency: "INR",
+      order_id: paymentData.order_id,
+      name: "GoGeneric Wallet",
+      description: "Wallet Top-up",
+      handler: async function (response) {
+        alert("Payment Successful");
+        fetchWallet();
+        setShowAddMoney(false);
+        setAmount("");
+      },
+      modal: {
+        ondismiss: () => {
+          alert("Payment cancelled");
+        },
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Payment initiation failed");
+  }
 };
+
 
   if (loading) {
     return (

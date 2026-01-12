@@ -28,6 +28,7 @@ import {
   FaNewspaper,
   FaPhoneAlt,
   FaUsers,
+  FaCoins 
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
@@ -312,6 +313,21 @@ export default function Navbar() {
               </Link>
             </li>
           )}
+
+          {user && (
+  <li>
+    <Link
+      to="#"
+      onClick={(e) => {
+        e.preventDefault();
+        handleNavigate("/loyalty-points");
+      }}
+    >
+      <FaCoins /> Loyalty Points
+    </Link>
+  </li>
+)}
+
 
           <li>
             <Link

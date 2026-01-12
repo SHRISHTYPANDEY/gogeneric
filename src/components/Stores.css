@@ -71,6 +71,7 @@
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .stores-grid > .store-card-6am:nth-child(4n+1) { background-color: #fdf5f5; }
@@ -124,6 +125,7 @@
 
 .store-card-6am:hover .store-name {
   color: var(--deep-plum);
+  
 }
 
 .store-address {
