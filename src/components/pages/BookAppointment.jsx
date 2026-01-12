@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./BookAppointment.css";
+import { openRazorpay } from "../../utils/razorpayPayment";
 
 const getTodayDate = () => {
   const today = new Date();
@@ -76,36 +77,27 @@ Please confirm the appointment.`;
 
     setShowPayNow(true);
   };
+const handlePayNow = () => {
+  if (!selectedDate || !selectedSlot) {
+    alert("Please select date & time slot");
+    return;
+  }
 
-  const handlePayNow = () => {
-    if (!selectedDate || !selectedSlot) {
-      alert("Please select date & time slot");
-      return;
-    }
-
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: numericPrice * 100, 
-      currency: "INR",
-      name: "Doctor Appointment",
-      description: `${planName} - ₹${numericPrice}`,
-      handler: function (response) {
-        alert(
-          `Payment Successful!\nPlan: ${planName}\nAmount: ₹${numericPrice}\nPayment ID: ${response.razorpay_payment_id}`
-        );
-      },
-      prefill: {
-        contact: phone,
-      },
-      theme: {
-        color: "#0d6efd",
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  };
-
+  openRazorpay({
+    amount: numericPrice,
+    name: "Doctor Appointment",
+    description: `${planName} - ₹${numericPrice}`,
+    phone,
+    onSuccess: (response) => {
+      alert(
+        `Payment Successful!
+Plan: ${planName}
+Amount: ₹${numericPrice}
+Payment ID: ${response.razorpay_payment_id}`
+      );
+    },
+  });
+};
   return (
     <div className="booking-container">
 

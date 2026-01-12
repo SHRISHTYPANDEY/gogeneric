@@ -8,16 +8,13 @@ import AddToCartButton from "./CartButton";
 import Loader from "./Loader";
 import WishlistButton from "./WishlistButton";
 
-
 export default function NearbyStores() {
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [loading, setLoading] = useState(true);
-
   const scrollRef = useRef(null);
   const abortRef = useRef(null);
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,10 +51,7 @@ export default function NearbyStores() {
         [];
 
       const cats =
-        res.data.categories ||
-        res.data.filters ||
-        res.data.category_list ||
-        [];
+        res.data.categories || res.data.filters || res.data.category_list || [];
 
       setStores(products);
       setCategories(cats);
@@ -132,7 +126,6 @@ export default function NearbyStores() {
                     key={store.id}
                     onClick={() => navigate(`/medicine/${store.id}`)}
                   >
-                
                     <div onClick={(e) => e.stopPropagation()}>
                       <WishlistButton item={store} />
                       <AddToCartButton item={store} />
@@ -160,7 +153,6 @@ export default function NearbyStores() {
               )}
             </div>
           </div>
-
         </>
       )}
     </div>

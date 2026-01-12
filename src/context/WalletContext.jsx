@@ -65,8 +65,6 @@ export const WalletProvider = ({ children }) => {
   }
 };
 
-
-  // 🔁 Auto refresh on login/logout
   useEffect(() => {
     fetchWallet();
   }, [user]);

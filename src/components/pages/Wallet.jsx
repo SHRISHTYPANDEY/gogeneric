@@ -1,25 +1,50 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Wallet.css";
 import { FaWallet, FaRupeeSign } from "react-icons/fa";
 import { useWallet } from "../../context/WalletContext";
 import { useAuth } from "../../context/AuthContext";
 import Loader from "../Loader";
+import { openRazorpay } from "../../utils/razorpayPayment";
 
 export default function Wallet() {
   const { user } = useAuth();
-const {
-  balance = 0,
-  transactions = [],
-  loading = false,
-  fetchWallet,
-} = useWallet();
+  const {
+    balance = 0,
+    transactions = [],
+    loading = false,
+    fetchWallet,
+  } = useWallet();
 
-  /* ---------------- FETCH WALLET ---------------- */
+  const [showAddMoney, setShowAddMoney] = useState(false);
+  const [amount, setAmount] = useState("");
+
   useEffect(() => {
     if (user) {
       fetchWallet();
     }
   }, [user]);
+
+  const handleAddMoney = () => {
+  const numericAmount = Number(amount);
+    console.log("Clicked add money", numericAmount);
+  if (!numericAmount || numericAmount < 10) {
+    alert("Minimum amount to add is ₹10");
+    return;
+  }
+
+  openRazorpay({
+    amount: numericAmount, 
+    name: "GoGeneric Wallet",
+    description: `Wallet Top-up ₹${numericAmount}`,
+    phone: user?.phone,
+    onSuccess: () => {
+      alert("Wallet credited successfully");
+      setShowAddMoney(false);
+      setAmount("");
+      fetchWallet();
+    },
+  });
+};
 
   if (loading) {
     return (
@@ -30,58 +55,101 @@ const {
   }
 
   return (
-    <div className="wallet-page">
-      {/* WALLET HEADER */}
-      <div className="wallet-header">
-        <FaWallet className="wallet-icon" />
-        <h2>My Wallet</h2>
-      </div>
+    <>
+      <div className="wallet-page">
+        <div className="wallet-header">
+          <FaWallet className="wallet-icon" />
+          <h2>My Wallet</h2>
+        </div>
 
-      {/* BALANCE CARD */}
-      <div className="wallet-balance-card">
-        <span className="balance-label">Available Balance</span>
-        <div className="balance-amount">
-          <FaRupeeSign />
-          {balance}
+        <div className="wallet-balance-card">
+          <span className="balance-label">Available Balance</span>
+          <div className="balance-amount">
+            <FaRupeeSign />
+            {balance}
+          </div>
+
+          <button
+            className="add-money-btn"
+            onClick={() => setShowAddMoney(true)}
+          >
+            Add Money
+          </button>
+        </div>
+
+        <div className="wallet-transactions">
+          <h3>Transaction History</h3>
+
+          {transactions.length === 0 ? (
+            <p className="empty-text">No wallet transactions found</p>
+          ) : (
+            <ul className="transaction-list">
+              {transactions.map((tx) => {
+                const credit = Number(tx.credit || 0);
+                const debit = Number(tx.debit || 0);
+                const txAmount = credit > 0 ? credit : debit;
+                const isCredit = credit > 0;
+
+                return (
+                  <li key={tx.id} className="transaction-item">
+                    <div>
+                      <p className="tx-title">
+                        {tx.transaction_type || "Wallet Transaction"}
+                      </p>
+                      <span className="tx-date">
+                        {new Date(tx.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    <span
+                      className={`tx-amount ${
+                        isCredit ? "credit" : "debit"
+                      }`}
+                    >
+                      {isCredit ? "+" : "-"}₹{txAmount}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
 
-      {/* TRANSACTIONS */}
-      <div className="wallet-transactions">
-        <h3>Transaction History</h3>
+      {showAddMoney && (
+        <div className="wallet-modal-overlay">
+          <div className="wallet-modal">
+            <h3>Add Money to Wallet</h3>
 
-        {transactions.length === 0 ? (
-          <p className="empty-text">No wallet transactions found</p>
-        ) : (
-          <ul className="transaction-list">
-          {transactions.map((tx) => {
-  const credit = Number(tx.credit || 0);
-  const debit = Number(tx.debit || 0);
-  const amount = credit > 0 ? credit : debit;
-  const isCredit = credit > 0;
+            <input
+              type="number"
+              placeholder="Enter amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
 
-  return (
-    <li key={tx.id} className="transaction-item">
-      <div>
-        <p className="tx-title">
-          {tx.transaction_type || "Wallet Transaction"}
-        </p>
-        <span className="tx-date">
-          {new Date(tx.created_at).toLocaleDateString()}
-        </span>
-      </div>
+            <div className="wallet-modal-actions">
+              <button
+                className="btn-cancel"
+                onClick={() => {
+                  setShowAddMoney(false);
+                  setAmount("");
+                }}
+              >
+                Cancel
+              </button>
 
-      <span
-        className={`tx-amount ${isCredit ? "credit" : "debit"}`}
-      >
-        {isCredit ? "+" : "-"}₹{amount}
-      </span>
-    </li>
-  );
-})}
-          </ul>
-        )}
-      </div>
-    </div>
+              <button
+                className="btn-primary"
+                onClick={handleAddMoney}
+                disabled={!amount || Number(amount) < 10}
+              >
+                Proceed to Pay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

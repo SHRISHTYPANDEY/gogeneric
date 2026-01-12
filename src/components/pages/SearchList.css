@@ -7,15 +7,16 @@
   --gs-text-light: #636e72;
   --gs-white: #ffffff;
   --gs-shadow: 0 10px 30px rgba(107, 63, 105, 0.08);
-  --gs-card-radius: 28px;
+  --gs-card-radius: 24px;
 }
 
 .gs-search-container {
-  padding: 60px 20px;
+  padding: 40px 20px;
   background-color: #fcfbfc;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
+
 .gs-loader-center {
   min-height: 60vh;
   display: flex;
@@ -24,43 +25,77 @@
   width: 100%;
 }
 
-
 .gs-search-wrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Header Styling */
 .gs-search-header {
   margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; 
+  border-bottom: 2px solid rgba(107, 63, 105, 0.05);
+  padding-bottom: 20px;
 }
 
 .gs-result-title {
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 850;
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 700;
   color: var(--gs-text);
-  margin-bottom: 8px;
+  margin: 0;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .gs-result-title .gs-highlight {
   color: var(--gs-plum);
-  background: var(--gs-soft-pink);
-  padding: 2px 12px;
-  border-radius: 10px;
+  background: linear-gradient(120deg, var(--gs-soft-pink) 0%, #f3e8f1 100%);
+  padding: 4px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  display: inline-block;
+  box-shadow: 2px 4px 10px rgba(107, 63, 105, 0.05);
 }
 
 .gs-result-count {
-  color: var(--gs-text-light);
-  font-size: 15px;
-  font-weight: 500;
+  background: var(--gs-plum);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 50px; 
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(107, 63, 105, 0.2);
+  white-space: nowrap; 
+}
+
+@media (max-width: 768px) {
+  .gs-search-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+  }
+
+  .gs-result-title {
+    font-size: 18px;
+  }
+
+  .gs-result-count {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
 }
 .gs-medicine-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
 }
+
 .gs-medicine-card {
+  background-color: var(--gs-white);
   border-radius: var(--gs-card-radius);
   border: 1px solid rgba(107, 63, 105, 0.05);
   overflow: hidden;
@@ -68,84 +103,96 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100%; 
   position: relative;
-}
-.gs-medicine-card:nth-child(4n + 1) { 
-  background-color: #fdf2f2 !important; 
+  box-shadow: var(--gs-shadow);
 }
 
-.gs-medicine-card:nth-child(4n + 2) { 
-  background-color: #f8f0f7 !important; 
-}
-
-.gs-medicine-card:nth-child(4n + 3) { 
-  background-color: #fef5ed !important; 
-}
-
-.gs-medicine-card:nth-child(4n + 4) { 
-  background-color: #f2f0f9 !important; 
-}
+.gs-medicine-card:nth-child(4n + 1) { background-color: #fdf2f2; }
+.gs-medicine-card:nth-child(4n + 2) { background-color: #f8f0f7; }
+.gs-medicine-card:nth-child(4n + 3) { background-color: #fef5ed; }
+.gs-medicine-card:nth-child(4n + 4) { background-color: #f2f0f9; }
 
 .gs-medicine-card:hover {
-  transform: translateY(-12px);
+  transform: translateY(-8px);
   background-color: var(--gs-white) !important;
   border-color: var(--gs-plum-light);
-  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.1);
+  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.12);
 }
 
 .gs-img-box {
-  height: 200px;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 25px;
-  background-color: transparent; 
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.3); 
+  margin: 12px;
+  border-radius: 20px;
 }
 
 .gs-img-box img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  transition: transform 0.4s ease;
-  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.08));
+  transition: transform 0.5s ease;
 }
 
 .gs-medicine-card:hover .gs-img-box img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
-
 .gs-card-info {
-  padding: 10px 24px 24px;
+  padding: 0 20px 20px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between; 
+}
+
+.gs-text-group {
+  margin-bottom: 15px;
   text-align: center;
 }
 
 .gs-med-name {
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--gs-text);
-  margin-bottom: 12px;
-  line-height: 1.4;
+  margin-bottom: 6px;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 45px;
+  min-height: 42px; 
+}
+
+.gs-med-store {
+  font-size: 13px;
+  color: var(--gs-text-light);
+  font-weight: 500;
+}
+
+.gs-wishlist {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .gs-view-btn {
-  background: rgba(255, 255, 255, 0.5); 
+  background: rgba(107, 63, 105, 0.08);
   color: var(--gs-plum);
-  border: 1px solid rgba(107, 63, 105, 0.1);
+  border: 1px solid transparent;
   padding: 12px;
-  border-radius: 16px;
-  font-weight: 800;
+  border-radius: 14px;
+  font-weight: 700;
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
   transition: all 0.3s ease;
   width: 100%;
 }
@@ -153,87 +200,65 @@
 .gs-medicine-card:hover .gs-view-btn {
   background: var(--gs-plum);
   color: var(--gs-white);
-  border-color: var(--gs-plum);
+}
+
+.gs-status-box {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: var(--gs-shadow);
+}
+
+.gs-empty-icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.gs-no-results {
+  font-size: 18px;
+  color: var(--gs-text-light);
+  margin-bottom: 20px;
+}
+
+.gs-retry-btn {
+  background: var(--gs-plum);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
-  .gs-medicine-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  .gs-img-box { height: 160px; }
-  .gs-medicine-card { border-radius: 20px; }
-}
-@media (max-width: 768px) {
-
   .gs-search-container {
-    padding: 20px 12px;
-    overflow-x: hidden;
-  }
-
-  .gs-search-wrapper {
-    width: 100%;
-    overflow-x: hidden;
-  }
-  .gs-search-header {
-    margin-bottom: 20px;
-  }
-
-  .gs-result-title {
-    font-size: 18px;
-    line-height: 1.4;
-  }
-
-  .gs-result-title .gs-highlight {
-    padding: 2px 8px;
-    font-size: 16px;
-  }
-
-  .gs-result-count {
-    font-size: 13px;
+    padding: 20px 15px;
   }
 
   .gs-medicine-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    width: 100%;
   }
 
-  .gs-medicine-card {
-    border-radius: 18px;
-    width: 100%;
-  }
   .gs-img-box {
-    height: 140px;
-    padding: 14px;
-  }
-
-  .gs-img-box img {
-    max-width: 100%;
-    max-height: 100%;
+    height: 130px;
+    padding: 10px;
+    margin: 8px;
   }
 
   .gs-card-info {
-    padding: 10px 12px 14px;
+    padding: 0 12px 15px;
   }
 
   .gs-med-name {
-    font-size: 13px;
-    height: 38px;
-    -webkit-line-clamp: 2;
+    font-size: 14px;
+    min-height: 36px;
   }
 
   .gs-view-btn {
-    font-size: 11px;
     padding: 10px;
-    border-radius: 12px;
-  }
-
-  .gs-status-box {
-    padding: 30px 10px;
-  }
-
-  .gs-no-results {
-    font-size: 14px;
+    font-size: 10px;
+    border-radius: 10px;
   }
 }

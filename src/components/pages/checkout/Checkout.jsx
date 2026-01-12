@@ -12,6 +12,7 @@ import AddressSection from "./AddressSection";
 import PaymentMethod from "./PaymentMethod";
 import PrescriptionUpload from "./PrescriptionUpload";
 import Loader from "../../Loader";
+import { openRazorpay } from "../../../utils/razorpayPayment";
 
 export default function Checkout() {
   const [cartItems, setCartItems] = useState([]);
@@ -94,46 +95,20 @@ export default function Checkout() {
     }
   };
 
-  const handleDigitalPayment = () => {
+ const handleDigitalPayment = () => {
+  if (!validateBeforeOrder()) return;
 
-    if (!validateBeforeOrder()) return;
+  openRazorpay({
+    amount: totalPayable,
+    name: "GoGeneric",
+    description: "Order Payment",
+    phone: selectedAddress?.phone,
+    onSuccess: (response) => {
+      placeOrderAfterPayment(response);
+    },
+  });
+};
 
-    if (deliveryType === "delivery" && !selectedAddress) {
-      toast.error("Please select delivery address");
-      return;
-    }
-
-    if (!policyAccepted) {
-      toast.error("Please accept policies");
-      return;
-    }
-
-    if (isPrescriptionRequired && !prescriptionFile) {
-      toast.error("Please upload prescription");
-      return;
-    }
-
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: totalPayable * 100,
-      currency: "INR",
-      name: "Your App Name",
-      description: "Order Payment",
-      handler: function (response) {
-        placeOrderAfterPayment(response);
-      },
-      prefill: {
-        name: selectedAddress?.name || "",
-        contact: selectedAddress?.phone || "",
-      },
-      theme: {
-        color: "#0d6efd",
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  };
 
   const placeOrderAfterPayment = async (paymentResponse) => {
     try {
@@ -285,26 +260,23 @@ export default function Checkout() {
   }
 
   const validateBeforeOrder = () => {
-  // 🔐 Login check
+
   if (!token) {
     toast.error("Please login first to place your order");
     navigate("/login");
     return false;
   }
 
-  // 🚚 Address check
   if (deliveryType === "delivery" && !selectedAddress) {
     toast.error("Please select a delivery address");
     return false;
   }
 
-  // 💳 Payment method
   if (!paymentMethod) {
     toast.error("Please select a payment method");
     return false;
   }
 
-  // 💰 Wallet balance
   if (paymentMethod === "wallet" && walletBalance < totalPayable) {
     toast.error(
       `Insufficient wallet balance. Available ₹${walletBalance}`
@@ -312,13 +284,11 @@ export default function Checkout() {
     return false;
   }
 
-  // 📄 Prescription
   if (isPrescriptionRequired && !prescriptionFile) {
     toast.error("Prescription is required for selected medicines");
     return false;
   }
 
-  // 📜 Policy
   if (!policyAccepted) {
     toast.error("Please accept Privacy Policy & Terms");
     return false;

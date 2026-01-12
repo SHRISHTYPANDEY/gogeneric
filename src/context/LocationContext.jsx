@@ -8,7 +8,12 @@ export const LocationProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
-  // 🔒 control flag
+  const [locationVersion, setLocationVersion] = useState(0);
+
+  const notifyAddressChange = () => {
+    setLocationVersion((v) => v + 1);
+  };
+
   const isLocationAllowed =
     localStorage.getItem("location_allowed") === "true";
 
@@ -20,14 +25,12 @@ export const LocationProvider = ({ children }) => {
     setLocation(null);
     localStorage.removeItem("user_location");
     localStorage.setItem("location_allowed", "false");
+    notifyAddressChange(); 
   };
 
-  // 🌍 AUTO FETCH (ONLY WHEN LOGGED IN + ALLOWED)
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (!token) return;
-    // if (!isLocationAllowed) return;
     if (location) return;
     if (!navigator.geolocation) return;
 
@@ -49,7 +52,9 @@ export const LocationProvider = ({ children }) => {
 
           setLocation(payload);
           localStorage.setItem("user_location", JSON.stringify(payload));
-          localStorage.setItem("location_allowed", "true"); 
+          localStorage.setItem("location_allowed", "true");
+
+          notifyAddressChange(); 
         } catch (e) {
           console.error(e);
         }
@@ -65,6 +70,8 @@ export const LocationProvider = ({ children }) => {
         setLocation,
         resetLocation,
         enableLocation,
+        notifyAddressChange, 
+        locationVersion,      
       }}
     >
       {children}

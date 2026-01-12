@@ -16,7 +16,6 @@ export const WishlistProvider = ({ children }) => {
     localStorage.setItem("guest_id", guestId);
   }
 
-  /* ================= FETCH ================= */
   const fetchWishlist = async () => {
     try {
       const res = await api.get("/api/v1/customer/wish-list", {
@@ -38,7 +37,6 @@ export const WishlistProvider = ({ children }) => {
     fetchWishlist();
   }, [token]);
 
-  /* ================= ADD ================= */
   const addToWishlist = async (itemId) => {
     try {
       setLoading(true);
@@ -71,7 +69,6 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  /* ================= REMOVE ================= */
   const removeFromWishlist = async (itemId) => {
     try {
       setLoading(true);
@@ -97,7 +94,6 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  /* ================= HELPERS ================= */
   const isWishlisted = (itemId) =>
     wishlist.some((item) => item.id === itemId);
 
