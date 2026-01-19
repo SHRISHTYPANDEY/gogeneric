@@ -5,16 +5,27 @@ import "./Cart.css";
 import { cleanImageUrl } from "../../utils";
 import LoginModal from "../auth/LoginModal";
 import { useNavigate } from "react-router-dom";
-import { addToCart } from "../../utils/cartHelper";
+import AddToCartButton from "../CartButton";
+import WishlistButton from "../WishlistButton";
 import Loader from "../Loader";
+import useDiscounts from "../../hooks/useDiscounts";
+import {
+  getDiscountedPrice,
+  getFinalPrice,
+  getDiscountPercent,
+} from "../../utils/priceUtils";
+
 export default function Cart() {
   const [cart, setCart] = useState([]);
   const [suggested, setSuggested] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
+
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  const { discountMap, fetchDiscountedItems } = useDiscounts();
 
   let guestId = localStorage.getItem("guest_id");
   if (!token && !guestId) {
@@ -23,15 +34,21 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    fetchCart();
+    fetchCartAndSync();
+    fetchDiscountedItems();
+
+    const handler = () => fetchCartAndSync();
+    window.addEventListener("cart-updated", handler);
+    return () => window.removeEventListener("cart-updated", handler);
   }, []);
 
   useEffect(() => {
     if (cart.length) fetchSuggestedItems();
   }, [cart]);
 
-  const fetchCart = async () => {
+  const fetchCartAndSync = async () => {
     try {
+      setLoading(true);
       const res = await api.get("/api/v1/customer/cart/list", {
         headers: {
           zoneId: JSON.stringify([3]),
@@ -41,9 +58,14 @@ export default function Cart() {
         params: !token ? { guest_id: guestId } : {},
       });
 
-      setCart(res.data || []);
+      const cartItems = res.data || [];
+      setCart(cartItems);
+      localStorage.setItem(
+        "cart_item_ids",
+        JSON.stringify(cartItems.map((c) => c.item_id))
+      );
     } catch (err) {
-      // console.error("Cart fetch error:", err);
+      console.error("Cart sync error", err);
     } finally {
       setLoading(false);
     }
@@ -52,92 +74,72 @@ export default function Cart() {
   const updateQty = async (item, qty) => {
     if (qty < 1) return;
 
-    try {
-      await api.post(
-        "/api/v1/customer/cart/update",
-        {
-          cart_id: item.id,
-          price: item.price,
-          quantity: qty,
-          ...(token ? {} : { guest_id: guestId }),
-        },
-        {
-          headers: {
-            zoneId: JSON.stringify([3]),
-            moduleId: "2",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-        }
-      );
-      fetchCart();
-    } catch (err) {
-      console.error("Update error:", err);
-    }
-  };
-
-  const removeItem = async (item) => {
-    setCart((prev) => prev.filter((c) => c.id !== item.id));
-
-    try {
-      await api.delete("/api/v1/customer/cart/remove-item", {
-        data: {
-          cart_id: item.id,
-          ...(token ? {} : { guest_id: guestId }),
-        },
+    await api.post(
+      "/api/v1/customer/cart/update",
+      {
+        cart_id: item.id,
+        price: item.price,
+        quantity: qty,
+        ...(token ? {} : { guest_id: guestId }),
+      },
+      {
         headers: {
           zoneId: JSON.stringify([3]),
           moduleId: "2",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-      });
-    } catch (err) {
-      // console.error("Remove error:", err);
-      fetchCart();
-    }
+      }
+    );
+
+    window.dispatchEvent(new Event("cart-updated"));
   };
 
-  const fetchSuggestedItems = async () => {
-  const firstItem = cart[0];
-  if (!firstItem) return;
-
-  const storeId = firstItem.item?.store_id || firstItem.item?.store?.id;
-  const categoryId =
-    firstItem.item?.category_id || firstItem.item?.category?.id;
-
-  if (!storeId || !categoryId) return;
-
-  try {
-    setSuggestedLoading(true);
-
-    const res = await api.get("/api/v1/items/latest", {
+  const removeItem = async (item) => {
+    await api.delete("/api/v1/customer/cart/remove-item", {
+      data: {
+        cart_id: item.id,
+        ...(token ? {} : { guest_id: guestId }),
+      },
       headers: {
         zoneId: JSON.stringify([3]),
         moduleId: "2",
-      },
-      params: {
-        store_id: storeId,
-        category_id: categoryId,
-        offset: 1,
-        limit: 6,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
 
-    setSuggested(res.data?.products || []);
-  } catch (err) {
-    // console.error("Suggested error:", err);
-  } finally {
-    setSuggestedLoading(false);
-  }
-};
+    window.dispatchEvent(new Event("cart-updated"));
+  };
 
-  const addSuggestedToCart = async (product) => {
+  const fetchSuggestedItems = async () => {
+    const firstItem = cart[0];
+    if (!firstItem) return;
+
+    const storeId = firstItem.item?.store_id || firstItem.item?.store?.id;
+    const categoryId =
+      firstItem.item?.category_id || firstItem.item?.category?.id;
+
+    if (!storeId || !categoryId) return;
+
     try {
-      await addToCart({
-        item: product, 
+      setSuggestedLoading(true);
+      const res = await api.get("/api/v1/items/latest", {
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: "2",
+        },
+        params: {
+          store_id: storeId,
+          category_id: categoryId,
+          offset: 1,
+          limit: 6,
+        },
       });
-      fetchCart();
+
+      setSuggested(res.data?.products || []);
     } catch (err) {
-      // console.error("Add suggested error:", err);
+      setSuggestedLoading(false);
+    } finally {
+      setSuggestedLoading(false);
     }
   };
 
@@ -158,22 +160,18 @@ export default function Cart() {
       {cart.length === 0 ? (
         <div className="empty-cart-state medical">
           <span className="medical-icon">💊</span>
-
           <h3>Your cart is currently empty</h3>
-
           <p>
             Please add required medicines or healthcare
             <br />
             items to continue.
           </p>
-
           <button className="explore-btn" onClick={() => navigate("/")}>
             Browse Medicines
           </button>
         </div>
       ) : (
         <>
-          {/* CART ITEMS */}
           <div className="cart-layout">
             <div className="cart-items">
               {cart.map((c) => {
@@ -206,13 +204,15 @@ export default function Cart() {
                       </button>
                     </div>
 
-                    <div className="item-total">₹{c.price * c.quantity}</div>
-
+                    <div className="item-total">
+                      ₹{c.price * c.quantity}
+                    </div>
                     <Trash2 className="delete" onClick={() => removeItem(c)} />
                   </div>
                 );
               })}
             </div>
+
             <div className="cart-summary">
               <h3>Summary</h3>
               <div className="summary-row">
@@ -234,40 +234,84 @@ export default function Cart() {
             </div>
           </div>
 
-        {/* SUGGESTED ITEMS */}
-<div className="suggested-section">
-  <h3 className="suggested-title">
-    You may also need
-  </h3>
+          <div className="suggested-section">
+            <h3 className="suggested-title">You may also need</h3>
 
-  {suggestedLoading ? (
-    <Loader text="Loading suggestions..." />
-  ) : (
-    <div className="suggested-grid">
-      {suggested.map((p) => (
-        <div key={p.id} className="suggested-card">
-          <img
-            src={cleanImageUrl(
-              p.image_full_url || p.images_full_url?.[0]
+            {suggestedLoading ? (
+              <Loader text="Loading suggestions..." />
+            ) : (
+              <div className="suggested-grid">
+                {suggested.map((p) => {
+                  const discountedPrice = getDiscountedPrice(
+                    p,
+                    discountMap
+                  );
+                  const discountPercent = getDiscountPercent(
+                    p,
+                    discountMap
+                  );
+
+                  return (
+                    <div key={p.id} className="suggested-card">
+                      {discountPercent && (
+                        <div className="discount-badge">
+                          {discountPercent}% OFF
+                        </div>
+                      )}
+
+                      <div className="suggested-img-container">
+                        <img
+                          src={cleanImageUrl(
+                            p.image_full_url || p.images_full_url?.[0]
+                          )}
+                          alt={p.name}
+                          onError={(e) =>
+                            (e.currentTarget.src = "/no-image.png")
+                          }
+                        />
+                      </div>
+
+                      <div className="suggested-info">
+                        <h4>{p.name}</h4>
+
+                        {discountedPrice ? (
+                          <>
+                            <span className="original-price">
+                              ₹{p.price}
+                            </span>
+                            <span className="discounted-price">
+                              ₹{discountedPrice}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="discounted-price">
+                            ₹{p.price}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="suggested-actions">
+                        <WishlistButton item={p} />
+                        <AddToCartButton
+                          item={{
+                            ...p,
+                            price: getFinalPrice(p, discountMap),
+                            original_price: p.price,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
-            alt={p.name}
-            onError={(e) => (e.currentTarget.src = "/no-image.png")}
-          />
-          <h4>{p.name}</h4>
-          <p>₹{p.price}</p>
-          <button onClick={() => addSuggestedToCart(p)}>
-            Add to Cart
-          </button>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+          </div>
+
           {showLogin && (
             <LoginModal
               onClose={() => {
                 setShowLogin(false);
-                fetchCart();
+                fetchCartAndSync();
               }}
             />
           )}

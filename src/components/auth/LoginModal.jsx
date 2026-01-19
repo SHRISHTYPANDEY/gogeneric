@@ -8,7 +8,6 @@ import { Eye, EyeOff, Mail, Phone, User, Lock, ArrowLeft } from "lucide-react";
 export default function LoginModal({ onClose }) {
   const [isSignup, setIsSignup] = useState(false);
   const [isForgot, setIsForgot] = useState(false);
-
   const [forgotValue, setForgotValue] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

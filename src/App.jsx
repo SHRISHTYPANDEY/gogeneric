@@ -13,7 +13,6 @@ import StoreDetails from "./components/pages/StoreDetails.jsx";
 import Cart from "./components/pages/Cart.jsx";
 import CategoryItems from "./components/pages/CategoryItems.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
-import FeaturedStoreDetails from "./components/pages/FeaturedStoreDetails.jsx";
 import Wishlist from "./components/pages/Wishlist.jsx";
 import ContactUs from "./components/pages/ContactUs.jsx";
 import WhatsAppChat from "./components/layout/WhatsAppChat.jsx";
@@ -38,6 +37,7 @@ import BlogList from "./components/pages/BlogList.jsx";
 import Checkout from "./components/pages/checkout/Checkout.jsx";
 import { LocationProvider } from "./context/LocationContext.jsx";
 import { useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "./context/LocationContext";
 import SearchList from "./components/pages/SearchList.jsx";
 import Pharmacy from "./components/pages/Pharmacy.jsx";
@@ -46,7 +46,11 @@ import ScrollToTop from "./components/ScrollToTop.jsx";
 import Labs from "./components/pages/Labs.jsx";
 import WhoWeAre from "./components/pages/WhoweAre.jsx";
 import LoyaltyPage from "./components/pages/LoyaltyPage.jsx";
-
+import Category from "./components/pages/Category.jsx";
+import HealthConcern from "./components/pages/HealthConcern.jsx";
+import HealthCon from "./components/pages/HealthCon.jsx";
+import AppDownloadModal from "./components/AppDownloadModal.jsx";
+import BackButton from "./components/BackButton.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
@@ -62,8 +66,18 @@ const fetchAddress = async (lat, lng) => {
 };
 
 function AppLayout() {
+  const [showModal, setShowModal] = useState(false);
   const { showLoginModal, setShowLoginModal } = useAuth();
   const { location, setLocation } = useLocation();
+    useEffect(() => {
+      setShowModal(true);
+  }, []);
+
+  const closeModal = () => {
+    localStorage.setItem("appDownloadDismissed", "true");
+    setShowModal(false);
+  };
+
   useEffect(() => {
     if (location) return; 
 
@@ -87,12 +101,16 @@ function AppLayout() {
 
   return (
     <>
+      {showModal && <AppDownloadModal onClose={closeModal} />}
       <Toaster
         position="top-right"
         toastOptions={{ style: { zIndex: 9999999 } }}
       />
       <TopHeader />
       <Navbar />
+      <div className="container"> 
+         <BackButton /> 
+      </div>
       <WhatsAppChat />
     <ScrollToTop />
       <Routes>
@@ -115,7 +133,6 @@ function AppLayout() {
         <Route path="/view-stores/:id" element={<StoreDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/category/:id" element={<CategoryItems />} />
-        <Route path="/store/:id" element={<FeaturedStoreDetails />} />
         <Route path="/medicine/:id" element={<MedicineDetails />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/notifications" element={<Notifications />} />
@@ -139,6 +156,9 @@ function AppLayout() {
         <Route path="/pharmacy" element={<Pharmacy />} />
         <Route path="/my-address" element={<MyAddress />} />
         <Route path="/who-we-are" element={<WhoWeAre />} />
+        <Route path="/category" element={<Category />} />
+        <Route path="/health-concern/:concernSlug" element={<HealthConcern />} />
+        <Route path="/health-concerns" element={<HealthCon />} />
       </Routes>
       {/* ✅ GLOBAL LOGIN MODAL */}
       {showLoginModal && (

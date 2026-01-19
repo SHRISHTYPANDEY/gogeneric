@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./FeaturedStores.css";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin } from "lucide-react";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 
@@ -97,11 +97,14 @@ export default function FeaturedStores() {
 
   /* ================= UI ================= */
   return (
-    <div className="fs-container max-w-7xl mx-auto px-4">
+    <div className="fs-container">
       <div className="fs-header">
         <h2 className="fs-main-title">Featured Stores</h2>
-        <button className="fs-see-all-btn" onClick={() => navigate("/stores")}>
-          See All →
+       <button
+          className="see-all-btn"
+          onClick={() => navigate("/stores")}
+        >
+          See All
         </button>
       </div>
 
@@ -109,9 +112,6 @@ export default function FeaturedStores() {
 
       {!loading && stores.length > 0 && (
         <div className="fs-relative-wrapper">
-          <button className="fs-scroll-btn fs-left" onClick={scrollLeft}>
-            <ChevronLeft size={22} />
-          </button>
 
           <div
             className="fs-wrapper"
@@ -147,7 +147,7 @@ export default function FeaturedStores() {
                   <div
                     key={store.id}
                     className="fs-card"
-                    onClick={() => navigate(`/store/${store.id}`)}
+                    onClick={() => navigate(`/view-stores/${store.id}`)}
                   >
                     <div className="fs-img-container">
                       <img
@@ -168,7 +168,7 @@ export default function FeaturedStores() {
 
                     <div className="fs-meta">
                       {distance && (
-                        <span className="fs-distance">📍 {distance}</span>
+                        <span className="fs-distance"><MapPin size={15}/> {distance}</span>
                       )}
                       <span
                         className={`fs-status ${
@@ -183,10 +183,6 @@ export default function FeaturedStores() {
               })}
             </div>
           </div>
-
-          <button className="fs-scroll-btn fs-right" onClick={scrollRight}>
-            <ChevronRight size={22} />
-          </button>
         </div>
       )}
     </div>

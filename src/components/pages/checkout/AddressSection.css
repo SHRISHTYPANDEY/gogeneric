@@ -1,100 +1,161 @@
-/* --- ADDRESS CARD LIST --- */
+/* ===============================
+   GoGeneric Theme Variables
+================================ */
+:root {
+  --gg-primary: #016b61;
+  --gg-primary-dark: #014f48;
+  --gg-primary-light: #e6f3f1;
+
+  --gg-text-dark: #1e1e1e;
+  --gg-text-muted: #6b6b6b;
+
+  --gg-border: #e6e6e6;
+  --gg-bg: #f9fdfc;
+  --gg-white: #ffffff;
+
+  --gg-radius-lg: 18px;
+  --gg-radius-md: 14px;
+  --gg-radius-sm: 10px;
+
+  --gg-shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --gg-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ===============================
+   Checkout Card Wrapper
+================================ */
+.checkout-card {
+  background: var(--gg-white);
+  border-radius: var(--gg-radius-lg);
+  padding: 22px;
+  border: 1px solid var(--gg-border);
+  box-shadow: var(--gg-shadow-soft);
+  margin-bottom: 20px;
+}
+
+.checkout-card h4 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--gg-primary);
+  margin-bottom: 18px;
+}
+
+/* ===============================
+   Address Card
+================================ */
 .address-card {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 12px;
   padding: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
+  border-radius: var(--gg-radius-md);
+  border: 1.5px solid var(--gg-border);
   background: #fff;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all 0.25s ease;
+  position: relative;
 }
 
 .address-card:hover {
-  border-color: #007bff;
-  background-color: #f8fbff;
+  border-color: var(--gg-primary);
+  background: var(--gg-primary-light);
 }
 
 .address-card.active {
-  border-color: #007bff;
-  background-color: #f0f7ff;
-  border-width: 2px;
+  border-color: var(--gg-primary);
+  background: var(--gg-primary-light);
+  box-shadow: 0 0 0 2px rgba(1, 107, 97, 0.15);
 }
 
+/* Left Content */
 .address-card strong {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #007bff;
+  color: var(--gg-primary);
   margin-bottom: 6px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .address-card p {
+  font-size: 13px;
   margin: 2px 0;
-  font-size: 14px;
-  color: #444;
-  line-height: 1.4;
+  color: var(--gg-text-muted);
+  line-height: 1.45;
 }
 
+/* ===============================
+   Edit Button
+================================ */
 .edit-btn {
   background: transparent;
-  color: #007bff;
-  border: 1px solid #007bff;
-  padding: 4px 12px;
-  border-radius: 6px;
+  color: var(--gg-primary);
+  border: 1.5px solid var(--gg-primary);
+  padding: 6px 14px;
+  border-radius: 50px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.25s ease;
+  height: fit-content;
 }
 
 .edit-btn:hover {
-  background: #007bff;
+  background: var(--gg-primary);
   color: #fff;
 }
 
+/* ===============================
+   Add Address Button
+================================ */
 .add-address-btn {
   width: 100%;
-  padding: 12px;
-  border: 2px dashed #ccc;
-  border-radius: 12px;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: var(--gg-radius-md);
+  border: 2px dashed var(--gg-border);
   background: transparent;
-  color: #666;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gg-text-muted);
   cursor: pointer;
-  margin-top: 10px;
-  transition: 0.2s;
+  transition: all 0.25s ease;
 }
 
 .add-address-btn:hover {
-  border-color: #007bff;
-  color: #007bff;
-  background: #f0f7ff;
+  border-color: var(--gg-primary);
+  color: var(--gg-primary);
+  background: var(--gg-primary-light);
 }
 
-/* --- ADDRESS FORM --- */
+/* ===============================
+   Address Form
+================================ */
 .address-form {
-  margin-top: 20px;
-  padding: 20px;
-  border-top: 2px solid #f0f0f0;
+  margin-top: 22px;
+  padding: 22px;
   background: #fafafa;
-  border-radius: 12px;
+  border-radius: var(--gg-radius-lg);
+  border-top: 1px solid var(--gg-border);
 }
 
 .address-form h4 {
-  margin-bottom: 15px;
-  color: #333;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--gg-text-dark);
+  margin-bottom: 16px;
 }
 
-/* Address Type Selection Row */
+/* ===============================
+   Address Type Row
+================================ */
 .address-type-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .type-btn {
@@ -102,71 +163,138 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: var(--gg-radius-sm);
+  border: 1.5px solid var(--gg-border);
   background: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gg-text-muted);
   cursor: pointer;
-  font-size: 14px;
-  color: #666;
+  transition: all 0.25s ease;
 }
 
 .type-btn.active {
-  background: #007bff;
+  background: var(--gg-primary);
+  border-color: var(--gg-primary);
   color: #fff;
-  border-color: #007bff;
 }
 
-/* Form Inputs Styling */
+.type-btn:hover {
+  border-color: var(--gg-primary);
+}
+
+/* ===============================
+   Inputs
+================================ */
 .address-form input {
   width: 100%;
   padding: 12px;
-  margin-bottom: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: var(--gg-radius-sm);
+  border: 1.5px solid var(--gg-border);
   font-size: 14px;
-  box-sizing: border-box; /* Padding handling */
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
 }
 
 .address-form input:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  border-color: var(--gg-primary);
+  box-shadow: 0 0 0 3px rgba(1, 107, 97, 0.15);
 }
 
+/* Two Column */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* Action Buttons (Save/Cancel) */
+/* ===============================
+   Form Actions
+================================ */
 .form-actions {
   display: flex;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 .form-actions button {
   flex: 1;
   padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
+  border-radius: var(--gg-radius-sm);
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
   border: none;
+  transition: all 0.25s ease;
 }
 
+/* Cancel */
 .form-actions button:first-child {
-  background: #eee;
+  background: #eeeeee;
   color: #444;
 }
 
+.form-actions button:first-child:hover {
+  background: #dddddd;
+}
+
+/* Save / Update */
 .form-actions button:last-child {
-  background: #28a745;
+  background: var(--gg-primary);
   color: #fff;
 }
 
-.form-actions button:hover {
-  opacity: 0.9;
+.form-actions button:last-child:hover {
+  background: var(--gg-primary-dark);
+}
+
+/* ===============================
+   Responsive
+================================ */
+@media (max-width: 768px) {
+  .checkout-card {
+    padding: 16px;
+  }
+
+  .checkout-card h4 {
+    font-size: 16px;
+  }
+
+  .address-card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .address-card strong {
+    font-size: 12px;
+  }
+
+  .address-card p {
+    font-size: 12px;
+  }
+
+  .edit-btn {
+    font-size: 11px;
+    padding: 5px 12px;
+  }
+
+  .address-type-row {
+    gap: 8px;
+  }
+
+  .type-btn {
+    font-size: 12px;
+    padding: 9px;
+  }
+
+  .address-form {
+    padding: 16px;
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+  }
 }

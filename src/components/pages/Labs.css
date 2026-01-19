@@ -1,13 +1,25 @@
+:root {
+  --primary-deep: #016B61;        
+  --secondary-muted: #70B2B2;     
+  --accent-light: #9ECFD4;       
+  --bg-pink: #eefaed;            
+  --text-main: #013631;          
+  --glass-white: rgba(255, 255, 255, 0.85);
+  --premium-shadow: 0 10px 30px rgba(1, 107, 97, 0.1);
+  --border-soft: rgba(1, 107, 97, 0.35);
+  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 .labs-page {
-  padding: 10px 10px;
-  background: #fdfafb;
+  padding: 10px;
   min-height: 80vh;
+  background: var(--bg-pink);
 }
 
 .labs-heading {
   font-size: 32px;
   font-weight: 800;
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   text-align: center;
   margin-bottom: 8px;
 }
@@ -15,79 +27,84 @@
 .labs-sub {
   font-size: 25px;
   font-weight: 600;
-  color: var(--muted-purple);
+  color: var(--text-main);
   text-align: center;
   margin-bottom: 40px;
 }
 
-
+/* CARD */
 .lab-card {
   max-width: 800px;
   margin: 0 auto;
-  background: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #fff1e6,
+    #ffe5d4
+  );
   border-radius: 24px;
   display: flex !important;
   flex-direction: row !important;
-  align-items: center; 
+  align-items: center;
   overflow: hidden;
-  border: 1px solid rgba(163, 118, 162, 0.12);
-  box-shadow: 0 10px 30px rgba(107, 63, 105, 0.04);
+  border: 2px solid #f77e2e; 
+  box-shadow: var(--premium-shadow);
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-height: 220px; 
+  transition: var(--transition-smooth);
+  min-height: 220px;
 }
 
 .lab-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 40px rgba(107, 63, 105, 0.08);
 }
 
 .lab-card .store-image-wrapper {
-  flex: 0 0 32% !important; 
+  flex: 0 0 32% !important;
   height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: #fff;
+  background: var(--glass-white);
 }
 
 .lab-card .store-image-wrapper img {
   width: 100%;
   height: 100%;
-  object-fit: contain; 
-  transform: scale(1.2); 
+  object-fit: contain;
+  transform: scale(1.15);
 }
 
+/* CONTENT */
 .lab-card .store-content-vertical {
   flex: 1 !important;
-  padding: 30px 40px 30px 10px; 
+  padding: 30px 40px 30px 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.store-name {
+/* TEXT */
+.store-name1 {
   font-size: 24px;
   font-weight: 800;
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   margin-bottom: 10px;
   letter-spacing: -0.5px;
 }
 
-.store-address {
+.store-address1 {
   font-size: 14px;
-  color: var(--text-body);
+  color: var(--text-main);
   line-height: 1.5;
   margin-bottom: 8px;
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-.store-address svg {
-  color: var(--mauve);
+.store-address1 svg {
+  color: var(--secondary-muted);
   margin-top: 3px;
   flex-shrink: 0;
 }
@@ -98,11 +115,11 @@
   gap: 12px;
   margin-top: 15px;
   padding-top: 15px;
-  border-top: 1px solid rgba(163, 118, 162, 0.1);
+  border-top: 1px solid rgba(1, 107, 97, 0.2);
 }
 
-.store-distance, 
-.store-rating {
+.store-distance1,
+.store-rating1 {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -112,14 +129,14 @@
   border-radius: 10px;
 }
 
-.store-distance {
-  background: var(--dusty-rose);
-  color: var(--deep-plum);
+.store-distance1 {
+  background: var(--accent-light);
+  color: var(--text-main);
 }
 
-.store-rating {
-  background: rgba(0, 193, 110, 0.08);
-  color: #008f51;
+.store-rating1 {
+  background: rgba(1, 107, 97, 0.12);
+  color: var(--primary-deep);
 }
 
 @media (max-width: 768px) {
@@ -130,10 +147,9 @@
   }
 
   .lab-card .store-image-wrapper {
-    flex: none !important;
     width: 100%;
     height: 150px;
-    padding: 30px;
+    padding: 24px;
   }
 
   .lab-card .store-content-vertical {
@@ -141,7 +157,7 @@
     text-align: center;
   }
 
-  .store-address {
+  .store-address1 {
     justify-content: center;
     text-align: center;
   }
@@ -150,8 +166,8 @@
     justify-content: center;
   }
 }
-@media (max-width: 600px) {
 
+@media (max-width: 600px) {
   .labs-page {
     padding: 12px;
     overflow-x: hidden;
@@ -159,7 +175,6 @@
 
   .labs-heading {
     font-size: 22px;
-    margin-bottom: 4px;
   }
 
   .labs-sub {
@@ -169,7 +184,6 @@
 
   .lab-card {
     border-radius: 18px;
-    min-height: auto;
   }
 
   .lab-card .store-image-wrapper {
@@ -185,14 +199,12 @@
     padding: 16px;
   }
 
-  .store-name {
+  .store-name1 {
     font-size: 18px;
-    margin-bottom: 6px;
   }
 
-  .store-address {
+  .store-address1 {
     font-size: 13px;
-    margin-bottom: 6px;
   }
 
   .store-bottom-row {
@@ -201,8 +213,8 @@
     gap: 8px;
   }
 
-  .store-distance,
-  .store-rating {
+  .store-distance1,
+  .store-rating1 {
     font-size: 11px;
     padding: 4px 10px;
   }

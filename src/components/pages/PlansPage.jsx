@@ -60,7 +60,7 @@ export default function PlansPage() {
                 {Object.entries(plan.features).map(([key, value], index) => {
                   if (value === false) return (
                     <li key={index} className="feature-item disabled">
-                      <span className="icon">✕</span> 
+                      <span className="icon cross">✕</span> 
                       <span className="label">{key}</span>
                     </li>
                   );

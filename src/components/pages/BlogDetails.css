@@ -1,4 +1,18 @@
-/* ================= BLOG DETAILS ================= */
+/* ================= BLOG DETAILS (GOGENERIC GREEN) ================= */
+
+:root {
+  --gg-green: #016b61;
+  --gg-green-light: #1e8e82;
+  --gg-green-soft: #e8f6f4;
+  --gg-green-bg: #f6fbfa;
+
+  --text-dark: #0f2f2b;
+  --text-muted: #5f7d79;
+
+  --shadow-soft: 0 10px 25px rgba(1, 107, 97, 0.12);
+}
+
+/* ================= CONTAINER ================= */
 
 .blog-details {
   max-width: 840px;
@@ -6,95 +20,106 @@
   padding: 20px 20px;
 }
 
-/* Blog Title */
+/* ================= TITLE ================= */
+
 .blog-details h1 {
   font-size: 42px;
   font-weight: 800;
   line-height: 1.25;
-  color: var(--deep-plum);
+  color: var(--gg-green);
   margin-bottom: 32px;
   letter-spacing: -0.7px;
 }
 
-/* Main Content */
+/* ================= MAIN CONTENT ================= */
+
 .blog-content {
   font-size: 16.5px;
   line-height: 1.85;
-  color: #4a3048;
+  color: var(--text-dark);
 }
 
 /* Paragraphs */
 .blog-content p {
   margin-bottom: 22px;
+  color: var(--text-muted);
 }
 
-/* Headings inside content */
-.blog-details .blog-content h2{
+/* ================= HEADINGS ================= */
+
+.blog-details .blog-content h2 {
   font-size: 28px;
-  font-weight: 700;
-  color: #4E2A4F;
+  font-weight: 800;
+  color: var(--gg-green);
   margin: 52px 0 18px;
+  position: relative;
 }
 
 .blog-content h3 {
   font-size: 22px;
-  font-weight: 600;
-  color: var(--muted-purple);
+  font-weight: 700;
+  color: var(--gg-green-light);
   margin: 38px 0 14px;
 }
 
-/* Lists */
+/* ================= LISTS ================= */
+
 .blog-content ul {
-    list-style-type: disc;
+  list-style-type: disc;
   padding-left: 24px;
   margin: 22px 0;
 }
-.blog-content ol{
-    list-style-type: decimal;
-    padding-left: 24px;
+
+.blog-content ol {
+  list-style-type: decimal;
+  padding-left: 24px;
   margin: 22px 0;
 }
+
 .blog-content li {
   margin-bottom: 10px;
-  list-style-position: outside;
 }
 
-/* Links */
+/* ================= LINKS (NO PINK NOW) ================= */
+
 .blog-content a {
-  color: var(--deep-plum);
+  color: var(--gg-green);
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: var(--dusty-rose);
+  text-decoration-color: var(--gg-green-light);
   text-underline-offset: 4px;
 }
 
 .blog-content a:hover {
-  color: var(--muted-purple);
+  color: var(--gg-green-light);
 }
 
-/* Images inside blog HTML */
+/* ================= IMAGES ================= */
+
 .blog-content img {
   width: 100%;
   height: auto;
   border-radius: 18px;
   margin: 44px 0;
-  box-shadow: var(--premium-shadow);
+  box-shadow: var(--shadow-soft);
 }
 
-/* Blockquote */
+/* ================= BLOCKQUOTE ================= */
+
 .blog-content blockquote {
   margin: 44px 0;
   padding: 26px 30px;
-  background: rgba(221, 195, 195, 0.28);
-  border-left: 5px solid var(--deep-plum);
+  background: var(--gg-green-soft);
+  border-left: 5px solid var(--gg-green);
   border-radius: 14px;
   font-style: italic;
-  color: #5a3b58;
+  color: var(--text-dark);
 }
 
-/* Code blocks */
+/* ================= CODE BLOCK ================= */
+
 .blog-content pre {
-  background: #f8f5f8;
+  background: #f1f8f7;
   padding: 22px;
   border-radius: 16px;
   overflow-x: auto;
@@ -104,17 +129,18 @@
 .blog-content code {
   font-family: "Fira Code", monospace;
   font-size: 14px;
-  color: var(--deep-plum);
+  color: var(--gg-green);
 }
 
-/* Horizontal rule */
+/* ================= HR ================= */
+
 .blog-content hr {
   border: none;
   height: 1px;
   background: linear-gradient(
     to right,
     transparent,
-    var(--dusty-rose),
+    var(--gg-green-light),
     transparent
   );
   margin: 50px 0;
@@ -124,7 +150,7 @@
 
 @media (max-width: 768px) {
   .blog-details {
-    padding: 60px 16px;
+    padding: 40px 16px;
   }
 
   .blog-details h1 {
@@ -143,91 +169,37 @@
     font-size: 19px;
   }
 }
-@media (max-width: 600px) {
 
-  /* ===== GLOBAL SAFETY ===== */
-  html, body {
+@media (max-width: 600px) {
+  html,
+  body {
     max-width: 100%;
     overflow-x: hidden;
   }
 
-  /* ===== BLOG CONTAINER ===== */
   .blog-details {
     max-width: 100%;
-    padding: 40px 14px;
-    overflow-x: hidden;
+    padding: 36px 14px;
   }
 
-  /* ===== TITLE ===== */
   .blog-details h1 {
     font-size: 28px;
-    line-height: 1.25;
     margin-bottom: 22px;
-    letter-spacing: -0.4px;
   }
 
-  /* ===== CONTENT ===== */
   .blog-content {
     font-size: 15px;
     line-height: 1.75;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
   }
 
-  .blog-content p {
-    margin-bottom: 18px;
-  }
-
-  /* ===== HEADINGS ===== */
-  .blog-content h2 {
-    font-size: 22px;
-    margin: 38px 0 14px;
-  }
-
-  .blog-content h3 {
-    font-size: 18px;
-    margin: 28px 0 12px;
-  }
-
-  /* ===== LISTS ===== */
-  .blog-content ul,
-  .blog-content ol {
-    padding-left: 18px;
-    margin: 18px 0;
-  }
-
-  /* ===== IMAGES ===== */
   .blog-content img {
-    max-width: 100%;
-    height: auto;
     margin: 28px 0;
     border-radius: 14px;
   }
 
-  /* ===== BLOCKQUOTE ===== */
   .blog-content blockquote {
-    padding: 18px 18px;
+    padding: 18px;
     margin: 28px 0;
     font-size: 14.5px;
-  }
-
-  /* ===== CODE BLOCK ===== */
-  .blog-content pre {
-    max-width: 100%;
-    padding: 16px;
-    margin: 26px 0;
-    overflow-x: auto;
-    border-radius: 12px;
-  }
-
-  .blog-content code {
-    font-size: 13px;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-
-  /* ===== HR ===== */
-  .blog-content hr {
-    margin: 32px 0;
   }
 }

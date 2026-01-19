@@ -12,6 +12,10 @@ import i18n from "../../i18n";
 import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
 import { useLocation } from "../../context/LocationContext";
+import LogoImg from "../../assets/gogenlogo.png";
+import { FaShoppingCart, FaBell,FaDownload } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
+import SearchOverlayModal from "./SearchOverlayModal";
 
 export default function TopHeader() {
   const { t } = useTranslation();
@@ -21,20 +25,16 @@ export default function TopHeader() {
   const [openLocationModal, setOpenLocationModal] = useState(false);
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
-  const { user,logout } = useAuth();
+  const { user, logout } = useAuth();
   const [currentUserName, setCurrentUserName] = useState("Login");
   const navigate = useNavigate();
   const langRef = useRef(null);
 
-  const languages = [
-    { name: "English", code: "en", flag: "https://flagcdn.com/w20/us.png" },
-    { name: "हिन्दी", code: "hi", flag: "https://flagcdn.com/w20/in.png" },
-  ];
+  const [cartCount, setCartCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
 
-  const [language, setLanguage] = useState(() => {
-    const savedLang = localStorage.getItem("lang") || "en";
-    return languages.find((l) => l.code === savedLang) || languages[0];
-  });
+  const [openSearchModal, setOpenSearchModal] = useState(false);
+
 
   useEffect(() => {
     const handler = (e) => {
@@ -51,76 +51,128 @@ export default function TopHeader() {
     else setOpenLoginModal(true);
   };
 
-  const handleLanguageChange = (lang) => {
-    setLanguage(lang);
-    i18n.changeLanguage(lang.code);
-    localStorage.setItem("lang", lang.code);
-    setOpen(false);
+  const fetchCartCount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const guestId = localStorage.getItem("guest_id");
+
+      const res = await api.get("/api/v1/customer/cart/list", {
+        headers: {
+          moduleId: 2,
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        params: !token && guestId ? { guest_id: guestId } : {},
+      });
+
+      setCartCount(Array.isArray(res.data) ? res.data.length : 0);
+    } catch {}
   };
+
+  const fetchNotifications = async () => {
+  try {
+    if (!user) {
+      setNotificationCount(0);
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    const res = await api.get("/api/v1/customer/notifications", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        moduleId: 2,
+        zoneId: JSON.stringify([3]),
+      },
+    });
+
+    // ✅ status === 0 means UNREAD
+    const unreadCount = res.data.filter((n) => n.status === 0).length;
+    setNotificationCount(unreadCount);
+  } catch (err) {
+    console.error("Notification fetch failed");
+  }
+};
+
+useEffect(() => {
+  fetchCartCount();
+  fetchNotifications();
+
+  window.addEventListener("cart-updated", fetchCartCount);
+  window.addEventListener("notifications-updated", fetchNotifications);
+
+  return () => {
+    window.removeEventListener("cart-updated", fetchCartCount);
+    window.removeEventListener("notifications-updated", fetchNotifications);
+  };
+}, [user]);
 
   return (
     <>
-      <nav className="topheader-wrapper w-full">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div
-            className="location-trigger group"
-            onClick={() => setOpenLocationModal(true)}
-          >
-            <MdLocationOn size={20} className="text-orange-500" />
-            <div className="ml-2">
-              <span className="text-xs text-gray-400">{t("location")}</span>
-              <div className="text-sm font-semibold">
-                {location?.address || t("selectLocation")}
+     <nav className="topheader-wrapper w-full">
+        <div className="flex items-center justify-between">
+          <div className="topheader-icons flex items-center gap-6">
+            <img
+              src={LogoImg}
+              alt="GoGeneric"
+              className="cursor-pointer"
+              onClick={() => navigate("/")}
+            />
+
+            <div
+              className="location-trigger group"
+              onClick={() => setOpenLocationModal(true)}
+            >
+              <MdLocationOn size={20} className="text-orange-500" />
+              <div className="ml-2">
+                <span className="text-xs text-gray-400">{t("location")}</span>
+                <div className="text-sm font-semibold">
+                  {location?.address || t("selectLocation")}
+                </div>
               </div>
+              <IoMdArrowDropdown />
             </div>
-            <IoMdArrowDropdown />
           </div>
 
-          <div className="flex items-center gap-8">
-            <a
-              href="https://play.google.com/store/apps/details?id=com.gogeneric.user"
-              target="_blank"
-              rel="noreferrer"
-              className="download-pill"
+          <div className="flex items-center gap-6">
+            {/* DOWNLOAD APP */}
+<div
+  className="download-app-btn cursor-pointer"
+  onClick={() => window.open("https://play.google.com/store/apps/details?id=com.gogeneric.user", "_blank")}
+>
+  <FaDownload size={16} />
+  <span>Download App</span>
+</div>
+
+            {/* SEARCH ICON (New) */}
+          <div
+  className="relative cursor-pointer md:hidden"
+  onClick={() => setOpenSearchModal(true)}
+>
+  <IoSearch size={20} className="text-white" />
+</div>
+
+
+            {/* NOTIFICATIONS */}
+            <div
+              className="relative cursor-pointer"
+              onClick={() => user ? navigate("/notifications") : setOpenLoginModal(true)}
             >
-              {t("downloadApp")}
-            </a>
-
-            <div className="relative" ref={langRef}>
-              <div
-                className="lang-selector-premium"
-                onClick={() => setOpen(!open)}
-              >
-                <img
-                  src={language.flag}
-                  alt="flag"
-                  className="w-5 h-3.5 object-cover rounded-sm"
-                />
-                <span className="text-sm font-medium">{language.name}</span>
-                <IoMdArrowDropdown
-                  className={`transition-transform ${open ? "rotate-180" : ""}`}
-                />
-              </div>
-
-              {open && (
-                <div className="dropdown-animate shadow-premium absolute right-0 mt-3 bg-white border border-gray-100 rounded-xl overflow-hidden min-w-[140px] z-50">
-                  {languages.map((lang) => (
-                    <div
-                      key={lang.code}
-                      className="lang-item"
-                      onClick={() => handleLanguageChange(lang)}
-                    >
-                      <img
-                        src={lang.flag}
-                        alt={lang.name}
-                        className="w-5 h-3.5 object-cover rounded-sm"
-                      />
-                      <span>{lang.name}</span>
-                    </div>
-                  ))}
-                </div>
+              <FaBell size={18} />
+              {notificationCount > 0 && (
+                <span className="badge">{notificationCount}</span>
               )}
             </div>
+
+            {/* CART */}
+            <div
+              className="relative cursor-pointer"
+              onClick={() => navigate("/cart")}
+            >
+              <FaShoppingCart size={18} />
+              {cartCount > 0 && <span className="badge">{cartCount}</span>}
+            </div>
+
+            {/* PROFILE */}
             <div
               className="profile-trigger-premium cursor-pointer"
               onClick={handleProfileClick}
@@ -150,8 +202,8 @@ export default function TopHeader() {
             };
 
             setLocation(payload);
-localStorage.setItem("user_location", JSON.stringify(payload));
-localStorage.setItem("location_allowed", "true");
+            localStorage.setItem("user_location", JSON.stringify(payload));
+            localStorage.setItem("location_allowed", "true");
             try {
               const token = localStorage.getItem("token");
               if (!token) return;
@@ -192,6 +244,11 @@ localStorage.setItem("location_allowed", "true");
           }}
         />
       )}
+      {openSearchModal && (
+  <SearchOverlayModal onClose={() => setOpenSearchModal(false)} />
+)}
+
     </>
   );
+  
 }

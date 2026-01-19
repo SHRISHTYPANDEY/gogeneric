@@ -1,5 +1,6 @@
 .ak-footer-container {
-  background: #f8f0f7; /* Light Plum Tint */
+  /* Background color updated to Dark Teal */
+  background: #013631; 
   padding: 100px 20px 40px;
   display: flex;
   flex-direction: column;
@@ -15,7 +16,8 @@
 }
 
 .cta-icon {
-  background: var(--deep-plum); /* Root Color */
+  /* Icon background updated to match Primary Teal */
+  background: #016B61; 
   color: white;
   width: 55px;
   height: 55px;
@@ -25,25 +27,25 @@
   border-radius: 18px;
   margin: 0 auto 20px;
   font-size: 24px;
-  box-shadow: 0 10px 20px rgba(107, 63, 105, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .ak-footer-cta h2 {
   font-size: 38px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: #ffffff; /* White text for dark background */
   margin-bottom: 12px;
   letter-spacing: -1px;
 }
 
 .ak-footer-cta p {
-  color: var(--text-body);
+  color: #9ECFD4; /* Soft teal for readability */
   margin-bottom: 25px;
   font-weight: 500;
 }
 
 .cta-btn {
-  background: var(--deep-plum); /* Root Color instead of Blue */
+  background: #016B61; 
   color: white;
   border: none;
   padding: 14px 35px;
@@ -52,51 +54,51 @@
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(107, 63, 105, 0.25);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .cta-btn:hover {
-  background: var(--text-dark);
+  background: #ffffff;
+  color: #013631;
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(107, 63, 105, 0.35);
 }
 
 /* 🔹 2. WHITE FOOTER CARD */
 .ak-footer-card {
-  background: white;
+  background: #edf9ec;
   width: 100%;
   max-width: 1250px;
-  border-radius: 70px 70px 40px 40px; /* Highly Curved */
+  border-radius: 70px 70px 40px 40px; 
   padding: 130px 60px 40px; 
-  box-shadow: 0 25px 60px rgba(107, 63, 105, 0.06);
-  border: 1px solid rgba(163, 118, 162, 0.1); /* Mauve hint border */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(1, 107, 97, 0.1); 
 }
 
 .ak-footer-content {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
   gap: 50px;
-  border-bottom: 1px solid #f3eff2;
+  border-bottom: 1px solid #f0f4f4;
   padding-bottom: 50px;
 }
 
 .ak-footer-widget-heading {
   font-size: 18px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: #013631; /* Dark Teal Heading */
   margin-bottom: 25px;
   position: relative;
 }
 
-/* Subtle line under heading */
 .ak-footer-widget-heading::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: -8px;
   width: 30px;
-  height: 2px;
-  background: var(--dusty-rose);
+  height: 3px;
+  background: #016B61; /* Teal Underline */
+  border-radius: 2px;
 }
 
 .ak-footer-links {
@@ -110,14 +112,14 @@
 
 .ak-footer-links li a {
   text-decoration: none;
-  color: var(--text-body);
+  color: #4b5563; /* Muted Grey-Teal */
   font-weight: 600;
   font-size: 15px;
   transition: 0.3s ease;
 }
 
 .ak-footer-links li a:hover {
-  color: var(--deep-plum); /* Hover is now Plum */
+  color: #016B61; 
   padding-left: 5px;
 }
 
@@ -129,8 +131,8 @@
 }
 
 .ak-footer-social-icon a {
-  color: var(--text-body);
-  background: #f8f0f7; /* Mauve tint background */
+  color: #013631;
+  background: #f0fdfa; /* Very light teal tint */
   width: 40px;
   height: 40px;
   display: flex;
@@ -143,7 +145,7 @@
 
 .ak-footer-social-icon a:hover {
   color: white;
-  background: var(--deep-plum);
+  background: #016B61;
   transform: translateY(-5px) scale(1.1);
 }
 
@@ -154,7 +156,7 @@
   align-items: center;
   padding-top: 30px;
   font-size: 14px;
-  color: #a38ba3; /* Muted Plum-Grey */
+  color: #6b7280;
   font-weight: 600;
 }
 
@@ -163,149 +165,46 @@
   gap: 25px;
 }
 
-.bottom-links span {
+.bottom-links span a {
   cursor: pointer;
   transition: 0.2s;
+  color: inherit;
+  text-decoration: none;
 }
 
-.bottom-links span:hover {
-  color: var(--deep-plum);
+.bottom-links span a:hover {
+  color: #016B61;
 }
 
-/* App Download Images */
+/* Logo and App Buttons */
+.ak-footer-logo-img {
+  height: 80px;
+  width: auto;
+  margin-bottom: 20px;
+}
+
 .app-buttons img {
-  border: 1px solid #eee;
-  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
   transition: 0.3s;
 }
 
 .app-buttons img:hover {
   transform: translateY(-3px);
-  border-color: var(--mauve);
+  border-color: #016B61;
 }
 
-/* 📱 MOBILE VIEW */
+/* 📱 RESPONSIVE FIXES */
 @media (max-width: 992px) {
   .ak-footer-content { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 768px) {
-  .ak-footer-card { padding: 100px 25px 30px; border-radius: 40px; }
-  .ak-footer-content { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-  .ak-footer-social-icon { justify-content: center; }
-  .ak-bottom-bar { flex-direction: column; gap: 20px; text-align: center; }
-  .ak-footer-cta h2 { font-size: 28px; }
-  .ak-footer-widget-heading::after { left: 50%; transform: translateX(-50%); }
-}
-/* Footer Logo Container Fix */
-.ak-footer-logo-img {
-  height: 100px;
-  width: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Logo ko horizontal center karne ke liye */
-  margin: 0 auto 20px auto; 
-  text-align: center;
-}
-
-/* Agar logo ke andar <img> tag hai toh usko container me fit karne ke liye */
-.ak-footer-logo-img img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-/* ================= FOOTER MOBILE FIX ================= */
 @media (max-width: 600px) {
-
-  /* Safety: horizontal scroll kill */
-  html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .ak-footer-container {
-    padding: 70px 12px 30px;
-    overflow-x: hidden;
-  }
-
-  /* ===== CTA FIX ===== */
-  .ak-footer-cta {
-    margin-bottom: -30px;
-    padding: 0 10px;
-  }
-
-  .ak-footer-cta h2 {
-    font-size: 26px;
-    line-height: 1.2;
-  }
-
-  .ak-footer-cta p {
-    font-size: 14px;
-  }
-
-  .cta-btn {
-    padding: 12px 26px;
-    font-size: 14px;
-  }
-
-  /* ===== FOOTER CARD ===== */
-  .ak-footer-card {
-    padding: 80px 18px 30px;
-    border-radius: 32px;
-    max-width: 100%;
-  }
-
-  /* ===== CONTENT GRID ===== */
-  .ak-footer-content {
-    grid-template-columns: 1fr;
-    gap: 35px;
-    text-align: center;
-    padding-bottom: 35px;
-  }
-
-  /* Headings underline center */
-  .ak-footer-widget-heading::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* ===== BRAND TEXT ===== */
-  .ak-footer-text {
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  /* ===== SOCIAL ICONS ===== */
-  .ak-footer-social-icon {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  /* ===== APP BUTTON ===== */
-  .app-buttons img {
-    width: 160px;
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* ===== BOTTOM BAR ===== */
-  .ak-bottom-bar {
-    flex-direction: column;
-    gap: 12px;
-    text-align: center;
-    font-size: 13px;
-  }
-
-  .bottom-links {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  /* Logo size fix */
-  .ak-footer-logo-img {
-    width: 90px;
-    height: 90px;
-  }
+  .ak-footer-container { padding: 70px 12px 30px; }
+  .ak-footer-card { padding: 80px 18px 30px; border-radius: 32px; }
+  .ak-footer-cta h2 { font-size: 26px; }
+  .ak-footer-content { grid-template-columns: 1fr; text-align: center; gap: 35px; }
+  .ak-footer-widget-heading::after { left: 50%; transform: translateX(-50%); }
+  .ak-bottom-bar { flex-direction: column; gap: 12px; }
+  .ak-footer-logo-img { margin: 0 auto 20px; }
 }

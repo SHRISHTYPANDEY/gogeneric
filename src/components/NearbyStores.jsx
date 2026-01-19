@@ -2,63 +2,45 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import "./NearbyStores.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
-import { Plus } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddToCartButton from "./CartButton";
 import Loader from "./Loader";
 import WishlistButton from "./WishlistButton";
+import useDiscounts from "../hooks/useDiscounts";
+import {
+  getDiscountedPrice,
+  getFinalPrice,
+  getDiscountPercent,
+} from "../utils/priceUtils";
 
 export default function NearbyStores() {
   const [stores, setStores] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [loading, setLoading] = useState(true);
+
   const scrollRef = useRef(null);
   const abortRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    return () => {
-      abortRef.current?.abort();
-    };
-  }, []);
+  const { discountMap, fetchDiscountedItems } = useDiscounts();
 
   const fetchBasicMedicines = useCallback(async () => {
     try {
       abortRef.current?.abort();
       abortRef.current = new AbortController();
-
       setLoading(true);
 
       const res = await api.get("/api/v1/items/basic", {
-        params: {
-          limit: 20,
-          offset: 0,
-        },
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
+        params: { limit: 20, offset: 0 },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
         signal: abortRef.current.signal,
       });
 
-      const products =
-        res.data.items ||
-        res.data.products ||
-        res.data.data ||
-        res.data.medicines ||
-        [];
-
-      const cats =
-        res.data.categories || res.data.filters || res.data.category_list || [];
-
-      setStores(products);
-      setCategories(cats);
+      setStores(res.data.items || res.data.products || []);
+      setCategories(res.data.categories || res.data.filters || []);
     } catch (err) {
-      if (err.name !== "CanceledError") {
-        console.error("API ERROR:", err);
-      }
+      if (err.name !== "CanceledError") console.error(err);
     } finally {
       setLoading(false);
     }
@@ -66,27 +48,21 @@ export default function NearbyStores() {
 
   useEffect(() => {
     fetchBasicMedicines();
-  }, [fetchBasicMedicines]);
+    fetchDiscountedItems();
+  }, [fetchBasicMedicines, fetchDiscountedItems]);
+
+  useEffect(() => {
+    return () => abortRef.current?.abort();
+  }, []);
 
   const filteredStores =
     activeFilter === "All"
       ? stores
       : stores.filter((p) => p.category_id === activeFilter);
 
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
-  };
-
   return (
     <div className="nearby-section max-w-7xl mx-auto">
       <h2 className="nearby-title">Basic Medicines Near You</h2>
-      <p className="nearby-subtitle">
-        Browse essential medicines available near you
-      </p>
 
       {loading ? (
         <Loader text="Loading medicines..." />
@@ -120,36 +96,85 @@ export default function NearbyStores() {
               {filteredStores.length === 0 ? (
                 <p className="empty-text">No medicines found</p>
               ) : (
-                filteredStores.map((store) => (
-                  <div
-                    className="store-card"
-                    key={store.id}
-                    onClick={() => navigate(`/medicine/${store.id}`)}
-                  >
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <WishlistButton item={store} />
-                      <AddToCartButton item={store} />
+                filteredStores.map((store) => {
+                  const discountedPrice = getDiscountedPrice(
+                    store,
+                    discountMap
+                  );
+                  const discountPercent = getDiscountPercent(
+                    store,
+                    discountMap
+                  );
+
+                  return (
+                    <div
+                      className="store-card"
+                      key={store.id}
+                      onClick={() => navigate(`/medicine/${store.id}`)}
+                    >
+                      <div
+                        className="top-actions"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <WishlistButton item={store} />
+                      </div>
+
+                      {discountPercent && (
+                        <div className="discount-badge">
+                          {discountPercent}% OFF
+                        </div>
+                      )}
+
+                      <div className="image-wrapper">
+                        <img
+                          src={
+                            cleanImageUrl(store.image_full_url) ||
+                            "/no-image.jpg"
+                          }
+                          alt={store.name}
+                          onError={(e) =>
+                            (e.currentTarget.src = "/no-image.jpg")
+                          }
+                        />
+                      </div>
+
+                      <h4>{store.name}</h4>
+
+                      <div className="card-footer">
+                        <div className="price-box">
+                          {discountedPrice ? (
+                            <>
+                              <span className="original-price">
+                                ₹{store.price || store.unit_price}
+                              </span>
+                              <span className="discounted-price">
+                                ₹{discountedPrice}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="discounted-price">
+                              ₹{store.price || store.unit_price}
+                            </span>
+                          )}
+                        </div>
+
+                        <div
+                          className="cart-action"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <AddToCartButton
+                            item={{
+                              ...store,
+                              price: getFinalPrice(store, discountMap),
+                              original_price:
+                                store.price || store.unit_price,
+                            }}
+                          />
+                        </div>
+                      </div>
                     </div>
-
-                    <img
-                      src={
-                        cleanImageUrl(store.image_full_url) ||
-                        cleanImageUrl(store.full_url) ||
-                        cleanImageUrl(store.thumbnail) ||
-                        "/no-image.jpg"
-                      }
-                      alt={store.name}
-                      onError={(e) => {
-                        e.currentTarget.src = "/no-image.jpg";
-                      }}
-                    />
-
-                    <h4>{store.name}</h4>
-                    <p className="price">
-                      ₹{store.price || store.unit_price || 0}
-                    </p>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

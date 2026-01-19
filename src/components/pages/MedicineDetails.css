@@ -1,226 +1,146 @@
-.medicine-page {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-  min-height: 70vh;
-  font-family: var(--font-main);
-}
-
-.medicine-loader {
+/* Page Wrapper */
+.med-det-page-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
+  padding: 40px 20px;
+  background-color: #f4f7f6;
+  min-height: 65vh;
 }
 
-.medicine-card {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 50px;
-  background: var(--white);
-  padding: 40px;
-  border-radius: 32px;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: var(--premium-shadow);
-  align-items: start;
-}
-
-.medicine-image {
-  position: relative;
-  background: linear-gradient(135deg, #fdfafb 0%, var(--dusty-rose) 100%);
-  border-radius: 24px;
-  padding: 30px;
+/* Compact Main Card with Background */
+.med-det-main-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid rgba(163, 118, 162, 0.1);
-}
-
-.medicine-image img {
+  flex-direction: row; 
+  background: #f8fafc; /* Card ka halka background color */
   width: 100%;
-  max-width: 400px;
-  height: auto;
-  object-fit: contain;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 800px; /* Thoda aur compact kiya */
+  min-height: 350px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative; 
+  overflow: hidden;
+  border: 2px solid #b3cae7;
 }
 
-.medicine-image:hover img {
-  transform: scale(1.08);
-}
-
-.medicine-wishlist {
+/* Save Button Wrapper */
+.med-det-save-wrapper {
   position: absolute;
   top: 20px;
   right: 20px;
   z-index: 10;
-}
-
-.medicine-info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 }
 
-.medicine-info h1 {
-  font-size: 38px;
-  color: var(--text-dark) !important;
-  margin: 0;
-  line-height: 1.1;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+/* LEFT SECTION: Image area with specific background */
+.med-det-left-section {
+  flex: 0 0 42%;
+  background-color: #ffffff; /* Image ke peeche pure white background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 30px;
+  /* Halka sa inner shadow image section ko depth dene ke liye */
+  box-shadow: inset -5px 0 15px rgba(0,0,0,0.02); 
 }
 
-.medicine-price {
-  font-size: 36px;
-  font-weight: 900;
-  color: var(--deep-plum) !important; 
-  margin: 0;
-}
-
-.medicine-price.unavailable {
-  color: #94a3b8 !important;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.medicine-desc {
-  font-size: 16px;
-  color: #4a3048;
-  line-height: 1.8;
-  background: rgba(221, 195, 195, 0.15); 
-  padding: 24px;
-  border-radius: 20px;
-  border-left: 5px solid var(--mauve);
-}
-
-.medicine-actions {
-  margin-top: 15px;
-}
-
-.add-to-cart-btn {
+.med-det-product-img {
   width: 100%;
-  max-width: 320px;
-  background: linear-gradient(45deg, var(--deep-plum), var(--muted-purple)) !important;
-  color: white !important;
-  border: none;
-  padding: 20px 35px;
-  border-radius: 50px; 
-  font-size: 15px;
+  max-height: 320px;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
+}
+
+.med-det-discount-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #ff4d4f;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  z-index: 5;
+}
+
+/* RIGHT SECTION: Content area */
+.med-det-right-section {
+  flex: 1;
+  padding: 45px 35px;
+  display: flex;
+  flex-direction: column;
+}
+
+.med-det-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.med-det-price-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.med-det-new-price {
+  font-size: 1.8rem;
   font-weight: 800;
+  color: #10b981; /* Medical Green */
+}
+
+.med-det-old-price {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+/* Description Styling */
+.med-det-desc-wrapper {
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.5); /* Desc ke peeche halka transparency */
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.med-det-desc-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.2);
+  letter-spacing: 1px;
 }
 
-.add-to-cart-btn:hover:not(:disabled) {
-  background: linear-gradient(45deg, var(--muted-purple), var(--mauve)) !important;
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 12px 25px rgba(107, 63, 105, 0.3);
+.med-det-description {
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
-.add-to-cart-btn:disabled {
-  background: var(--dusty-rose) !important;
-  color: var(--white) !important;
-  cursor: not-allowed;
-  opacity: 0.6;
+/* Action Area */
+.med-det-action-area {
+  margin-top: auto;
+  width: 100%;
 }
 
-@media (max-width: 992px) {
-  .medicine-card {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 25px;
+/* Responsive */
+@media (max-width: 768px) {
+  .med-det-main-card {
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px;
   }
-  
-  .medicine-info h1 {
-    font-size: 30px;
-  }
-}
-
-@media (max-width: 640px) {
-
-  .medicine-page {
-    margin: 20px auto;
-    padding: 0 12px;
-  }
-
-  .medicine-card {
-    grid-template-columns: 1fr;
-    gap: 22px;
-    padding: 18px;
-    border-radius: 22px;
-  }
-
-  .medicine-image {
-    padding: 18px;
-    border-radius: 18px;
-    max-height: 250px;
-  }
-
-  .medicine-image img {
-  max-width: 220px;
-  max-height: 220px;
-  width: auto;
-  height: auto;
-}
-
-  .medicine-wishlist {
-    top: 12px;
-    right: 12px;
-  }
-
-  /* ================= INFO ================= */
-  .medicine-info {
-    gap: 14px;
-  }
-
-  /* ================= TITLE ================= */
-  .medicine-info h1 {
-    font-size: 22px;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-  }
-
-  /* ================= PRICE ================= */
-  .medicine-price {
-    font-size: 24px;
-  }
-
-  .medicine-price.unavailable {
-    font-size: 14px;
-  }
-
-  /* ================= DESCRIPTION ================= */
-  .medicine-desc {
-    font-size: 14px;
-    line-height: 1.6;
-    padding: 16px;
-    border-radius: 16px;
-    border-left-width: 4px;
-  }
-
-  /* ================= ACTIONS ================= */
-  .medicine-actions {
-    margin-top: 10px;
-  }
-
-  .add-to-cart-btn {
-    max-width: 100%;
-    padding: 16px 20px;
-    font-size: 14px;
-    border-radius: 40px;
-    letter-spacing: 1px;
-  }
-
-  .add-to-cart-btn:hover {
-    transform: none;
-    box-shadow: 0 8px 16px rgba(107, 63, 105, 0.25);
-  }
-
-  /* ================= LOADER ================= */
-  .medicine-loader {
-    height: 60vh;
+  .med-det-left-section {
+    flex: none;
+    height: 300px;
+    border-right: none;
   }
 }

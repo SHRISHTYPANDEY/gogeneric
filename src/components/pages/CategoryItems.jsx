@@ -111,7 +111,7 @@ const fetchCategoryItems = useCallback(async () => {
     <div className="category-items-page">
       {/* 🔹 HEADER */}
       <div className="category-header">
-        <h2 className="page-title">{categoryName}</h2>
+        <h2 className="page-title">Best Medicines for {categoryName}</h2>
 
         <div className="search-box">
           <Search size={16} />
@@ -147,18 +147,14 @@ const fetchCategoryItems = useCallback(async () => {
             >
               <WishlistButton item={item} />
               <AddToCartButton item={item} />
-
-              <img
-                src={cleanImageUrl(item.image_full_url)}
-                alt={item.name}
-                onError={(e) =>
-                  (e.currentTarget.src = "/no-image.png")
-                }
-              />
-
-              <h4>{item.name}</h4>
-              <p>₹{item.price}</p>
-            </div>
+<div className="card-img-wrapper">
+    <img src={cleanImageUrl(item.image_full_url)} alt={item.name} />
+  </div>
+            <div className="card-content">
+    <h4>{item.name}</h4>
+    <p className="price">₹{item.price}</p>
+  </div>
+</div>
           ))}
         </div>
       )}

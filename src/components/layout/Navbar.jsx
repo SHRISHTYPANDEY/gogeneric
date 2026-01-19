@@ -3,10 +3,9 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { HiBars3 } from "react-icons/hi2";
+import { cleanImageUrl } from "../../utils"
 import {
   FaSignOutAlt,
-  FaShoppingCart,
-  FaBell,
   FaUser,
   FaShoppingBag,
   FaMapMarkedAlt,
@@ -28,80 +27,55 @@ import {
   FaNewspaper,
   FaPhoneAlt,
   FaUsers,
-  FaCoins 
+  FaCoins,
+  FaStore, FaMotorcycle 
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
 import LoginModal from "../auth/LoginModal";
-import LogoImg from "../../assets/gogenlogo.png";
 import { useLocation } from "../../context/LocationContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [notificationCount, setNotificationCount] = useState(0);
-
   const { user, logout } = useAuth();
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
   const { resetLocation } = useLocation();
+  const [categories, setCategories] = useState([]);
+  const [pharmacies, setPharmacies] = useState([]);
+  const [labs, setLabs] = useState([]);
 
-  /* ---------------- COMMON CLOSE ---------------- */
+
+useEffect(() => {
+  api.get("/api/v1/categories")
+    .then((res) => setCategories(res.data || []))
+    .catch((err) => console.error("Navbar categories error:", err));
+  api.get("/api/v1/stores/get-stores/all", {
+    headers: { zoneId: JSON.stringify([3]), moduleId: "2" }
+  })
+    .then((res) => {
+      const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
+      setPharmacies(storeList);
+    })
+    .catch((err) => console.error("Navbar stores error:", err));
+
+      api.get("/api/v1/stores/details/74")
+    .then((res) => {
+      const labData = res?.data?.stores || res?.data || [];
+      setLabs(Array.isArray(labData) ? labData : [labData]);
+    })
+    .catch((err) => console.error("Navbar labs error:", err));
+
+}, []);
   const closeMenu = () => setOpen(false);
 
-  /* ---------------- NOTIFICATIONS ---------------- */
-  const fetchNotifications = async () => {
-    try {
-      if (!user) return;
-      const token = localStorage.getItem("token");
-
-      const res = await api.get("/api/v1/customer/notifications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          moduleId: 2,
-          zoneId: JSON.stringify([3]),
-        },
-      });
-
-      setNotificationCount(res.data.filter((n) => !n.read).length);
-    } catch (err) {
-      // console.error("Notification error", err);
-    }
-  };
   const handleNavigate = (path) => {
     closeMenu();
     navigate(path);
   };
-
-  /* ---------------- CART COUNT ---------------- */
-  const fetchCartCount = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const guestId = localStorage.getItem("guest_id");
-
-      const res = await api.get("/api/v1/customer/cart/list", {
-        headers: {
-          moduleId: 2,
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        params: !token && guestId ? { guest_id: guestId } : {},
-      });
-
-      setCartCount(Array.isArray(res.data) ? res.data.length : 0);
-    } catch (error) {
-      // console.error("Cart count error:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCartCount();
-    fetchNotifications();
-    window.addEventListener("cart-updated", fetchCartCount);
-    return () => window.removeEventListener("cart-updated", fetchCartCount);
-  }, [user]);
 
   const handleProfileClick = () => {
     closeMenu();
@@ -121,87 +95,97 @@ export default function Navbar() {
     resetLocation();
     navigate("/");
   };
-
   return (
     <>
-     
       <nav className="navbar">
-        <div className="nav-container max-w-7xl mx-auto px-4 py-3">
-          <div className="nav-logo">
-            <Link
-              to="/"
-              onClick={() => {
-                closeMenu();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            >
-              <img src={LogoImg} alt="GoGeneric Logo" />
-            </Link>
+      <div className="nav-container">
+        <ul className="nav-links">
+          <li><Link to="/">Home</Link></li>
+          <li className="category-dropdown-container">
+              <Link to="/category" className="category-trigger">
+                Category
+              </Link>
+              
+              <div className="mega-dropdown">
+                <div className="dropdown-inner-grid">
+                  {categories.slice(0, 15).map((cat) => (
+                    <div 
+                      key={cat.id} 
+                      className="dropdown-card"
+                      onClick={() => {
+                        navigate(`/category/${cat.id}`, { state: { categoryName: cat.name } });
+                        closeMenu();
+                      }}
+                    >
+                      <div className="dropdown-circle-img">
+                        <img
+                          src={cleanImageUrl(cat.image_full_url || `/storage/category/${cat.image}`)}
+                          alt={cat.name}
+                        />
+                      </div>
+                      <span className="dropdown-cat-name">{cat.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+          <li className="category-dropdown-container">
+              <Link to="/pharmacy" className="category-trigger">Pharmacy</Link>
+              <div className="mega-dropdown">
+                <div className="dropdown-inner-grid">
+                  {pharmacies.map((store) => (
+                    <div key={store.id} className="dropdown-card" onClick={() => {
+                      navigate(`/view-stores/${store.id}`);
+                      closeMenu();
+                    }}>
+                      <div className="dropdown-circle-img">
+                        <img src={cleanImageUrl(store.logo_full_url)} alt={store.name} />
+                      </div>
+                      <span className="dropdown-cat-name">{store.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+          <li className="category-dropdown-container">
+  <Link to="/labs" className="category-trigger">Labs</Link>
+
+  <div className="mega-dropdown">
+    <div className="dropdown-inner-grid">
+      {labs.map((lab) => (
+        <div
+          key={lab.id}
+          className="dropdown-card"
+          onClick={() => {
+            navigate(`/view-stores/${lab.id}`);
+            closeMenu();
+          }}
+        >
+          <div className="dropdown-circle-img">
+            <img
+              src={cleanImageUrl(lab.logo_full_url || lab.image_full_url)}
+              alt={lab.name}
+            />
           </div>
-
-          <div className="flex items-center gap-6">
-            
-            <ul className="nav-links">
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/aboutus">About</Link>
-              </li>
-              <li>
-                <Link to="/who-we-are">Who We Are</Link>
-              </li>
-              <li>
-                <Link to="/pharmacy">Pharmacy</Link>
-              </li>
-              <li>
-                <Link to="/labs">Labs</Link>
-              </li>
-              <li>
-                <Link to="/doctors">Doctors</Link>
-              </li>
-              <li>
-                <Link to="/blog">Blog</Link>
-              </li>
-              <li>
-                <Link to="/contactus">Contact Us</Link>
-              </li>
-            </ul>
-
-            
-            <div
-              className="notification-icon"
-              onClick={() => {
-                closeMenu();
-                user ? navigate("/notifications") : setShowLogin(true);
-              }}
-            >
-              <FaBell />
-              {notificationCount > 0 && (
-                <span className="notification-badge">{notificationCount}</span>
-              )}
-            </div>
-
-            
-            <div
-              className="cart-icon"
-              onClick={() => {
-                closeMenu();
-                navigate("/cart");
-              }}
-            >
-              <FaShoppingCart />
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </div>
-
-           
-            <div className="hamburger" onClick={() => setOpen(true)}>
-              <HiBars3 />
-            </div>
-          </div>
+          <span className="dropdown-cat-name">{lab.name}</span>
         </div>
-      </nav>
+      ))}
+    </div>
+  </div>
+</li>
 
+          <li><Link to="/doctors">Doctors</Link></li>
+          <li><Link to="/blog">Blog</Link></li>
+          <li><Link to="/aboutus">About</Link></li>
+          <li><Link to="/contactus">Contact Us</Link></li>
+          <li><Link to="/who-we-are">Who We Are</Link></li>
+        </ul>
+
+        <div className="hamburger" onClick={() => setOpen(true)}>
+          <HiBars3 />
+        </div>
+      </div>
+    </nav>
       {open && <div className="overlay" onClick={closeMenu} />}
 
       <div className={`side-menu ${open ? "open" : ""}`}>
@@ -345,17 +329,6 @@ export default function Navbar() {
               to="#"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavigate("/language");
-              }}
-            >
-              <FaLanguage /> Language
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="#"
-              onClick={(e) => {
-                e.preventDefault();
                 handleNavigate("/coupon");
               }}
             >
@@ -384,6 +357,30 @@ export default function Navbar() {
               <FaComments /> Live Chat
             </Link>
           </li>
+          <li>
+  <Link
+    to="#"
+    onClick={(e) => {
+      e.preventDefault();
+      window.open("https://gogenericpharma.com/vendor/apply", "_blank");
+    }}
+  >
+    <FaStore /> Apply as Vendor
+  </Link>
+</li>
+
+<li>
+  <Link
+    to="#"
+    onClick={(e) => {
+      e.preventDefault();
+     window.open("https://gogenericpharma.com/deliveryman/apply", "_blank");
+    }}
+  >
+    <FaMotorcycle /> Apply as Deliveryman
+  </Link>
+</li>
+
           <li>
             <Link
               to="#"

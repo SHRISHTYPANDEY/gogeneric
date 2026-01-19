@@ -58,7 +58,7 @@ export default function ContactUs() {
             rel="noopener noreferrer"
             className="info-box clickable"
           >
-            <MapPin size={20} />
+            <MapPin className="address-icon" />
             <div>
               <h4>Address</h4>
               <p>

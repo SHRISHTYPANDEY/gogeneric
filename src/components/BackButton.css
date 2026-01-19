@@ -1,0 +1,33 @@
+/* Container taaki button page ke content se align rahe */
+.back-button-container {
+  max-width: 1200px; /* Aapke content ki width ke hisaab se */
+  margin: 15px auto 0 auto;
+  padding: 0 20px;
+}
+
+.back-btn-styled {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #004d43; /* Aapke navbar ka dark green color */
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.back-btn-styled:hover {
+  background-color: #004d43; /* Hover par theme color */
+  color: #ffffff;
+  border-color: #004d43;
+  transform: translateX(-3px); /* Chota sa animation */
+}
+
+.back-btn-styled svg {
+  transition: transform 0.3s ease;
+}

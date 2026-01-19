@@ -1,116 +1,167 @@
+/* ===============================
+   GoGeneric Theme Variables
+================================ */
 :root {
-  --deep-plum: #6B3F69;
-  --muted-purple: #8D5F8C;
-  --mauve: #A376A2;
-  --dusty-rose: #DDC3C3;
-  --text-dark: #331d32;
-  --white: #ffffff;
-  --bg-light: #fdfafc;
-  --premium-shadow: 0 8px 32px rgba(107, 63, 105, 0.08);
+  --gg-primary: #016b61;
+  --gg-primary-dark: #014f48;
+  --gg-primary-light: #e6f3f1;
+
+  --gg-text-dark: #1a1a1a;
+  --gg-text-muted: #6f6f6f;
+
+  --gg-border: #e8e8e8;
+  --gg-bg: #f9fdfc;
+  --gg-white: #ffffff;
+
+  --gg-radius-lg: 20px;
+  --gg-radius-md: 14px;
+  --gg-radius-sm: 10px;
+
+  --gg-shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.06);
+  --gg-shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.1);
 }
 
+/* ===============================
+   Page Wrapper
+================================ */
 .myaddress-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-  background-color: var(--bg-light);
+  background: var(--gg-bg);
   min-height: 100vh;
 }
 
+/* ===============================
+   Page Header
+================================ */
 .page-title {
-  font-size: 2.2rem;
-  color: var(--deep-plum);
+  font-size: 28px;
   font-weight: 800;
-  margin-bottom: 35px;
-  letter-spacing: -0.5px;
+  color: var(--gg-primary);
+  margin: 0;
 }
 
+/* Add New Button (inline styles ka replacement) */
+.add-address-btn {
+  padding: 12px 22px;
+  border-radius: 50px;
+  background: var(--gg-primary);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.add-address-btn:hover {
+  background: var(--gg-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   Address Grid
+================================ */
 .address-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 22px;
 }
 
+/* ===============================
+   Address Card
+================================ */
 .address-card {
-  background: var(--white);
-  border-radius: 20px;
-  padding: 24px;
-  border: 1px solid rgba(221, 195, 195, 0.3);
-  box-shadow: var(--premium-shadow);
+  background: var(--gg-white);
+  border-radius: var(--gg-radius-lg);
+  padding: 22px;
+  border: 1px solid var(--gg-border);
+  box-shadow: var(--gg-shadow-soft);
   display: flex;
   flex-direction: column;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
 }
 
 .address-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--mauve);
-  box-shadow: 0 12px 40px rgba(107, 63, 105, 0.12);
+  transform: translateY(-4px);
+  border-color: var(--gg-primary);
+  box-shadow: var(--gg-shadow-hover);
 }
 
+/* ===============================
+   Card Header
+================================ */
 .address-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
 
 .address-header h3 {
-  color: var(--deep-plum);
-  text-transform: capitalize;
-  font-size: 1.2rem;
+  font-size: 16px;
   font-weight: 700;
+  color: var(--gg-primary);
+  text-transform: capitalize;
   margin: 0;
 }
 
 .default-badge {
-  background: #f4effc;
-  color: var(--deep-plum);
-  padding: 4px 12px;
+  background: var(--gg-primary-light);
+  color: var(--gg-primary);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
   border-radius: 50px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  border: 1px solid var(--mauve);
+  border: 1px solid rgba(1, 107, 97, 0.3);
 }
 
+/* ===============================
+   Address Text
+================================ */
 .address-text {
-  color: #665c66;
-  font-size: 0.95rem;
+  font-size: 14px;
   line-height: 1.6;
-  margin-bottom: 25px;
-  min-height: 50px;
+  color: var(--gg-text-muted);
+  margin-bottom: 22px;
+  min-height: 48px;
 }
 
+/* ===============================
+   Actions
+================================ */
 .address-actions {
   display: flex;
   gap: 12px;
   margin-top: auto;
-  border-top: 1px solid #f5f0f5;
-  padding-top: 20px;
+  border-top: 1px solid #f1f1f1;
+  padding-top: 18px;
 }
 
 .address-actions button {
   flex: 1;
   padding: 10px;
   border-radius: 50px;
+  font-size: 13px;
   font-weight: 700;
-  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   border: none;
 }
 
+/* Edit */
 .address-actions button:first-child {
-  background: var(--white);
-  color: var(--deep-plum);
-  border: 1.5px solid var(--deep-plum);
+  background: #fff;
+  color: var(--gg-primary);
+  border: 1.5px solid var(--gg-primary);
 }
 
 .address-actions button:first-child:hover {
-  background: var(--deep-plum);
-  color: var(--white);
+  background: var(--gg-primary);
+  color: #fff;
 }
 
+/* Delete */
 .address-actions button:last-child {
   background: #fff0f0;
   color: #d32f2f;
@@ -118,16 +169,16 @@
 
 .address-actions button:last-child:hover {
   background: #d32f2f;
-  color: #ffffff;
+  color: #fff;
 }
 
+/* ===============================
+   Edit Modal Overlay
+================================ */
 .edit-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(51, 29, 50, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
@@ -136,25 +187,26 @@
   padding: 20px;
 }
 
+/* ===============================
+   Edit Modal
+================================ */
 .edit-modal {
-  background: var(--white);
+  background: var(--gg-white);
   width: 100%;
-  max-width: 600px;
+  max-width: 620px;
   max-height: 90vh;
   border-radius: 24px;
   overflow-y: auto;
-  position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-  animation: modalSlideUp 0.3s ease-out;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  animation: modalFadeUp 0.3s ease;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
 .edit-modal::-webkit-scrollbar {
   display: none;
 }
 
-@keyframes modalSlideUp {
+@keyframes modalFadeUp {
   from {
     transform: translateY(30px);
     opacity: 0;
@@ -165,37 +217,16 @@
   }
 }
 
+/* ===============================
+   Responsive
+================================ */
 @media (max-width: 768px) {
-  .address-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .edit-modal {
-    max-height: 95vh;
-  }
-}
-@media (max-width: 768px) {
-
   .myaddress-page {
-    padding: 20px 12px;
-  }
-  .myaddress-page > div:first-child {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    margin-bottom: 20px !important;
+    padding: 20px 14px;
   }
 
   .page-title {
     font-size: 20px;
-    margin-bottom: 0;
-    text-align: left;
-  }
-
-  .myaddress-page button {
-    width: 100%;
-    padding: 12px;
-    font-size: 14px;
   }
 
   .address-grid {
@@ -219,7 +250,6 @@
 
   .address-text {
     font-size: 13px;
-    line-height: 1.5;
     margin-bottom: 16px;
   }
 
@@ -232,13 +262,14 @@
     font-size: 12px;
     padding: 10px;
   }
+
   .edit-modal-overlay {
-    padding: 10px;
     align-items: flex-end;
+    padding: 10px;
   }
 
   .edit-modal {
-    max-height: 90vh;
+    max-height: 92vh;
     border-radius: 20px 20px 0 0;
     padding-bottom: env(safe-area-inset-bottom);
   }

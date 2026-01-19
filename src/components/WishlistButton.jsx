@@ -1,10 +1,10 @@
-import { Heart } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { useWishlist } from "../context/WishlistContext";
 import "./WishlistButton.css";
 
 export default function WishlistButton({ item }) {
   const { toggleWishlist, isWishlisted } = useWishlist();
-  
+
   if (!item || !item.id) return null;
 
   const active = isWishlisted(item.id);
@@ -16,13 +16,14 @@ export default function WishlistButton({ item }) {
         e.stopPropagation();
         toggleWishlist(item);
       }}
-      aria-label="Add to wishlist"
+      aria-label={active ? "Remove from wishlist" : "Add to wishlist"}
     >
+      <span className="wish-text">{active ? "Saved" : "Save"}</span>
       <div className="wish-icon-container">
-        <Heart 
-          size={18} 
-          strokeWidth={active ? 0 : 2.5} 
-          className="heart-icon" 
+        <Bookmark
+          size={14}
+          strokeWidth={2.5}
+          className="bookmark-icon"
         />
         <span className="ring-effect"></span>
       </div>

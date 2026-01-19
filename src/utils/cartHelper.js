@@ -1,6 +1,27 @@
 import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 
+/**
+ * Sync cart item IDs from backend
+ * Single source of truth = backend cart
+ */
+const syncCartSnapshot = async ({ token, guestId }) => {
+  const res = await api.get("/api/v1/customer/cart/list", {
+    headers: {
+      zoneId: JSON.stringify([3]),
+      moduleId: "2",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    params: !token ? { guest_id: guestId } : {},
+  });
+
+  const cartItems = res.data || [];
+  const ids = cartItems.map((c) => c.item_id);
+
+  localStorage.setItem("cart_item_ids", JSON.stringify(ids));
+  window.dispatchEvent(new Event("cart-updated"));
+};
+
 export const addToCart = async ({ item }) => {
   const token = localStorage.getItem("token");
 
@@ -10,7 +31,7 @@ export const addToCart = async ({ item }) => {
     localStorage.setItem("guest_id", guestId);
   }
 
-  // ✅ FRONTEND STOCK CHECK (FAST FAIL)
+  // ✅ FAST FRONTEND STOCK CHECK
   if (
     item.available_stock === 0 ||
     item.stock === 0 ||
@@ -18,7 +39,7 @@ export const addToCart = async ({ item }) => {
     item.is_available === false
   ) {
     toast.error("Product is out of stock");
-    return; // ⛔ STOP HERE
+    return;
   }
 
   try {
@@ -39,9 +60,8 @@ export const addToCart = async ({ item }) => {
       (c) => c.item_id === item.id
     );
 
-    // 🔹 STEP 3: IF EXISTS → UPDATE QTY
+    // 🔹 STEP 3: UPDATE QTY IF EXISTS
     if (existingItem) {
-      // 🚫 BLOCK IF STOCK LIMIT REACHED
       if (
         item.available_stock &&
         existingItem.quantity >= item.available_stock
@@ -69,7 +89,8 @@ export const addToCart = async ({ item }) => {
 
       toast.success("Quantity updated");
     }
-    // 🔹 STEP 4: ELSE → ADD NEW ITEM
+
+    // 🔹 STEP 4: ADD NEW ITEM
     else {
       await api.post(
         "/api/v1/customer/cart/add",
@@ -92,11 +113,12 @@ export const addToCart = async ({ item }) => {
       toast.success("Added to cart");
     }
 
-    window.dispatchEvent(new Event("cart-updated"));
+    // 🔹 STEP 5: FINAL SYNC (MOST IMPORTANT)
+    await syncCartSnapshot({ token, guestId });
+
   } catch (err) {
     console.error("Add to cart error:", err?.response?.data);
 
-    // HANDLE BACKEND OUT-OF-STOCK MESSAGE
     if (
       err?.response?.data?.message ===
       "Product out of stock warning"

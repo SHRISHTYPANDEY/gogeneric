@@ -1,84 +1,77 @@
 .premium-wish-btn {
   position: absolute;
-  top: 12px;
-  left: 12px; 
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  top: 16px;
+  right: 16px; /* Image ke hisaab se right side set kiya */
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px; /* Capsule shape ke liye */
+  background: #ffffff;
+  border: 1px solid #016B61;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 0;
-  overflow: visible;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.wish-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #016B61  ; /* Muted gray text */
+  transition: color 0.3s ease;
 }
 
 .wish-icon-container {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.heart-icon {
-  color: #a0aec0;
+.bookmark-icon {
+  color: #016B61;
+  fill: transparent;
   transition: all 0.3s ease;
 }
 
+/* Hover State */
 .premium-wish-btn:hover {
-  background: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(107, 63, 105, 0.15);
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
-.premium-wish-btn:hover .heart-icon {
-  color: #ed64a6; 
-  transform: scale(1.1);
-}
-
+/* Active / Saved State */
 .premium-wish-btn.active {
-  background: #fff5f5;
-  border-color: #feb2b2;
+  background: #f1f5f9;
+  border-color: #013631; /* Darker border when saved */
 }
 
-.premium-wish-btn.active .heart-icon {
-  color: #e53e3e; 
-  fill: #e53e3e; 
-  animation: heart-pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+.premium-wish-btn.active .wish-text {
+  color:  #013631;
 }
 
-.premium-wish-btn.active .ring-effect {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border: 2px solid #e53e3e;
-  border-radius: 50%;
-  animation: ring-pulse 0.6s ease-out forwards;
-  opacity: 0;
+.premium-wish-btn.active .bookmark-icon {
+  color:  #013631;
+  fill:  #013631; /* Solid black icon like image */
+  animation: bookmark-pop 0.4s ease;
 }
 
-@keyframes heart-pop {
-  0% { transform: scale(0.5); }
-  50% { transform: scale(1.4); }
+/* Animations */
+@keyframes bookmark-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
 
-@keyframes ring-pulse {
-  0% { transform: scale(1); opacity: 0.5; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
   .premium-wish-btn {
-    width: 34px;
-    height: 34px;
-    top: 8px;
-    left: 8px;
+    padding: 4px 10px;
+    top: 12px;
+    right: 12px;
+  }
+  .wish-text {
+    font-size: 11px;
   }
 }

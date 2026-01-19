@@ -6,40 +6,42 @@ import { cleanImageUrl } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
 
-export default function Searchbar() {
+export default function Searchbar({ isModal = false, onClose }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
 
+  /* LOCK SCROLL IN MODAL */
+  useEffect(() => {
+    if (isModal) document.body.style.overflow = "hidden";
+    return () => (document.body.style.overflow = "unset");
+  }, [isModal]);
+
+  /* ESC TO CLOSE */
+  useEffect(() => {
+    if (!isModal) return;
+    const esc = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
+  }, [isModal, onClose]);
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      (pos) => setLocation({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+      (pos) =>
+        setLocation({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        }),
       () => setLocation({ latitude: 0, longitude: 0 })
     );
-  }, []);
-
-  useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [isMobileOpen]);
-
-  useEffect(() => {
-    return () => {
-      abortRef.current?.abort();
-      clearTimeout(debounceRef.current);
-    };
   }, []);
 
   const fetchResults = async (searchText) => {
@@ -48,9 +50,8 @@ export default function Searchbar() {
       abortRef.current = new AbortController();
       setLoading(true);
 
-      const safeQuery = searchText.slice(0, 3);
       const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: safeQuery },
+        params: { name: searchText.slice(0, 3) },
         headers: {
           zoneId: "[3]",
           moduleId: 2,
@@ -60,7 +61,7 @@ export default function Searchbar() {
         signal: abortRef.current.signal,
       });
 
-      const rawData = [
+      const data = [
         ...(res.data?.items || []).map((i) => ({
           id: `item-${i.id}`,
           type: "medicine",
@@ -75,17 +76,9 @@ export default function Searchbar() {
         })),
       ];
 
-      const fuse = new Fuse(rawData, {
-        keys: ["name"],
-        threshold: 0.45,
-        ignoreLocation: true,
-      });
-
-      const finalResults = fuse.search(searchText).map((r) => r.item);
-      setResults(finalResults);
+      const fuse = new Fuse(data, { keys: ["name"], threshold: 0.45 });
+      setResults(fuse.search(searchText).map((r) => r.item));
       setShowDropdown(true);
-    } catch (err) {
-      if (err.name !== "CanceledError") console.error(err);
     } finally {
       setLoading(false);
     }
@@ -93,14 +86,9 @@ export default function Searchbar() {
 
   const triggerSearch = useCallback(
     (text) => {
-      const searchText = text.trim().toLowerCase();
-      if (searchText.length < 2 || !location) {
-        setResults([]);
-        setShowDropdown(false);
-        return;
-      }
+      if (!location || text.length < 2) return;
       clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => fetchResults(searchText), 300);
+      debounceRef.current = setTimeout(() => fetchResults(text), 300);
     },
     [location]
   );
@@ -109,100 +97,66 @@ export default function Searchbar() {
     triggerSearch(query);
   }, [query, triggerSearch]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const trimmedQuery = query.trim();
-      if (trimmedQuery.length < 2) return;
-      closeSearch();
-      navigate(`/searchlist?query=${encodeURIComponent(trimmedQuery)}`);
-      return;
-    }
-    if (!showDropdown || results.length === 0) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex((i) => (i + 1) % results.length);
-    }
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => (i <= 0 ? results.length - 1 : i - 1));
-    }
-    if (e.key === "Escape") {
-      setShowDropdown(false);
-      setActiveIndex(-1);
-    }
-  };
-
   const handleSelect = (item) => {
-    closeSearch();
+    onClose?.();
     const id = item.id.split("-")[1];
     navigate(item.type === "medicine" ? `/medicine/${id}` : `/view-stores/${id}`);
   };
+  const handleKeyDown = (e) => {
+  if (e.key !== "Enter") return;
 
-  const closeSearch = () => {
-    setShowDropdown(false);
-    setIsMobileOpen(false);
-    setActiveIndex(-1);
-  };
+  // Agar dropdown open hai aur koi item highlighted hai
+  if (activeIndex >= 0 && results[activeIndex]) {
+    handleSelect(results[activeIndex]);
+    return;
+  }
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        closeSearch();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // Normal search → search list page
+  if (query.trim()) {
+    onClose?.();
+    navigate(`/searchlist?query=${encodeURIComponent(query.trim())}`);
+  }
+};
+useEffect(() => {
+  setActiveIndex(-1);
+}, [query]);
 
-  return (
-    <header className="header-main ">
-      <div className="header-container max-w-7xl mx-auto px-4 py-3">
-        {!isMobileOpen && <h2 className="logo">GOGENRIC HEALTHCARE</h2>}
 
-        <div className={`search-wrapper ${isMobileOpen ? "mobile-open" : ""}`} ref={wrapperRef}>
-          <div className="search-bar">
-            <Search size={18} className="search-icon" />
-            <input
-              value={query}
-              placeholder="Search medicines, stores..."
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => {
-                setShowDropdown(true);
-                if (window.innerWidth < 768) setIsMobileOpen(true);
-              }}
-              onKeyDown={handleKeyDown}
-            />
-            {(isMobileOpen || query) && (
-              <X className="close-btn" size={20} onClick={() => { setQuery(""); closeSearch(); }} />
-            )}
-          </div>
-
-          {showDropdown && (
-            <div className="search-dropdown">
-              {loading && <div className="loader">Searching...</div>}
-              {!loading && results.length === 0 && query.length >= 2 && (
-                <p className="empty-text">No results found</p>
-              )}
-              {!loading &&
-                results.map((item, index) => (
-                  <div
-                    key={item.id}
-                    className={`search-item ${index === activeIndex ? "active" : ""}`}
-                    onMouseEnter={() => setActiveIndex(index)}
-                    onClick={() => handleSelect(item)}
-                  >
-                    <img src={cleanImageUrl(item.image) || "/no-image.jpg"} alt={item.name} />
-                    <div className="search-info">
-                      <p>{item.name}</p>
-                      <span className={`search-type ${item.type}`}>{item.type}</span>
-                    </div>
-                  </div>
-                ))}
-            </div>
+return (
+  <header className={`header-main ${isModal ? "modal-mode" : ""}`}>
+    <div className="header-container">
+      <div className="search-wrapper" ref={wrapperRef}>
+        <div className="search-bar">
+          <Search size={22} className="search-icon" />
+          <input
+            autoFocus={isModal}
+            value={query}
+            placeholder="Search medicines or stores..."
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => handleKeyDown(e)}
+          />
+          {/* Input clear karne ke liye chota cross */}
+          {query && (
+            <X size={20} className="clear-query" onClick={() => setQuery("")} />
           )}
         </div>
+
+        {showDropdown && (
+          <div className="search-dropdown">
+            {loading && <div className="loader">Searching...</div>}
+            {!loading && results.map((item) => (
+              <div key={item.id} className="search-item" onClick={() => handleSelect(item)}>
+                <img src={cleanImageUrl(item.image)} alt={item.name} />
+                <div className="search-info">
+                  <p>{item.name}</p>
+                  <span className={`search-type ${item.type}`}>{item.type}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </header>
-  );
-} 
+    </div>
+  </header>
+);
+}

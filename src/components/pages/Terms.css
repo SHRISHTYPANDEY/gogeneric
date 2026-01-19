@@ -31,7 +31,7 @@
   display: block;
   width: 80px;
   height: 5px;
-  background: linear-gradient(to right, var(--deep-plum), var(--mauve));
+  /* background: linear-gradient(to right, var(--deep-plum), var(--mauve)); */
   margin: 15px auto 0;
   border-radius: 10px;
 }
@@ -82,7 +82,7 @@
 .terms-content h1, 
 .terms-content h2, 
 .terms-content h3 {
-  color: var(--deep-plum);
+  /* color: var(--deep-plum); */
   margin-top: 45px;
   margin-bottom: 20px;
   font-weight: 800;
@@ -100,7 +100,7 @@
   content: '';
   width: 4px;
   height: 24px;
-  background: var(--mauve);
+  /* background: var(--mauve); */
   border-radius: 10px;
   display: inline-block;
 }

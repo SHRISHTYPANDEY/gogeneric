@@ -1,36 +1,55 @@
-/* ================= FAQ SECTION ================= */
+/* ================= FAQ (GOGENERIC GREEN) ================= */
+
+:root {
+  --gg-green: #016b61;
+  --gg-green-light: #1e8e82;
+  --gg-green-soft: #e8f6f4;
+  --gg-green-bg: #f6fbfa;
+
+  --text-dark: #0f2f2b;
+  --text-muted: #5f7d79;
+
+  --shadow-soft: 0 10px 25px rgba(1, 107, 97, 0.12);
+}
+
+/* ================= SECTION ================= */
 
 .faq-section {
   padding: 100px 20px;
-  /* Updated to soft Mauve gradient */
   background: radial-gradient(
     1200px 500px at top,
-    #fffafa 0%,
-    #fdf5f8 45%,
-    #f8f1f4 100%
+    #ffffff 0%,
+    var(--gg-green-bg) 50%,
+    #eef7f5 100%
   );
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* ================= TITLE ================= */
+
 .faq-title {
   font-size: 42px;
-  font-weight: 800; /* Bolder for premium look */
+  font-weight: 800;
   margin-bottom: 56px;
-  color: var(--deep-plum); /* Deep Plum Title */
+  color: var(--gg-green);
   letter-spacing: -0.03em;
   position: relative;
 }
 
-/* Subtle underline like other pages */
+/* Green underline */
 .faq-title::after {
-  content: '';
+  content: "";
   display: block;
-  width: 60px;
+  width: 64px;
   height: 4px;
-  background: var(--mauve);
-  margin: 12px auto 0;
+  background: linear-gradient(
+    135deg,
+    var(--gg-green),
+    var(--gg-green-light)
+  );
+  margin: 14px auto 0;
   border-radius: 10px;
 }
 
@@ -40,11 +59,10 @@
   width: 100%;
   max-width: 760px;
   background: #ffffff;
-  border-radius: 28px; /* Softer corners */
-  border: 1px solid var(--dusty-rose);
-  box-shadow: var(--premium-shadow);
+  border-radius: 28px;
+  border: 1.5px solid #cce7e3;
+  box-shadow: var(--shadow-soft);
   overflow: hidden;
-  backdrop-filter: blur(10px);
 }
 
 /* ================= FAQ ITEM ================= */
@@ -60,14 +78,13 @@
   right: 24px;
   bottom: 0;
   height: 1px;
-  /* Soft Dusty Rose divider */
   background: linear-gradient(
     90deg,
     transparent,
-    var(--dusty-rose),
+    #cce7e3,
     transparent
   );
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .faq-item:last-child::after {
@@ -92,9 +109,9 @@
 }
 
 .faq-question:hover {
-  background: rgba(163, 118, 162, 0.05); /* Very light Mauve hover */
+  background: rgba(1, 107, 97, 0.05);
   padding-left: 36px;
-  color: var(--deep-plum);
+  color: var(--gg-green);
 }
 
 /* ================= ICON ================= */
@@ -103,31 +120,25 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  /* Light Mauve Background */
-  background: linear-gradient(
-    135deg,
-    #fdf5f8,
-    var(--dusty-rose)
-  );
+  background: var(--gg-green-soft);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--mauve);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gg-green);
   transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item.active .icon {
   transform: rotate(180deg);
-  /* Deep Plum Active State */
   background: linear-gradient(
     135deg,
-    var(--mauve),
-    var(--deep-plum)
+    var(--gg-green),
+    var(--gg-green-light)
   );
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(107, 63, 105, 0.2);
+  box-shadow: 0 6px 16px rgba(1, 107, 97, 0.3);
 }
 
 /* ================= ANSWER ================= */
@@ -144,7 +155,7 @@
 }
 
 .faq-item.active .faq-answer {
-  max-height: 500px; /* Increased for longer text */
+  max-height: 500px;
   opacity: 1;
   transform: translateY(0);
 }
@@ -153,12 +164,12 @@
   padding: 0 30px 28px;
   font-size: 15.5px;
   line-height: 1.8;
-  color: var(--text-body);
+  color: var(--text-muted);
 }
 
-/* Adding a subtle highlight to active question */
+/* Highlight active question */
 .faq-item.active .faq-question {
-  color: var(--deep-plum);
+  color: var(--gg-green);
 }
 
 /* ================= MOBILE ================= */

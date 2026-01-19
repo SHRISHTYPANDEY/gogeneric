@@ -11,9 +11,7 @@ export default function Stores() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
-  const canShowViewMore = filteredStores.length > 9;
-
-  const [userCoords, setUserCoords] = useState(null); 
+  const [userCoords, setUserCoords] = useState(null);
 
   const abortRef = useRef(null);
   const navigate = useNavigate();
@@ -23,28 +21,21 @@ export default function Stores() {
       const stored = localStorage.getItem("user_location");
       setUserCoords(stored ? JSON.parse(stored) : null);
     };
-
     loadLocation();
     window.addEventListener("location-updated", loadLocation);
-
-    return () => {
-      window.removeEventListener("location-updated", loadLocation);
-    };
+    return () => window.removeEventListener("location-updated", loadLocation);
   }, []);
 
   const hasUserLocation = userCoords?.lat && userCoords?.lng;
 
   const fetchStoresByFilter = async (filter) => {
     if (abortRef.current) abortRef.current.abort();
-
     const controller = new AbortController();
     abortRef.current = controller;
-
     setLoading(true);
 
     let url = "/api/v1/stores/get-stores/all";
-    if (filter === "Newly Joined")
-      url = "/api/v1/stores/get-stores/newly-joined";
+    if (filter === "Newly Joined") url = "/api/v1/stores/get-stores/newly-joined";
     if (filter === "Popular") url = "/api/v1/stores/popular";
     if (filter === "Top Rated") url = "/api/v1/stores/get-stores/top-rated";
 
@@ -53,22 +44,22 @@ export default function Stores() {
         headers: {
           zoneId: JSON.stringify([3]),
           moduleId: "2",
-          ...(hasUserLocation && {
-            latitude: userCoords.lat,
-            longitude: userCoords.lng,
-          }),
+          ...(hasUserLocation && { latitude: userCoords.lat, longitude: userCoords.lng }),
           Accept: "application/json",
         },
         signal: controller.signal,
       });
+     const data = res.data?.stores || [];
 
-      const data = res.data?.stores || [];
-      setStores(data);
-      setFilteredStores(data);
+const sortedStores = hasUserLocation
+  ? sortByDistance(data)
+  : data;
+
+setStores(sortedStores);
+setFilteredStores(sortedStores);
+
     } catch (err) {
-      if (err.name !== "CanceledError") {
-        console.log("Stores API Error:", err);
-      }
+      if (err.name !== "CanceledError") console.log("Stores Error:", err);
     } finally {
       setLoading(false);
     }
@@ -79,10 +70,16 @@ export default function Stores() {
     return () => abortRef.current?.abort();
   }, [activeFilter, hasUserLocation]);
 
+  const sortByDistance = (stores) => {
+  return [...stores].sort((a, b) => {
+    if (!a.distance) return 1;
+    if (!b.distance) return -1;
+    return a.distance - b.distance;
+  });
+};
   return (
     <div className="stores-page max-w-7xl mx-auto px-4">
       <h2 className="stores-heading">Stores</h2>
-      <p className="stores-sub">{filteredStores.length} stores found</p>
 
       <div className="filter-row">
         <div className="store-filters">
@@ -96,81 +93,45 @@ export default function Stores() {
             </button>
           ))}
         </div>
-
-        {filteredStores.length > 9 && (
-          <button
-            className="view-more-btn"
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll ? "View Less" : "View More"}
-          </button>
-        )}
       </div>
 
       {loading ? (
         <div className="stores-grid">
-          {[1, 2, 3, 4].map((x) => (
-            <div className="skeleton-card" key={x}></div>
-          ))}
+          {[1, 2, 3, 4, 5, 6].map((x) => ( <div className="skeleton-card" key={x}></div> ))}
         </div>
       ) : (
         <div className="stores-grid">
-          {(showAll ? filteredStores : filteredStores.slice(0, 9)).map(
-            (store) => {
-              const showDistance =
-                hasUserLocation && typeof store.distance === "number";
+          {(showAll ? filteredStores : filteredStores.slice(0, 9)).map((store) => {
+            const distance = hasUserLocation && store.distance ? `${(store.distance / 1000).toFixed(1)} km` : null;
 
-              const distance = showDistance
-                ? `${(store.distance / 1000).toFixed(1)} km`
-                : null;
-
-              return (
-                <div
-                  key={store.id}
-                  className="store-card-6am"
-                  onClick={() => navigate(`/view-stores/${store.id}`)}
-                >
-                  <div className="store-image-wrapper">
-                    <img
-                      src={cleanImageUrl(
-                        store.cover_photo_full_url || store.cover_photo
-                      )}
-                      alt={store.name}
-                    />
-                  </div>
-
-                  <div className="store-content-vertical">
-                    <h3 className="store-name">{store.name}</h3>
-                    <p className="store-address">
-                      {store.address || "Address unavailable"}
-                    </p>
-
-                    <div className="store-bottom-row">
-                      {showDistance && (
-                        <span className="store-distance">
-                          <MapPin size={14} /> {distance}
-                        </span>
-                      )}
-
-                      <span className="store-rating">
-                        <Star size={14} fill="#00c16e" stroke="none" />
-                        {store.rating || "N/A"}
-                      </span>
-                    </div>
+            return (
+              <div key={store.id} className="store-card-6am" onClick={() => navigate(`/view-stores/${store.id}`)}>
+                <div className="store-image-wrapper">
+                  <img src={cleanImageUrl(store.cover_photo_full_url || store.cover_photo)} alt={store.name} />
+                </div>
+                <div className="store-content-vertical">
+                  <h3 className="store-name">{store.name}</h3>
+                  <p className="store-address">{store.address || "Address unavailable"}</p>
+                  <div className="store-bottom-row">
+                    {distance && (
+                      <span className="store-distance"><MapPin size={14} /> {distance}</span>
+                    )}
+                    <span className="store-rating">
+                      <Star size={12} fill="#fff" stroke="none" />
+                      {store.avg_rating || store.rating || "N/A"}
+                    </span>
                   </div>
                 </div>
-              );
-            }
-          )}
+              </div>
+            );
+          })}
         </div>
       )}
-      {!loading && canShowViewMore && (
+
+      {!loading && filteredStores.length > 9 && (
         <div className="view-more-bottom">
-          <button
-            className="view-more-btn"
-            onClick={() => setShowAll(!showAll)}
-          >
-            {showAll ? "View Less" : "View More"}
+          <button className="view-more-btn" onClick={() => setShowAll(!showAll)}>
+            {showAll ? "View Less" : "View More Stores"}
           </button>
         </div>
       )}

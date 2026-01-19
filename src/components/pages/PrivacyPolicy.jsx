@@ -62,7 +62,7 @@ export default function PrivacyPolicy() {
   return (
     <>
       <div className="privacy-page">
-        <h1 className="privacy-title">Privacy Policy</h1>
+        <h1 className="policy-title">Privacy Policy</h1>
         {content ? (
           <div
             className="privacy-content"

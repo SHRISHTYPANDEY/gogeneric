@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
-import { cleanImageUrl } from "../../utils";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
 import Loader from "../Loader";
@@ -15,7 +14,6 @@ export default function StoreDetails() {
 
   const [store, setStore] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const [activeTab, setActiveTab] = useState("products");
 
   const [products, setProducts] = useState([]);
@@ -28,99 +26,154 @@ export default function StoreDetails() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    if (!store?.id) return;
+  const [discountMap, setDiscountMap] = useState({});
 
-    if (searchTerm.trim() === "") return;
-    const delay = setTimeout(() => {
-      setPage(1);
-      setHasMore(true);
-      fetchProducts(1, searchTerm.trim());
-    }, 400); 
-
-    return () => clearTimeout(delay);
-  }, [searchTerm, store?.id]);
   useEffect(() => {
     fetchStoreDetails();
   }, [id]);
 
-  useEffect(() => {
-    if (store?.id) {
-      setPage(1);
-      setHasMore(true);
-      fetchProducts(1);
-    }
-  }, [store]);
-
   const fetchStoreDetails = async () => {
     try {
       const res = await api.get(`/api/v1/stores/details/${id}`, {
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
       setStore(res.data);
-    } catch (err) {
-      console.error(err);
+    } catch {
       toast.error("Failed to load store");
     } finally {
       setLoading(false);
     }
   };
-  const fetchProducts = async (pageNumber = 1, keyword = "") => {
+
+  useEffect(() => {
+    if (!id) return;
+    fetchDiscountedProducts();
+  }, [id]);
+
+  useEffect(() => {
+    if (!store?.id) return;
+    setProducts([]);
+    setPage(1);
+    setHasMore(true);
+    fetchProducts(1);
+  }, [store?.id]);
+
+  useEffect(() => {
+    if (!store?.id) return;
+
+    const delay = setTimeout(() => {
+      if (searchTerm.trim() === "") {
+        setProducts([]);
+        setPage(1);
+        setHasMore(true);
+        fetchProducts(1);
+      } else {
+        setHasMore(false);
+        searchProducts(searchTerm.trim());
+      }
+    }, 400);
+
+    return () => clearTimeout(delay);
+  }, [searchTerm]);
+
+  const searchProducts = async (keyword) => {
     try {
       setProductsLoading(true);
-
-      const res = await api.get("/api/v1/items/latest", {
-        params: {
-          store_id: id,
-          category_id: store.category_details?.[0]?.id || 1,
-          search: keyword || undefined,
-          limit: 20,
-          offset: pageNumber,
-        },
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
+      const res = await api.get("/api/v1/items/search", {
+        params: { name: keyword, store_id: id, limit: 10000, offset: 1 },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-
-      const newProducts = res.data.products || res.data.items || [];
-
-      if (pageNumber === 1) {
-        setProducts(newProducts);
-      } else {
-        setProducts((prev) => [...prev, ...newProducts]);
-      }
-
-      setHasMore(newProducts.length === 20);
-    } catch (err) {
-      console.error(err);
+      setProducts(res.data?.items || res.data?.products || []);
+      setHasMore(false);
     } finally {
       setProductsLoading(false);
     }
   };
 
+  const fetchProducts = async (pageNumber) => {
+    try {
+      setProductsLoading(true);
+      const res = await api.get("/api/v1/items/latest", {
+        params: {
+          store_id: id,
+          category_id: store.category_details?.[0]?.id || 1,
+          limit: 20,
+          offset: pageNumber,
+        },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+      });
+
+      const newProducts = res.data.products || res.data.items || [];
+      setProducts((prev) =>
+        pageNumber === 1 ? newProducts : [...prev, ...newProducts]
+      );
+      setHasMore(newProducts.length === 20);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
+
+  const fetchDiscountedProducts = async () => {
+    try {
+      const res = await api.get("/api/v1/items/discounted", {
+        params: { store_id: id, limit: 1000, offset: 1 },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+      });
+
+      const items = res.data.products || res.data.items || [];
+      const map = {};
+      items.forEach((item) => {
+        if (item.id && item.discounted_price) {
+          map[item.id] = item.discounted_price;
+        }
+      });
+      setDiscountMap(map);
+    } catch {}
+  };
+
+  const getDiscountedPrice = (item) => {
+    if (discountMap[item.id]) return discountMap[item.id];
+    if (!item.discount || item.discount === 0) return null;
+
+    const price = item.price || item.unit_price || 0;
+    if (item.discount_type === "percent")
+      return Math.round(price - (price * item.discount) / 100);
+    if (item.discount_type === "amount")
+      return Math.max(price - item.discount, 0);
+    return null;
+  };
+
+  const getDiscountPercent = (item) => {
+    const base = item.price || item.unit_price;
+    const discounted = getDiscountedPrice(item);
+    if (!base || !discounted || discounted >= base) return null;
+    return Math.round(((base - discounted) / base) * 100);
+  };
+
   useEffect(() => {
-    if (activeTab !== "products" || !hasMore || productsLoading) return;
+    if (
+      activeTab !== "products" ||
+      !hasMore ||
+      productsLoading ||
+      searchTerm.trim() !== ""
+    )
+      return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setPage((prev) => {
             const next = prev + 1;
-            fetchProducts(next, searchTerm.trim()); 
+            fetchProducts(next);
             return next;
           });
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     );
 
     const sentinel = document.getElementById("scroll-sentinel");
     if (sentinel) observer.observe(sentinel);
-
     return () => observer.disconnect();
   }, [hasMore, productsLoading, activeTab, searchTerm]);
 
@@ -129,18 +182,14 @@ export default function StoreDetails() {
       setReviewsLoading(true);
       const res = await api.get("/api/v1/stores/reviews", {
         params: { store_id: id },
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-        },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
       setReviews(res.data.reviews || []);
-    } catch (err) {
-      console.error(err);
     } finally {
       setReviewsLoading(false);
     }
   };
+
   const filteredReviews = reviews.filter(
     (r) =>
       r.comment?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -200,20 +249,11 @@ export default function StoreDetails() {
       </div>
 
       {activeTab === "products" && (
-  <>
-    {productsLoading && page === 1 ? (
-      <div className="sd-loader-center">
-        <Loader text="Loading products..." />
-      </div>
-    ) : (
-      <>
-        <div className="sd-products-grid">
-          {products.length === 0 ? (
-            <p>No products found</p>
-          ) : (
-            products.map((p, index) => (
+        <>
+          <div className="sd-products-grid">
+            {products.map((p) => (
               <div
-                key={`product-${p.id}-${index}`}
+                key={p.id}
                 className="sd-prod-card"
                 onClick={() =>
                   navigate(`/medicine/${p.id}`, {
@@ -223,29 +263,40 @@ export default function StoreDetails() {
               >
                 <WishlistButton item={p} />
                 <AddToCartButton item={p} />
-                <div className="sd-prod-img-box">
-                  <img
-                    src={cleanImageUrl(p.image_full_url)}
-                    alt={p.name}
-                    onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
-                  />
-                </div>
+
+                {getDiscountPercent(p) && (
+                  <span className="sd-discount-badge">
+                    {getDiscountPercent(p)}% OFF
+                  </span>
+                )}
+
                 <h4 className="sd-prod-name">{p.name}</h4>
-                <p className="sd-prod-price">₹{p.price}</p>
+
+                <div className="sd-price-row">
+                  {getDiscountedPrice(p) ? (
+                    <>
+                      <span className="sd-price-old">₹{p.price}</span>
+                      <span className="sd-price-new">
+                        ₹{getDiscountedPrice(p)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="sd-price-new">₹{p.price}</span>
+                  )}
+                </div>
               </div>
-            ))
+            ))}
+          </div>
+
+          {productsLoading && hasMore && (
+            <div className="sd-scroll-loader">
+              <Loader text="Loading more products..." />
+            </div>
           )}
-        </div>
 
-        {hasMore && <div id="scroll-sentinel" />}
-        {productsLoading && page > 1 && (
-          <Loader text="Loading more products..." />
-        )}
-      </>
-    )}
-  </>
-)}
-
+          {hasMore && <div id="scroll-sentinel" style={{ height: 1 }} />}
+        </>
+      )}
 
       {activeTab === "overview" && (
         <div className="sd-content-section">

@@ -1,138 +1,177 @@
 /* ================= SHIPPING POLICY PAGE ================= */
 
 .policy-page {
-  max-width: 950px;
+  max-width: 1050px;
   margin: 60px auto;
   padding: 0 24px;
   min-height: 80vh;
-  font-family: var(--font-main);
+  background: var(--gg-bg);
+  font-family: "Inter", sans-serif;
 }
 
+/* ================= TITLE ================= */
+
 .policy-title {
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--text-dark);
-  margin-bottom: 40px;
-  letter-spacing: -1.5px;
+  font-size: 44px;
+  font-weight: 900;
+  color: var(--gg-primary);
+  margin-bottom: 50px;
+  letter-spacing: -1.4px;
   text-align: center;
   position: relative;
 }
 
-/* Luxury accent line under title */
 .policy-title::after {
-  content: '';
+  content: "";
   display: block;
-  width: 80px;
-  height: 5px;
-  background: linear-gradient(to right, var(--deep-plum), var(--mauve));
-  margin: 15px auto 0;
-  border-radius: 10px;
+  width: 110px;
+  height: 4px;
+  margin: 14px auto 0;
+  background: linear-gradient(
+    to right,
+    var(--gg-primary),
+    var(--gg-accent),
+    transparent
+  );
+  border-radius: 50px;
 }
 
-/* ================= CONTENT CARD WRAPPER ================= */
+/* ================= CONTENT CARD ================= */
 
 .policy-content {
-  background: var(--white);
+  background: #ffffff;
   padding: 60px;
-  border-radius: 32px;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: var(--premium-shadow);
+  border-radius: 28px;
+  border: 1px solid var(--gg-border);
+  box-shadow: var(--gg-shadow);
   line-height: 1.9;
-  color: var(--text-body);
+  color: var(--gg-text-body);
   word-wrap: break-word;
 }
 
-/* ================= TYPOGRAPHY (HTML FROM API) ================= */
+/* ================= API HTML TYPOGRAPHY ================= */
 
-.policy-content h1, 
-.policy-content h2, 
+.policy-content h1,
+.policy-content h2,
 .policy-content h3 {
-  color: var(--deep-plum);
+  color: var(--gg-primary-dark);
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   font-weight: 800;
-  letter-spacing: -0.5px;
 }
 
-/* Section Sidebar Accent for H2 (Shipping sections like Delivery Time, Charges) */
 .policy-content h2 {
   font-size: 26px;
-  border-left: 5px solid var(--mauve);
-  padding-left: 20px;
   display: flex;
   align-items: center;
+  gap: 14px;
 }
 
+.policy-content h2::before {
+  content: "";
+  width: 5px;
+  height: 26px;
+  background: var(--gg-primary);
+  border-radius: 6px;
+}
+
+/* Paragraphs */
 .policy-content p {
-  margin-bottom: 25px;
-  font-size: 16px;
+  font-size: 16.5px;
+  margin-bottom: 24px;
   text-align: justify;
 }
 
-/* Divider Line Fix (Clean gradient for dashes/separators) */
-.policy-content hr {
-  border: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--dusty-rose), var(--mauve), var(--dusty-rose), transparent);
-  margin: 40px 0;
-  opacity: 0.7;
-}
-
-/* Lists styling (for step-by-step shipping process) */
-.policy-content ul, 
+/* Lists */
+.policy-content ul,
 .policy-content ol {
-  padding-left: 25px;
-  margin-bottom: 30px;
+  padding-left: 26px;
+  margin-bottom: 28px;
 }
 
 .policy-content li {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  font-size: 16px;
   position: relative;
 }
 
-/* Bold & Important Text (Tracking IDs, Dates etc.) */
-.policy-content strong {
-  color: var(--text-dark);
-  font-weight: 700;
+.policy-content ul li::marker {
+  color: var(--gg-primary);
 }
 
-/* Links (Tracking links or Support emails) */
+/* Divider / HR */
+.policy-content hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gg-primary),
+    transparent
+  );
+  margin: 45px 0;
+  opacity: 0.8;
+}
+
+/* Links (tracking / support links) */
 .policy-content a {
-  color: var(--mauve);
-  text-decoration: none;
+  color: var(--gg-primary);
   font-weight: 600;
-  border-bottom: 1.5px dashed var(--dusty-rose);
+  text-decoration: none;
+  border-bottom: 1.5px dashed var(--gg-border);
   transition: 0.3s ease;
 }
 
 .policy-content a:hover {
-  color: var(--deep-plum);
+  color: var(--gg-primary-dark);
   border-bottom-style: solid;
-  border-color: var(--deep-plum);
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
+/* Important text */
+.policy-content strong {
+  color: var(--gg-primary-dark);
+  font-weight: 700;
+}
+
+/* Tables (if API sends any) */
+.policy-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.policy-content th,
+.policy-content td {
+  border: 1px solid var(--gg-border);
+  padding: 12px;
+  font-size: 15px;
+}
+
+/* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
   .policy-page {
-    margin: 30px auto;
+    margin: 35px auto;
+    padding: 0 16px;
   }
-  
+
   .policy-title {
     font-size: 32px;
   }
-  
+
   .policy-content {
-    padding: 35px 20px;
-    border-radius: 24px;
+    padding: 34px 22px;
+    border-radius: 22px;
   }
 
   .policy-content h2 {
     font-size: 22px;
-    padding-left: 15px;
   }
 
   .policy-content p {
-    text-align: left; /* Mobile readability */
+    text-align: left;
+    font-size: 15.8px;
   }
 }

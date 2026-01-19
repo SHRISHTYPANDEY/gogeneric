@@ -81,7 +81,7 @@ export default function MyAddress() {
           style={{
             padding: "12px 20px",
             borderRadius: "50px",
-            background: "#6B3F69",
+            background: "#014f48",
             color: "#fff",
             border: "none",
             fontWeight: "700",

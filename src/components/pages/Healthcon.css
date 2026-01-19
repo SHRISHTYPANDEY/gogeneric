@@ -1,0 +1,196 @@
+/* =========================
+   PAGE WRAPPER
+========================= */
+.concern-page1 {
+  padding: 28px 0;
+}
+
+/* =========================
+   HEADER
+========================= */
+.concern-header1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  gap: 16px;
+}
+
+.concern-heading1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+  position: relative;
+  padding-bottom: 12px;
+  margin: 0;
+}
+
+/* 1mg style fading underline */
+.concern-heading1::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    #0f766e 0%,
+    #0f766e 40%,
+    rgba(15, 118, 110, 0.4) 65%,
+    transparent 100%
+  );
+  border-radius: 4px;
+}
+
+.concern-sub1 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  margin-top: 6px;
+}
+
+/* =========================
+   GRID LAYOUT (5–6 CARDS)
+========================= */
+.concern-type-row1 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 24px;
+}
+
+/* =========================
+   CARD BASE (BIGGER)
+========================= */
+.concern-type-card1 {
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+  min-height: 210px;
+}
+
+.concern-type-card1:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   CARD COLORS (PASTEL)
+========================= */
+.concern-type-card1:nth-child(6n + 1) {
+  background: #ecfeff;
+  border-color: #67e8f9;
+}
+
+.concern-type-card1:nth-child(6n + 2) {
+  background: #fdf1f0;
+  border-color: #ef8f86;
+}
+
+.concern-type-card1:nth-child(6n + 3) {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.concern-type-card1:nth-child(6n + 4) {
+  background: #fdf4ff;
+  border-color: #e879f9;
+}
+
+.concern-type-card1:nth-child(6n + 5) {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+}
+
+.concern-type-card1:nth-child(6n + 6) {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+/* =========================
+   IMAGE
+========================= */
+.concern-type-image1 {
+  width: 100%;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.concern-type-image1 img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.concern-type-card1:hover img {
+  transform: scale(1.06);
+}
+
+/* =========================
+   NAME
+========================= */
+.concern-type-name1 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.35;
+}
+
+/* =========================
+   TABLET (4–5 CARDS)
+========================= */
+@media (max-width: 1024px) {
+  .concern-type-row1 {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .concern-heading1 {
+    font-size: 22px;
+  }
+
+  .concern-sub1 {
+    font-size: 15px;
+  }
+
+  .concern-type-row1 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .concern-type-image1 {
+    height: 110px;
+  }
+}
+
+/* =========================
+   MOBILE (2 CARDS)
+========================= */
+@media (max-width: 480px) {
+  .concern-type-row1 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .concern-type-card1 {
+    padding: 14px;
+    min-height: 190px;
+  }
+
+  .concern-type-image1 {
+    height: 95px;
+  }
+
+  .concern-type-name1 {
+    font-size: 13px;
+  }
+}

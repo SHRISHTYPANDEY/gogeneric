@@ -1,44 +1,65 @@
-import { ShoppingBag } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { ShoppingBag, Check } from "lucide-react";
 import { addToCart } from "../utils/cartHelper";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CartButton.css";
 
 export default function AddToCartButton({ item }) {
-  const navigate = useNavigate();
-  const location = useLocation();
   const btnRef = useRef(null);
+  const navigate = useNavigate();
+  const [inCart, setInCart] = useState(false);
+
+  const checkInCart = () => {
+    const ids = JSON.parse(
+      localStorage.getItem("cart_item_ids") || "[]"
+    );
+    setInCart(ids.includes(item.id));
+  };
+
+  useEffect(() => {
+    checkInCart();
+
+    const handler = () => checkInCart();
+    window.addEventListener("cart-updated", handler);
+
+    return () => {
+      window.removeEventListener("cart-updated", handler);
+    };
+  }, [item.id]);
 
   const handleClick = (e) => {
     e.stopPropagation();
-
-    if (btnRef.current) {
-      btnRef.current.classList.add("clicked");
-      setTimeout(() => {
-        if (btnRef.current) {
-          btnRef.current.classList.remove("clicked");
-        }
-      }, 200);
+    if (inCart) {
+      navigate("/cart");
+      return;
     }
 
-    addToCart({
-      item,
-      navigate,
-      location,
-    });
+    // animation
+    btnRef.current?.classList.add("clicked");
+    setTimeout(() => {
+      btnRef.current?.classList.remove("clicked");
+    }, 200);
+
+    addToCart({ item });
   };
 
   return (
     <button
       ref={btnRef}
-      className="premium-add-btn"
-      aria-label="Add to cart"
+      className={`apply-now-btn ${inCart ? "added" : ""}`}
       onClick={handleClick}
     >
-      <div className="btn-icon-wrapper">
-        <ShoppingBag size={18} strokeWidth={2.5} />
-      </div>
-      <span className="btn-tooltip">Add</span>
+      {inCart ? (
+        <>
+          <span>Go to Cart</span>
+          <Check size={16} strokeWidth={2.5} />
+        </>
+      ) : (
+        <>
+          <span>Add to Cart</span>
+          <ShoppingBag size={16} strokeWidth={2.5} />
+        </>
+      )}
     </button>
   );
 }

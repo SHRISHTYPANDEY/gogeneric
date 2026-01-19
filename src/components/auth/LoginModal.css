@@ -1,10 +1,20 @@
-/* ================= LUXURY SPLIT LOGIN MODAL ================= */
+:root {
+  --primary-deep: #016B61;        
+  --secondary-muted: #70B2B2;     
+  --accent-light: #9ECFD4;       
+  --bg-pink: #eefaed;            
+  --text-main: #013631;          
+  --glass-white: rgba(255, 255, 255, 0.85);
+  --premium-shadow: 0 10px 30px rgba(1, 107, 97, 0.1);
+  --border-soft: 1px solid rgba(1, 107, 97, 0.15);
+  --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
 
 .login-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(45, 20, 44, 0.45); /* Deep Plum tint overlay */
-  backdrop-filter: blur(12px); /* Premium blur effect */
+  background: rgba(1, 54, 49, 0.4);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,10 +28,10 @@
   max-width: 950px;
   min-height: 600px;
   background: #ffffff;
-  border-radius: 40px; /* Luxury Squircle */
+  border-radius: 40px; 
   overflow: hidden;
   position: relative;
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 40px 100px rgba(1, 107, 97, 0.2);
   animation: modalSlideUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -35,7 +45,7 @@
   position: absolute;
   top: 25px;
   right: 25px;
-  background: #fdf5f5;
+  background: var(--bg-pink);
   border: none;
   width: 35px;
   height: 35px;
@@ -45,21 +55,19 @@
   align-items: center;
   justify-content: center;
   font-size: 22px;
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   z-index: 20;
-  transition: 0.3s;
+  transition: var(--transition-smooth);
 }
 
 .close-icon:hover {
-  background: var(--deep-plum);
+  background: var(--primary-deep);
   color: white;
   transform: rotate(90deg);
 }
-
-/* 🔹 LEFT SIDE: BRANDING PANEL */
 .login-left {
   flex: 1;
-  background: linear-gradient(135deg, var(--deep-plum) 0%, #4a2b49 100%);
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--secondary-muted) 100%);
   padding: 60px;
   display: flex;
   flex-direction: column;
@@ -77,24 +85,23 @@
 
 .brand-content p {
   font-size: 17px;
-  opacity: 0.8;
+  opacity: 0.9;
   line-height: 1.6;
   max-width: 280px;
 }
 
 .brand-badge {
   margin-top: 30px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   padding: 10px 20px;
   border-radius: 100px;
   display: inline-block;
   font-weight: 700;
   font-size: 14px;
   backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* 🔹 RIGHT SIDE: FORM PANEL */
 .login-right {
   flex: 1.2;
   padding: 60px;
@@ -104,28 +111,21 @@
   justify-content: center;
 }
 
-.form-content {
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
 .title {
   font-size: 34px;
   font-weight: 850;
-  color: var(--text-dark);
+  color: var(--text-main);
   margin-bottom: 8px;
   letter-spacing: -1px;
 }
 
 .subtext {
-  color: #888;
+  color: var(--secondary-muted);
   font-size: 15px;
   margin-bottom: 35px;
   font-weight: 500;
 }
 
-/* 🔹 INPUTS WITH ICONS */
 .input-group {
   position: relative;
   margin-bottom: 18px;
@@ -136,8 +136,8 @@
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--deep-plum);
-  opacity: 0.6;
+  color: var(--primary-deep);
+  opacity: 0.7;
   pointer-events: none;
 }
 
@@ -147,46 +147,45 @@
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #aaa;
+  color: var(--secondary-muted);
   transition: 0.3s;
 }
 
-.eye-toggle:hover { color: var(--deep-plum); }
+.eye-toggle:hover { color: var(--primary-deep); }
 
 .input {
   width: 100%;
-  padding: 16px 20px 16px 55px; /* Extra left padding for icon */
+  padding: 16px 20px 16px 55px; 
   border-radius: 18px;
   border: 1.5px solid #eee;
-  background: #f9f9f9;
+  background: var(--bg-pink);
   font-size: 15px;
   font-weight: 500;
-  transition: all 0.3s ease;
+  color: var(--text-main);
+  transition: var(--transition-smooth);
 }
 
 .input:focus {
-  border-color: var(--deep-plum);
+  border-color: var(--primary-deep);
   background: white;
-  box-shadow: 0 0 0 5px rgba(107, 63, 105, 0.08);
+  box-shadow: 0 0 0 5px rgba(1, 107, 97, 0.08);
   outline: none;
 }
-
-/* 🔹 BUTTONS & LINKS */
 .forgot-link {
   text-align: right;
   font-size: 14px;
   font-weight: 700;
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   cursor: pointer;
   margin-bottom: 25px;
   transition: 0.3s;
 }
 
-.forgot-link:hover { text-decoration: underline; }
+.forgot-link:hover { opacity: 0.8; text-decoration: underline; }
 
 .submit-btn {
   width: 100%;
-  background: var(--deep-plum);
+  background: var(--primary-deep);
   color: white;
   padding: 18px;
   border-radius: 18px;
@@ -194,40 +193,21 @@
   font-weight: 800;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 25px rgba(107, 63, 105, 0.25);
+  transition: var(--transition-smooth);
+  box-shadow: 0 10px 25px rgba(1, 107, 97, 0.25);
 }
 
 .submit-btn:hover {
-  background: #4a2b49;
+  background: var(--text-main);
   transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(107, 63, 105, 0.35);
-}
-
-.guest-btn-outline {
-  width: 100%;
-  background: transparent;
-  color: var(--deep-plum);
-  border: 2px solid #f0e6ef;
-  padding: 14px;
-  border-radius: 18px;
-  margin-top: 15px;
-  font-weight: 800;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.guest-btn-outline:hover {
-  background: #fdf5f5;
-  border-color: var(--deep-plum);
+  box-shadow: 0 15px 35px rgba(1, 107, 97, 0.35);
 }
 
 .back-nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
@@ -238,27 +218,19 @@
   text-align: center;
   margin-top: 30px;
   font-size: 15px;
-  color: #777;
+  color: var(--secondary-muted);
   font-weight: 500;
 }
 
 .switch-text span {
-  color: var(--deep-plum);
+  color: var(--primary-deep);
   font-weight: 800;
   cursor: pointer;
 }
 
-/* 📱 RESPONSIVE */
 @media (max-width: 900px) {
-  .login-left { display: none; } /* Mobile par brand panel hide */
+  .login-left { display: none; }
   .login-card { max-width: 450px; border-radius: 30px; }
   .login-right { padding: 40px 25px; }
   .title { font-size: 28px; }
-}
-
-/* 📱 Responsive Social Grid */
-@media (max-width: 400px) {
-  .social-login-grid {
-    grid-template-columns: 1fr;
-  }
 }

@@ -1,151 +1,129 @@
-/* ================= PREMIUM WISHLIST DASHBOARD ================= */
+/* ================= PREMIUM WISHLIST ================= */
 
 .wishlist-page {
   padding: 40px 20px;
   min-height: 80vh;
-  background: #ffffff;
+  background: #fff;
 }
 
-/* 🔹 HEADING STYLE */
+/* HEADING */
 .wishlist-heading {
-  font-size: 32px;
-  font-weight: 850;
-  color: var(--text-dark);
-  margin-bottom: 40px;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 35px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  letter-spacing: -1px;
+  gap: 10px;
 }
 
 .wishlist-heading svg {
-  color: #6B3F69; /* Heart icon red for classic feel */
-  fill: rgba(239, 68, 68, 0.1);
+  color: var(--primary-deep);
+  fill: rgba(1, 107, 97, 0.1);
 }
 
-/* 🔹 WISHLIST GRID */
+/* GRID */
 .items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 30px;
+  gap: 28px;
 }
 
-/* 🔹 THE ITEM CARD (Squircle Design) */
+/* CARD */
 .item-card1 {
   position: relative;
-  height: 380px; 
-  padding: 25px;
-  border-radius: 32px;
+  padding: 24px;
+  border-radius: 28px;
+  background: var(--glass-white);
+  box-shadow: var(--premium-shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  border: 1.5px solid transparent; 
-  box-shadow: 0 10px 25px rgba(107, 63, 105, 0.04);
-  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-  overflow: visible;
+  transition: var(--transition-smooth);
 }
-
-/* 🎨 UNIFORM COLOR PALETTE (Matching Category Styles) */
-.item-card1:nth-child(4n + 1) { background: #fdf5f5; }
-.item-card1:nth-child(4n + 2) { background: #f8f0f7; } 
-.item-card1:nth-child(4n + 3) { background: #fce7ea; } 
-.item-card1:nth-child(4n + 4) { background: #eeccea; } 
 
 .item-card1:hover {
-  transform: translateY(-10px);
-  background: var(--white) !important;
-  border-color: var(--deep-plum);
-  box-shadow: 0 25px 50px rgba(107, 63, 105, 0.12);
+  transform: translateY(-8px);
 }
 
-/* 🔹 IMAGE BOX */
+/* IMAGE */
 .item-card1 img {
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   object-fit: contain;
-  filter: drop-shadow(0 12px 20px rgba(0,0,0,0.08));
-  transition: transform 0.5s ease;
-  margin-top: 10px;
+  margin: 10px 0;
+  transition: transform 0.4s ease;
 }
 
 .item-card1:hover img {
   transform: scale(1.1);
 }
 
-/* 🔹 TEXT & PRICE */
+/* TEXT */
 .item-card1 h4 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--text-main);
   text-align: center;
-  line-height: 1.4;
-  height: 44px;
+  height: 42px;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
 .item-card1 .price {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
-  color: var(--deep-plum);
-  margin-bottom: 15px;
+  color: var(--primary-deep);
+  margin: 10px 0 16px;
 }
 
-/* 🔹 REMOVE BUTTON (X) */
+/* REMOVE BUTTON */
 .remove-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.8);
-  border: none;
+  top: 14px;
+  right: 14px;
   width: 34px;
   height: 34px;
   border-radius: 50%;
+  background: #fff;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: 0.3s;
-  z-index: 10;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .remove-btn:hover {
-  background: #6B3F69;
-  color: white;
+  background: var(--primary-deep);
+  color: #fff;
   transform: rotate(90deg);
 }
 
-/* 🔹 MOVE TO CART BUTTON (Branded Pill) */
+/* MOVE TO CART */
 .move-cart-btn {
   width: 100%;
   padding: 14px;
   border-radius: 16px;
+  background: var(--primary-deep);
+  color: #fff;
   border: none;
-  background: var(--deep-plum);
-  color: white;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .move-cart-btn:hover {
-  opacity: 0.9;
-  transform: scale(0.98);
-  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.2);
+  background: var(--text-main);
 }
 
-/* 🏥 EMPTY WISHLIST STATE (Medical Style) */
+/* EMPTY STATE */
 .empty-wishlist.medical {
-  min-height: 60vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,228 +138,46 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
+  0%,100% { transform: translateY(0); }
   50% { transform: translateY(-15px); }
 }
 
 .empty-wishlist h3 {
   font-size: 26px;
   font-weight: 800;
-  color: var(--text-dark);
+  color: var(--text-main);
 }
 
 .empty-wishlist p {
-  color: var(--text-body);
+  font-size: 15px;
   opacity: 0.7;
-  font-size: 16px;
-  margin-top: 10px;
+  margin: 10px 0 25px;
 }
 
-@media (max-width: 768px) {
-
-  /* PAGE PADDING FIX (no horizontal scroll) */
-  .wishlist-page {
-    padding: 20px 12px;
-  }
-
-  /* HEADING SIZE FIX */
-  .wishlist-heading {
-    font-size: 20px;
-    margin-bottom: 20px;
-    gap: 8px;
-  }
-
-  .wishlist-heading svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  /* GRID → SINGLE COLUMN (full card visible) */
-  .items-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  /* CARD FIX */
-  .item-card1 {
-    width: 100%;
-    height: auto;
-    padding: 16px;
-    border-radius: 20px;
-  }
-
-  /* IMAGE */
-  .item-card1 img {
-    width: 110px;
-    height: 110px;
-    margin-top: 8px;
-  }
-
-  /* PRODUCT NAME */
-  .item-card1 h4 {
-    font-size: 14px;
-    line-height: 1.3;
-    height: auto;
-    margin: 8px 0 4px;
-  }
-
-  /* PRICE */
-  .item-card1 .price {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-
-  /* REMOVE BUTTON → TOP RIGHT PERFECT */
-  .remove-btn {
-    top: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-  }
-
-  /* MOVE TO CART BUTTON → FULL WIDTH (better UX) */
-  .move-cart-btn {
-    width: 100%;
-    height: 44px;
-    border-radius: 12px;
-    font-size: 14px;
-    gap: 8px;
-  }
-
-  .move-cart-btn span {
-    display: inline;
-  }
-
-  /* EMPTY STATE TEXT FIX */
-  .empty-wishlist h3 {
-    font-size: 20px;
-  }
-
-  .empty-wishlist p {
-    font-size: 14px;
-  }
-}
-/* 🏥 EMPTY WISHLIST STATE (Premium Medical Style) */
-.empty-wishlist.medical {
-  min-height: 70vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 20px;
-  background: white;
-  border-radius: 40px;
-  max-width: 600px;
-  margin: 40px auto;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: 0 20px 50px rgba(107, 63, 105, 0.05);
-  animation: slideUp 0.6s ease-out;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* CONTAINER FOR ICON WITH PULSE */
-.empty-icon {
-  font-size: 70px;
-  background: var(--dusty-rose);
-  width: 130px;
-  height: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  margin-bottom: 30px;
-  position: relative;
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Floating Animation */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-/* Pulse Effect behind Medicine Icon */
-.empty-icon::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid var(--mauve);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.5; }
-  100% { transform: scale(1.5); opacity: 0; }
-}
-
-.empty-wishlist h3 {
-  font-size: 28px;
-  font-weight: 850;
-  color: var(--deep-plum);
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-}
-
-.empty-wishlist p {
-  color: var(--text-body);
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 350px;
-  margin: 0 auto 30px;
-  opacity: 0.8;
-}
-
-/* PREMIUM BUTTON STYLING */
-.empty-wishlist .explore-btn {
-  background: var(--deep-plum);
-  color: white;
-  padding: 18px 45px;
+/* BUTTON */
+.explore-btn {
+  background: var(--primary-deep);
+  color: #fff;
+  padding: 16px 42px;
   border-radius: 50px;
-  font-size: 16px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 20px rgba(107, 63, 105, 0.2);
+  transition: 0.3s;
 }
 
-.empty-wishlist .explore-btn:hover {
-  transform: scale(1.05) translateY(-3px);
-  background: var(--text-dark);
-  box-shadow: 0 15px 30px rgba(107, 63, 105, 0.3);
+.explore-btn:hover {
+  background: var(--text-main);
+  transform: translateY(-3px);
 }
 
-.empty-wishlist .explore-btn:active {
-  transform: scale(0.98);
-}
-
-/* MOBILE ADJUSTMENTS */
+/* MOBILE */
 @media (max-width: 768px) {
-  .empty-wishlist.medical {
-    min-height: 60vh;
-    padding: 60px 20px;
-    margin: 20px;
-    border-radius: 30px;
+  .items-grid {
+    grid-template-columns: 1fr;
   }
 
-  .empty-icon {
-    width: 100px;
-    height: 100px;
-    font-size: 50px;
-  }
-
-  .empty-wishlist h3 {
-    font-size: 22px;
-  }
-
-  .empty-wishlist p {
-    font-size: 14px;
+  .wishlist-heading {
+    font-size: 20px;
   }
 }

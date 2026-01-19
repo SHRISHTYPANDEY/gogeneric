@@ -1,42 +1,56 @@
-.checkout-card {
-  /* Common container style (agar main layout me nahi dala toh) */
-  background: #ffffff;
-  border-radius: 12px;
+:root {
+  --primary: #016B61;
+  --primary-light: #e6f4f2;
+  --text-dark: #1a1a1a;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
 }
 
+/* ===== Card Wrapper ===== */
+.checkout-card {
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== Heading ===== */
 .checkout-card h4 {
   font-size: 18px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0; /* Heading ke neeche halki line */
+  border-bottom: 1px solid var(--border);
 }
 
+/* ===== Cart Item ===== */
 .checkout-cart-item {
   display: flex;
   align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #f9f9f9;
+  padding: 14px 0;
+  border-bottom: 1px dashed #f0f0f0;
+  transition: background 0.2s ease;
 }
 
 .checkout-cart-item:last-child {
-  border-bottom: none; /* Last item ke neeche line nahi chahiye */
+  border-bottom: none;
 }
 
-/* Image styling */
+/* ===== Image ===== */
 .cart-item-image {
-  width: 65px;
-  height: 65px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid #eee;
-  margin-right: 15px;
+  margin-right: 14px;
+  background: #fff;
 }
 
-/* Middle info section */
+/* ===== Info ===== */
 .cart-item-info {
-  flex: 1; /* Ye bachi hui sari space le lega */
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -44,30 +58,47 @@
 
 .cart-item-name {
   font-size: 15px;
-  font-weight: 500;
-  color: #1a1a1a;
+  font-weight: 600;
+  color: var(--text-dark);
   margin: 0;
   line-height: 1.4;
 }
 
 .cart-item-qty {
   font-size: 13px;
-  color: #777;
+  color: var(--text-muted);
   margin: 0;
 }
 
-/* Price section */
+/* ===== Price ===== */
 .cart-item-price {
   font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 90px;
   text-align: right;
-  min-width: 80px;
 }
 
-/* Hover effect (Optional) */
+/* ===== Hover ===== */
 .checkout-cart-item:hover {
-  background-color: #fafafa;
-  border-radius: 8px;
-  transition: background 0.2s ease;
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 576px) {
+  .cart-item-image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cart-item-name {
+    font-size: 14px;
+  }
+
+  .cart-item-price {
+    font-size: 15px;
+  }
 }

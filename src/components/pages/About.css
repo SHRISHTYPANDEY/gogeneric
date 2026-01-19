@@ -1,144 +1,165 @@
-/* ================= ABOUT US PAGE CONTAINER ================= */
+/* ================= ABOUT US PAGE ================= */
 
 .about-page {
-  max-width: 1000px;
-  margin: 60px auto;
+  max-width: 1100px;
+  margin: 20px auto;
   padding: 0 24px;
   min-height: 80vh;
-  font-family: var(--font-main);
+  background: var(--gg-bg);
+  font-family: "Inter", sans-serif;
 }
 
+/* ================= TITLE ================= */
+
 .about-title {
-  font-size: 48px;
+  font-size: 46px;
   font-weight: 900;
-  color: var(--deep-plum);
-  margin-bottom: 40px;
-  letter-spacing: -1.5px;
+  color: var(--gg-primary);
+  margin-bottom: 50px;
   text-align: center;
+  letter-spacing: -1.4px;
   position: relative;
 }
 
-/* Luxury accent underline */
 .about-title::after {
-  content: '';
+  content: "";
   display: block;
-  width: 80px;
-  height: 6px;
-  background: linear-gradient(90deg, var(--deep-plum), var(--mauve));
-  margin: 15px auto 0;
+  width: 120px;
+  height: 4px;
+  margin: 14px auto 0;
+  background: linear-gradient(
+    to right,
+    var(--gg-primary),
+    var(--gg-accent),
+    transparent
+  );
   border-radius: 50px;
 }
 
 /* ================= CONTENT CARD ================= */
 
 .about-content {
-  background: var(--white);
+  background: #ffffff;
   padding: 60px;
-  border-radius: 40px;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: var(--premium-shadow);
+  border-radius: 28px;
+  border: 1px solid var(--gg-border);
+  box-shadow: var(--gg-shadow);
   line-height: 1.9;
-  color: var(--text-body);
-  word-wrap: break-word;
+  color: var(--gg-text-body);
 }
 
-/* ================= TYPOGRAPHY (HTML FROM API) ================= */
+/* ================= HTML CONTENT ================= */
 
-.about-content h1, 
-.about-content h2, 
+.about-content h1,
+.about-content h2,
 .about-content h3 {
-  color: var(--deep-plum);
+  color: var(--gg-primary-dark);
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   font-weight: 800;
-  letter-spacing: -0.5px;
 }
 
 .about-content h2 {
-  font-size: 28px;
+  font-size: 26px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
-/* Sidebar accent for section headers */
 .about-content h2::before {
-  content: '';
+  content: "";
   width: 5px;
-  height: 28px;
-  background: var(--mauve);
-  border-radius: 10px;
-  display: inline-block;
+  height: 26px;
+  background: var(--gg-primary);
+  border-radius: 6px;
 }
 
+/* Paragraph */
 .about-content p {
-  margin-bottom: 25px;
-  font-size: 17px;
+  font-size: 16.5px;
+  margin-bottom: 24px;
   text-align: justify;
-  color: var(--text-body);
 }
 
-/* Divider Line Fix (Dashes from API) */
-.about-content hr {
-  border: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--dusty-rose), var(--mauve), var(--dusty-rose), transparent);
-  margin: 45px 0;
-  opacity: 0.7;
+/* Lists */
+.about-content ul {
+  padding-left: 26px;
+  margin-bottom: 28px;
+  list-style: none;
 }
 
-/* Lists styling */
-.about-content ul, 
-.about-content ol {
-  padding-left: 25px;
-  margin-bottom: 30px;
-  list-style-type: none;
-}
-
-/* Custom Bullet Points */
-.about-content ul li::before {
-  content: "✦";
-  color: var(--mauve);
-  font-weight: bold;
-  display: inline-block; 
-  width: 1.5em;
-  margin-left: -1.5em;
-}
-
-.about-content li {
-  margin-bottom: 15px;
+.about-content ul li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 14px;
   font-size: 16px;
 }
 
-/* Bold & Important Text */
-.about-content strong {
-  color: var(--deep-plum);
+.about-content ul li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: var(--gg-primary);
   font-weight: 700;
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
+/* Divider */
+.about-content hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gg-primary),
+    transparent
+  );
+  margin: 45px 0;
+}
+
+/* Images from API */
+.about-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 18px;
+  margin: 28px 0;
+}
+
+/* Tables */
+.about-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  display: block;
+  overflow-x: auto;
+}
+
+.about-content th,
+.about-content td {
+  border: 1px solid var(--gg-border);
+  padding: 12px;
+  font-size: 15px;
+}
+
+/* Strong text */
+.about-content strong {
+  color: var(--gg-primary-dark);
+  font-weight: 700;
+}
+
+/* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
-  .about-page {
-    margin: 40px auto;
-    padding: 0 16px;
-  }
-  
   .about-title {
     font-size: 34px;
   }
-  
-  .about-content {
-    padding: 35px 25px;
-    border-radius: 30px;
-  }
 
-  .about-content h2 {
-    font-size: 24px;
+  .about-content {
+    padding: 34px 26px;
+    border-radius: 22px;
   }
 
   .about-content p {
     text-align: left;
-    font-size: 16px;
+    font-size: 15.8px;
   }
 }

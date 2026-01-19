@@ -38,7 +38,7 @@ export default function Cancellation() {
   return (
     <>
     <div className="cancel-page">
-      <h1 className="cancel-title">Cancellation Policy</h1>
+      <h1 className="policy-title">Cancellation Policy</h1>
 
       {content ? (
         <div

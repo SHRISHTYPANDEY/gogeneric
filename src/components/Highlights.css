@@ -1,24 +1,41 @@
-/* ================= PREMIUM HIGHLIGHTS BANNERS (PURPLE THEME) ================= */
-
 .highlight-section {
-  position: relative;
-  margin-top: 50px;
-  padding: 20px 0;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 10px 16px;
 }
 
 .highlight-title {
-  font-size: 30px;
+   font-size: 28px;
   font-weight: 800;
-  color: var(--text-dark) !important;
-  margin-bottom: 20px;
-  letter-spacing: -0.5px;
+  color: var(--text-main);
+  position: relative;
+  padding-bottom: 12px;
+  margin-bottom: 30px;
+}
+
+.highlight-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 190px;      
+  height: 3px;
+
+  background: linear-gradient(
+    to right,
+    #0f766e 0%,
+    #0f766e 40%,
+    rgba(15, 118, 110, 0.4) 65%,
+    rgba(15, 118, 110, 0.1) 80%,
+    rgba(15, 118, 110, 0) 100%
+  );
+
+  border-radius: 4px;
 }
 
 .highlight-wrapper {
   overflow-x: auto;
-  overflow-y: hidden;
   scroll-behavior: smooth;
-  white-space: nowrap;
   padding: 15px 5px 35px 5px;
   scrollbar-width: none;
 }
@@ -28,36 +45,52 @@
 }
 
 .highlight-scroll {
-  display: inline-flex;
+  display: flex;
   gap: 25px;
 }
 
 .highlight-card {
-  width: 380px;
+  position: relative;
+  min-width: 380px;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   cursor: pointer;
-  border-radius: 24px;
-  background: var(--white);
-  padding: 0;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid transparent;
   overflow: hidden;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 10px 25px rgba(107, 63, 105, 0.05); /* Soft Plum Shadow */
-  border: 1px solid var(--dusty-rose); /* Updated border */
 }
+
+.highlight-card:nth-child(4n + 1) { background-color: #f0f7ff; }
+.highlight-card:nth-child(4n + 2) { background-color: #fff1f1; }
+.highlight-card:nth-child(4n + 3) { background-color: #f0fff4; }
+.highlight-card:nth-child(4n + 4) { background-color: #fefce8; }
 
 .highlight-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(107, 63, 105, 0.15);
-  border-color: var(--deep-plum); /* Updated hover border */
+  transform: translateY(-5px);
+  box-shadow: none !important;
 }
 
-.highlight-card img,
-.highlight-card iframe {
+.highlight-card:nth-child(4n + 1):hover { border-color: #bcd9ff; }
+.highlight-card:nth-child(4n + 2):hover { border-color: #ffcccc; }
+.highlight-card:nth-child(4n + 3):hover { border-color: #c6f6d5; }
+.highlight-card:nth-child(4n + 4):hover { border-color: #fef08a; }
+
+.highlight-media {
   width: 100%;
   height: 210px;
+  overflow: hidden;
+}
+
+.highlight-media img,
+.highlight-media iframe {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  display: block;
+  border: none;
   transition: transform 0.5s ease;
 }
 
@@ -69,25 +102,17 @@
   padding: 16px 20px;
   font-size: 17px;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #1f2937;
   margin: 0;
-  background: var(--white);
-  white-space: normal;
-  line-height: 1.4;
-  transition: color 0.3s ease;
+  text-align: left;
 }
 
-.highlight-card:hover .highlight-name {
-  color: var(--deep-plum); /* Text changes to plum on hover */
-}
-
-/* 🔹 NAVIGATION BUTTONS (PURPLE THEME) */
 .scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--white);
-  border: 1px solid var(--dusty-rose);
+  background: #fff;
+  border: 1.5px solid #eee;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -96,108 +121,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(107, 63, 105, 0.12);
   transition: 0.3s;
-  color: var(--deep-plum);
+  color: #0f766e;
 }
 
 .scroll-btn.left { left: -20px; }
 .scroll-btn.right { right: -20px; }
 
 .scroll-btn:hover {
-  background: var(--deep-plum);
-  color: var(--white);
-  border-color: var(--deep-plum);
-  transform: translateY(-50%) scale(1.1);
+  background: #0f766e;
+  color: #fff;
+  border-color: #0f766e;
 }
 
-/* 🔹 HEALTH QUOTE (PREMIUM GRADIENT) */
 .health-quote {
   margin-top: 30px;
   padding: 25px;
-  /* Updated to very light mauve/plum gradient */
-  background: linear-gradient(135deg, #f8f0f7 0%, var(--white) 100%);
+  background: #f0fdfa;
   border-radius: 16px;
   font-size: 16px;
   font-weight: 700;
-  color: var(--text-dark);
+  color: #0f766e;
   font-style: italic;
   text-align: center;
-  border: 1px solid var(--dusty-rose);
-  box-shadow: inset 0 2px 4px rgba(107, 63, 105, 0.02);
+  border: 1px solid #ccfbf1;
 }
 
 @media (max-width: 768px) {
-
-  /* SECTION */
-  .highlight-section {
-    margin-top: 30px;
-    padding: 10px 0;
-  }
-
-  /* HEADING */
-  .highlight-title {
-    font-size: 21px;       /* 🔥 balanced */
-    line-height: 1.25;
-    margin-bottom: 14px;
-    letter-spacing: -0.3px;
-  }
-
-  /* SCROLL WRAPPER */
-  .highlight-wrapper {
-    padding: 10px 4px 25px;
-  }
-
-  .highlight-scroll {
-    gap: 16px;
-  }
-
-  /* CARD */
+  .highlight-title { font-size: 24px; }
+  .highlight-title::after { width: 140px; }
   .highlight-card {
-    width: 240px;         /* 🔥 compact */
-    border-radius: 18px;
-    box-shadow: 0 6px 16px rgba(107, 63, 105, 0.06);
+    min-width: 280px;
+    max-width: 280px;
+    border-radius: 20px;
   }
-
-  .highlight-card img,
-  .highlight-card iframe {
-    height: 135px;        /* 🔥 reduced */
-  }
-
-  /* TITLE */
-  .highlight-name {
-    padding: 10px 12px;
-    font-size: 14px;
-    line-height: 1.35;
-    font-weight: 600;
-  }
-
-  /* REMOVE HOVER EFFECTS (MOBILE) */
-  .highlight-card:hover {
-    transform: none;
-    box-shadow: 0 6px 16px rgba(107, 63, 105, 0.06);
-    border-color: var(--dusty-rose);
-  }
-
-  .highlight-card:hover img {
-    transform: none;
-  }
-
-  .highlight-card:hover .highlight-name {
-    color: var(--text-dark);
-  }
-
-  /* NAV BUTTONS */
-  .scroll-btn {
-    display: none;
-  }
-
-  /* QUOTE */
-  .health-quote {
-    margin-top: 20px;
-    padding: 14px;
-    font-size: 13.5px;
-    line-height: 1.4;
-    border-radius: 12px;
-  }
+  .highlight-media { height: 160px; }
+  .highlight-name { font-size: 15px; padding: 12px 15px; }
+  .scroll-btn { display: none; }
+  .health-quote { font-size: 14px; padding: 15px; }
 }

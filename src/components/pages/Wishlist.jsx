@@ -3,10 +3,12 @@ import { cleanImageUrl } from "../../utils";
 import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
 import "./Wishlist.css";
-import { X, ShoppingCart, Heart } from "lucide-react";
+import { X, ShoppingCart, Bookmark } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlist();
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
   let guestId = localStorage.getItem("guest_id");
@@ -18,8 +20,7 @@ export default function Wishlist() {
   /* ================= MOVE TO CART ================= */
   const moveToCart = async (item) => {
     if (!item?.id || !item?.price) {
-      console.error("Invalid wishlist item:", item);
-      toast.error("Invalid product data");
+      toast.error("Invalid product");
       return;
     }
 
@@ -44,48 +45,41 @@ export default function Wishlist() {
 
       await removeFromWishlist(item.id);
       window.dispatchEvent(new Event("cart-updated"));
-
-      toast.success("Item moved to cart");
+      toast.success("Moved to cart");
     } catch (err) {
-      console.error("Move to cart error:", err.response?.data);
       toast.error(
-        err.response?.data?.errors?.[0]?.message ||
-          "Failed to move item"
+        err.response?.data?.errors?.[0]?.message || "Something went wrong"
       );
     }
   };
 
-if (wishlist.length === 0) {
-  return (
-    <div className="empty-wishlist medical">
-      <div className="empty-icon">
-        💊
+  /* ================= EMPTY STATE ================= */
+  if (wishlist.length === 0) {
+    return (
+      <div className="empty-wishlist medical">
+        <div className="empty-icon">🔖</div>
+        <h3>No saved items yet</h3>
+        <p>
+          Bookmark medicines you like<br />
+          for quick access later.
+        </p>
+        <button className="explore-btn" onClick={() => navigate("/")}>
+          Browse Medicines
+        </button>
       </div>
-
-      <h3>Your wishlist is empty</h3>
-
-      <p>
-        Save medicines or healthcare items<br />
-        to quickly access them later.
-      </p>
-      <br/>
-      <button className="explore-btn" onClick={() => navigate("/")}>
-            Browse Medicines
-          </button>
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="wishlist-page max-w-7xl mx-auto">
       <h2 className="wishlist-heading">
-        <Heart size={20} /> My Wishlist
+        <Bookmark size={22} /> My Wishlist
       </h2>
 
       <div className="items-grid">
         {wishlist.map((item) => (
           <div key={item.id} className="item-card1">
-            {/* REMOVE BUTTON */}
+            {/* REMOVE */}
             <button
               className="remove-btn"
               onClick={() => removeFromWishlist(item.id)}
@@ -94,19 +88,14 @@ if (wishlist.length === 0) {
             </button>
 
             <img
-              src={cleanImageUrl(
-                item.image_full_url || item.image
-              )}
+              src={cleanImageUrl(item.image_full_url || item.image)}
               alt={item.name}
-              onError={(e) =>
-                (e.currentTarget.src = "/no-image.png")
-              }
+              onError={(e) => (e.currentTarget.src = "/no-image.png")}
             />
 
             <h4>{item.name}</h4>
             <p className="price">₹{item.price}</p>
 
-            {/* MOVE TO CART */}
             <button
               className="move-cart-btn"
               onClick={() => moveToCart(item)}

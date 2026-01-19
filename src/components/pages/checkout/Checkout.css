@@ -1,131 +1,157 @@
-/* Container styling */
+/* ===== Root Colors ===== */
+:root {
+  --primary: #016B61;
+  --primary-light: #e6f4f2;
+  --secondary: #28a745;
+  --text-dark: #1a1a1a;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --bg: #f4f8f7;
+}
+
+/* ===== Container ===== */
 .checkout-container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  background-color: #f8f9fa;
+  margin: auto;
+  padding: 30px 16px;
+  /* background: var(--bg); */
   min-height: 100vh;
-  font-family: 'Inter', sans-serif; /* Clean font */
+  font-family: "Inter", sans-serif;
 }
 
 .checkout-title {
   font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #1a1a1a;
-  text-align: left;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 24px;
+  position: relative;
+  padding-bottom: 8px;
 }
+.checkout-title::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 190px;      
+  height: 3px;
 
-/* Flexbox layout for Left and Right columns */
+  background: linear-gradient(
+    to right,
+    #0f766e 0%,
+    #0f766e 40%,
+    rgba(15, 118, 110, 0.4) 65%,
+    rgba(15, 118, 110, 0.1) 80%,
+    rgba(15, 118, 110, 0) 100%
+  );
+
+  border-radius: 4px; 
+}
+/* ===== Layout ===== */
 .checkout-layout {
   display: flex;
-  gap: 30px;
+  gap: 24px;
   align-items: flex-start;
 }
 
-/* Left Section: Information cards */
+/* ===== Left Column ===== */
 .checkout-left {
-  flex: 1; /* Occupies 70% space */
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
-/* Common Card Styling for all sub-components */
+/* ===== Card Style ===== */
 .checkout-left > div {
-  background: #ffffff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
-/* Right Section: Bill Summary (Sticky) */
+/* ===== Right Column (Bill Summary) ===== */
 .checkout-right {
-  width: 380px; /* Fixed width for summary */
+  width: 360px;
   position: sticky;
-  top: 20px; /* Keeps summary visible while scrolling */
+  top: 16px;
 }
 
-/* Pay Using Button */
-.pay-using-btn {
-  width: 100%;
-  padding: 14px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 15px;
+/* ===== Section Headings ===== */
+.checkout-left h3,
+.checkout-right h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 14px;
 }
 
-.pay-using-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Policy Consent Section */
+/* ===== Policy Section ===== */
 .policy-consent {
-  margin-top: 25px;
-  padding: 15px;
-  font-size: 14px;
-  color: #666;
+  background: #fff;
+  border: 1px dashed var(--border);
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin-top: 18px;
 }
 
 .policy-checkbox {
   display: flex;
-  align-items: flex-start;
   gap: 10px;
-  cursor: pointer;
-}
-
-.policy-checkbox input {
-  margin-top: 3px;
+  font-size: 14px;
+  color: var(--text-muted);
 }
 
 .policy-checkbox a {
-  color: #007bff;
+  color: var(--primary);
+  font-weight: 600;
   text-decoration: none;
-  font-weight: 500;
 }
 
-/* Place Order Button (Big & Bold) */
+/* ===== Place Order Button ===== */
 .place-order-btn {
   width: 100%;
-  padding: 18px;
-  background-color: #28a745;
-  color: white;
+  padding: 16px;
+  margin-top: 20px;
+  background: var(--primary);
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 12px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 20px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.place-order-btn:hover {
+  background: #014f48;
 }
 
 .place-order-btn:disabled {
-  background-color: #94d3a2;
+  background: #9ccfc9;
   cursor: not-allowed;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 992px) {
-  .checkout-layout {
-    flex-direction: column;
-  }
-  
-  .checkout-right {
-    width: 100%;
-    position: static;
-  }
+/* ===== Payment Status Text ===== */
+.payment-success-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--secondary);
+  font-weight: 600;
 }
+
+/* ===== Wallet Balance ===== */
+.wallet-text {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ===== Loader Overlay ===== */
 .checkout-loader-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -135,5 +161,18 @@
 
 .checkout-loader-overlay p {
   margin-top: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 992px) {
+  .checkout-layout {
+    flex-direction: column;
+  }
+
+  .checkout-right {
+    width: 100%;
+    position: static;
+  }
 }

@@ -13,26 +13,6 @@ export default function Labs() {
   const [error, setError] = useState(false);
 
   const navigate = useNavigate();
-
-//   useEffect(() => {
-//   const fetchDeliveryManStore = async () => {
-//     try {
-//       const res = await api.post("/api/v1/auth/delivery-man/store", {
-//         headers: {
-//           Accept: "application/json",
-//         },
-//       });
-
-//       console.log("Delivery Man Store API Response:", res.data);
-//     } catch (err) {
-//       console.error("Delivery Man Store API Error:", err);
-//     }
-//   };
-
-//   fetchDeliveryManStore();
-// }, []);
-
-
   useEffect(() => {
     let isMounted = true;
 
@@ -133,7 +113,7 @@ export default function Labs() {
 
           <div className="store-bottom-row">
             {showDistance && (
-              <span className="store-distance">
+              <span className="store-distance1">
                 <MapPin size={14} />
                 {distance}
               </span>

@@ -1,22 +1,24 @@
 :root {
-  --ba-plum: #6b3f69;
-  --ba-plum-light: #8e5a8a;
-  --ba-mauve-bg: #fdf6f6;
-  --ba-soft-pink: #fcefee;
-  --ba-text: #331d32;
-  --ba-text-grey: #636e72;
+  --ba-green: #016b61;
+  --ba-green-light: #1e8e82;
+  --ba-green-soft: #e8f6f4;
+  --ba-bg: #f7fbfa;
+  --ba-text: #0f2f2b;
+  --ba-text-grey: #6b7c7a;
   --ba-white: #ffffff;
-  --ba-shadow: 0 10px 25px rgba(107, 63, 105, 0.1);
+  --ba-shadow: 0 10px 25px rgba(1, 107, 97, 0.12);
 }
+
+/* ================= CONTAINER ================= */
 
 .booking-container {
   max-width: 500px;
   margin: 20px auto;
-  padding: 30px;
+  padding: px;
   background: var(--ba-white);
   border-radius: 28px;
   box-shadow: var(--ba-shadow);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .booking-container .section {
@@ -25,78 +27,110 @@
 
 .booking-container h4 {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--ba-text);
   margin-bottom: 15px;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
 }
 
-.options-row, .slots-grid {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+/* ================= SLOTS ================= */
 
 .slots-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-.option-btn, .slot-btn {
-  padding: 12px 20px;
+.slot-btn {
+  padding: 14px 18px;
   border-radius: 14px;
-  border: 1.5px solid #f0f0f0;
-  background: #fafafa;
+  border: 1.5px solid #e1eaea;
+  background: var(--ba-bg);
   color: var(--ba-text-grey);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s ease;
 }
 
-.option-btn:hover, .slot-btn:hover {
-  border-color: var(--ba-plum-light);
-  background: var(--ba-mauve-bg);
-  color: var(--ba-plum);
+.slot-btn:hover {
+  border-color: var(--ba-green-light);
+  background: var(--ba-green-soft);
+  color: var(--ba-green);
 }
-.option-btn.active, .slot-btn.active {
-  background: var(--ba-plum) !important;
-  color: var(--ba-white) !important;
-  border-color: var(--ba-plum) !important;
-  box-shadow: 0 8px 15px rgba(107, 63, 105, 0.2);
+
+.slot-btn.active {
+  background: var(--ba-green);
+  color: var(--ba-white);
+  border-color: var(--ba-green);
+  box-shadow: 0 10px 20px rgba(1, 107, 97, 0.25);
   transform: translateY(-2px);
 }
 
+/* Disabled slot */
+.slot-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #eef3f3;
+  color: #889999;
+}
+
+/* ================= DATE INPUT ================= */
+
+.calendar-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #d9e5e3;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ba-text);
+  cursor: pointer;
+  background: #fff;
+}
+
+.calendar-input:focus {
+  outline: none;
+  border-color: var(--ba-green);
+  box-shadow: 0 0 0 3px rgba(1, 107, 97, 0.15);
+}
+
+/* ================= CTA BUTTONS ================= */
 
 .book-btn {
   width: 100%;
   padding: 16px;
   margin-top: 10px;
-  background: var(--ba-plum);
+  background: linear-gradient(
+    135deg,
+    var(--ba-green),
+    var(--ba-green-light)
+  );
   color: white;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(107, 63, 105, 0.15);
+  box-shadow: 0 12px 24px rgba(1, 107, 97, 0.25);
 }
 
 .book-btn:hover {
-  background: var(--ba-plum-light);
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(107, 63, 105, 0.25);
+  box-shadow: 0 16px 30px rgba(1, 107, 97, 0.35);
 }
+
+/* Pay button */
 
 .pay-btn {
   width: 100%;
   padding: 16px;
   margin-top: 15px;
   background: #ffffff;
-  color: #27ae60; 
-  border: 2px solid #27ae60;
-  border-radius: 16px;
+  color: var(--ba-green);
+  border: 2px solid var(--ba-green);
+  border-radius: 18px;
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
@@ -105,37 +139,17 @@
 }
 
 .pay-btn:hover {
-  background: #27ae60;
+  background: var(--ba-green);
   color: white;
-}
-.slot-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background-color: #eee;
-  color: #888;
+  box-shadow: 0 10px 20px rgba(1, 107, 97, 0.25);
 }
 
-.calendar-input {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.calendar-input:focus {
-  outline: none;
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
-}
-
+/* ================= ANIMATION ================= */
 
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -143,21 +157,26 @@
   }
 }
 
-/* ================= MOBILE VIEW ================= */
+/* ================= MOBILE ================= */
 
 @media (max-width: 480px) {
   .booking-container {
     padding: 20px;
-    border-radius: 20px;
+    border-radius: 22px;
     margin: 10px;
   }
-  
+
   .slots-grid {
-    grid-template-columns: 1fr; /* Single column on very small screens */
+    grid-template-columns: 1fr;
   }
 
-  .option-btn, .slot-btn {
-    padding: 10px 15px;
+  .slot-btn {
+    padding: 12px 14px;
     font-size: 13px;
+  }
+
+  .book-btn,
+  .pay-btn {
+    font-size: 15px;
   }
 }

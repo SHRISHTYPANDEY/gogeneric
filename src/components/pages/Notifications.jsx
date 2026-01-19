@@ -15,6 +15,7 @@ export default function Notifications() {
   useEffect(() => {
     if (!user) return;
     fetchNotifications();
+    markAllAsRead();
   }, [user]);
 
   const fetchNotifications = async () => {
@@ -35,6 +36,43 @@ export default function Notifications() {
     }
   };
 
+  const markOneAsRead = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    await api.post(
+      `/api/v1/customer/notifications/${id}/read`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    window.dispatchEvent(new Event("notifications-updated"));
+  } catch {}
+};
+
+  const markAllAsRead = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    await api.post(
+      "/api/v1/customer/notifications/mark-all-read",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          moduleId: 2,
+        },
+      }
+    );
+
+    // 🔔 navbar ko notify karo
+    window.dispatchEvent(new Event("notifications-updated"));
+  } catch (err) {
+    console.error("Failed to mark notifications as read");
+  }
+};
+
+
   if (!user) return <p className="text-center mt-10">Please login</p>;
   if (loading) return <p className="text-center mt-10">Loading...</p>;
 
@@ -51,7 +89,13 @@ export default function Notifications() {
           <div
             key={n.id}
             className={`notification-card ${n.status === 0 ? "unread" : ""}`}
-            onClick={() => setSelectedNotif(n)}
+            onClick={() => {
+  setSelectedNotif(n);
+  if (n.status === 0) {
+    markOneAsRead(n.id);
+  }
+}}
+
           >
             {(n.image_full_url || n.image || n.data?.image) && (
               <img
