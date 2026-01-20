@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import WishlistButton from "../WishlistButton";
@@ -28,6 +28,25 @@ export default function StoreDetails() {
 
   const [discountMap, setDiscountMap] = useState({});
 
+  const fileInputRef = useRef(null);
+
+  const handlePrescriptionClick = () => {
+  fileInputRef.current?.click();
+};
+
+const handlePrescriptionFile = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  navigate("/checkout", {
+    state: {
+      store_id: store.id,
+      isPrescriptionOrder: true,
+      prescriptionFile: file,
+    },
+  });
+};
+
   useEffect(() => {
     fetchStoreDetails();
   }, [id]);
@@ -38,6 +57,7 @@ export default function StoreDetails() {
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
       setStore(res.data);
+      // console.log("store api data", res.data);
     } catch {
       toast.error("Failed to load store");
     } finally {
@@ -210,16 +230,16 @@ export default function StoreDetails() {
             <MapPin size={16} /> {store.address}
           </p>
         </div>
-
-        <div className="sd-rating-card">
-          <div className="sd-rating-num">
-            {store.avg_rating || "N/A"}
-            <Star size={18} fill="#fff" stroke="none" />
-          </div>
-          <span className="sd-rating-label">Store Rating</span>
-        </div>
+      <div className="sd-rating-card">
+  <div className="sd-rating-num">
+    <span className="sd-rating-value">
+      {store.avg_rating || "N/A"}
+    </span>
+    <Star className="sd-rating-star" size={18} />
+  </div>
+  <span className="sd-rating-label"></span>
+</div>
       </div>
-
       <div className="sd-tabs-nav">
         <div className="sd-tabs-list">
           {["products", "overview", "reviews"].map((tab) => (
@@ -324,17 +344,23 @@ export default function StoreDetails() {
         </div>
       )}
 
-      <div
-        className="sd-floating-prescription"
-        onClick={() =>
-          navigate("/checkout", {
-            state: { store_id: store.id, isPrescriptionOrder: true },
-          })
-        }
-      >
-        <FileText size={24} />
-        <span>Prescription</span>
-      </div>
+     <div
+  className="sd-floating-prescription"
+  onClick={handlePrescriptionClick}
+>
+  <FileText size={24} />
+  <span>Prescription</span>
+</div>
+
+{/* Hidden file input */}
+<input
+  type="file"
+  accept="image/*,.pdf"
+  ref={fileInputRef}
+  onChange={handlePrescriptionFile}
+  style={{ display: "none" }}
+/>
+
     </div>
   );
 }

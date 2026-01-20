@@ -13,11 +13,10 @@ const TABS = {
 
 export default function Orders() {
   const [activeTab, setActiveTab] = useState(TABS.RUNNING);
-  const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const [cancelOrder, setCancelOrder] = useState(null);
-
 
   const fetchOrders = async () => {
     try {
@@ -32,6 +31,12 @@ export default function Orders() {
         ? "/api/v1/customer/order/running-orders"
         : "/api/v1/customer/order/list";
 
+      console.log("📦 FETCHING ORDERS");
+      console.log("TAB:", activeTab);
+      console.log("URL:", url);
+      console.log("TOKEN:", token);
+      console.log("GUEST ID:", guestId);
+
       const res = await api.get(url, {
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -43,13 +48,31 @@ export default function Orders() {
         },
       });
 
-      const ordersArray = Array.isArray(res.data?.orders)
-        ? res.data.orders
-        : [];
+      console.log("✅ FULL API RESPONSE:", res);
+      console.log("✅ RESPONSE DATA:", res.data);
+
+      let ordersArray = [];
+
+      if (Array.isArray(res.data?.orders)) {
+        console.log("📌 Orders found in res.data.orders");
+        ordersArray = res.data.orders;
+      } else if (Array.isArray(res.data?.data)) {
+        console.log("📌 Orders found in res.data.data");
+        ordersArray = res.data.data;
+      } else if (Array.isArray(res.data)) {
+        console.log("📌 Orders found in res.data (array)");
+        ordersArray = res.data;
+      } else {
+        console.warn("⚠️ Orders NOT found in expected keys");
+      }
+
+      console.log("🧾 FINAL ORDERS ARRAY:", ordersArray);
+      console.log("🧾 ORDERS COUNT:", ordersArray.length);
 
       setOrders(ordersArray);
     } catch (error) {
-      console.error("Fetch orders failed:", error);
+      console.error("❌ Fetch orders failed:", error);
+      console.error("❌ ERROR RESPONSE:", error?.response?.data);
 
       if (error?.response?.status === 401) {
         setShowLogin(true);
@@ -93,7 +116,7 @@ export default function Orders() {
         <div className="orders-list">
           {orders.map((order) => (
             <OrderCard
-              key={order.id}
+              key={order.id || order.order_id}
               order={order}
               isRunning={activeTab === TABS.RUNNING}
               onCancel={(order) => setCancelOrder(order)}
@@ -101,16 +124,16 @@ export default function Orders() {
           ))}
         </div>
       )}
-  {cancelOrder && (
-  <CancelOrder
-    order={cancelOrder}
-    onClose={() => setCancelOrder(null)}
-    onSuccess={fetchOrders}
-  />
-)}
+
+      {cancelOrder && (
+        <CancelOrder
+          order={cancelOrder}
+          onClose={() => setCancelOrder(null)}
+          onSuccess={fetchOrders}
+        />
+      )}
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </div>
   );
 }
-	

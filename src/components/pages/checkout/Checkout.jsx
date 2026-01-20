@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../../../api/axiosInstance";
 import toast from "react-hot-toast";
 import "./Checkout.css";
@@ -22,20 +22,31 @@ export default function Checkout() {
 
   const [instructions, setInstructions] = useState([]);
   const [selectedTip, setSelectedTip] = useState("0");
-
+  const location = useLocation();
+  const prescriptionStoreId = location.state?.store_id;
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [paymentReady, setPaymentReady] = useState(false);
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [prescriptionFile, setPrescriptionFile] = useState(null);
   const { balance: walletBalance, fetchWallet } = useWallet();
 
+  const isPrescriptionOrder = location.state?.isPrescriptionOrder;
+
+  const ORDER_API = isPrescriptionOrder
+    ? "/api/v1/customer/order/prescription/place"
+    : "/api/v1/customer/order/place";
+
   const [deliveryType, setDeliveryType] = useState(
-    localStorage.getItem("delivery_type") || "delivery"
+    localStorage.getItem("delivery_type") || "delivery",
   );
   const cartAmount = cartItems.reduce(
     (sum, item) => sum + Number(item.price) * Number(item.quantity),
-    0
+    0,
   );
+  const getOrderStoreId = () => {
+    if (prescriptionStoreId) return prescriptionStoreId;
+    return cartItems?.[0]?.item?.store_id;
+  };
 
   const deliveryCharge = deliveryType === "delivery" ? 50 : 0;
   const platformFee = 2;
@@ -47,7 +58,7 @@ export default function Checkout() {
   const guestId = localStorage.getItem("guest_id");
 
   const isPrescriptionRequired = cartItems.some(
-    (ci) => ci.item?.is_prescription_required == 1
+    (ci) => ci.item?.is_prescription_required == 1,
   );
 
   useEffect(() => {
@@ -57,6 +68,12 @@ export default function Checkout() {
   useEffect(() => {
     // console.log("CART ITEMS FOR PRESCRIPTION", cartItems);
   }, [cartItems]);
+
+  useEffect(() => {
+    if (location.state?.prescriptionFile) {
+      setPrescriptionFile(location.state.prescriptionFile);
+    }
+  }, [location.state]);
 
   const fetchCart = async () => {
     try {
@@ -68,11 +85,13 @@ export default function Checkout() {
         },
         params: !token ? { guest_id: guestId } : {},
       });
-      // console.log("Full cartt api response", res);
+
       const items = res.data || [];
       setCartItems(items);
 
-      if (items.length === 0) navigate("/cart");
+      if (items.length === 0 && !isPrescriptionOrder) {
+        navigate("/cart");
+      }
     } catch {
       toast.error("Failed to load cart");
     } finally {
@@ -95,26 +114,25 @@ export default function Checkout() {
     }
   };
 
- const handleDigitalPayment = () => {
-  if (!validateBeforeOrder()) return;
+  const handleDigitalPayment = () => {
+    if (!validateBeforeOrder()) return;
 
-  openRazorpay({
-    amount: totalPayable,
-    name: "GoGeneric",
-    description: "Order Payment",
-    phone: selectedAddress?.phone,
-    onSuccess: (response) => {
-      placeOrderAfterPayment(response);
-    },
-  });
-};
-
+    openRazorpay({
+      amount: totalPayable,
+      name: "GoGeneric",
+      description: "Order Payment",
+      phone: selectedAddress?.phone,
+      onSuccess: (response) => {
+        placeOrderAfterPayment(response);
+      },
+    });
+  };
 
   const placeOrderAfterPayment = async (paymentResponse) => {
     try {
       setPlacingOrder(true);
+      const storeId = getOrderStoreId();
 
-      const storeId = cartItems?.[0]?.item?.store_id;
       const formData = new FormData();
 
       formData.append("order_type", deliveryType);
@@ -147,7 +165,7 @@ export default function Checkout() {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
 
-      const res = await api.post("/api/v1/customer/order/place", formData, {
+      const res = await api.post(ORDER_API, formData, {
         headers,
       });
 
@@ -180,9 +198,9 @@ export default function Checkout() {
       return;
     }
 
-    if (isPrescriptionRequired && !prescriptionFile) {
-      toast.error("Please upload prescription");
-      return;
+    if ((isPrescriptionRequired || isPrescriptionOrder) && !prescriptionFile) {
+      toast.error("Prescription is required");
+      return false;
     }
 
     if (paymentMethod === "digital_payment") {
@@ -191,13 +209,12 @@ export default function Checkout() {
 
     try {
       setPlacingOrder(true);
-
-      const storeId = cartItems?.[0]?.item?.store_id;
+      const storeId = getOrderStoreId();
 
       if (paymentMethod === "wallet") {
         if (walletBalance < totalPayable) {
           toast.error(
-            `Insufficient wallet balance. Available ₹${walletBalance}`
+            `Insufficient wallet balance. Available ₹${walletBalance}`,
           );
           setPlacingOrder(false);
           return;
@@ -222,9 +239,10 @@ export default function Checkout() {
       if (!token) {
         formData.append("guest_id", guestId);
       }
-      if (isPrescriptionRequired && prescriptionFile) {
-        formData.append("order_attachment", prescriptionFile);
-      }
+      if ((isPrescriptionRequired || isPrescriptionOrder) && prescriptionFile) {
+  formData.append("order_attachment", prescriptionFile);
+}
+
 
       for (let pair of formData.entries()) {
         console.log(pair[0], pair[1]);
@@ -236,9 +254,10 @@ export default function Checkout() {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       };
 
-      const res = await api.post("/api/v1/customer/order/place", formData, {
-        headers,
-      });
+      const res = await api.post(ORDER_API, formData, { headers });
+      if (isPrescriptionOrder) {
+  console.log("PRESCRIPTION ORDER API RESPONSE 👉", res.data);
+}
 
       toast.success("Order placed successfully 🎉");
       fetchWallet();
@@ -260,42 +279,43 @@ export default function Checkout() {
   }
 
   const validateBeforeOrder = () => {
+    if (!token) {
+      toast.error("Please login first to place your order");
+      navigate("/login");
+      return false;
+    }
 
-  if (!token) {
-    toast.error("Please login first to place your order");
-    navigate("/login");
-    return false;
-  }
+    if (deliveryType === "delivery" && !selectedAddress) {
+      toast.error("Please select a delivery address");
+      return false;
+    }
 
-  if (deliveryType === "delivery" && !selectedAddress) {
-    toast.error("Please select a delivery address");
-    return false;
-  }
+    if (!paymentMethod) {
+      toast.error("Please select a payment method");
+      return false;
+    }
+    if (!getOrderStoreId()) {
+      toast.error("Store not found for this order");
+      return false;
+    }
 
-  if (!paymentMethod) {
-    toast.error("Please select a payment method");
-    return false;
-  }
+    if (paymentMethod === "wallet" && walletBalance < totalPayable) {
+      toast.error(`Insufficient wallet balance. Available ₹${walletBalance}`);
+      return false;
+    }
 
-  if (paymentMethod === "wallet" && walletBalance < totalPayable) {
-    toast.error(
-      `Insufficient wallet balance. Available ₹${walletBalance}`
-    );
-    return false;
-  }
+    if (isPrescriptionRequired && !prescriptionFile) {
+      toast.error("Prescription is required for selected medicines");
+      return false;
+    }
 
-  if (isPrescriptionRequired && !prescriptionFile) {
-    toast.error("Prescription is required for selected medicines");
-    return false;
-  }
+    if (!policyAccepted) {
+      toast.error("Please accept Privacy Policy & Terms");
+      return false;
+    }
 
-  if (!policyAccepted) {
-    toast.error("Please accept Privacy Policy & Terms");
-    return false;
-  }
-
-  return true;
-};
+    return true;
+  };
 
   return (
     <div className="checkout-container">
@@ -325,7 +345,7 @@ export default function Checkout() {
             tipValue={selectedTip}
             onTipChange={setSelectedTip}
           />
-          {isPrescriptionRequired && (
+          {(isPrescriptionRequired || prescriptionFile) && (
             <PrescriptionUpload
               required={isPrescriptionRequired}
               file={prescriptionFile}
@@ -392,26 +412,31 @@ export default function Checkout() {
       </div>
 
       <button
-  className="place-order-btn"
-  disabled={placingOrder}
-  onClick={() => {
-    if (!validateBeforeOrder()) return;
+        className="place-order-btn"
+        disabled={placingOrder}
+        onClick={() => {
+          if (!validateBeforeOrder()) return;
 
-    if (paymentMethod === "digital_payment") {
-      handleDigitalPayment();
-    } else {
-      handlePlaceOrder();
-    }
-  }}
->
-  {placingOrder ? "Placing Order..." : "Place Order"}
-</button>
+          if (paymentMethod === "digital_payment") {
+            handleDigitalPayment();
+          } else {
+            handlePlaceOrder();
+          }
+        }}
+      >
+        {placingOrder ? "Placing Order..." : "Place Order"}
+      </button>
 
       {placingOrder && (
         <div className="checkout-loader-overlay">
           <Loader />
           <p>Placing your order...</p>
         </div>
+      )}
+      {prescriptionFile && (
+        <p style={{ color: "green", fontSize: "13px" }}>
+          ✔ Prescription uploaded
+        </p>
       )}
     </div>
   );

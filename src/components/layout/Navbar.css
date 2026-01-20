@@ -1,9 +1,7 @@
-/* --- CSS VARIABLES & ROOT --- */
 :root {
   --primary-deep: #016B61;
   --secondary-muted: #70B2B2;
   --accent-light: #9ECFD4;
-  /* --bg-cream: #E5E9C5; */
   --text-main: #013631;
   --glass-white: rgba(255, 255, 255, 0.95);
   --premium-shadow: 0 15px 40px rgba(1, 107, 97, 0.15);
@@ -85,9 +83,8 @@
   width: 100%;
 }
 
-/* --- MEGA DROPDOWN LOGIC --- */
 .category-dropdown-container {
-  position: static !important; /* Required for full-width dropdown */
+  position: static !important; 
 }
 
 .mega-dropdown {
@@ -184,7 +181,6 @@
   color: var(--primary-deep);
 }
 
-/* --- HAMBURGER & SIDE MENU --- */
 .hamburger {
   cursor: pointer !important;
   display: flex;

@@ -19,13 +19,11 @@ export default function Searchbar({ isModal = false, onClose }) {
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
 
-  /* LOCK SCROLL IN MODAL */
   useEffect(() => {
     if (isModal) document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "unset");
   }, [isModal]);
 
-  /* ESC TO CLOSE */
   useEffect(() => {
     if (!isModal) return;
     const esc = (e) => e.key === "Escape" && onClose();
@@ -105,13 +103,11 @@ export default function Searchbar({ isModal = false, onClose }) {
   const handleKeyDown = (e) => {
   if (e.key !== "Enter") return;
 
-  // Agar dropdown open hai aur koi item highlighted hai
   if (activeIndex >= 0 && results[activeIndex]) {
     handleSelect(results[activeIndex]);
     return;
   }
 
-  // Normal search → search list page
   if (query.trim()) {
     onClose?.();
     navigate(`/searchlist?query=${encodeURIComponent(query.trim())}`);

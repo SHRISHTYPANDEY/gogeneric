@@ -46,11 +46,10 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
-
+  const [showEditModal, setShowEditModal] = useState(false);
   const { logout } = useAuth();
   const { resetLocation } = useLocation();
 
-  /* ================= FETCH PROFILE ================= */
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -86,7 +85,7 @@ export default function Profile() {
       } catch (err) {
         console.error(err);
       } finally {
-        setInitialLoading(false); // 🔑 FIX
+        setInitialLoading(false); 
       }
     };
 
@@ -349,12 +348,13 @@ export default function Profile() {
 
             <div className="premium-footer-btns">
               {!editing ? (
-                <button
-                  className="premium-action-btn"
-                  onClick={() => setEditing(true)}
-                >
-                  <Pencil size={18} /> Edit Profile
-                </button>
+               <button
+  className="premium-action-btn"
+  onClick={() => setShowEditModal(true)}
+>
+  <Pencil size={18} /> Edit Profile
+</button>
+
               ) : (
                 <button
                   className="premium-action-btn save"
@@ -374,18 +374,6 @@ export default function Profile() {
           </div>
 
           <div className="premium-menu-stack">
-            <div
-              className="premium-menu-link"
-              onClick={() => setShowPasswordModal(true)}
-            >
-              <div className="premium-menu-left">
-                <div className="p-icon-circle">
-                  <ShieldCheck size={20} />
-                </div>
-                <span>Change Password</span>
-              </div>
-              <ChevronRight size={18} className="opacity-40" />
-            </div>
             {showPassword && (
               <div className="password-box">
                 <input
@@ -528,6 +516,88 @@ export default function Profile() {
           </div>
         </div>
       )}
+      {showEditModal && (
+  <div
+    className="edit-modal-overlay"
+    onClick={() => setShowEditModal(false)}
+  >
+    <div
+      className="edit-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h3>Edit Profile</h3>
+
+      {/* IMAGE */}
+      <div className="edit-avatar">
+        <img
+          src={previewImage || "https://via.placeholder.com/150"}
+          alt="preview"
+        />
+        <label className="edit-image-btn">
+          <Camera size={16} />
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setProfileImage(file);
+                setPreviewImage(URL.createObjectURL(file));
+              }
+            }}
+          />
+        </label>
+      </div>
+
+      {/* INPUTS */}
+      <input
+        value={user.name}
+        onChange={(e) =>
+          setUser({ ...user, name: e.target.value })
+        }
+        placeholder="Full Name"
+      />
+
+      <input
+        value={user.email}
+        onChange={(e) =>
+          setUser({ ...user, email: e.target.value })
+        }
+        placeholder="Email"
+      />
+
+      <input
+        value={user.phone || ""}
+        onChange={(e) =>
+          setUser({ ...user, phone: e.target.value })
+        }
+        placeholder="Phone"
+      />
+
+      {/* ACTIONS */}
+      <div className="edit-modal-actions">
+        <button
+          className="btn-secondary"
+          onClick={() => setShowEditModal(false)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="btn-primary"
+          onClick={async () => {
+            await handleProfileUpdate();
+            setShowEditModal(false);
+          }}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Changes"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }

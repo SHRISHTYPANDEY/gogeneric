@@ -124,12 +124,10 @@ const fetchCategoryItems = useCallback(async () => {
         </div>
       </div>
 
-      {/* ❌ EMPTY STATE — AFTER LOADING */}
       {items.length === 0 && (
         <p className="empty-text">No medicines found</p>
       )}
 
-      {/* ✅ ITEMS */}
       {filteredItems.length > 0 && (
         <div className="items-grid">
           {filteredItems.map((item, index) => (

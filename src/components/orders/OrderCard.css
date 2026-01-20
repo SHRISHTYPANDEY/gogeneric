@@ -194,3 +194,9 @@
 .invoice-btn:hover {
   background: #e5e7eb;
 }
+.order-otp {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #016b61;
+  font-weight: 600;
+}

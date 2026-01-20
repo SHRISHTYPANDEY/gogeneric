@@ -5,11 +5,23 @@ import toast from "react-hot-toast";
 import "./Wishlist.css";
 import { X, ShoppingCart, Bookmark } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import useDiscounts from "../../hooks/useDiscounts";
+import {
+  getDiscountedPrice,
+  getFinalPrice,
+  getDiscountPercent,
+} from "../../utils/priceUtils";
 
 export default function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlist();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const { discountMap, fetchDiscountedItems } = useDiscounts();
+
+  useEffect(() => {
+    fetchDiscountedItems();
+  }, [fetchDiscountedItems]);
 
   let guestId = localStorage.getItem("guest_id");
   if (!token && !guestId) {
@@ -30,7 +42,8 @@ export default function Wishlist() {
         {
           item_id: item.id,
           quantity: 1,
-          price: item.price,
+          price: getFinalPrice(item, discountMap),
+          original_price: item.price || item.unit_price,
           model: "Item",
           ...(token ? {} : { guest_id: guestId }),
         },
@@ -40,7 +53,7 @@ export default function Wishlist() {
             moduleId: "2",
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
-        }
+        },
       );
 
       await removeFromWishlist(item.id);
@@ -48,7 +61,7 @@ export default function Wishlist() {
       toast.success("Moved to cart");
     } catch (err) {
       toast.error(
-        err.response?.data?.errors?.[0]?.message || "Something went wrong"
+        err.response?.data?.errors?.[0]?.message || "Something went wrong",
       );
     }
   };
@@ -60,7 +73,8 @@ export default function Wishlist() {
         <div className="empty-icon">🔖</div>
         <h3>No saved items yet</h3>
         <p>
-          Bookmark medicines you like<br />
+          Bookmark medicines you like
+          <br />
           for quick access later.
         </p>
         <button className="explore-btn" onClick={() => navigate("/")}>
@@ -94,12 +108,24 @@ export default function Wishlist() {
             />
 
             <h4>{item.name}</h4>
-            <p className="price">₹{item.price}</p>
+            <div className="price-box">
+              {getDiscountedPrice(item, discountMap) ? (
+                <>
+                  <span className="original-price-wish">
+                    ₹{item.price || item.unit_price}
+                  </span>
+                  <span className="discounted-price-wish">
+                    ₹{getDiscountedPrice(item, discountMap)}
+                  </span>
+                </>
+              ) : (
+                <span className="discounted-price-wish">
+                  ₹{item.price || item.unit_price}
+                </span>
+              )}
+            </div>
 
-            <button
-              className="move-cart-btn"
-              onClick={() => moveToCart(item)}
-            >
+            <button className="move-cart-btn" onClick={() => moveToCart(item)}>
               <ShoppingCart size={16} />
               <span>Move to Cart</span>
             </button>

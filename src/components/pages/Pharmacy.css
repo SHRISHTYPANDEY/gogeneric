@@ -209,28 +209,109 @@
   gap: 15px;
 }
 
-/* --- Mobile Fixes --- */
 @media (max-width: 850px) {
   .pharmacy-card {
-    flex-direction: column;
-    padding: 15px;
+    gap: 20px;
+    padding: 16px;
+    border-radius: 24px;
   }
+
   .pharmacy-image {
-    width: 100%;
-    height: 180px;
+    height: 170px;
+    padding: 14px;
+  }
+
+  .pharmacy-name {
+    font-size: 1.3rem;
+  }
+
+  .pharmacy-address {
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 600px) {
-  .pharmacy-header {
-    flex-direction: column;
-    align-items: stretch;
-    margin-bottom: 30px;
+  .pharmacy-page {
+    padding: 30px 14px;
   }
-  .pharmacy-title { font-size: 1.8rem; }
-  .pharmacy-name { font-size: 1.3rem; }
-  .visit-btn { width: 100%; justify-content: center; }
+
+  
+.pharmacy-title {
+  font-size: 1.6rem;
+  color: var(--text-main);
+  font-weight: 800;
+  margin: 0;
+  position: relative;
 }
+.pharmacy-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width:180px;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    #0f766e 0%,
+    #0f766e 40%,
+    rgba(15, 118, 110, 0.4) 65%,
+    transparent 100%
+  );
+  border-radius: 4px;
+}
+
+  .pharmacy-card {
+    flex-direction: column;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  /* IMAGE */
+  .pharmacy-image {
+    width: 100%;
+    height: 150px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  /* TEXT SCALE DOWN */
+  .pharmacy-name {
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+
+  .pharmacy-address {
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    max-width: 100%;
+  }
+
+  /* BADGES */
+  .pharmacy-meta {
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .pharmacy-rating,
+  .pharmacy-distance,
+  .status-open,
+  .status-closed {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 10px;
+  }
+
+  /* BUTTON */
+  .visit-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 12px;
+    border-radius: 14px;
+    justify-content: center;
+  }
+}
+
 /* --- Background Colors Logic --- */
 
 /* Card 1: Blue Tint */
@@ -326,4 +407,22 @@
   padding: 6px 14px;
   border-radius: 12px;
   font-size: 0.9rem;
+}
+@media (max-width: 420px) {
+  .pharmacy-name {
+    font-size: 0.95rem;
+  }
+
+  .pharmacy-address {
+    font-size: 0.8rem;
+  }
+
+  .pharmacy-image {
+    height: 130px;
+  }
+
+  .visit-btn {
+    font-size: 0.85rem;
+    padding: 10px;
+  }
 }

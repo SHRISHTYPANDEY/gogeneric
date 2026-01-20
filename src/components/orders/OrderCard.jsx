@@ -70,11 +70,23 @@ export default function OrderCard({ order, isRunning }) {
           </span>
         </div>
 
-        <div className="order-body">
-          <p>{order.store?.name}</p>
-          <p>{order.details_count} items</p>
-          <p>₹{order.order_amount}</p>
-        </div>
+       <div className="order-body">
+  <p>{order.store?.name}</p>
+  <p>
+  {order.details_count > 0
+    ? `${order.details_count} items`
+    : "Prescription Order"}
+</p>
+
+  <p>₹{order.order_amount}</p>
+
+  {isRunning && order.otp && (
+    <p className="order-otp">
+      <strong>Delivery OTP:</strong> {order.otp}
+    </p>
+  )}
+</div>
+
 
         <div className="order-footer">
           <span>{new Date(order.created_at).toLocaleString()}</span>

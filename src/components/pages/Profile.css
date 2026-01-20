@@ -238,3 +238,81 @@
   font-weight: 500;
   cursor: pointer;
 }
+.edit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.edit-modal {
+  background: white;
+  border-radius: 25px;
+  padding: 30px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: var(--premium-shadow);
+  animation: scaleUp 0.3s ease;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.edit-modal h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--text-main);
+}
+
+.edit-modal input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: var(--border-soft);
+  background: var(--bg-pink);
+}
+
+.edit-avatar {
+  position: relative;
+  width: 110px;
+  margin: 0 auto 20px;
+}
+
+.edit-avatar img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.edit-image-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--primary-deep);
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid white;
+}
+
+.edit-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+  

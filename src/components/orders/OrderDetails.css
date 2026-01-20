@@ -180,3 +180,26 @@
   transform: scale(1.05);
   transition: transform 0.2s ease;
 }
+.order-otp-box {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border: 1px dashed #016b61;
+  background: #f1fffd;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.otp-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #016b61;
+}
+
+.otp-value {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #016b61;
+}
