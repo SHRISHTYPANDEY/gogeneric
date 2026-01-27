@@ -7,8 +7,6 @@ import LocationModal from "../Location/LocationModal";
 import LoginModal from "../auth/LoginModal";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import i18n from "../../i18n";
 import api from "../../api/axiosInstance";
 import toast from "react-hot-toast";
 import { useLocation } from "../../context/LocationContext";
@@ -18,7 +16,7 @@ import { IoSearch } from "react-icons/io5";
 import SearchOverlayModal from "./SearchOverlayModal";
 
 export default function TopHeader() {
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const { location, setLocation, notifyAddressChange } = useLocation();
 
   const [open, setOpen] = useState(false);
@@ -124,9 +122,9 @@ useEffect(() => {
             >
               <MdLocationOn size={20} className="text-orange-500" />
               <div className="ml-2">
-                <span className="text-xs text-gray-400">{t("location")}</span>
+                <span className="text-xs text-gray-400">{("location")}</span>
                 <div className="text-sm font-semibold">
-                  {location?.address || t("selectLocation")}
+                  {location?.address || ("selectLocation")}
                 </div>
               </div>
               <IoMdArrowDropdown />
@@ -150,8 +148,6 @@ useEffect(() => {
 >
   <IoSearch size={20} className="text-white" />
 </div>
-
-
             {/* NOTIFICATIONS */}
             <div
               className="relative cursor-pointer"
@@ -179,7 +175,7 @@ useEffect(() => {
             >
               <CgProfile size={20} />
               <span className="font-semibold">
-                {user ? user.name?.split(" ")[0] : t("login")}
+                {user ? user.name?.split(" ")[0] :("login")}
               </span>
             </div>
           </div>

@@ -16,13 +16,13 @@
 }
 
 .delivery-option {
-  flex: 1; /* Dono buttons barabar width ke honge */
+  flex: 1; 
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 16px;
-  border: 2px solid #f0f0f0; /* Default border color */
+  border: 2px solid #f0f0f0; 
   border-radius: 10px;
   background-color: #fff;
   cursor: pointer;
@@ -37,21 +37,18 @@
   border-color: #ddd;
 }
 
-/* Active State Styling */
 .delivery-option.active {
-  background-color: #f0f7ff; /* Halka blue tint */
-  border-color: #007bff;     /* Primary blue color */
+  background-color: #f0f7ff; 
+  border-color: #007bff;  
   color: #007bff;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
 }
 
-/* Icons styling (Emojis or SVG) */
 .delivery-option span {
   font-size: 18px;
 }
 
-/* Responsive for small screens */
 @media (max-width: 480px) {
   .delivery-options {
     flex-direction: column;

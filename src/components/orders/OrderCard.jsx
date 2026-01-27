@@ -14,35 +14,32 @@ export default function OrderCard({ order, isRunning }) {
   const [showRefundModal, setShowRefundModal] = useState(false);
 
   const handleDownloadInvoice = async (e) => {
-  e.stopPropagation();
+    e.stopPropagation();
 
-  try {
-    const response = await api.get(
-      `/orders/${order.id}/invoice`,
-      {
+    try {
+      const response = await api.get(`/orders/${order.id}/invoice`, {
         responseType: "blob",
-      }
-    );
+      });
 
-    const blob = new Blob([response.data], {
-      type: "application/pdf",
-    });
+      const blob = new Blob([response.data], {
+        type: "application/pdf",
+      });
 
-    const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `Invoice_Order_${order.id}.pdf`;
-    document.body.appendChild(link);
-    link.click();
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Invoice_Order_${order.id}.pdf`;
+      document.body.appendChild(link);
+      link.click();
 
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Invoice download error:", error);
-    alert("Invoice download failed");
-  }
-};
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Invoice download error:", error);
+      alert("Invoice download failed");
+    }
+  };
   const handleTrackOrder = (e) => {
     e.stopPropagation();
     navigate(`/orders/${order.id}/track`);
@@ -70,24 +67,22 @@ export default function OrderCard({ order, isRunning }) {
           </span>
         </div>
 
-       <div className="order-body">
-  <p>{order.store?.name}</p>
-  <p>
-  {order.details_count > 0
-    ? `${order.details_count} items`
-    : "Prescription Order"}
-</p>
+        <div className="order-body">
+          <p>{order.store?.name}</p>
+          <p>
+            {order.details_count > 0
+              ? `${order.details_count} items`
+              : "Prescription Order"}
+          </p>
 
-  <p>₹{order.order_amount}</p>
+          <p>₹{order.order_amount}</p>
 
-  {isRunning && order.otp && (
-    <p className="order-otp">
-      <strong>Delivery OTP:</strong> {order.otp}
-    </p>
-  )}
-</div>
-
-
+          {isRunning && order.otp && (
+            <p className="order-otp">
+              <strong>Delivery OTP:</strong> {order.otp}
+            </p>
+          )}
+        </div>
         <div className="order-footer">
           <span>{new Date(order.created_at).toLocaleString()}</span>
           <div className="order-actions">
@@ -97,16 +92,16 @@ export default function OrderCard({ order, isRunning }) {
               </button>
             )}
             {isDelivered && (
-  <button
-    className="refund-btn"
-    onClick={(e) => {
-      e.stopPropagation();
-      setShowRefundModal(true);
-    }}
-  >
-    <RotateCcw size={16} /> Refund
-  </button>
-)}
+              <button
+                className="refund-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowRefundModal(true);
+                }}
+              >
+                <RotateCcw size={16} /> Refund
+              </button>
+            )}
             {isRunning && (
               <button className="track-btn" onClick={handleTrackOrder}>
                 <Truck size={16} /> Track
@@ -134,13 +129,12 @@ export default function OrderCard({ order, isRunning }) {
         />
       )}
       {showRefundModal && (
-  <RefundOrder
-    order={order}
-    onClose={() => setShowRefundModal(false)}
-    onSuccess={() => window.location.reload()}
-  />
-)}
-
+        <RefundOrder
+          order={order}
+          onClose={() => setShowRefundModal(false)}
+          onSuccess={() => window.location.reload()}
+        />
+      )}
     </>
   );
 }

@@ -1,46 +1,40 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import "./Highlights.css";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
+import WishlistButton from "./WishlistButton";
+import { useNavigate } from "react-router-dom";
 
 export default function Highlights() {
   const [highlights, setHighlights] = useState([]);
   const scrollRef = useRef(null);
-  const abortRef = useRef(null);
   const rafRef = useRef(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    return () => {
-      abortRef.current?.abort();
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
+  const handleCardClick = (storeId) => {
+    if (!storeId) return;
+    navigate(`/view-stores/${storeId}`);
+  };
   const fetchAdvertisements = useCallback(async () => {
     try {
-      abortRef.current?.abort();
-      abortRef.current = new AbortController();
-      const token = localStorage.getItem("token");
       const res = await api.get("/api/v1/advertisement/list", {
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: 2,
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        signal: abortRef.current.signal,
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-
-      const ads = res.data || [];
+      const ads = res.data?.data || res.data || [];
       const formattedAds = ads.map((ad) => ({
         id: ad.id,
-        type: ad.type === "video" ? "video" : "image",
-        src: ad.cover_image_full_url,
-        title: ad.store?.name || "Advertisement",
+        storeId: ad.store_id,
+        banner: ad.cover_image_full_url,
+        profile: ad.profile_image_full_url || ad.store?.logo_full_url,
+        title: ad.title,
+        storeName: ad.store?.name,
+        description: ad.description,
+        rating: ad.average_rating,
+        reviews: ad.reviews_comments_count,
       }));
       setHighlights(formattedAds);
     } catch (err) {
-      if (err.name !== "CanceledError") console.error("API error:", err);
+      console.error("HIGHLIGHTS ERROR", err);
     }
   }, []);
 
@@ -48,53 +42,63 @@ export default function Highlights() {
     fetchAdvertisements();
   }, [fetchAdvertisements]);
 
-  useEffect(() => {
-    const slider = scrollRef.current;
-    if (!slider) return;
-    let speed = 0.6;
-    const autoScroll = () => {
-      slider.scrollLeft += speed;
-      if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth) {
-        slider.scrollLeft = 0;
-      }
-      rafRef.current = requestAnimationFrame(autoScroll);
-    };
+useEffect(() => {
+  const slider = scrollRef.current;
+  if (!slider) return;
+
+  const speed = window.innerWidth <= 768 ? 0.6 : 1.2;
+
+  const autoScroll = () => {
+    slider.scrollLeft += speed;
+
+    if (slider.scrollLeft >= slider.scrollWidth / 2) {
+      slider.scrollLeft = 0;
+    }
     rafRef.current = requestAnimationFrame(autoScroll);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, []);
-
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
 
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: 300, behavior: "smooth" });
-  };
+  rafRef.current = requestAnimationFrame(autoScroll);
+  return () => cancelAnimationFrame(rafRef.current);
+}, [highlights]);
 
   return (
-    <div className="highlight-section max-w-7xl mx-auto px-4">
+    <div className="highlight-section">
       <h2 className="highlight-title">Highlights for You</h2>
       <div className="highlight-wrapper" ref={scrollRef}>
         <div className="highlight-scroll">
-          {highlights.map((item) => (
-            <div key={item.id} className="highlight-card">
-              <div className="highlight-media">
-                {item.type === "image" ? (
-                  <img src={cleanImageUrl(item.src)} alt={item.title} />
-                ) : (
-                  <iframe
-                    src={item.src.includes("youtube") ? item.src : `https://www.youtube.com/embed/${item.src}`}
-                    title={item.title}
-                    allowFullScreen
+          {[...highlights, ...highlights].map((item, index) => (
+            <div
+              key={`${item.id}-${index}`}
+              className="highlight-card clickable"
+              onClick={() => handleCardClick(item.storeId)}
+            >
+              <div className="highlight-header">
+                <div className="highlight-store-row">
+                  <img
+                    src={cleanImageUrl(item.profile)}
+                    alt={item.storeName}
+                    className="highlight-profile"
                   />
-                )}
+                  <p className="highlight-store">{item.storeName}</p>
+                </div>
+
+                <div className="highlight-rating">
+                  ★ <span>{item.reviews || 0}+</span>
+                </div>
               </div>
-              <p className="highlight-name">{item.title}</p>
+
+              <div className="highlight-media">
+                <img src={cleanImageUrl(item.banner)} alt={item.title} />
+              </div>
+
+              <div className="highlight-content">
+                <h3 className="ad-title">{item.title}</h3>
+                <p className="highlight-description">{item.description}</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="health-quote">“Invest in your body — it’s the only place you have to live.”</div>
     </div>
   );
 }

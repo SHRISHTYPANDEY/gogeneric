@@ -43,53 +43,64 @@ export default function Searchbar({ isModal = false, onClose }) {
   }, []);
 
   const fetchResults = async (searchText) => {
-    try {
-      abortRef.current?.abort();
-      abortRef.current = new AbortController();
-      setLoading(true);
+  try {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
 
-      const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: searchText.slice(0, 3) },
-        headers: {
-          zoneId: "[3]",
-          moduleId: 2,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        signal: abortRef.current.signal,
-      });
+    const res = await api.get("/api/v1/items/item-or-store-search", {
+      params: { name: searchText.slice(0, 3) },
+      headers: {
+        zoneId: "[3]",
+        moduleId: 2,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+      signal: abortRef.current.signal,
+    });
 
-      const data = [
-        ...(res.data?.items || []).map((i) => ({
-          id: `item-${i.id}`,
-          type: "medicine",
-          name: i.name,
-          image: i.image_full_url || i.image,
-        })),
-        ...(res.data?.stores || []).map((s) => ({
-          id: `store-${s.id}`,
-          type: "store",
-          name: s.name,
-          image: s.logo || s.image_full_url,
-        })),
-      ];
+    const data = [
+      ...(res.data?.items || []).map((i) => ({
+        id: `item-${i.id}`,
+        type: "medicine",
+        name: i.name,
+        image: i.image_full_url || i.image,
+      })),
+      ...(res.data?.stores || []).map((s) => ({
+        id: `store-${s.id}`,
+        type: "store",
+        name: s.name,
+        image: s.logo || s.image_full_url,
+      })),
+    ];
 
-      const fuse = new Fuse(data, { keys: ["name"], threshold: 0.45 });
-      setResults(fuse.search(searchText).map((r) => r.item));
-      setShowDropdown(true);
-    } finally {
-      setLoading(false);
+    const fuse = new Fuse(data, { keys: ["name"], threshold: 0.45 });
+    setResults(fuse.search(searchText).map((r) => r.item));
+  } catch (e) {
+    if (e.name !== "CanceledError") console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+const triggerSearch = useCallback(
+  (text) => {
+    if (!location || text.length < 2) {
+      setShowDropdown(false);
+      return;
     }
-  };
 
-  const triggerSearch = useCallback(
-    (text) => {
-      if (!location || text.length < 2) return;
-      clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => fetchResults(text), 300);
-    },
-    [location]
-  );
+    setShowDropdown(true); // 👈 IMPORTANT: loader dikhane ke liye
+    setLoading(true);
+
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchResults(text);
+    }, 300);
+  },
+  [location]
+);
+
 
   useEffect(() => {
     triggerSearch(query);
@@ -116,6 +127,12 @@ export default function Searchbar({ isModal = false, onClose }) {
 useEffect(() => {
   setActiveIndex(-1);
 }, [query]);
+const handleClear = () => {
+  setQuery("");
+  setResults([]);
+  setShowDropdown(false);
+  setActiveIndex(-1);
+};
 
 
 return (
@@ -133,24 +150,37 @@ return (
           />
           {/* Input clear karne ke liye chota cross */}
           {query && (
-            <X size={20} className="clear-query" onClick={() => setQuery("")} />
+            <X size={20} className="clear-query" onClick={handleClear} />
           )}
         </div>
 
         {showDropdown && (
-          <div className="search-dropdown">
-            {loading && <div className="loader">Searching...</div>}
-            {!loading && results.map((item) => (
-              <div key={item.id} className="search-item" onClick={() => handleSelect(item)}>
-                <img src={cleanImageUrl(item.image)} alt={item.name} />
-                <div className="search-info">
-                  <p>{item.name}</p>
-                  <span className={`search-type ${item.type}`}>{item.type}</span>
-                </div>
-              </div>
-            ))}
+  <div className="search-dropdown">
+    {loading && <div className="loader">Searching...</div>}
+
+    {!loading && results.length === 0 && (
+      <div className="empty-state">No results found</div>
+    )}
+
+    {!loading &&
+      results.map((item) => (
+        <div
+          key={item.id}
+          className="search-item"
+          onClick={() => handleSelect(item)}
+        >
+          <img src={cleanImageUrl(item.image)} alt={item.name} />
+          <div className="search-info">
+            <p>{item.name}</p>
+            <span className={`search-type ${item.type}`}>
+              {item.type}
+            </span>
           </div>
-        )}
+        </div>
+      ))}
+  </div>
+)}
+
       </div>
     </div>
   </header>

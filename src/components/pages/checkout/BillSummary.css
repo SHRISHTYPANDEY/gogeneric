@@ -23,7 +23,6 @@
   color: #555;
 }
 
-/* Specific styling for individual labels */
 .bill-row span:first-child {
   color: #666;
 }
@@ -33,14 +32,12 @@
   color: #1a1a1a;
 }
 
-/* Horizontal Line styling */
 hr {
   border: 0;
-  border-top: 1px dashed #ddd; /* Professional dashed look */
+  border-top: 1px dashed #ddd; 
   margin: 18px 0;
 }
 
-/* Total Amount styling */
 .bill-row.total {
   margin-top: 10px;
   margin-bottom: 0;
@@ -52,13 +49,11 @@ hr {
   font-weight: 800;
 }
 
-/* Green Highlight for Delivery Charges if Free */
 .bill-row .free-delivery {
   color: #28a745;
   font-weight: 600;
 }
 
-/* Extra Info Text (Optional Tip) */
 .bill-summary-note {
   font-size: 12px;
   color: #888;

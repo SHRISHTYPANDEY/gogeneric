@@ -31,11 +31,11 @@ export default function Orders() {
         ? "/api/v1/customer/order/running-orders"
         : "/api/v1/customer/order/list";
 
-      console.log("📦 FETCHING ORDERS");
-      console.log("TAB:", activeTab);
-      console.log("URL:", url);
-      console.log("TOKEN:", token);
-      console.log("GUEST ID:", guestId);
+      // console.log("FETCHING ORDERS");
+      // console.log("TAB:", activeTab);
+      // console.log("URL:", url);
+      // console.log("TOKEN:", token);
+      // console.log("GUEST ID:", guestId);
 
       const res = await api.get(url, {
         headers: {
@@ -48,31 +48,31 @@ export default function Orders() {
         },
       });
 
-      console.log("✅ FULL API RESPONSE:", res);
-      console.log("✅ RESPONSE DATA:", res.data);
+      // console.log("FULL API RESPONSE:", res);
+      // console.log("RESPONSE DATA:", res.data);
 
       let ordersArray = [];
 
       if (Array.isArray(res.data?.orders)) {
-        console.log("📌 Orders found in res.data.orders");
+        // console.log("📌 Orders found in res.data.orders");
         ordersArray = res.data.orders;
       } else if (Array.isArray(res.data?.data)) {
-        console.log("📌 Orders found in res.data.data");
+        // console.log("📌 Orders found in res.data.data");
         ordersArray = res.data.data;
       } else if (Array.isArray(res.data)) {
-        console.log("📌 Orders found in res.data (array)");
+        // console.log("📌 Orders found in res.data (array)");
         ordersArray = res.data;
       } else {
         console.warn("⚠️ Orders NOT found in expected keys");
       }
 
-      console.log("🧾 FINAL ORDERS ARRAY:", ordersArray);
-      console.log("🧾 ORDERS COUNT:", ordersArray.length);
+      // console.log("🧾 FINAL ORDERS ARRAY:", ordersArray);
+      // console.log("🧾 ORDERS COUNT:", ordersArray.length);
 
       setOrders(ordersArray);
     } catch (error) {
-      console.error("❌ Fetch orders failed:", error);
-      console.error("❌ ERROR RESPONSE:", error?.response?.data);
+      console.error("Fetch orders failed:", error);
+      console.error("ERROR RESPONSE:", error?.response?.data);
 
       if (error?.response?.status === 401) {
         setShowLogin(true);
@@ -107,7 +107,6 @@ export default function Orders() {
         </button>
       </div>
 
-      {/* Content */}
       {loading ? (
         <Loader />
       ) : orders.length === 0 ? (

@@ -240,9 +240,8 @@ export default function Checkout() {
         formData.append("guest_id", guestId);
       }
       if ((isPrescriptionRequired || isPrescriptionOrder) && prescriptionFile) {
-  formData.append("order_attachment", prescriptionFile);
-}
-
+        formData.append("order_attachment", prescriptionFile);
+      }
 
       for (let pair of formData.entries()) {
         console.log(pair[0], pair[1]);
@@ -256,9 +255,9 @@ export default function Checkout() {
 
       const res = await api.post(ORDER_API, formData, { headers });
       if (isPrescriptionOrder) {
-  console.log("PRESCRIPTION ORDER API RESPONSE 👉", res.data);
-}
-
+        console.log("PRESCRIPTION ORDER API RESPONSE ", res.data);
+      }
+      console.log("Cart order data", res.data);
       toast.success("Order placed successfully 🎉");
       fetchWallet();
       localStorage.removeItem("delivery_type");
@@ -323,7 +322,7 @@ export default function Checkout() {
 
       <div className="checkout-layout">
         <div className="checkout-left">
-          <CartItems cartItems={cartItems} />
+          {!isPrescriptionOrder && <CartItems cartItems={cartItems} />}
 
           <DeliveryType
             value={deliveryType}
@@ -345,9 +344,9 @@ export default function Checkout() {
             tipValue={selectedTip}
             onTipChange={setSelectedTip}
           />
-          {(isPrescriptionRequired || prescriptionFile) && (
+          {(isPrescriptionOrder || isPrescriptionRequired) && (
             <PrescriptionUpload
-              required={isPrescriptionRequired}
+              required={true}
               file={prescriptionFile}
               onChange={setPrescriptionFile}
             />
@@ -379,11 +378,13 @@ export default function Checkout() {
         </div>
 
         <div className="checkout-right">
-          <BillSummary
-            cartItems={cartItems}
-            deliveryType={deliveryType}
-            totalPayable={totalPayable}
-          />
+          {!isPrescriptionOrder && (
+            <BillSummary
+              cartItems={cartItems}
+              deliveryType={deliveryType}
+              totalPayable={totalPayable}
+            />
+          )}
         </div>
       </div>
 

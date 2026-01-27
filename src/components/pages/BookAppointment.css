@@ -8,9 +8,6 @@
   --ba-white: #ffffff;
   --ba-shadow: 0 10px 25px rgba(1, 107, 97, 0.12);
 }
-
-/* ================= CONTAINER ================= */
-
 .booking-container {
   max-width: 500px;
   margin: 20px auto;
@@ -32,8 +29,6 @@
   margin-bottom: 15px;
   letter-spacing: -0.3px;
 }
-
-/* ================= SLOTS ================= */
 
 .slots-grid {
   display: grid;
@@ -67,15 +62,12 @@
   transform: translateY(-2px);
 }
 
-/* Disabled slot */
 .slot-btn.disabled {
   opacity: 0.4;
   cursor: not-allowed;
   background-color: #eef3f3;
   color: #889999;
 }
-
-/* ================= DATE INPUT ================= */
 
 .calendar-input {
   width: 100%;
@@ -94,8 +86,6 @@
   border-color: var(--ba-green);
   box-shadow: 0 0 0 3px rgba(1, 107, 97, 0.15);
 }
-
-/* ================= CTA BUTTONS ================= */
 
 .book-btn {
   width: 100%;
@@ -121,8 +111,6 @@
   box-shadow: 0 16px 30px rgba(1, 107, 97, 0.35);
 }
 
-/* Pay button */
-
 .pay-btn {
   width: 100%;
   padding: 16px;
@@ -144,8 +132,6 @@
   box-shadow: 0 10px 20px rgba(1, 107, 97, 0.25);
 }
 
-/* ================= ANIMATION ================= */
-
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -156,8 +142,6 @@
     transform: translateY(0);
   }
 }
-
-/* ================= MOBILE ================= */
 
 @media (max-width: 480px) {
   .booking-container {

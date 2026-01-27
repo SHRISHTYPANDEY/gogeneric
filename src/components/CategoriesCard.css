@@ -1,14 +1,8 @@
-/* =========================
-   SECTION
-========================= */
 .category-section {
   padding: 10px 0;
   text-align: center;
 }
 
-/* =========================
-   TITLE
-========================= */
 .cate-title {
   font-size: 30px;
   font-weight: 800;
@@ -32,20 +26,14 @@
   );
 }
 
-/* =========================
-   GRID → 4 CARDS PER ROW
-========================= */
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 20px;
 }
 
-/* =========================
-   CARD BASE (SLIM + TALL)
-========================= */
 .category-card {
-  height: 280px; /* 🔼 taller */
+  height: 180px;
   border-radius: 22px;
   cursor: pointer;
   overflow: hidden;
@@ -61,48 +49,47 @@
   box-shadow: 0 26px 50px rgba(0, 0, 0, 0.16);
 }
 
-/* =========================
-   CARD COLORS (ROTATION)
-========================= */
 .category-card:nth-child(6n + 1) {
   background: #ecfeff;
   border-color: #67e8f9;
 }
+
 .category-card:nth-child(6n + 2) {
   background: #fff7ed;
   border-color: #fdba74;
 }
+
 .category-card:nth-child(6n + 3) {
   background: #fdf4ff;
   border-color: #e879f9;
 }
+
 .category-card:nth-child(6n + 4) {
   background: #f0fdf4;
   border-color: #86efac;
 }
+
 .category-card:nth-child(6n + 5) {
   background: #fefce8;
   border-color: #fde047;
 }
+
 .category-card:nth-child(6n + 6) {
   background: #f0f9ff;
   border-color: #7dd3fc;
 }
 
-/* =========================
-   IMAGE AREA
-========================= */
 .card-image-box {
-  height: 70%; /* 🔼 image area bada */
+  height: 65%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 12px;
+  padding: 6px;
 }
 
 .card-image-box img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   transition: transform 0.4s ease;
 }
@@ -111,9 +98,6 @@
   transform: scale(1.1);
 }
 
-/* =========================
-   INFO AREA
-========================= */
 .card-info-box {
   height: 30%;
   display: flex;
@@ -131,16 +115,13 @@
   padding: 0 12px;
 }
 
-/* =========================
-   BROWSE ALL BUTTON
-========================= */
 .browse-all-wrapper {
   margin-top: 60px;
 }
 
 .browse-all-btn {
   padding: 14px 36px;
-  border-radius: 12px; /* 🔲 rectangle button */
+  border-radius: 12px;
   background: linear-gradient(135deg, #0f766e, #14b8a6);
   color: #fff;
   font-size: 16px;
@@ -155,9 +136,6 @@
   box-shadow: 0 14px 30px rgba(20, 184, 166, 0.45);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
 @media (max-width: 1200px) {
   .category-grid {
     grid-template-columns: repeat(4, 1fr);
@@ -177,17 +155,22 @@
 
 @media (max-width: 768px) {
   .category-section {
-    padding-top: 10px;   
+    padding-top: 10px;
     padding-bottom: 20px;
     margin: 0 10px;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .category-card {
+    height: 200px;
   }
 }
 
 @media (max-width: 640px) {
-  .category-grid {
-     grid-template-columns: repeat(2, 1fr); 
-  }
-
   .cate-title {
     font-size: 26px;
   }
@@ -198,5 +181,15 @@
 
   .category-name {
     font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-card {
+    height: 190px;
   }
 }

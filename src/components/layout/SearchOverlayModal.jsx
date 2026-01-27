@@ -3,7 +3,6 @@ import "./SearchOverlayModal.css";
 
 export default function SearchOverlayModal({ onClose }) {
   const handleOverlayClick = (e) => {
-    // Agar user search bar ke bahar (blur area) click kare to modal band ho jaye
     if (e.target.classList.contains('search-overlay-root')) {
       onClose();
     }

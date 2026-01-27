@@ -87,20 +87,15 @@
   overflow: hidden;
 }
 
-.store-card-6am:nth-child(4n+1) { background-color: #f0f7ff; }
-.store-card-6am:nth-child(4n+2) { background-color: #fff1f1; }
-.store-card-6am:nth-child(4n+3) { background-color: #f0fff4; }
-.store-card-6am:nth-child(4n+4) { background-color: #fefce8; }
+.store-card-6am:nth-child(4n+1) { background-color: #f0f7ff; border-color: #bcd9ff; }
+.store-card-6am:nth-child(4n+2) { background-color: #fff1f1; border-color: #ffcccc; }
+.store-card-6am:nth-child(4n+3) { background-color: #f0fff4; border-color: #c6f6d5;}
+.store-card-6am:nth-child(4n+4) { background-color: #fefce8; border-color: #fef08a;}
 
 .store-card-6am:hover {
   transform: translateY(-5px);
   box-shadow: none !important;
 }
-
-.store-card-6am:nth-child(4n+1):hover { border-color: #bcd9ff; }
-.store-card-6am:nth-child(4n+2):hover { border-color: #ffcccc; }
-.store-card-6am:nth-child(4n+3):hover { border-color: #c6f6d5; }
-.store-card-6am:nth-child(4n+4):hover { border-color: #fef08a; }
 
 .store-image-wrapper {
   width: 100%;

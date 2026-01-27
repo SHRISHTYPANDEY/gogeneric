@@ -9,7 +9,6 @@
   padding: 30px 20px;
 }
 
-/* Container for Cards */
 .items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -38,7 +37,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  width: 100px; /* Adjusted for better look */
+  width: 100px; 
   height: 3px;
   background: linear-gradient(to right, #0f766e, transparent);
   border-radius: 4px;
@@ -64,9 +63,6 @@
   font-size: 14px;
 }
 
-/* =========================
-   ITEM CARD
-========================= */
 .item-card {
   position: relative;
   height: 380px;
@@ -86,7 +82,6 @@
   box-shadow: 0 10px 20px rgba(0,0,0,0.05);
 }
 
-/* Multi-color Backgrounds */
 .item-card:nth-child(4n + 1) { background: #f0f7ff; border-color: #d0e4ff; }
 .item-card:nth-child(4n + 2) { background: #fff1f1; border-color: #ffdada; } 
 .item-card:nth-child(4n + 3) { background: #f0fff4; border-color: #d1f5d9; } 
@@ -129,12 +124,9 @@
   margin-top: auto; 
 }
 
-/* =========================
-   RESPONSIVE: MOBILE VIEW (2 Cards Per Row)
-========================= */
 @media (max-width: 768px) {
   .items-grid {
-    grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
 
@@ -170,12 +162,12 @@
   }
 
   .items-grid {
-    grid-template-columns: repeat(2, 1fr); /* Strictly 2 columns */
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
 
   .item-card {
-    min-height: 280px; /* Adjusted for small screens */
+    min-height: 280px;
     padding: 10px;
   }
 

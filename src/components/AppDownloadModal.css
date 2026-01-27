@@ -1,135 +1,235 @@
+:root {
+  --gg-primary: #016b61;
+  --gg-accent: #00a991;
+  --gg-border: rgba(0, 0, 0, 0.08);
+  --gg-text-main: #0f2f2c;
+  --gg-text-soft: #5f7c78;
+  --gg-bg-light: #f4fbfa;
+}
 
 .app-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(1, 54, 49, 0.45);
-  /* backdrop-filter: blur(12px); */
-  z-index: 9999;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  animation: fadeInApp 0.4s ease;
+  z-index: 10000;
 }
 
 .app-modal {
-  background: linear-gradient(135deg, #ffffff 0%, var(--bg-pink) 100%);
   width: 100%;
-  max-width: 400px;
-  padding: 50px 30px 40px;
-  border-radius: 40px;
-  position: relative;
-  text-align: center;
-  box-shadow: 
-    0 20px 40px rgba(1, 107, 97, 0.2),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.5);
-  border: var(--border-soft);
-  animation: floatModal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-width: 420px;
+  max-height: 85vh;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
 }
 
-.app-modal::before {
-  content: "📱";
-  position: absolute;
-  top: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px;
-  height: 70px;
-  background: white;
-  border-radius: 22px;
-  font-size: 35px;
+.playstore-badge-link {
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.playstore-badge {
+  height: 52px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.playstore-badge:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 8px;
+}
+.close-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: none;
+  background: #f2f6f6;
+  color: var(--gg-text-main);
+  cursor: pointer;
+
+  /* text cross styling */
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(1, 107, 97, 0.15);
-  border: 2px solid var(--accent-light);
-}
 
-.close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 35px;
-  height: 35px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(1, 107, 97, 0.05);
-  color: var(--primary-deep);
-  font-size: 22px;
-  cursor: pointer;
-  transition: var(--transition-smooth);
+  /* IMPORTANT */
+  transform: none;
+  transition: background-color 0.2s ease;
 }
 
 .close-btn:hover {
-  transform: scale(1.1);
+  background: #e6f1ef;
 }
 
-.app-modal h2 {
-  color: var(--text-main);
-  font-size: 28px;
-  font-weight: 900;
-  margin-bottom: 10px;
-  letter-spacing: -0.5px;
+.modal-body {
+  padding: 10px 22px 26px;
+  overflow-y: auto;
 }
 
-.app-modal p {
-  color: var(--text-body-alt);
-  font-size: 15px;
-  margin-bottom: 35px;
-  line-height: 1.5;
-  padding: 0 10px;
-}
-
-.android-btn {
-  background: #000000; 
-  color: white;
-  text-decoration: none;
-  padding: 12px 25px;
-  border-radius: 14px;
+.app-icon-container {
   display: flex;
+  justify-content: center;
+  margin: 10px 0 14px;
+}
+
+.gg-logo {
+  height: 56px;
+}
+
+.modal-title {
+  text-align: center;
+  color: var(--gg-text-main);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.title-sub {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gg-text-soft);
+  margin-top: 4px;
+}
+
+.modal-description {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gg-text-soft);
+  margin: 14px 0 20px;
+  line-height: 1.5;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gg-primary);
+  margin-bottom: 8px;
+}
+
+.offer-card {
+  background: linear-gradient(135deg, #e9fbf7, #f4fffd);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(0, 169, 145, 0.2);
+}
+.offer-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff4d4f, #d9363e);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+
+.offer-content {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.offer-icon {
+  font-size: 1.4rem;
+}
+
+.offer-title {
+  font-size: 0.8rem;
+  color: var(--gg-text-main);
+}
+
+.offer-amount {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--gg-primary);
+}
+
+.offer-note {
+  font-size: 0.7rem;
+  color: var(--gg-text-soft);
+}
+
+.download-section {
+  margin-top: 6px;
+}
+
+.download-button {
+  display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: center;
-  gap: 15px;
-  transition: var(--transition-smooth);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #000000;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: white;
 }
 
-.android-btn:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-  background: #1a1a1a;
+.button-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
 }
 
-.android-btn::before {
-  content: "";
-  width: 28px;
-  height: 28px;
-  background: url('https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Play_Arrow_logo.svg') no-repeat center;
-  background-size: contain;
+.button-label {
+  font-size: 0.65rem;
+  opacity: 0.8;
 }
 
-.android-btn::after {
-  white-space: pre;
-  text-align: left;
-  font-size: 10px;
-  font-weight: 400;
-  line-height: 1.2;
+.button-platform {
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-@keyframes fadeInApp {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.download-note {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--gg-text-soft);
+  margin-top: 6px;
 }
 
-@keyframes floatModal {
-  from { transform: translateY(50px) scale(0.9); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
+.security-note {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gg-border);
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--gg-text-soft);
 }
 
 @media (max-width: 480px) {
   .app-modal {
-    padding: 45px 20px 30px;
-    max-width: 320px;
+    max-width: 360px;
   }
-  .app-modal h2 { font-size: 22px; }
+
+  .modal-title {
+    font-size: 1.6rem;
+  }
+}
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
 }

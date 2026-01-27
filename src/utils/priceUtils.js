@@ -3,26 +3,26 @@ export const getDiscountedPrice = (item, discountMap = {}) => {
 
   if (!item.discount || item.discount === 0) return null;
 
-  const price = item.price || item.unit_price || 0;
+  const basePrice = item.mrp || item.price || item.unit_price || 0;
 
+  let discountedPrice;
   if (item.discount_type === "percent") {
-    return Math.round(price - (price * item.discount) / 100);
+    discountedPrice = basePrice - (basePrice * item.discount) / 100;
+  } else if (item.discount_type === "amount") {
+    discountedPrice = basePrice - item.discount;
+  } else {
+    return null;
   }
 
-  if (item.discount_type === "amount") {
-    return Math.max(price - item.discount, 0);
-  }
-
-  return null;
+  return Math.max(Math.round(discountedPrice), 0);
 };
 
 export const getFinalPrice = (item, discountMap = {}) => {
-  const discounted = getDiscountedPrice(item, discountMap);
-  return discounted ?? (item.price || item.unit_price);
+  return item.price || item.unit_price || 0;
 };
 
 export const getDiscountPercent = (item, discountMap = {}) => {
-  const base = item.price || item.unit_price;
+  const base = item.mrp || item.price || item.unit_price || 0;
   const discounted = getDiscountedPrice(item, discountMap);
 
   if (!base || !discounted || discounted >= base) return null;

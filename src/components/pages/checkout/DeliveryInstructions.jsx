@@ -18,19 +18,25 @@ export default function DeliveryInstructions({ value = [], onChange }) {
 
   return (
     <div className="checkout-card">
-      <h4>Delivery Instructions</h4>
+      <h4 className="instruction-header-title">Delivery Instructions</h4>
 
       <div className="instruction-list">
-        {DELIVERY_INSTRUCTIONS.map((item) => (
-          <label key={item.key} className="instruction-item">
-            <input
-              type="checkbox"
-              checked={value.includes(item.key)}
-              onChange={() => toggleInstruction(item.key)}
-            />
-            <span>{item.label}</span>
-          </label>
-        ))}
+        {DELIVERY_INSTRUCTIONS.map((item) => {
+          const isActive = value.includes(item.key);
+          return (
+            <label 
+              key={item.key} 
+              className={`instruction-item ${isActive ? "active-item" : ""}`}
+            >
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={() => toggleInstruction(item.key)}
+              />
+              <span>{item.label}</span>
+            </label>
+          );
+        })}
       </div>
     </div>
   );

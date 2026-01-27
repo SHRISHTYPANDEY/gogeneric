@@ -23,7 +23,6 @@ export default function PaymentMethod({
 
   return (
     <div className="checkout-card">
-      {/* PAY USING BUTTON */}
       <button
         type="button"
         className="pay-using-toggle"
@@ -33,7 +32,6 @@ export default function PaymentMethod({
         {value && `• ${methods.find((m) => m.key === value)?.label}`}
       </button>
 
-      {/* PAYMENT OPTIONS */}
       {open && (
         <div className="payment-options">
           {methods.map((m) => (

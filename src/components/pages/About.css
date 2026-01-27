@@ -36,8 +36,6 @@
   border-radius: 50px;
 }
 
-/* ================= CONTENT CARD ================= */
-
 .about-content {
   background: #ffffff;
   padding: 60px;
@@ -47,8 +45,6 @@
   line-height: 1.9;
   color: var(--gg-text-body);
 }
-
-/* ================= HTML CONTENT ================= */
 
 .about-content h1,
 .about-content h2,
@@ -74,14 +70,12 @@
   border-radius: 6px;
 }
 
-/* Paragraph */
 .about-content p {
   font-size: 16.5px;
   margin-bottom: 24px;
   text-align: justify;
 }
 
-/* Lists */
 .about-content ul {
   padding-left: 26px;
   margin-bottom: 28px;
@@ -103,7 +97,6 @@
   font-weight: 700;
 }
 
-/* Divider */
 .about-content hr {
   border: none;
   height: 2px;
@@ -116,7 +109,6 @@
   margin: 45px 0;
 }
 
-/* Images from API */
 .about-content img {
   max-width: 100%;
   height: auto;
@@ -124,7 +116,6 @@
   margin: 28px 0;
 }
 
-/* Tables */
 .about-content table {
   width: 100%;
   border-collapse: collapse;
@@ -140,13 +131,10 @@
   font-size: 15px;
 }
 
-/* Strong text */
 .about-content strong {
   color: var(--gg-primary-dark);
   font-weight: 700;
 }
-
-/* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
   .about-title {

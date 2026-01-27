@@ -8,11 +8,13 @@ import { toast } from "react-hot-toast";
 import WishlistButton from "../WishlistButton";
 import Loader from "../Loader";
 import AddToCartButton from "../CartButton";
+import { decodeId } from "../../utils/idObfuscator";
 
 export default function MedicineDetails() {
-  const { id } = useParams();
-  const location = useLocation();
+  const { hash } = useParams();
+  const id = hash ? decodeId(hash) : null;
 
+  const location = useLocation();
   const detailsAbortRef = useRef(null);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -24,52 +26,55 @@ export default function MedicineDetails() {
 
   const passedPrice = location.state?.price || null;
 
-  /* ---------------- FETCH DETAILS ---------------- */
-  useEffect(() => {
-    fetchMedicineDetails();
-    return () => detailsAbortRef.current?.abort();
-  }, [id]);
-
+  /* ---------------- FETCH MEDICINE ---------------- */
   const fetchMedicineDetails = async () => {
-  // Abort previous request
-  detailsAbortRef.current?.abort();
+    detailsAbortRef.current?.abort();
+    const controller = new AbortController();
+    detailsAbortRef.current = controller;
 
-  const controller = new AbortController();
-  detailsAbortRef.current = controller;
+    try {
+      setLoading(true);
 
-  try {
-    setLoading(true);
+      const res = await api.get(`/api/v1/items/details/${id}`, {
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+        signal: controller.signal,
+      });
 
-    const res = await api.get(`/api/v1/items/details/${id}`, {
-      headers: {
-        zoneId: JSON.stringify([3]),
-        moduleId: 2,
-      },
-      signal: controller.signal,
-    });
+      if (!controller.signal.aborted) {
+        setMedicine(res.data || null);
+      }
+    } catch (err) {
+      if (
+        err.name === "CanceledError" ||
+        err.name === "AbortError" ||
+        err.code === "ERR_CANCELED"
+      ) {
+        return;
+      }
 
-    if (!controller.signal.aborted) {
-      setMedicine(res.data || null);
+      console.error("Medicine fetch error:", err);
+      toast.error("Failed to load medicine details");
+    } finally {
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
-  } catch (err) {
-    if (
-      err.name === "CanceledError" ||
-      err.name === "AbortError" ||
-      err.code === "ERR_CANCELED" ||
-      controller.signal.aborted
-    ) {
+  };
+
+  /* ---------------- MAIN EFFECT ---------------- */
+  useEffect(() => {
+    if (!id) {
+      setLoading(false);
+      toast.error("Invalid medicine link");
       return;
     }
 
-    console.error("Medicine fetch error:", err);
-    toast.error("Failed to load medicine details");
-  } finally {
-    if (!controller.signal.aborted) {
-      setLoading(false);
-    }
-  }
-};
-
+    fetchMedicineDetails();
+    return () => detailsAbortRef.current?.abort();
+  }, [id]);
 
   /* ---------------- IMAGE HANDLING ---------------- */
   useEffect(() => {
@@ -78,8 +83,10 @@ export default function MedicineDetails() {
     const imgs = [];
 
     if (medicine.image_full_url) imgs.push(medicine.image_full_url);
-    if (Array.isArray(medicine.images_full_url))
+
+    if (Array.isArray(medicine.images_full_url)) {
       imgs.push(...medicine.images_full_url);
+    }
 
     if (Array.isArray(medicine.storage)) {
       medicine.storage.forEach((s) => {
@@ -105,14 +112,16 @@ export default function MedicineDetails() {
   const handleTouchEnd = () => {
     const diff = touchStartX.current - touchEndX.current;
 
-    if (diff > 50 && activeIndex < images.length - 1)
+    if (diff > 50 && activeIndex < images.length - 1) {
       setActiveIndex((p) => p + 1);
+    }
 
-    if (diff < -50 && activeIndex > 0)
+    if (diff < -50 && activeIndex > 0) {
       setActiveIndex((p) => p - 1);
+    }
   };
 
-  /* ---------------- PRICE ---------------- */
+  /* ---------------- PRICE LOGIC ---------------- */
   const basePrice =
     passedPrice ||
     medicine?.price ||
@@ -134,9 +143,12 @@ export default function MedicineDetails() {
       ? Math.round(((basePrice - discountedPrice) / basePrice) * 100)
       : null;
 
+  /* ---------------- RENDER ---------------- */
   return (
     <>
-      <ProductSchema medicine={medicine} price={finalPrice} />
+      {medicine && (
+        <ProductSchema medicine={medicine} price={finalPrice} />
+      )}
 
       <div className="med-det-page-container">
         {loading && <Loader text="Loading medicine details..." />}
@@ -147,7 +159,7 @@ export default function MedicineDetails() {
               <WishlistButton item={medicine} />
             </div>
 
-            {/* IMAGE CAROUSEL */}
+            {/* IMAGE SECTION */}
             <div
               className="med-det-left-section"
               onTouchStart={handleTouchStart}

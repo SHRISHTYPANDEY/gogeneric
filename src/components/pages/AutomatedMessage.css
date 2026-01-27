@@ -1,5 +1,3 @@
-/* ================= AUTOMATED MESSAGES PAGE ================= */
-
 .policy-page {
   max-width: 900px;
   margin: 60px auto;
@@ -18,7 +16,6 @@
   position: relative;
 }
 
-/* Luxury accent underline */
 .policy-title::after {
   content: '';
   display: block;
@@ -28,19 +25,13 @@
   margin: 15px auto 0;
   border-radius: 10px;
 }
-
-/* ================= MESSAGE LIST CONTAINER ================= */
-
 .policy-content {
-  list-style: none; /* Default bullets hatane ke liye */
+  list-style: none; 
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-
-/* ================= MESSAGE ITEM (BUBBLE LOOK) ================= */
-
 .policy-content li {
   background: var(--white);
   padding: 20px 25px;
@@ -57,15 +48,12 @@
   gap: 15px;
 }
 
-/* Left Accent Border on Hover */
 .policy-content li:hover {
   transform: translateX(8px);
   border-color: var(--mauve);
   box-shadow: 0 6px 20px rgba(107, 63, 105, 0.1);
   background: #fffafa;
 }
-
-/* Custom Bullet Icon using Mauve Palette */
 .policy-content li::before {
   content: '✦';
   color: var(--mauve);
@@ -73,7 +61,6 @@
   font-weight: bold;
 }
 
-/* ================= EMPTY STATE ================= */
 
 .policy-page > p {
   text-align: center;
@@ -85,7 +72,6 @@
   border: 1.5px dashed var(--dusty-rose);
 }
 
-/* ================= RESPONSIVE ================= */
 
 @media (max-width: 768px) {
   .policy-page {

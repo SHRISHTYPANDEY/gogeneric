@@ -69,14 +69,26 @@ function AppLayout() {
   const [showModal, setShowModal] = useState(false);
   const { showLoginModal, setShowLoginModal } = useAuth();
   const { location, setLocation } = useLocation();
-    useEffect(() => {
-      setShowModal(true);
-  }, []);
+  const MODAL_COOLDOWN = 20 * 60 * 1000; // 20 minutes
 
-  const closeModal = () => {
-    localStorage.setItem("appDownloadDismissed", "true");
-    setShowModal(false);
-  };
+   useEffect(() => {
+  const lastDismissed = localStorage.getItem("appDownloadDismissedAt");
+
+  if (!lastDismissed) {
+    setShowModal(true);
+    return;
+  }
+  const now = Date.now();
+  const diff = now - Number(lastDismissed);
+  if (diff > MODAL_COOLDOWN) {
+    setShowModal(true);
+  }
+}, []);
+
+const closeModal = () => {
+  localStorage.setItem("appDownloadDismissedAt", Date.now().toString());
+  setShowModal(false);
+};
 
   useEffect(() => {
     if (location) return; 
@@ -120,7 +132,6 @@ function AppLayout() {
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/doctors/:id/plans" element={<DoctorPlans />} />
-
         <Route path="/contactus" element={<ContactUs />} />
         <Route
           path="/profile"
@@ -132,8 +143,8 @@ function AppLayout() {
         />
         <Route path="/view-stores/:id" element={<StoreDetails />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/category/:id" element={<CategoryItems />} />
-        <Route path="/medicine/:id" element={<MedicineDetails />} />
+        <Route path="/category/:hash" element={<CategoryItems />} />
+        <Route path="/medicine/:hash" element={<MedicineDetails />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
@@ -160,7 +171,6 @@ function AppLayout() {
         <Route path="/health-concern/:concernSlug" element={<HealthConcern />} />
         <Route path="/health-concerns" element={<HealthCon />} />
       </Routes>
-      {/* ✅ GLOBAL LOGIN MODAL */}
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
       )}

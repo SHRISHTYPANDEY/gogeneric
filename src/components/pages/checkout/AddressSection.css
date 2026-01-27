@@ -1,6 +1,3 @@
-/* ===============================
-   GoGeneric Theme Variables
-================================ */
 :root {
   --gg-primary: #016b61;
   --gg-primary-dark: #014f48;
@@ -21,9 +18,6 @@
   --gg-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* ===============================
-   Checkout Card Wrapper
-================================ */
 .checkout-card {
   background: var(--gg-white);
   border-radius: var(--gg-radius-lg);
@@ -40,9 +34,6 @@
   margin-bottom: 18px;
 }
 
-/* ===============================
-   Address Card
-================================ */
 .address-card {
   display: flex;
   justify-content: space-between;
@@ -69,7 +60,6 @@
   box-shadow: 0 0 0 2px rgba(1, 107, 97, 0.15);
 }
 
-/* Left Content */
 .address-card strong {
   display: block;
   font-size: 13px;
@@ -87,9 +77,6 @@
   line-height: 1.45;
 }
 
-/* ===============================
-   Edit Button
-================================ */
 .edit-btn {
   background: transparent;
   color: var(--gg-primary);
@@ -108,9 +95,6 @@
   color: #fff;
 }
 
-/* ===============================
-   Add Address Button
-================================ */
 .add-address-btn {
   width: 100%;
   margin-top: 14px;
@@ -131,9 +115,6 @@
   background: var(--gg-primary-light);
 }
 
-/* ===============================
-   Address Form
-================================ */
 .address-form {
   margin-top: 22px;
   padding: 22px;
@@ -149,9 +130,6 @@
   margin-bottom: 16px;
 }
 
-/* ===============================
-   Address Type Row
-================================ */
 .address-type-row {
   display: flex;
   gap: 10px;
@@ -185,9 +163,6 @@
   border-color: var(--gg-primary);
 }
 
-/* ===============================
-   Inputs
-================================ */
 .address-form input {
   width: 100%;
   padding: 12px;
@@ -204,16 +179,12 @@
   box-shadow: 0 0 0 3px rgba(1, 107, 97, 0.15);
 }
 
-/* Two Column */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* ===============================
-   Form Actions
-================================ */
 .form-actions {
   display: flex;
   gap: 12px;
@@ -241,7 +212,6 @@
   background: #dddddd;
 }
 
-/* Save / Update */
 .form-actions button:last-child {
   background: var(--gg-primary);
   color: #fff;
@@ -251,9 +221,6 @@
   background: var(--gg-primary-dark);
 }
 
-/* ===============================
-   Responsive
-================================ */
 @media (max-width: 768px) {
   .checkout-card {
     padding: 16px;

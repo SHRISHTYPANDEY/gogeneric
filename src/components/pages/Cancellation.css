@@ -1,8 +1,6 @@
-/* ================= CANCELLATION POLICY PAGE ================= */
-
 .cancel-page {
   max-width: 950px;
-  margin: 60px auto;
+  /* margin: 60px auto; */
   padding: 0 24px;
   min-height: 80vh;
   font-family: var(--font-main);
@@ -18,7 +16,6 @@
   position: relative;
 }
 
-/* Luxury accent underline with Mauve gradient */
 .cancel-title::after {
   content: '';
   display: block;
@@ -29,7 +26,6 @@
   border-radius: 10px;
 }
 
-/* ================= CONTENT CARD WRAPPER ================= */
 
 .cancel-content {
   background: var(--white);
@@ -42,22 +38,19 @@
   word-wrap: break-word;
 }
 
-/* ================= TYPOGRAPHY (HTML FROM API) ================= */
-
 .cancel-content h1, 
 .cancel-content h2, 
 .cancel-content h3 {
-  color: var(--deep-plum);
+  /* color: var(--deep-plum); */
   margin-top: 40px;
   margin-bottom: 15px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
 
-/* Section Sidebar Accent for H2 */
 .cancel-content h2 {
   font-size: 26px;
-  border-left: 5px solid var(--mauve);
+  /* border-left: 5px solid var(--mauve); */
   padding-left: 20px;
   display: flex;
   align-items: center;
@@ -69,16 +62,14 @@
   text-align: justify;
 }
 
-/* Divider Line Fix (for dashes coming from API) */
 .cancel-content hr {
   border: 0;
   height: 2px;
-  background: linear-gradient(to right, transparent, var(--dusty-rose), var(--mauve), var(--dusty-rose), transparent);
+  /* background: linear-gradient(to right, transparent, var(--dusty-rose), var(--mauve), var(--dusty-rose), transparent); */
   margin: 40px 0;
   opacity: 0.7;
 }
 
-/* Lists styling */
 .cancel-content ul, 
 .cancel-content ol {
   padding-left: 25px;
@@ -90,18 +81,16 @@
   position: relative;
 }
 
-/* Bold & Important Text */
 .cancel-content strong {
   color: var(--text-dark);
   font-weight: 700;
 }
 
-/* Links & Support Emails */
 .cancel-content a {
   color: var(--mauve);
   text-decoration: none;
   font-weight: 600;
-  border-bottom: 1.5px dashed var(--dusty-rose);
+  /* border-bottom: 1.5px dashed var(--dusty-rose); */
   transition: 0.3s ease;
 }
 
@@ -110,9 +99,6 @@
   border-bottom-style: solid;
   border-color: var(--deep-plum);
 }
-
-/* ================= EMPTY STATE ================= */
-
 .cancel-page > p {
   text-align: center;
   color: var(--muted-purple);
@@ -120,8 +106,6 @@
   margin-top: 50px;
   font-size: 18px;
 }
-
-/* ================= RESPONSIVE DESIGN ================= */
 
 @media (max-width: 768px) {
   .cancel-page {
@@ -143,6 +127,6 @@
   }
 
   .cancel-content p {
-    text-align: left; /* Mobile readability fix */
+    text-align: left; 
   }
 }

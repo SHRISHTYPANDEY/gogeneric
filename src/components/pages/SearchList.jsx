@@ -18,7 +18,6 @@ import {
 export default function SearchList() {
   const [params] = useSearchParams();
   const query = params.get("query");
-
   const [medicines, setMedicines] = useState([]);
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +73,7 @@ export default function SearchList() {
         },
         signal: abortRef.current.signal,
       });
-      console.log("search api data", res.data);
+      // console.log("search api data", res.data);
 
       const rawItems = res.data?.items || [];
       const rawStores = res.data?.stores || [];

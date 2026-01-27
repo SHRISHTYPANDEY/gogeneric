@@ -7,11 +7,19 @@ import { Search } from "lucide-react";
 import Loader from "../Loader";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
+import { decodeId, encodeId } from "../../utils/idObfuscator";
 
 export default function CategoryItems() {
-  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { hash } = useParams();
+  const id = hash ? decodeId(hash) : null;
+
+  useEffect(() => {
+    if (!id) {
+      navigate("/category");
+    }
+  }, [id, navigate]);
 
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -20,6 +28,7 @@ export default function CategoryItems() {
 
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
+  const requestIdRef = useRef(0);
 
   const categoryName =
     location.state?.categoryName || "Category Products";
@@ -38,41 +47,42 @@ export default function CategoryItems() {
     setIsLoading(true);
   }, [id]);
 
- const requestIdRef = useRef(0);
+  const fetchCategoryItems = useCallback(async () => {
+    if (!id) return;
 
-const fetchCategoryItems = useCallback(async () => {
-  const requestId = ++requestIdRef.current;
+    const requestId = ++requestIdRef.current;
 
-  try {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    const res = await api.get(`/api/v1/categories/items/${id}`, {
-      params: { limit: 20, offset: 1 },
-      headers: {
-        zoneId: JSON.stringify([3]),
-        moduleId: 2,
-      },
-    });
+      const res = await api.get(`/api/v1/categories/items/${id}`, {
+        params: { limit: 20, offset: 1 },
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: 2,
+        },
+      });
 
-    if (requestId !== requestIdRef.current) return;
+      if (requestId !== requestIdRef.current) return;
 
-    const data =
-      res.data?.items ||
-      res.data?.products ||
-      [];
+      const data =
+        res.data?.items ||
+        res.data?.products ||
+        [];
 
-    setItems(data);
-    setFilteredItems(data);
-  } catch (err) {
-    if (requestId === requestIdRef.current) {
-      console.error("Category items error:", err);
+      setItems(data);
+      setFilteredItems(data);
+    } catch (err) {
+      if (requestId === requestIdRef.current) {
+        console.error("Category items error:", err);
+      }
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setIsLoading(false);
+      }
     }
-  } finally {
-    if (requestId === requestIdRef.current) {
-      setIsLoading(false);
-    }
-  }
-}, [id]);
+  }, [id]);
+
   useEffect(() => {
     fetchCategoryItems();
   }, [fetchCategoryItems]);
@@ -109,9 +119,10 @@ const fetchCategoryItems = useCallback(async () => {
 
   return (
     <div className="category-items-page">
-      {/* 🔹 HEADER */}
       <div className="category-header">
-        <h2 className="page-title">Best Medicines for {categoryName}</h2>
+        <h2 className="page-title">
+          Best Medicines for {categoryName}
+        </h2>
 
         <div className="search-box">
           <Search size={16} />
@@ -135,7 +146,7 @@ const fetchCategoryItems = useCallback(async () => {
               key={item.id}
               className={`item-card grad-${(index % 8) + 1}`}
               onClick={() =>
-                navigate(`/medicine/${item.id}`, {
+                navigate(`/medicine/${encodeId(item.id)}`, {
                   state: {
                     price: item.price,
                     store_id: item.store_id,
@@ -145,14 +156,19 @@ const fetchCategoryItems = useCallback(async () => {
             >
               <WishlistButton item={item} />
               <AddToCartButton item={item} />
-<div className="card-img-wrapper">
-    <img src={cleanImageUrl(item.image_full_url)} alt={item.name} />
-  </div>
-            <div className="card-content">
-    <h4>{item.name}</h4>
-    <p className="price">₹{item.price}</p>
-  </div>
-</div>
+
+              <div className="card-img-wrapper">
+                <img
+                  src={cleanImageUrl(item.image_full_url)}
+                  alt={item.name}
+                />
+              </div>
+
+              <div className="card-content">
+                <h4>{item.name}</h4>
+                <p className="price">₹{item.price}</p>
+              </div>
+            </div>
           ))}
         </div>
       )}

@@ -19,9 +19,6 @@
 
   --shadow-soft: 0 10px 25px rgba(1, 107, 97, 0.1);
 }
-
-/* ================= BLOG PAGE ================= */
-
 .blog-page {
   max-width: 1000px;
   margin: 0 auto;
@@ -42,9 +39,6 @@
   flex-direction: column;
   gap: 40px;
 }
-
-/* ================= BLOG CARD ================= */
-
 .blog-card {
   display: flex;
   gap: 40px;
@@ -54,9 +48,6 @@
   box-shadow: var(--shadow-soft);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-/* 🎨 DIFFERENT BACKGROUNDS */
-
 .blog-card:nth-child(3n + 1) {
   background: var(--card-bg-1);
   border: 1.5px solid var(--card-border-1);
@@ -76,9 +67,6 @@
   transform: translateY(-4px);
   box-shadow: 0 16px 35px rgba(1, 107, 97, 0.2);
 }
-
-/* ================= IMAGE ================= */
-
 .blog-image {
   width: 320px;
   height: 200px;
@@ -98,8 +86,6 @@
 .blog-image:hover img {
   transform: scale(1.1);
 }
-
-/* ================= CONTENT ================= */
 
 .blog-content {
   flex: 1;
@@ -130,9 +116,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* ================= READ MORE BUTTON ================= */
-
 .read-more {
   display: inline-block;
   padding: 12px 30px;
@@ -156,9 +139,6 @@
   box-shadow: 0 10px 28px rgba(1, 107, 97, 0.35);
   text-decoration: none;
 }
-
-/* ================= RESPONSIVE ================= */
-
 @media (max-width: 850px) {
   .blog-card {
     flex-direction: column;

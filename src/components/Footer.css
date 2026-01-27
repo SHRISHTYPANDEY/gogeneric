@@ -1,5 +1,4 @@
 .ak-footer-container {
-  /* Background color updated to Dark Teal */
   background: #013631; 
   padding: 100px 20px 40px;
   display: flex;
@@ -7,7 +6,6 @@
   align-items: center;
 }
 
-/* 🔹 1. TOP CTA BOX (Floating Part) */
 .ak-footer-cta {
   text-align: center;
   margin-bottom: -65px; 
@@ -16,7 +14,6 @@
 }
 
 .cta-icon {
-  /* Icon background updated to match Primary Teal */
   background: #016B61; 
   color: white;
   width: 55px;
@@ -33,13 +30,13 @@
 .ak-footer-cta h2 {
   font-size: 38px;
   font-weight: 800;
-  color: #ffffff; /* White text for dark background */
+  color: #ffffff; 
   margin-bottom: 12px;
   letter-spacing: -1px;
 }
 
 .ak-footer-cta p {
-  color: #9ECFD4; /* Soft teal for readability */
+  color: #9ECFD4;
   margin-bottom: 25px;
   font-weight: 500;
 }
@@ -63,7 +60,6 @@
   transform: translateY(-3px);
 }
 
-/* 🔹 2. WHITE FOOTER CARD */
 .ak-footer-card {
   background: #edf9ec;
   width: 100%;
@@ -85,7 +81,7 @@
 .ak-footer-widget-heading {
   font-size: 18px;
   font-weight: 800;
-  color: #013631; /* Dark Teal Heading */
+  color: #013631; 
   margin-bottom: 25px;
   position: relative;
 }
@@ -97,7 +93,7 @@
   bottom: -8px;
   width: 30px;
   height: 3px;
-  background: #016B61; /* Teal Underline */
+  background: #016B61; 
   border-radius: 2px;
 }
 
@@ -112,7 +108,7 @@
 
 .ak-footer-links li a {
   text-decoration: none;
-  color: #4b5563; /* Muted Grey-Teal */
+  color: #4b5563;
   font-weight: 600;
   font-size: 15px;
   transition: 0.3s ease;
@@ -123,7 +119,6 @@
   padding-left: 5px;
 }
 
-/* 🔹 3. SOCIAL ICONS */
 .ak-footer-social-icon {
   display: flex;
   gap: 15px;
@@ -132,7 +127,7 @@
 
 .ak-footer-social-icon a {
   color: #013631;
-  background: #f0fdfa; /* Very light teal tint */
+  background: #f0fdfa; 
   width: 40px;
   height: 40px;
   display: flex;
@@ -149,7 +144,6 @@
   transform: translateY(-5px) scale(1.1);
 }
 
-/* 🔹 4. BOTTOM BAR */
 .ak-bottom-bar {
   display: flex;
   justify-content: space-between;

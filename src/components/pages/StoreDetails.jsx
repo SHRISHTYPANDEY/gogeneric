@@ -56,8 +56,9 @@ const handlePrescriptionFile = (e) => {
       const res = await api.get(`/api/v1/stores/details/${id}`, {
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-      setStore(res.data);
       // console.log("store api data", res.data);
+      setStore(res.data);
+      
     } catch {
       toast.error("Failed to load store");
     } finally {
@@ -110,28 +111,45 @@ const handlePrescriptionFile = (e) => {
     }
   };
 
-  const fetchProducts = async (pageNumber) => {
-    try {
-      setProductsLoading(true);
-      const res = await api.get("/api/v1/items/latest", {
-        params: {
-          store_id: id,
-          category_id: store.category_details?.[0]?.id || 1,
-          limit: 20,
-          offset: pageNumber,
-        },
-        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
-      });
+ const fetchProducts = async (pageNumber) => {
+  try {
+    setProductsLoading(true);
 
-      const newProducts = res.data.products || res.data.items || [];
-      setProducts((prev) =>
-        pageNumber === 1 ? newProducts : [...prev, ...newProducts]
-      );
-      setHasMore(newProducts.length === 20);
-    } finally {
-      setProductsLoading(false);
-    }
-  };
+    const res = await api.get("/api/v1/items/latest", {
+      params: {
+        store_id: id,
+        category_id: store.category_details?.[0]?.id || 1,
+        limit: 20,
+        offset: pageNumber,
+      },
+      headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+    });
+
+    // console.log("LATEST PRODUCTS API RESPONSE 👉", res.data);
+
+    const newProducts = res.data.products || res.data.items || [];
+
+    // console.log("NEW PRODUCTS (page " + pageNumber + ") 👉", newProducts);
+
+    setProducts((prev) => {
+  const merged = pageNumber === 1
+    ? newProducts
+    : [...prev, ...newProducts];
+
+  const uniqueMap = new Map();
+  merged.forEach((item) => {
+    uniqueMap.set(item.id, item); 
+  });
+
+  return Array.from(uniqueMap.values());
+});
+
+
+    setHasMore(newProducts.length === 20);
+  } finally {
+    setProductsLoading(false);
+  }
+};
 
   const fetchDiscountedProducts = async () => {
     try {
@@ -149,7 +167,7 @@ const handlePrescriptionFile = (e) => {
       });
       setDiscountMap(map);
     } catch {}
-  };
+  };''
 
   const getDiscountedPrice = (item) => {
     if (discountMap[item.id]) return discountMap[item.id];
@@ -217,6 +235,7 @@ const handlePrescriptionFile = (e) => {
   );
 
   if (loading) return <Loader text="Loading store details..." />;
+
   if (!store) return <div>Store not found</div>;
 
   return (
@@ -308,11 +327,11 @@ const handlePrescriptionFile = (e) => {
             ))}
           </div>
 
-          {productsLoading && hasMore && (
-            <div className="sd-scroll-loader">
-              <Loader text="Loading more products..." />
-            </div>
-          )}
+    {productsLoading && (
+  <div className="sd-products-loader">
+    <Loader text="Loading more products..." inline />
+  </div>
+)}
 
           {hasMore && <div id="scroll-sentinel" style={{ height: 1 }} />}
         </>

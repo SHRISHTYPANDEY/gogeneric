@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { cleanImageUrl } from "../../utils";
-import {
-  ArrowLeft,
-  Phone,
-  Mail,
-  PackageSearch,
-} from "lucide-react";
+import { ArrowLeft, Phone, Mail, PackageSearch } from "lucide-react";
 import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
 import toast from "react-hot-toast";
@@ -39,8 +34,7 @@ export default function OrderDetails() {
           ...(!token && guestId ? { guest_id: guestId } : {}),
         },
       });
-
-      // console.log("ORDER DETAILS RESPONSE 👉", res.data);
+      console.log("orderrrr detailssssss", res);
       setDetails(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Order details error:", err);
@@ -56,28 +50,30 @@ export default function OrderDetails() {
 
   const orderInfo = details[0];
 
-  /* ---------------- CALCULATIONS ---------------- */
-  const itemTotal = details.reduce(
-    (sum, item) => sum + Number(item.price) * Number(item.quantity),
-    0
-  );
+  const store =
+    orderInfo?.store ||
+    orderInfo?.store_details ||
+    orderInfo?.item_details?.store ||
+    null;
+  const hasItems = details.some((d) => d.item_details);
+
+  const itemTotal = hasItems
+    ? details.reduce(
+        (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0),
+        0
+      )
+    : 0;
 
   const deliveryFee = Number(orderInfo.delivery_charge ?? 0);
   const discount = Number(orderInfo.total_discount ?? 0);
   const totalPayable = Number(orderInfo.order_amount ?? itemTotal);
-
-  /* ---------------- HANDLERS ---------------- */
   const handleTrackOrder = () => {
     if (!orderInfo?.order_id) return;
     navigate(`/orders/${orderInfo.order_id}/track`);
   };
 
-const store = details[0]?.item_details?.store;
-
-
   return (
     <div className="order-details-page">
-      {/* HEADER */}
       <header className="order-details-header">
         <button onClick={() => navigate(-1)} className="back-btn">
           <ArrowLeft size={18} />
@@ -85,12 +81,10 @@ const store = details[0]?.item_details?.store;
         <h3>Order #{orderInfo.order_id}</h3>
       </header>
 
-      {/* STATUS */}
       <div className={`order-status ${orderInfo.order_status}`}>
         {orderInfo.order_status}
       </div>
 
-      {/* GENERAL INFO */}
       <div className="order-section">
         <h4>General Info</h4>
         <p><strong>Order ID:</strong> #{orderInfo.order_id}</p>
@@ -112,78 +106,88 @@ const store = details[0]?.item_details?.store;
         </p>
       </div>
 
-      {/* STORE */}
-{store && (
-  <div className="order-section store-section">
-    <h4>Store</h4>
+      {store && (
+        <div className="order-section store-section">
+          <h4>Store</h4>
 
-    <div className="store-info">
-     <img
-  src={cleanImageUrl(store?.logo_full_url)}
-  alt={store?.name || "Store"}
-  className="store-logo"
-  onError={(e) => {
-    // console.error("STORE IMAGE FAILED 👉", store?.logo_full_url);
-    e.currentTarget.src = "/images/store-placeholder.png";
-  }}
-/>
+          <div className="store-info">
+            <img
+              src={cleanImageUrl(store.logo_full_url)}
+              alt={store.name || "Store"}
+              className="store-logo"
+              onError={(e) => {
+                e.currentTarget.src = "/images/store-placeholder.png";
+              }}
+            />
 
+            <div>
+              <p className="store-name">{store.name}</p>
 
-      <div>
-        <p className="store-name">{store.name}</p>
+              {store.phone && (
+                <p className="store-contact">
+                  <Phone size={14} /> {store.phone}
+                </p>
+              )}
 
-        {store.phone && (
-          <p className="store-contact">
-            <Phone size={14} /> {store.phone}
-          </p>
-        )}
-
-        {store.email && (
-          <p className="store-contact">
-            <Mail size={14} /> {store.email}
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
-)}
-
-
-      {/* ITEMS */}
-      <div className="order-section">
-        <h4>Items</h4>
-
-        {details.map((item) => (
-          <div key={item.id} className="order-item">
-            <div className="item-info">
-              <strong>{item.item_details?.name}</strong>
-
-              {/* VARIATION SAFE PARSE */}
-              {item.variation && (() => {
-                try {
-                  const parsed =
-                    typeof item.variation === "string"
-                      ? JSON.parse(item.variation)
-                      : item.variation;
-
-                  return parsed?.[0]?.type ? (
-                    <div className="variation">{parsed[0].type}</div>
-                  ) : null;
-                } catch {
-                  return null;
-                }
-              })()}
-            </div>
-
-            <div className="item-meta">
-              <span>Qty: {item.quantity}</span>
-              <span>₹{item.price}</span>
+              {store.email && (
+                <p className="store-contact">
+                  <Mail size={14} /> {store.email}
+                </p>
+              )}
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      {/* DELIVERY ADDRESS */}
+      {hasItems && (
+        <div className="order-section">
+          <h4>Items</h4>
+
+          {details.map((item) => (
+            <div key={item.id} className="order-item">
+              <div className="item-info">
+                <strong>{item.item_details?.name}</strong>
+
+                {item.variation && (() => {
+                  try {
+                    const parsed =
+                      typeof item.variation === "string"
+                        ? JSON.parse(item.variation)
+                        : item.variation;
+
+                    return parsed?.[0]?.type ? (
+                      <div className="variation">{parsed[0].type}</div>
+                    ) : null;
+                  } catch {
+                    return null;
+                  }
+                })()}
+              </div>
+
+              <div className="item-meta">
+                <span>Qty: {item.quantity}</span>
+                <span>₹{item.price}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {orderInfo.order_attachment && (
+        <div className="order-section">
+          <h4>Prescription</h4>
+
+          <a
+            href={cleanImageUrl(orderInfo.order_attachment)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="prescription-link"
+          >
+            View Uploaded Prescription
+          </a>
+        </div>
+      )}
+
       {orderInfo.delivery_address && (
         <div className="order-section">
           <h4>Delivery Address</h4>
@@ -193,24 +197,27 @@ const store = details[0]?.item_details?.store;
         </div>
       )}
 
-      {/* ORDER SUMMARY */}
       <div className="order-section">
         <h4>Order Summary</h4>
 
-        <div className="summary-row">
-          <span>Item Total</span>
-          <span>₹{itemTotal}</span>
-        </div>
+        {hasItems && (
+          <div className="summary-row">
+            <span>Item Total</span>
+            <span>₹{itemTotal}</span>
+          </div>
+        )}
 
         <div className="summary-row">
           <span>Delivery Fee</span>
           <span>₹{deliveryFee}</span>
         </div>
 
-        <div className="summary-row">
-          <span>Discount</span>
-          <span>- ₹{discount}</span>
-        </div>
+        {discount > 0 && (
+          <div className="summary-row">
+            <span>Discount</span>
+            <span>- ₹{discount}</span>
+          </div>
+        )}
 
         <div className="summary-row total">
           <strong>Total Amount</strong>
@@ -218,7 +225,6 @@ const store = details[0]?.item_details?.store;
         </div>
       </div>
 
-      {/* ACTIONS */}
       <div className="order-actions">
         <button className="track-btn" onClick={handleTrackOrder}>
           <PackageSearch size={16} /> Track Order

@@ -1,4 +1,3 @@
-/* ===== Root Colors ===== */
 :root {
   --primary: #016B61;
   --primary-light: #e6f4f2;
@@ -9,12 +8,10 @@
   --bg: #f4f8f7;
 }
 
-/* ===== Container ===== */
 .checkout-container {
   max-width: 1200px;
   margin: auto;
   padding: 30px 16px;
-  /* background: var(--bg); */
   min-height: 100vh;
   font-family: "Inter", sans-serif;
 }
@@ -46,14 +43,12 @@
 
   border-radius: 4px; 
 }
-/* ===== Layout ===== */
 .checkout-layout {
   display: flex;
   gap: 24px;
   align-items: flex-start;
 }
 
-/* ===== Left Column ===== */
 .checkout-left {
   flex: 1;
   display: flex;
@@ -61,7 +56,6 @@
   gap: 20px;
 }
 
-/* ===== Card Style ===== */
 .checkout-left > div {
   background: #fff;
   padding: 20px;
@@ -70,14 +64,12 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
-/* ===== Right Column (Bill Summary) ===== */
 .checkout-right {
   width: 360px;
   position: sticky;
   top: 16px;
 }
 
-/* ===== Section Headings ===== */
 .checkout-left h3,
 .checkout-right h3 {
   font-size: 18px;
@@ -86,7 +78,6 @@
   margin-bottom: 14px;
 }
 
-/* ===== Policy Section ===== */
 .policy-consent {
   background: #fff;
   border: 1px dashed var(--border);
@@ -108,7 +99,6 @@
   text-decoration: none;
 }
 
-/* ===== Place Order Button ===== */
 .place-order-btn {
   width: 100%;
   padding: 16px;
@@ -132,7 +122,6 @@
   cursor: not-allowed;
 }
 
-/* ===== Payment Status Text ===== */
 .payment-success-text {
   margin-top: 8px;
   font-size: 14px;
@@ -140,14 +129,12 @@
   font-weight: 600;
 }
 
-/* ===== Wallet Balance ===== */
 .wallet-text {
   margin-top: 6px;
   font-size: 14px;
   font-weight: 600;
 }
 
-/* ===== Loader Overlay ===== */
 .checkout-loader-overlay {
   position: fixed;
   inset: 0;
@@ -165,7 +152,6 @@
   color: var(--primary);
 }
 
-/* ===== Mobile Responsive ===== */
 @media (max-width: 992px) {
   .checkout-layout {
     flex-direction: column;

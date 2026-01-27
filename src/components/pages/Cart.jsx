@@ -166,7 +166,7 @@ export default function Cart() {
             <br />
             items to continue.
           </p>
-          <button className="explore-btn" onClick={() => navigate("/")}>
+          <button className="explore-btn1" onClick={() => navigate("/")}>
             Browse Medicines
           </button>
         </div>
