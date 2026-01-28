@@ -17,6 +17,7 @@ import ReviewPopup from "../ReviewPopup";
 import RepublicDayPopup from "../RepublicDayPopup";
 import api from "../../api/axiosInstance";
 import ServiceCard from "../ServiceCard";
+import PlaystoreBanner from "../PlaystoreBanner";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -135,6 +136,7 @@ const handleLater = () => {
         <Highlights />
         <VisitAgain />
         <FeaturedStores />
+        <PlaystoreBanner />
         <Stores />
         <Footer />
       </div>

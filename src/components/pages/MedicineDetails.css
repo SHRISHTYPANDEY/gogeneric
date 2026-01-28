@@ -119,3 +119,9 @@
     max-width: 400px;
   }
 }
+.med-det-store-name {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}

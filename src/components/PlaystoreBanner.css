@@ -1,0 +1,132 @@
+.playstore-banner-wrapper {
+  width: 100%;
+  padding: clamp(20px, 4vw, 52px) 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 145, 116, 0.1),
+    rgba(12, 145, 116, 0)
+  );
+}
+
+.playstore-banner {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: clamp(14px, 2vw, 22px);
+
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  animation: softPulse 6s ease-in-out infinite;
+  transition:
+    transform 0.45s cubic-bezier(.22,.61,.36,1),
+    box-shadow 0.45s ease;
+}
+
+.playstore-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.playstore-banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  animation: shineSweep 3.8s ease-in-out infinite;
+  z-index: 2;
+}
+
+.playstore-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(
+    120deg,
+    rgba(12,145,116,0.45),
+    rgba(0,0,0,0),
+    rgba(12,145,116,0.45)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.7;
+  z-index: 3;
+  pointer-events: none;
+}
+
+@keyframes shineSweep {
+  0% { left: -130%; }
+  55% { left: 130%; }
+  100% { left: 130%; }
+}
+
+@keyframes softPulse {
+  0%, 100% {
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    box-shadow:
+      0 16px 36px rgba(12,145,116,0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .playstore-banner:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow:
+      0 24px 48px rgba(12,145,116,0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .playstore-banner:hover::after {
+    animation-duration: 2.6s;
+  }
+}
+
+@media (max-width: 1024px) {
+  .playstore-banner-wrapper {
+    padding: 28px 14px;
+  }
+}
+@media (max-width: 640px) {
+  .playstore-banner-wrapper {
+    padding: 20px 10px;
+  }
+
+  .playstore-banner {
+    border-radius: 16px;
+    animation-duration: 7s;
+  }
+
+  .playstore-banner::after {
+    animation-duration: 6s;
+  }
+}

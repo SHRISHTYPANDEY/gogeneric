@@ -47,8 +47,7 @@ export default function Navbar() {
   const [categories, setCategories] = useState([]);
   const [pharmacies, setPharmacies] = useState([]);
   const [labs, setLabs] = useState([]);
-
-
+  const [openDropdown, setOpenDropdown] = useState(null);
 useEffect(() => {
   api.get("/api/v1/categories")
     .then((res) => setCategories(res.data || []))
@@ -129,24 +128,43 @@ useEffect(() => {
                 </div>
               </div>
             </li>
-          <li className="category-dropdown-container">
-              <Link to="/pharmacy" className="category-trigger">Pharmacy</Link>
-              <div className="mega-dropdown">
-                <div className="dropdown-inner-grid">
-                  {pharmacies.map((store) => (
-                    <div key={store.id} className="dropdown-card" onClick={() => {
-                      navigate(`/view-stores/${store.id}`);
-                      closeMenu();
-                    }}>
-                      <div className="dropdown-circle-img">
-                        <img src={cleanImageUrl(store.logo_full_url)} alt={store.name} />
-                      </div>
-                      <span className="dropdown-cat-name">{store.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </li>
+          <li
+  className="category-dropdown-container"
+  onMouseEnter={() => setOpenDropdown("pharmacy")}
+  onMouseLeave={() => setOpenDropdown(null)}
+>
+  <Link to="/pharmacy" className="category-trigger">
+    Pharmacy
+  </Link>
+
+  {openDropdown === "pharmacy" && (
+    <div className="mega-dropdown">
+      <div className="dropdown-inner-grid">
+        {pharmacies.map((store) => (
+          <div
+            key={store.id}
+            className="dropdown-card"
+            onClick={() => {
+              navigate(`/view-stores/${store.id}`);
+              setOpenDropdown(null);
+            }}
+          >
+            <div className="dropdown-circle-img">
+              <img
+                src={cleanImageUrl(store.logo_full_url)}
+                alt={store.name}
+              />
+            </div>
+            <span className="dropdown-cat-name">
+              {store.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+</li>
+
           <li className="category-dropdown-container">
   <Link to="/labs" className="category-trigger">Labs</Link>
 

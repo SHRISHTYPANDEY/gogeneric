@@ -1,13 +1,13 @@
-  import { useNavigate } from "react-router-dom";
-  import { doctors } from "../../data/Doctor";
-  import "./Doctors.css"; 
+import { useNavigate } from "react-router-dom";
+import { doctors } from "../../data/Doctor";
+import "./Doctors.css";
 import Footer from "../Footer";
 
-  export default function Doctors() {
-    const navigate = useNavigate();
+export default function Doctors() {
+  const navigate = useNavigate();
 
-    return (
-      <>
+  return (
+    <>
       <div className="doctors-container">
         <div className="doctors-wrapper">
           <h1 className="doctors-title">Our Certified Doctors</h1>
@@ -38,6 +38,6 @@ import Footer from "../Footer";
         </div>
       </div>
       <Footer />
-      </>
-    );
-  }
+    </>
+  );
+}

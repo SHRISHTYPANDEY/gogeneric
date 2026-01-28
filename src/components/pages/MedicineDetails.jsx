@@ -198,6 +198,12 @@ export default function MedicineDetails() {
             {/* RIGHT SECTION */}
             <div className="med-det-right-section">
               <h1 className="med-det-title">{medicine.name}</h1>
+              {(medicine.store_name || medicine.store?.name) && (
+  <p className="med-det-store-name">
+    {medicine.store_name || medicine.store?.name}
+  </p>
+)}
+
 
               <div className="med-det-price-container">
                 {discountedPrice ? (

@@ -56,11 +56,22 @@ export default function Pharmacy() {
     }
   };
 
-  const filteredStores = stores.filter(
-    (store) =>
-      store?.id !== 74 &&
-      (store?.name || "").toLowerCase().includes(search.toLowerCase())
-  );
+const filteredStores = stores.filter((store) => {
+  if (store?.id === 74) return false;
+
+  const searchText = search.toLowerCase();
+
+  const nameMatch = (store?.name || "")
+    .toLowerCase()
+    .includes(searchText);
+
+  const addressMatch = (store?.address || "")
+    .toLowerCase()
+    .includes(searchText);
+
+  return nameMatch || addressMatch;
+});
+
 
   if (loading) {
     return (

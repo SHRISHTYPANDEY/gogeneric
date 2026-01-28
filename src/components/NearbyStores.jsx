@@ -7,6 +7,8 @@ import AddToCartButton from "./CartButton";
 import Loader from "./Loader";
 import WishlistButton from "./WishlistButton";
 import useDiscounts from "../hooks/useDiscounts";
+import { encodeId } from "../utils/idObfuscator";
+
 import {
   getDiscountedPrice,
   getFinalPrice,
@@ -31,14 +33,32 @@ export default function NearbyStores() {
       abortRef.current = new AbortController();
       setLoading(true);
 
-      const res = await api.get("/api/v1/items/basic", {
-        params: { limit: 20, offset: 0 },
-        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
-        signal: abortRef.current.signal,
-      });
+      let allItems = [];
+      let offset = 0;
+      const limit = 50;
+      let hasMore = true;
+      let categoriesSet = false;
 
-      setStores(res.data.items || res.data.products || []);
-      setCategories(res.data.categories || res.data.filters || []);
+      while (hasMore) {
+        const res = await api.get("/api/v1/items/basic", {
+          params: { limit, offset },
+          headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+          signal: abortRef.current.signal,
+        });
+
+        const items = res.data.items || res.data.products || [];
+        allItems = [...allItems, ...items];
+
+        if (!categoriesSet) {
+          setCategories(res.data.categories || res.data.filters || []);
+          categoriesSet = true;
+        }
+
+        hasMore = items.length === limit;
+        offset += limit;
+      }
+
+      setStores(allItems);
     } catch (err) {
       if (err.name !== "CanceledError") console.error(err);
     } finally {
@@ -68,6 +88,7 @@ export default function NearbyStores() {
         <Loader text="Loading medicines..." />
       ) : (
         <>
+          {/* FILTERS */}
           <div className="nearby-filters">
             <button
               className={`nearby-filter-btn ${
@@ -91,6 +112,7 @@ export default function NearbyStores() {
             ))}
           </div>
 
+          {/* LIST */}
           <div className="nearby-wrapper" ref={scrollRef}>
             <div className="nearby-scroll">
               {filteredStores.length === 0 ? (
@@ -110,7 +132,13 @@ export default function NearbyStores() {
                     <div
                       className="store-card"
                       key={store.id}
-                      onClick={() => navigate(`/medicine/${store.id}`)}
+                      onClick={() =>
+                        navigate(`/medicine/${encodeId(store.id)}`, {
+                          state: {
+                            price: getFinalPrice(store, discountMap),
+                          },
+                        })
+                      }
                     >
                       <div
                         className="top-actions"
@@ -138,7 +166,9 @@ export default function NearbyStores() {
                         />
                       </div>
 
-                      <h4>{store.name}</h4>
+                      <h4 className="medicine-name">{store.name}</h4>
+
+                      <p className="storee-name">{store.store_name}</p>
 
                       <div className="card-footer">
                         <div className="price-box">

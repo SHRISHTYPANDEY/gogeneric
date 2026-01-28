@@ -13,7 +13,8 @@
   background: var(--text-main);
   /* border-bottom: var(--border-soft); */
   padding: 0 40px;
-  height: 90px;
+  min-height: 90px;
+  height: auto;
   display: flex;
   align-items: center;
   position: sticky;
@@ -54,7 +55,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: var(--transition-smooth);
-  max-width: 400px;
+  max-width: 500px;
   margin-left: 20px;
 }
 
@@ -65,12 +66,13 @@
 
 .location-trigger .text-sm {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: white;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 250px;
+  text-overflow: unset;
+  max-width: 400px;
+  line-height: 1.4;
 }
 
 .download-app-btn {
@@ -157,7 +159,7 @@
   .topheader-wrapper > div { flex-direction: column; gap: 10px; }
   .location-trigger { margin-left: 0; max-width: 100%; width: 100%; order: 3; }
   .flex.items-center.gap-6 { width: 100%; justify-content: space-between; order: 2; }
-  .download-app-btn { display: none; }
+  /* .download-app-btn { display: none; } */
 }
 
 @media (max-width: 480px) {
