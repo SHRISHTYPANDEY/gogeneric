@@ -1,9 +1,27 @@
 import { useState } from "react";
 import "./LoginModal.css";
 import api from "../../api/axiosInstance";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
 import { Eye, EyeOff, Mail, Phone, User, Lock, ArrowLeft } from "lucide-react";
+
+/* 🔔 SweetAlert helper */
+const showAlert = (icon, title, text = "") => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    showConfirmButton: false,
+    timer: 2200,
+    backdrop: "rgba(0,0,0,0.6)",
+
+    customClass: {
+      popup: "gg-swal-popup",
+      backdrop: "gg-swal-backdrop",
+    },
+  });
+};
+
 
 export default function LoginModal({ onClose }) {
   const [isSignup, setIsSignup] = useState(false);
@@ -24,65 +42,68 @@ export default function LoginModal({ onClose }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const { login } = useAuth();
+
   const resetFields = () => {
     setPassword("");
     setConfirmPassword("");
   };
+
   const handleSignup = async () => {
     if (!name || !email || !phone || !password || !confirmPassword) {
-      toast.error("All fields are required");
+      showAlert("error", "Missing Fields", "All fields are required");
       return;
     }
+
     const formattedPhone = phone.startsWith("+91") ? phone : `+91${phone}`;
     if (!/^\+91\d{10}$/.test(formattedPhone)) {
-      toast.error("Phone must be 10 digits");
+      showAlert("error", "Invalid Phone", "Phone must be 10 digits");
       return;
     }
+
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      showAlert("error", "Password Mismatch");
       return;
     }
+
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
     if (!passwordRegex.test(password)) {
-      toast.error(
-        "Password must be at least 8 characters and include uppercase, lowercase, number & special character"
+      showAlert(
+        "error",
+        "Weak Password",
+        "Use uppercase, lowercase, number & special character"
       );
       return;
     }
+
     try {
-      const res = await api.post("/api/v1/auth/sign-up", {
+      await api.post("/api/v1/auth/sign-up", {
         name,
         email,
         phone: formattedPhone,
         password,
       });
-      const apiUser = res.data?.data;
-      const normalizedUser = {
-        id: apiUser?.id,
-        name: apiUser?.name,
-        email: apiUser?.email,
-        phone: apiUser?.phone,
-      };
-      toast.success("Signup successful! Please login to continue ");
+
+      showAlert("success", "Signup Successful", "Please login to continue");
       setIsSignup(false);
-      setPassword("");
-      setConfirmPassword("");
+      resetFields();
     } catch (err) {
       const errors = err?.response?.data?.errors;
-      if (errors?.length) {
-        toast.error(errors[0].message);
-      } else {
-        toast.error(err?.response?.data?.message || "Signup failed");
-      }
+      showAlert(
+        "error",
+        "Signup Failed",
+        errors?.[0]?.message || err?.response?.data?.message
+      );
     }
   };
 
   const handleLogin = async () => {
     if (!identifier || !password) {
-      toast.error("Email/Phone & Password required");
+      showAlert("error", "Missing Credentials");
       return;
     }
+
     const guestId = localStorage.getItem("guest_id");
     const isEmail = identifier.includes("@");
     const formattedIdentifier = isEmail
@@ -90,6 +111,7 @@ export default function LoginModal({ onClose }) {
       : identifier.startsWith("+91")
       ? identifier
       : `+91${identifier}`;
+
     try {
       const res = await api.post("/api/v1/auth/login", {
         login_type: "manual",
@@ -98,25 +120,33 @@ export default function LoginModal({ onClose }) {
         password,
         guest_id: guestId,
       });
+
       const apiUser = res.data?.user || res.data;
-      const normalizedUser = {
-        id: apiUser?.id,
-        name: apiUser?.name || "",
-        email: apiUser?.email,
-        phone: apiUser?.phone || null,
-      };
-      login(normalizedUser, res.data?.token);
-      toast.success(`Welcome ${normalizedUser.name}`);
+      login(
+        {
+          id: apiUser?.id,
+          name: apiUser?.name || "",
+          email: apiUser?.email,
+          phone: apiUser?.phone || null,
+        },
+        res.data?.token
+      );
+
+      showAlert("success", "Welcome Back", apiUser?.name);
       localStorage.setItem("location_allowed", "true");
       onClose();
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Login failed");
+      showAlert(
+        "error",
+        "Login Failed",
+        err?.response?.data?.message || "Invalid credentials"
+      );
     }
   };
 
   const handleForgotPassword = async () => {
     if (!forgotValue) {
-      toast.error("Phone number is required");
+      showAlert("error", "Phone Required");
       return;
     }
 
@@ -125,67 +155,48 @@ export default function LoginModal({ onClose }) {
       : `+91${forgotValue}`;
 
     try {
-      await api.post("/api/v1/auth/forgot-password", {
-        phone,
-      });
-
-      toast.success("OTP sent successfully ");
+      await api.post("/api/v1/auth/forgot-password", { phone });
+      showAlert("success", "OTP Sent");
       setIsReset(true);
     } catch (err) {
-      console.log("FORGOT ERROR ", err.response?.data);
       const errors = err?.response?.data?.errors;
-
-      if (errors?.length) {
-        toast.error(errors[0].message);
-      } else {
-        toast.error(err?.response?.data?.message || "Failed to send OTP");
-      }
+      showAlert(
+        "error",
+        "Failed",
+        errors?.[0]?.message || err?.response?.data?.message
+      );
     }
   };
 
   const handleResetPassword = async () => {
     if (!forgotValue || !otp || !newPassword || !confirmNewPassword) {
-      toast.error("All fields are required");
+      showAlert("error", "All fields are required");
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      toast.error("Passwords do not match");
+      showAlert("error", "Password Mismatch");
       return;
     }
-    if (!/^\d{10}$/.test(forgotValue)) {
-      toast.error("Enter valid 10 digit phone number");
-      return;
-    }
-
-    const phone = forgotValue.startsWith("+91")
-      ? forgotValue
-      : `+91${forgotValue}`;
 
     try {
       await api.put("/api/v1/auth/reset-password", {
-        phone,
+        phone: `+91${forgotValue}`,
         reset_token: otp,
         password: newPassword,
         confirm_password: confirmNewPassword,
       });
 
-      toast.success("Password reset successful ");
-
+      showAlert("success", "Password Reset Successful");
       setIsReset(false);
       setIsForgot(false);
-      setOtp("");
-      setNewPassword("");
-      setConfirmNewPassword("");
     } catch (err) {
-      console.log("RESET ERROR ", err.response?.data);
-
       const errors = err?.response?.data?.errors;
-      if (errors?.length) {
-        toast.error(errors[0].message);
-      } else {
-        toast.error(err?.response?.data?.message || "Reset failed");
-      }
+      showAlert(
+        "error",
+        "Reset Failed",
+        errors?.[0]?.message || err?.response?.data?.message
+      );
     }
   };
 

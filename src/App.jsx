@@ -1,5 +1,4 @@
 import TopHeader from "./components/layout/TopHeader.jsx";
-import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Navbar from "./components/layout/Navbar.jsx";
 import Home from "./components/pages/Home.jsx";
@@ -51,6 +50,7 @@ import HealthConcern from "./components/pages/HealthConcern.jsx";
 import HealthCon from "./components/pages/HealthCon.jsx";
 import AppDownloadModal from "./components/AppDownloadModal.jsx";
 import BackButton from "./components/BackButton.jsx";
+import NotificationListener from "./components/NotificationListener.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
@@ -113,11 +113,9 @@ const closeModal = () => {
 
   return (
     <>
+    <NotificationListener />
       {showModal && <AppDownloadModal onClose={closeModal} />}
-      <Toaster
-        position="top-right"
-        toastOptions={{ style: { zIndex: 9999999 } }}
-      />
+      
       <TopHeader />
       <Navbar />
       <div className="container"> 

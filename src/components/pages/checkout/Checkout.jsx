@@ -170,6 +170,7 @@ export default function Checkout() {
       });
 
       toast.success("Payment successful & Order placed 🎉");
+      window.dispatchEvent(new Event("cart-updated")); 
       navigate(`/orders/${res.data?.order_id}`);
     } catch (err) {
       toast.error("Order placement failed");
@@ -259,6 +260,7 @@ export default function Checkout() {
       }
       console.log("Cart order data", res.data);
       toast.success("Order placed successfully 🎉");
+      window.dispatchEvent(new Event("cart-updated")); 
       fetchWallet();
       localStorage.removeItem("delivery_type");
       navigate(`/orders/${res.data?.order_id || ""}`);

@@ -15,26 +15,33 @@ export default function Notifications() {
   useEffect(() => {
     if (!user) return;
     fetchNotifications();
-    markAllAsRead();
+    // markAllAsRead();
   }, [user]);
 
-  const fetchNotifications = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await api.get("/api/v1/customer/notifications", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          moduleId: 2,
-          zoneId: JSON.stringify([3]),
-        },
-      });
-      setNotifications(res.data || []);
-    } catch (err) {
-      toast.error("Failed to load notifications");
-    } finally {
-      setLoading(false);
-    }
-  };
+ const fetchNotifications = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await api.get("/api/v1/customer/notifications", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        moduleId: 2,
+        zoneId: JSON.stringify([3]),
+      },
+    });
+// console.log("notification data", res.data)
+    const list = res.data || [];
+    const sorted = [...list].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+
+    setNotifications(sorted);
+  } catch (err) {
+    toast.error("Failed to load notifications");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const markOneAsRead = async (id) => {
   try {
@@ -49,29 +56,6 @@ export default function Notifications() {
     window.dispatchEvent(new Event("notifications-updated"));
   } catch {}
 };
-
-  const markAllAsRead = async () => {
-  try {
-    const token = localStorage.getItem("token");
-
-    await api.post(
-      "/api/v1/customer/notifications/mark-all-read",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          moduleId: 2,
-        },
-      }
-    );
-
-    // 🔔 navbar ko notify karo
-    window.dispatchEvent(new Event("notifications-updated"));
-  } catch (err) {
-    console.error("Failed to mark notifications as read");
-  }
-};
-
 
   if (!user) return <p className="text-center mt-10">Please login</p>;
   if (loading) return <p className="text-center mt-10">Loading...</p>;
@@ -136,7 +120,9 @@ export default function Notifications() {
             </div>
           </div>
         </div>
+        
       )}
+
 
       <Footer />
     </>

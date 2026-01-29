@@ -8,6 +8,14 @@ export default function Doctors() {
 
   return (
     <>
+          <div className="doctors-banner">
+        <img
+          src="/doctor_img/Doctorbanner.png"   
+          alt="Doctors Banner"
+          className="doctors-banner-img"
+        />
+      </div>
+
       <div className="doctors-container">
         <div className="doctors-wrapper">
           <h1 className="doctors-title">Our Certified Doctors</h1>

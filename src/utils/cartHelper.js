@@ -1,5 +1,19 @@
 import api from "../api/axiosInstance";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+
+/**
+ * Central alert helper (modal-style notification)
+ */
+const showAlert = (icon, title, text = "") => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    showConfirmButton: false,
+    timer: 1800,
+    backdrop: "rgba(0,0,0,0.45)",
+  });
+};
 
 /**
  * Sync cart item IDs from backend
@@ -38,7 +52,7 @@ export const addToCart = async ({ item }) => {
     item.quantity === 0 ||
     item.is_available === false
   ) {
-    toast.error("Product is out of stock");
+    showAlert("error", "Out of Stock", "Product is currently unavailable");
     return;
   }
 
@@ -66,7 +80,7 @@ export const addToCart = async ({ item }) => {
         item.available_stock &&
         existingItem.quantity >= item.available_stock
       ) {
-        toast.error("No more stock available");
+        showAlert("error", "Stock Limit Reached", "No more stock available");
         return;
       }
 
@@ -87,7 +101,7 @@ export const addToCart = async ({ item }) => {
         }
       );
 
-      toast.success("Quantity updated");
+      showAlert("success", "Cart Updated", "Quantity increased");
     }
 
     // 🔹 STEP 4: ADD NEW ITEM
@@ -110,10 +124,10 @@ export const addToCart = async ({ item }) => {
         }
       );
 
-      toast.success("Added to cart");
+      showAlert("success", "Added to Cart", "Product added successfully");
     }
 
-    // 🔹 STEP 5: FINAL SYNC (MOST IMPORTANT)
+    // 🔹 STEP 5: FINAL SYNC
     await syncCartSnapshot({ token, guestId });
 
   } catch (err) {
@@ -123,13 +137,14 @@ export const addToCart = async ({ item }) => {
       err?.response?.data?.message ===
       "Product out of stock warning"
     ) {
-      toast.error("Product is out of stock");
+      showAlert("error", "Out of Stock", "Product is currently unavailable");
       return;
     }
 
-    toast.error(
-      err?.response?.data?.errors?.[0]?.message ||
-        "Failed to add item"
+    showAlert(
+      "error",
+      "Something went wrong",
+      err?.response?.data?.errors?.[0]?.message || "Failed to add item"
     );
   }
 };

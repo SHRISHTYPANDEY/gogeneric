@@ -71,10 +71,20 @@ export default function Cart() {
     }
   };
 
-  const updateQty = async (item, qty) => {
-    if (qty < 1) return;
+const updateQty = async (item, qty) => {
+  if (qty < 1) return;
 
-    await api.post(
+  console.log("Updating quantity:", {
+    cart_id: item.id,
+    oldQty: item.quantity,
+    newQty: qty,
+    price: item.price,
+    tokenPresent: !!token,
+    guestId,
+  });
+
+  try {
+    const res = await api.post(
       "/api/v1/customer/cart/update",
       {
         cart_id: item.id,
@@ -91,8 +101,23 @@ export default function Cart() {
       }
     );
 
+    console.log("Cart update success:", res.data);
+
     window.dispatchEvent(new Event("cart-updated"));
-  };
+  } catch (error) {
+    console.error("Cart update failed");
+
+    if (error.response) {
+      console.error("Status:", error.response.status);
+      console.error("Response data:", error.response.data);
+      console.error("Headers:", error.response.headers);
+    } else if (error.request) {
+      console.error("No response received:", error.request);
+    } else {
+      console.error("Error message:", error.message);
+    }
+  }
+};
 
   const removeItem = async (item) => {
     await api.delete("/api/v1/customer/cart/remove-item", {
