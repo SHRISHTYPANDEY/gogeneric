@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
+
 import api from "../../api/axiosInstance";
 import Loader from "../Loader";
 import { useAuth } from "../../context/AuthContext";
@@ -49,6 +50,17 @@ export default function Profile() {
   const [showEditModal, setShowEditModal] = useState(false);
   const { logout } = useAuth();
   const { resetLocation } = useLocation();
+  const showAlert = (icon, title, text, timer = null) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonColor: "#016B61",
+    timer,
+    showConfirmButton: !timer,
+  });
+};
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -149,14 +161,19 @@ export default function Profile() {
           moduleId: 2,
         },
       });
+      showAlert("success", "Deleted", "Account deleted successfully", 2000);
 
-      toast.success("Account deleted successfully");
 
       localStorage.clear();
       navigate("/");
     } catch (err) {
       console.error(err);
-      toast.error(err?.response?.data?.message || "Failed to delete account");
+      showAlert(
+  "error",
+  "Failed",
+  err?.response?.data?.message || "Failed to delete account"
+);
+
     }
   };
   const handleProfileUpdate = async () => {
@@ -184,12 +201,16 @@ export default function Profile() {
           "Content-Type": "multipart/form-data",
         },
       });
+showAlert("success", "Updated", res.data?.message || "Profile updated", 2000);
 
-      toast.success(res.data?.message || "Profile updated");
       setEditing(false);
     } catch (err) {
       console.log(err.response?.data);
-      toast.error(err?.response?.data?.errors?.[0]?.message || "Update failed");
+showAlert(
+  "error",
+  "Update Failed",
+  err?.response?.data?.errors?.[0]?.message || "Update failed"
+);
     } finally {
       setLoading(false);
     }
@@ -208,12 +229,12 @@ export default function Profile() {
 
   const handleChangePassword = async () => {
     if (!oldPassword || !newPassword || !confirmNewPassword) {
-      toast.error("All fields are required");
+showAlert("warning", "Required", "All fields are required");
       return;
     }
 
     if (newPassword !== confirmNewPassword) {
-      toast.error("Passwords do not match");
+showAlert("error", "Mismatch", "Passwords do not match");
       return;
     }
 
@@ -240,7 +261,12 @@ export default function Profile() {
         }
       );
 
-      toast.success("Password changed successfully");
+showAlert(
+  "success",
+  "Success",
+  "Password changed successfully",
+  2000
+);
 
       setOldPassword("");
       setNewPassword("");
@@ -251,11 +277,14 @@ export default function Profile() {
       navigate("/login");
     } catch (err) {
       console.error(err);
-      toast.error(
-        err?.response?.data?.message ||
-          err?.response?.data?.errors?.[0]?.message ||
-          "Password update failed"
-      );
+      showAlert(
+  "error",
+  "Failed",
+  err?.response?.data?.message ||
+    err?.response?.data?.errors?.[0]?.message ||
+    "Password update failed"
+);
+
     } finally {
       setLoading(false);
     }
@@ -403,15 +432,23 @@ export default function Profile() {
                           },
                         }
                       );
-                      toast.success("Password updated successfully");
+showAlert(
+  "success",
+  "Updated",
+  "Password updated successfully",
+  2000
+);
                       setPassword("");
                       setShowPassword(false);
                     } catch (e) {
                       console.log(e.response?.data);
-                      toast.error(
-                        e?.response?.data?.errors?.[0]?.message ||
-                          "Password update failed"
-                      );
+                      showAlert(
+  "error",
+  "Failed",
+  e?.response?.data?.errors?.[0]?.message ||
+    "Password update failed"
+);
+
                     }
                   }}
                 >

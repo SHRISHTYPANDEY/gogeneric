@@ -4,9 +4,6 @@ import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
 import { cleanImageUrl } from "../utils";
 
-/**
- * Center modal notification helper
- */
 const showNotificationModal = ({ title, description, image }) => {
   Swal.fire({
     title: title || "Notification",
@@ -41,6 +38,7 @@ export default function NotificationListener() {
     const interval = setInterval(async () => {
       try {
         const token = localStorage.getItem("token");
+        if (!token) return;
 
         const res = await api.get("/api/v1/customer/notifications", {
           headers: {
@@ -51,19 +49,34 @@ export default function NotificationListener() {
         });
 
         const notifications = res.data || [];
-        const unread = notifications.find((n) => n.status === 0);
 
-        if (unread && unread.id !== lastNotificationId.current) {
-          lastNotificationId.current = unread.id;
+        const unreadList = notifications.filter((n) => n.status === 0);
+        if (unreadList.length === 0) return;
+
+        const latestUnread = unreadList.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        )[0];
+
+        if (latestUnread.id !== lastNotificationId.current) {
+          lastNotificationId.current = latestUnread.id;
 
           showNotificationModal({
-            title: unread.data?.title || unread.title,
+            title: latestUnread.data?.title || latestUnread.title,
             description:
-              unread.data?.description || unread.description,
-            image: unread.image
-              ? cleanImageUrl(unread.image)
+              latestUnread.data?.description ||
+              latestUnread.description,
+            image: latestUnread.image
+              ? cleanImageUrl(latestUnread.image)
+              : latestUnread.image_full_url
+              ? cleanImageUrl(latestUnread.image_full_url)
+              : latestUnread.data?.image
+              ? cleanImageUrl(latestUnread.data.image)
               : null,
           });
+
+          window.dispatchEvent(
+            new Event("notifications-updated")
+          );
         }
       } catch (err) {
         console.error("Notification fetch failed", err);

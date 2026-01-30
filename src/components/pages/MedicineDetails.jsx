@@ -4,7 +4,7 @@ import { useParams, useLocation } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import "./MedicineDetails.css";
 import { cleanImageUrl } from "../../utils";
-import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 import WishlistButton from "../WishlistButton";
 import Loader from "../Loader";
 import AddToCartButton from "../CartButton";
@@ -25,6 +25,17 @@ export default function MedicineDetails() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const passedPrice = location.state?.price || null;
+  const showAlert = (icon, title, text, timer = null) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonColor: "#016B61",
+    timer,
+    showConfirmButton: !timer,
+  });
+};
+
 
   /* ---------------- FETCH MEDICINE ---------------- */
   const fetchMedicineDetails = async () => {
@@ -56,7 +67,12 @@ export default function MedicineDetails() {
       }
 
       console.error("Medicine fetch error:", err);
-      toast.error("Failed to load medicine details");
+      showAlert(
+  "error",
+  "Error",
+  "Failed to load medicine details"
+);
+
     } finally {
       if (!controller.signal.aborted) {
         setLoading(false);
@@ -68,7 +84,12 @@ export default function MedicineDetails() {
   useEffect(() => {
     if (!id) {
       setLoading(false);
-      toast.error("Invalid medicine link");
+      showAlert(
+  "error",
+  "Invalid Link",
+  "This medicine link is not valid"
+);
+
       return;
     }
 

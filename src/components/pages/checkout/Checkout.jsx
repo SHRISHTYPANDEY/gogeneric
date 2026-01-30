@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import api from "../../../api/axiosInstance";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import "./Checkout.css";
 import { useWallet } from "../../../context/WalletContext";
 import DeliveryInstructions from "./DeliveryInstructions";
@@ -29,6 +29,17 @@ export default function Checkout() {
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [prescriptionFile, setPrescriptionFile] = useState(null);
   const { balance: walletBalance, fetchWallet } = useWallet();
+  const showAlert = (icon, title, text, timer = null) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonColor: "#016B61",
+    timer,
+    showConfirmButton: !timer,
+  });
+};
+
 
   const isPrescriptionOrder = location.state?.isPrescriptionOrder;
 
@@ -93,8 +104,8 @@ export default function Checkout() {
         navigate("/cart");
       }
     } catch {
-      toast.error("Failed to load cart");
-    } finally {
+       showAlert("error", "Error", "Failed to load cart");
+} finally {
       setLoading(false);
     }
   };
@@ -156,7 +167,7 @@ export default function Checkout() {
       }
 
       if (isPrescriptionRequired && prescriptionFile) {
-        formData.append("order_attachment", prescriptionFile);
+        formData.append("order_attachment[]", prescriptionFile);
       }
 
       const headers = {
@@ -169,11 +180,16 @@ export default function Checkout() {
         headers,
       });
 
-      toast.success("Payment successful & Order placed 🎉");
+showAlert(
+  "success",
+  "Order Placed 🎉",
+  "Thank you for shopping with us",
+  1500
+);
       window.dispatchEvent(new Event("cart-updated")); 
       navigate(`/orders/${res.data?.order_id}`);
     } catch (err) {
-      toast.error("Order placement failed");
+showAlert("error", "Failed", "Order placement failed");
     } finally {
       setPlacingOrder(false);
     }
@@ -185,22 +201,22 @@ export default function Checkout() {
     // console.log("SELECTED ADDRESS FULL OBJECT", selectedAddress);
 
     if (!paymentMethod || !paymentReady) {
-      toast.error("Complete payment first");
+showAlert("warning", "Payment Pending", "Complete payment first");
       return;
     }
 
     if (deliveryType === "delivery" && !selectedAddress) {
-      toast.error("Please select delivery address");
+    showAlert("warning", "Address Required", "Please select delivery address");
       return;
     }
 
     if (!policyAccepted) {
-      toast.error("Please accept policies");
+     showAlert("warning", "Policy Required", "Please accept policies");
       return;
     }
 
     if ((isPrescriptionRequired || isPrescriptionOrder) && !prescriptionFile) {
-      toast.error("Prescription is required");
+showAlert("warning", "Prescription Required", "Prescription is required");
       return false;
     }
 
@@ -214,9 +230,12 @@ export default function Checkout() {
 
       if (paymentMethod === "wallet") {
         if (walletBalance < totalPayable) {
-          toast.error(
-            `Insufficient wallet balance. Available ₹${walletBalance}`,
-          );
+          showAlert(
+  "error",
+  "Insufficient Balance",
+  `Wallet balance ₹${walletBalance}`
+);
+
           setPlacingOrder(false);
           return;
         }
@@ -241,7 +260,7 @@ export default function Checkout() {
         formData.append("guest_id", guestId);
       }
       if ((isPrescriptionRequired || isPrescriptionOrder) && prescriptionFile) {
-        formData.append("order_attachment", prescriptionFile);
+        formData.append("order_attachment[]", prescriptionFile);
       }
 
       for (let pair of formData.entries()) {
@@ -259,14 +278,21 @@ export default function Checkout() {
         console.log("PRESCRIPTION ORDER API RESPONSE ", res.data);
       }
       console.log("Cart order data", res.data);
-      toast.success("Order placed successfully 🎉");
+      showAlert(
+  "success",
+  "Order Placed 🎉",
+  "Thank you for shopping with us",
+  1500
+);
+
       window.dispatchEvent(new Event("cart-updated")); 
       fetchWallet();
       localStorage.removeItem("delivery_type");
       navigate(`/orders/${res.data?.order_id || ""}`);
     } catch (err) {
       console.error("ORDER ERROR", err.response?.data || err);
-      toast.error("Order placement failed");
+   showAlert("error", "Failed", "Order placement failed");
+
     } finally {
       setPlacingOrder(false);
     }
@@ -281,37 +307,49 @@ export default function Checkout() {
 
   const validateBeforeOrder = () => {
     if (!token) {
-      toast.error("Please login first to place your order");
+showAlert("info", "Login Required", "Please login first");
       navigate("/login");
       return false;
     }
 
     if (deliveryType === "delivery" && !selectedAddress) {
-      toast.error("Please select a delivery address");
+showAlert("warning", "Address Required", "Please select delivery address");
       return false;
     }
 
     if (!paymentMethod) {
-      toast.error("Please select a payment method");
+showAlert("warning", "Payment Required", "Please select payment method");
       return false;
     }
     if (!getOrderStoreId()) {
-      toast.error("Store not found for this order");
+   showAlert("error", "Error", "Store not found for this order");
       return false;
     }
 
     if (paymentMethod === "wallet" && walletBalance < totalPayable) {
-      toast.error(`Insufficient wallet balance. Available ₹${walletBalance}`);
+showAlert(
+  "error",
+  "Insufficient Balance",
+  `Wallet balance ₹${walletBalance}`
+);
       return false;
     }
 
     if (isPrescriptionRequired && !prescriptionFile) {
-      toast.error("Prescription is required for selected medicines");
+ showAlert(
+  "warning",
+  "Prescription Required",
+  "Prescription is required for selected medicines"
+);
       return false;
     }
 
     if (!policyAccepted) {
-      toast.error("Please accept Privacy Policy & Terms");
+   showAlert(
+  "warning",
+  "Policy Required",
+  "Please accept Privacy Policy & Terms"
+);
       return false;
     }
 

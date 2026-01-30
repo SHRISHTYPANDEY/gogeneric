@@ -1,7 +1,7 @@
 import { useWishlist } from "../../context/WishlistContext";
 import { cleanImageUrl } from "../../utils";
 import api from "../../api/axiosInstance";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import "./Wishlist.css";
 import { X, ShoppingCart, Bookmark } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,33 @@ export default function Wishlist() {
   const token = localStorage.getItem("token");
   const { discountMap, fetchDiscountedItems } = useDiscounts();
 
+  const showAlert = (icon, title, text, timer = null) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonColor: "#016B61",
+    timer,
+    showConfirmButton: !timer,
+  });
+};
+const confirmRemove = (id) => {
+  Swal.fire({
+    title: "Remove item?",
+    text: "This item will be removed from your wishlist",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#016B61",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, remove",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      removeFromWishlist(id);
+      showAlert("success", "Removed", "Item removed from wishlist", 1200);
+    }
+  });
+};
+
   useEffect(() => {
     fetchDiscountedItems();
   }, [fetchDiscountedItems]);
@@ -29,10 +56,9 @@ export default function Wishlist() {
     localStorage.setItem("guest_id", guestId);
   }
 
-  /* ================= MOVE TO CART ================= */
   const moveToCart = async (item) => {
     if (!item?.id || !item?.price) {
-      toast.error("Invalid product");
+showAlert("error", "Invalid Product", "Invalid product");
       return;
     }
 
@@ -58,15 +84,18 @@ export default function Wishlist() {
 
       await removeFromWishlist(item.id);
       window.dispatchEvent(new Event("cart-updated"));
-      toast.success("Moved to cart");
+showAlert("success", "Added", "Moved to cart", 1500);
     } catch (err) {
-      toast.error(
-        err.response?.data?.errors?.[0]?.message || "Something went wrong",
-      );
+     showAlert(
+  "error",
+  "Failed",
+  err.response?.data?.errors?.[0]?.message ||
+    "Something went wrong"
+);
+
     }
   };
 
-  /* ================= EMPTY STATE ================= */
   if (wishlist.length === 0) {
     return (
       <div className="empty-wishlist medical">
@@ -93,13 +122,13 @@ export default function Wishlist() {
       <div className="items-grid">
         {wishlist.map((item) => (
           <div key={item.id} className="item-card1">
-            {/* REMOVE */}
             <button
-              className="remove-btn"
-              onClick={() => removeFromWishlist(item.id)}
-            >
-              <X size={16} />
-            </button>
+  className="remove-btn"
+  onClick={() => confirmRemove(item.id)}
+>
+  <X size={16} />
+</button>
+
 
             <img
               src={cleanImageUrl(item.image_full_url || item.image)}

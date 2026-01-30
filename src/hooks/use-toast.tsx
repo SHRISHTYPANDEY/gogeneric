@@ -22,7 +22,6 @@ export interface ToastItem {
 
 export type ToasterToast = ToastItem;
 
-// Action types for reducer
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
   UPDATE_TOAST: "UPDATE_TOAST",
@@ -30,11 +29,9 @@ const actionTypes = {
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const;
 
-// Configuration constants
 const TOAST_LIMIT = 20;
 const TOAST_REMOVE_DELAY = 1000;
 
-// ID generation for toasts
 let count = 0;
 
 function genId() {
@@ -42,7 +39,6 @@ function genId() {
   return count.toString();
 }
 
-// Action types for the reducer
 type ActionType = typeof actionTypes;
 
 type Action =
@@ -63,15 +59,12 @@ type Action =
       toastId?: string;
     };
 
-// State interface
 interface State {
   toasts: ToasterToast[];
 }
 
-// Track toast timeouts
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
-// Reducer for toast state management
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case actionTypes.ADD_TOAST:
@@ -127,11 +120,9 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-// Memory state and listeners
 const listeners: Array<(state: State) => void> = [];
 let memoryState: State = { toasts: [] };
 
-// Dispatch function to update state and notify listeners
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action);
   listeners.forEach((listener) => {
@@ -139,18 +130,15 @@ function dispatch(action: Action) {
   });
 }
 
-// Toast function for creating toasts
 type ToastOptions = Omit<ToastItem, "id">;
 
 function toast(props: ToastOptions) {
   const id = genId();
 
-  // Auto-dismiss after duration
   if (props.duration !== Infinity) {
     const timeout = setTimeout(() => {
       dispatch({ type: actionTypes.DISMISS_TOAST, toastId: id });
       
-      // Remove after animation completes
       setTimeout(() => {
         dispatch({ type: actionTypes.REMOVE_TOAST, toastId: id });
       }, TOAST_REMOVE_DELAY);
@@ -161,7 +149,6 @@ function toast(props: ToastOptions) {
     toastTimeouts.set(id, timeout);
   }
 
-  // Methods for the toast
   const update = (props: ToastOptions) => {
     dispatch({
       type: actionTypes.UPDATE_TOAST,
@@ -173,20 +160,17 @@ function toast(props: ToastOptions) {
   const dismiss = () => {
     dispatch({ type: actionTypes.DISMISS_TOAST, toastId: id });
     
-    // Clear any existing timeout
     const timeout = toastTimeouts.get(id);
     if (timeout) {
       clearTimeout(timeout);
       toastTimeouts.delete(id);
     }
     
-    // Remove after animation completes
     setTimeout(() => {
       dispatch({ type: actionTypes.REMOVE_TOAST, toastId: id });
     }, TOAST_REMOVE_DELAY);
   };
 
-  // Add the toast to state
   dispatch({
     type: actionTypes.ADD_TOAST,
     toast: {
@@ -207,14 +191,12 @@ function toast(props: ToastOptions) {
   };
 }
 
-// Convenience functions for different toast types
 toast.default = (props: Omit<ToastOptions, "type">) => toast({ ...props, type: "default" });
 toast.destructive = (props: Omit<ToastOptions, "type">) => toast({ ...props, type: "destructive" });
 toast.success = (props: Omit<ToastOptions, "type">) => toast({ ...props, type: "success", variant: "success" });
 toast.warning = (props: Omit<ToastOptions, "type">) => toast({ ...props, type: "warning" });
 toast.info = (props: Omit<ToastOptions, "type">) => toast({ ...props, type: "info" });
 
-// Hook for consuming toasts
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
 

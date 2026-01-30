@@ -9,6 +9,7 @@ import AddToCartButton from "../CartButton";
 import WishlistButton from "../WishlistButton";
 import Loader from "../Loader";
 import useDiscounts from "../../hooks/useDiscounts";
+import Swal from "sweetalert2";
 import {
   getDiscountedPrice,
   getFinalPrice,
@@ -104,19 +105,39 @@ const updateQty = async (item, qty) => {
     console.log("Cart update success:", res.data);
 
     window.dispatchEvent(new Event("cart-updated"));
-  } catch (error) {
-    console.error("Cart update failed");
+ } catch (error) {
+  console.error("Cart update failed", error);
 
-    if (error.response) {
-      console.error("Status:", error.response.status);
-      console.error("Response data:", error.response.data);
-      console.error("Headers:", error.response.headers);
-    } else if (error.request) {
-      console.error("No response received:", error.request);
+  if (
+    error.response &&
+    error.response.data?.errors &&
+    error.response.data.errors.length
+  ) {
+    const err = error.response.data.errors[0];
+
+    if (err.code === "out_of_stock") {
+      Swal.fire({
+        icon: "warning",
+        title: "Out of Stock 😔",
+        // text: err.message || "Selected quantity is not available",
+        confirmButtonColor: "#016B61",
+      });
     } else {
-      console.error("Error message:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: err.message || "Something went wrong",
+      });
     }
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Network Error",
+      text: "Please try again later",
+    });
   }
+}
+
 };
 
   const removeItem = async (item) => {

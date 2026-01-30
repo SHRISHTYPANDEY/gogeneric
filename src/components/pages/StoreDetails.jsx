@@ -56,7 +56,7 @@ const handlePrescriptionFile = (e) => {
       const res = await api.get(`/api/v1/stores/details/${id}`, {
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-      // console.log("store api data", res.data);
+      console.log("store api data", res.data);
       setStore(res.data);
       
     } catch {
@@ -104,7 +104,14 @@ const handlePrescriptionFile = (e) => {
         params: { name: keyword, store_id: id, limit: 10000, offset: 1 },
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-      setProducts(res.data?.items || res.data?.products || []);
+      const items = res.data?.items || res.data?.products || [];
+
+      const sorted = items.sort((a, b) => {
+        const aStock = a.stock > 0 ? 1 : 0;
+        const bStock = b.stock > 0 ? 1 : 0;
+        return bStock - aStock;
+      });
+      setProducts(sorted);
       setHasMore(false);
     } finally {
       setProductsLoading(false);
@@ -125,11 +132,23 @@ const handlePrescriptionFile = (e) => {
       headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
     });
 
-    // console.log("LATEST PRODUCTS API RESPONSE 👉", res.data);
+    console.log("LATEST PRODUCTS API RESPONSE ", res.data);
 
     const newProducts = res.data.products || res.data.items || [];
 
-    // console.log("NEW PRODUCTS (page " + pageNumber + ") 👉", newProducts);
+// if (newProducts.length) {
+//   console.log("🔎 SAMPLE PRODUCT STOCK DATA:", {
+//     id: newProducts[0].id,
+//     name: newProducts[0].name,
+//     stock: newProducts[0].stock,
+//     current_stock: newProducts[0].current_stock,
+//     quantity: newProducts[0].quantity,
+//     available_quantity: newProducts[0].available_quantity,
+//     fullObject: newProducts[0],
+//   });
+// }
+
+    // console.log("NEW PRODUCTS (page " + pageNumber + ") ", newProducts);
 
     setProducts((prev) => {
   const merged = pageNumber === 1
@@ -141,7 +160,12 @@ const handlePrescriptionFile = (e) => {
     uniqueMap.set(item.id, item); 
   });
 
-  return Array.from(uniqueMap.values());
+ return Array.from(uniqueMap.values()).sort((a, b) => {
+  const aStock = a.stock > 0 ? 1 : 0;
+  const bStock = b.stock > 0 ? 1 : 0;
+  return bStock - aStock;
+});
+
 });
 
 

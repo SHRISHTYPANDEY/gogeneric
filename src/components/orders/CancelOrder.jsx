@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../../api/axiosInstance";
 import { X } from "lucide-react";
-import { toast } from "react-hot-toast";
+import Swal from "sweetalert2";
 import "./CancelOrder.css";
 
 export default function CancelOrder({ order, onClose, onSuccess }) {
@@ -10,7 +10,11 @@ export default function CancelOrder({ order, onClose, onSuccess }) {
 
   const handleCancelOrder = async () => {
     if (!reason.trim()) {
-      toast.error("Please provide cancellation reason");
+      Swal.fire({
+        icon: "warning",
+        title: "Reason required",
+        text: "Please provide cancellation reason",
+      });
       return;
     }
 
@@ -34,16 +38,26 @@ export default function CancelOrder({ order, onClose, onSuccess }) {
         }
       );
 
-      toast.success("Order cancelled successfully");
+      Swal.fire({
+        icon: "success",
+        title: "Order Cancelled",
+        text: "Your order has been cancelled successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       onSuccess();
       onClose();
     } catch (error) {
       console.error("❌ Cancel order failed:", error);
 
-      toast.error(
-        error?.response?.data?.errors?.[0]?.message ||
-          "You cannot cancel this order now"
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Cancellation Failed",
+        text:
+          error?.response?.data?.errors?.[0]?.message ||
+          "You cannot cancel this order now",
+      });
     } finally {
       setLoading(false);
     }
@@ -51,10 +65,7 @@ export default function CancelOrder({ order, onClose, onSuccess }) {
 
   return (
     <div className="cancel-modal-backdrop" onClick={onClose}>
-      <div
-        className="cancel-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="cancel-modal" onClick={(e) => e.stopPropagation()}>
         {/* HEADER */}
         <div className="cancel-modal-header">
           <h3>Cancel Order #{order.id}</h3>
@@ -73,7 +84,6 @@ export default function CancelOrder({ order, onClose, onSuccess }) {
 
         {/* FOOTER */}
         <div className="modal-actions">
-
           <button
             className="danger"
             onClick={handleCancelOrder}

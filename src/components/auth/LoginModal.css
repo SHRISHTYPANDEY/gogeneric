@@ -234,3 +234,38 @@
   .login-right { padding: 40px 25px; }
   .title { font-size: 28px; }
 }
+/* 🔒 Field wrapper */
+.field {
+  display: flex;
+  flex-direction: column;
+  /* margin-bottom: 18px; */
+}
+
+/* 🔴 Error text (stable height) */
+.error-msg {
+  min-height: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e53935;
+  /* margin-top: 6px; */
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.error-msg.show {
+  opacity: 1;
+}
+
+/* 🔴 Input error state */
+.input.error {
+  border-color: #e53935;
+  background: #fff5f5;
+  animation: shake 0.25s ease-in-out;
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}

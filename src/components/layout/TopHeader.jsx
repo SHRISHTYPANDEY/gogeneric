@@ -8,13 +8,12 @@ import LoginModal from "../auth/LoginModal";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
-import toast from "react-hot-toast";
 import { useLocation } from "../../context/LocationContext";
 import LogoImg from "../../assets/gogenlogo.png";
 import { FaShoppingCart, FaBell,FaDownload } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import SearchOverlayModal from "./SearchOverlayModal";
-
+import Swal from "sweetalert2";
 export default function TopHeader() {
   // const { t } = useTranslation();
   const { location, setLocation, notifyAddressChange } = useLocation();
@@ -32,6 +31,20 @@ export default function TopHeader() {
   const [notificationCount, setNotificationCount] = useState(0);
 
   const [openSearchModal, setOpenSearchModal] = useState(false);
+  const showAlert = (icon, title, text = "") => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    showConfirmButton: false,
+    timer: 2000,
+    backdrop: "rgba(0,0,0,0.6)",
+    customClass: {
+      popup: "gg-swal-popup",
+      backdrop: "gg-swal-backdrop",
+    },
+  });
+};
 
 
   useEffect(() => {
@@ -90,6 +103,14 @@ export default function TopHeader() {
     console.error("Notification fetch failed");
   }
 };
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (user) fetchNotifications();
+  }, 15000);
+
+  return () => clearInterval(interval);
+}, [user]);
+
 
 useEffect(() => {
   fetchCartCount();
@@ -231,8 +252,11 @@ useEffect(() => {
                 );
               }
               notifyAddressChange();
-              toast.success("Delivery location updated");
+              showAlert("success", "Location Updated", "Delivery location updated");
+
             } catch (err) {
+              showAlert("error", "Location Failed", "Unable to save address");
+
               console.error(err);
             }
 

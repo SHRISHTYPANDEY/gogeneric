@@ -4,7 +4,6 @@ import { cleanImageUrl } from "../../utils";
 import { ArrowLeft, Phone, Mail, PackageSearch } from "lucide-react";
 import api from "../../api/axiosInstance";
 import Loader from "../../components/Loader";
-import toast from "react-hot-toast";
 import "./OrderDetails.css";
 
 export default function OrderDetails() {
@@ -13,6 +12,7 @@ export default function OrderDetails() {
 
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState([]);
+  const [store, setStore] = useState(null);
 
   useEffect(() => {
     fetchOrderDetails();
@@ -34,14 +34,42 @@ export default function OrderDetails() {
           ...(!token && guestId ? { guest_id: guestId } : {}),
         },
       });
-      console.log("orderrrr detailssssss", res);
-      setDetails(Array.isArray(res.data) ? res.data : []);
+      console.log("orderdetailssss", res.data);
+      const data = res.data;
+
+      let normalized = [];
+      if (Array.isArray(data)) {
+        normalized = data;
+      } else if (data && typeof data === "object") {
+        normalized = [data];
+      }
+
+      setDetails(normalized);
+
+      const orderInfo = normalized[0];
+      if (orderInfo?.store_id && !orderInfo.store && !orderInfo.store_details) {
+        fetchStoreDetails(orderInfo.store_id);
+      }
     } catch (err) {
       console.error("Order details error:", err);
-      toast.error("Unable to load order details");
       navigate("/orders");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchStoreDetails = async (storeId) => {
+    try {
+      const res = await api.get(`/api/v1/stores/details/${storeId}`, {
+        headers: {
+          zoneId: JSON.stringify([3]),
+          moduleId: "2",
+        },
+      });
+
+      setStore(res.data);
+    } catch (err) {
+      console.error("Store fetch error:", err);
     }
   };
 
@@ -50,27 +78,35 @@ export default function OrderDetails() {
 
   const orderInfo = details[0];
 
-  const store =
+  // ✅ FINAL store resolver
+  const resolvedStore =
+    store ||
     orderInfo?.store ||
     orderInfo?.store_details ||
     orderInfo?.item_details?.store ||
     null;
+
   const hasItems = details.some((d) => d.item_details);
 
   const itemTotal = hasItems
     ? details.reduce(
-        (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0),
-        0
+        (sum, item) =>
+          sum + Number(item.price || 0) * Number(item.quantity || 0),
+        0,
       )
     : 0;
 
   const deliveryFee = Number(orderInfo.delivery_charge ?? 0);
-  const discount = Number(orderInfo.total_discount ?? 0);
   const totalPayable = Number(orderInfo.order_amount ?? itemTotal);
+
   const handleTrackOrder = () => {
-    if (!orderInfo?.order_id) return;
-    navigate(`/orders/${orderInfo.order_id}/track`);
+    if (!resolvedOrderId) return;
+    navigate(`/orders/${resolvedOrderId}/track`);
   };
+
+  const safeImage = (val) =>
+    typeof val === "string" ? cleanImageUrl(val) : "";
+  const resolvedOrderId = orderInfo?.order_id || orderInfo?.id;
 
   return (
     <div className="order-details-page">
@@ -78,7 +114,7 @@ export default function OrderDetails() {
         <button onClick={() => navigate(-1)} className="back-btn">
           <ArrowLeft size={18} />
         </button>
-        <h3>Order #{orderInfo.order_id}</h3>
+        <h3>Order #{resolvedOrderId}</h3>
       </header>
 
       <div className={`order-status ${orderInfo.order_status}`}>
@@ -87,33 +123,28 @@ export default function OrderDetails() {
 
       <div className="order-section">
         <h4>General Info</h4>
-        <p><strong>Order ID:</strong> #{orderInfo.order_id}</p>
+        <p>
+          <strong>Order ID:</strong> #{resolvedOrderId}
+        </p>
+
         <p>
           <strong>Order Date:</strong>{" "}
           {new Date(orderInfo.created_at).toLocaleString()}
         </p>
-
-        {orderInfo.delivery_verification_code && (
-          <p>
-            <strong>Delivery Code:</strong>{" "}
-            {orderInfo.delivery_verification_code}
-          </p>
-        )}
-
         <p>
           <strong>Payment:</strong>{" "}
           {orderInfo.payment_method || "Cash on Delivery"}
         </p>
       </div>
 
-      {store && (
+      {resolvedStore && (
         <div className="order-section store-section">
           <h4>Store</h4>
 
           <div className="store-info">
             <img
-              src={cleanImageUrl(store.logo_full_url)}
-              alt={store.name || "Store"}
+              src={safeImage(resolvedStore.logo_full_url)}
+              alt={resolvedStore.name || "Store"}
               className="store-logo"
               onError={(e) => {
                 e.currentTarget.src = "/images/store-placeholder.png";
@@ -121,17 +152,17 @@ export default function OrderDetails() {
             />
 
             <div>
-              <p className="store-name">{store.name}</p>
+              <p className="store-name">{resolvedStore.name}</p>
 
-              {store.phone && (
+              {resolvedStore.phone && (
                 <p className="store-contact">
-                  <Phone size={14} /> {store.phone}
+                  <Phone size={14} /> {resolvedStore.phone}
                 </p>
               )}
 
-              {store.email && (
+              {resolvedStore.email && (
                 <p className="store-contact">
-                  <Mail size={14} /> {store.email}
+                  <Mail size={14} /> {resolvedStore.email}
                 </p>
               )}
             </div>
@@ -147,21 +178,6 @@ export default function OrderDetails() {
             <div key={item.id} className="order-item">
               <div className="item-info">
                 <strong>{item.item_details?.name}</strong>
-
-                {item.variation && (() => {
-                  try {
-                    const parsed =
-                      typeof item.variation === "string"
-                        ? JSON.parse(item.variation)
-                        : item.variation;
-
-                    return parsed?.[0]?.type ? (
-                      <div className="variation">{parsed[0].type}</div>
-                    ) : null;
-                  } catch {
-                    return null;
-                  }
-                })()}
               </div>
 
               <div className="item-meta">
@@ -172,21 +188,30 @@ export default function OrderDetails() {
           ))}
         </div>
       )}
+      {orderInfo.order_attachment_full_url &&
+        Array.isArray(orderInfo.order_attachment_full_url) &&
+        orderInfo.order_attachment_full_url.length > 0 && (
+          <div className="order-section">
+            <h4>Prescription</h4>
 
-      {orderInfo.order_attachment && (
-        <div className="order-section">
-          <h4>Prescription</h4>
-
-          <a
-            href={cleanImageUrl(orderInfo.order_attachment)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="prescription-link"
-          >
-            View Uploaded Prescription
-          </a>
-        </div>
-      )}
+            <div className="prescription-preview">
+              <img
+                src={cleanImageUrl(orderInfo.order_attachment_full_url[0])}
+                alt="Prescription"
+                className="prescription-image"
+                onClick={() =>
+                  window.open(
+                    cleanImageUrl(orderInfo.order_attachment_full_url[0]),
+                    "_blank",
+                  )
+                }
+                onError={(e) => {
+                  e.currentTarget.src = "/images/prescription-placeholder.png";
+                }}
+              />
+            </div>
+          </div>
+        )}
 
       {orderInfo.delivery_address && (
         <div className="order-section">
@@ -211,13 +236,6 @@ export default function OrderDetails() {
           <span>Delivery Fee</span>
           <span>₹{deliveryFee}</span>
         </div>
-
-        {discount > 0 && (
-          <div className="summary-row">
-            <span>Discount</span>
-            <span>- ₹{discount}</span>
-          </div>
-        )}
 
         <div className="summary-row total">
           <strong>Total Amount</strong>

@@ -9,6 +9,8 @@ import Fuse from "fuse.js";
 import AddToCartButton from "../CartButton";
 import Loader from "../Loader";
 import useDiscounts from "../../hooks/useDiscounts";
+import { encodeId } from "../../utils/idObfuscator";
+
 import {
   getDiscountedPrice,
   getFinalPrice,
@@ -36,6 +38,10 @@ export default function SearchList() {
     ignoreLocation: true,
     minMatchCharLength: 2,
   };
+  const isOutOfStock =
+  item.stock === 0 ||
+  item.available_quantity === 0 ||
+  item.is_available === false;
 
   useEffect(() => {
     fetchDiscountedItems();
@@ -73,7 +79,7 @@ export default function SearchList() {
         },
         signal: abortRef.current.signal,
       });
-      // console.log("search api data", res.data);
+      console.log("search api data", res.data);
 
       const rawItems = res.data?.items || [];
       const rawStores = res.data?.stores || [];
@@ -152,7 +158,8 @@ export default function SearchList() {
                   <div
                     className={`gs-medicine-card card-theme-${theme}`}
                     key={item.id}
-                    onClick={() => navigate(`/medicine/${item.id}`)}
+                    onClick={() => navigate(`/medicine/${encodeId(item.id)}`)}
+
                   >
                     <div className="gs-wishlist" onClick={(e) => e.stopPropagation()}>
                       <WishlistButton item={item} />
@@ -208,7 +215,8 @@ export default function SearchList() {
                   <div
                     key={store.id}
                     className={`gs-medicine-card card-theme-${theme}`}
-                    onClick={() => navigate(`/view-stores/${store.id}`)}
+                  onClick={() => navigate(`/view-stores/${encodeId(store.id)}`)}
+
                   >
                     <div className="gs-img-box">
                       <img

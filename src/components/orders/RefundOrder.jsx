@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axiosInstance";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import "./RefundOrder.css";
 
 export default function RefundOrder({ order, onClose, onSuccess }) {
@@ -9,7 +9,6 @@ export default function RefundOrder({ order, onClose, onSuccess }) {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 check refund already requested
   const isAlreadyRequested =
     order.refund_status === "requested" ||
     order.refund_status === "approved" ||
@@ -23,14 +22,24 @@ export default function RefundOrder({ order, onClose, onSuccess }) {
         setReasons(res.data.refund_reasons || []);
       })
       .catch(() => {
-        toast.error("Failed to load refund reasons");
+        Swal.fire({
+          icon: "error",
+          title: "Oops!",
+          text: "Failed to load refund reasons",
+          confirmButtonColor: "#016B61",
+        });
       });
   }, []);
 
   // 🔥 Submit refund request
   const handleSubmit = async () => {
     if (!reasonId) {
-      toast.error("Please select a refund reason");
+      Swal.fire({
+        icon: "warning",
+        title: "Required",
+        text: "Please select a refund reason",
+        confirmButtonColor: "#016B61",
+      });
       return;
     }
 
@@ -48,20 +57,28 @@ export default function RefundOrder({ order, onClose, onSuccess }) {
         payload
       );
 
-      toast.success(
-        response.data?.message || "Refund request submitted"
-      );
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: response.data?.message || "Refund request submitted",
+        confirmButtonColor: "#016B61",
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
-      // 🔥 auto close modal after 2s
       setTimeout(() => {
         onSuccess();
         onClose();
       }, 2000);
     } catch (error) {
-      toast.error(
-        error.response?.data?.errors?.[0]?.message ||
-          "Refund request failed"
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Failed",
+        text:
+          error.response?.data?.errors?.[0]?.message ||
+          "Refund request failed",
+        confirmButtonColor: "#016B61",
+      });
     } finally {
       setLoading(false);
     }

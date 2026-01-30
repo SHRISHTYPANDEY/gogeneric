@@ -113,7 +113,7 @@ const closeModal = () => {
 
   return (
     <>
-    <NotificationListener />
+    
       {showModal && <AppDownloadModal onClose={closeModal} />}
       
       <TopHeader />
@@ -178,6 +178,7 @@ const closeModal = () => {
 export default function App() {
   return (
     <AuthProvider>
+      <NotificationListener />
       <WalletProvider>
         <LocationProvider>
           <AppLayout />
