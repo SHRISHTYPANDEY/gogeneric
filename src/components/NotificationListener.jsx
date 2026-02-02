@@ -33,9 +33,12 @@ export default function NotificationListener() {
   const lastNotificationId = useRef(null);
 
   useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    const interval = setInterval(async () => {
+  let intervalId;
+
+  const startListening = () => {
+    intervalId = setInterval(async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
@@ -49,29 +52,30 @@ export default function NotificationListener() {
         });
 
         const notifications = res.data || [];
+        const unread = notifications.filter((n) => n.status === 0);
 
-        const unreadList = notifications.filter((n) => n.status === 0);
-        if (unreadList.length === 0) return;
+        if (!unread.length) return;
 
-        const latestUnread = unreadList.sort(
+        const latest = unread.sort(
           (a, b) => new Date(b.created_at) - new Date(a.created_at)
         )[0];
 
-        if (latestUnread.id !== lastNotificationId.current) {
-          lastNotificationId.current = latestUnread.id;
+        // 🔥 Persist last ID
+        const lastSeen = localStorage.getItem("lastNotificationId");
+
+        if (String(latest.id) !== String(lastSeen)) {
+          localStorage.setItem("lastNotificationId", latest.id);
 
           showNotificationModal({
-            title: latestUnread.data?.title || latestUnread.title,
+            title: latest.data?.title || latest.title,
             description:
-              latestUnread.data?.description ||
-              latestUnread.description,
-            image: latestUnread.image
-              ? cleanImageUrl(latestUnread.image)
-              : latestUnread.image_full_url
-              ? cleanImageUrl(latestUnread.image_full_url)
-              : latestUnread.data?.image
-              ? cleanImageUrl(latestUnread.data.image)
-              : null,
+              latest.data?.description || latest.description,
+            image:
+              cleanImageUrl(
+                latest.image_full_url ||
+                latest.image ||
+                latest.data?.image
+              ),
           });
 
           window.dispatchEvent(
@@ -81,10 +85,14 @@ export default function NotificationListener() {
       } catch (err) {
         console.error("Notification fetch failed", err);
       }
-    }, 10000); 
+    }, 10000);
+  };
 
-    return () => clearInterval(interval);
-  }, [user]);
+  startListening();
+
+  return () => clearInterval(intervalId);
+}, [user]);
+
 
   return null;
 }

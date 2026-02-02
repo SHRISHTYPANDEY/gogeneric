@@ -5,7 +5,7 @@ import "./Searchbar.css";
 import { cleanImageUrl } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
-
+import { encodeId } from "../../utils/idObfuscator";
 export default function Searchbar({ isModal = false, onClose }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -90,7 +90,7 @@ const triggerSearch = useCallback(
       return;
     }
 
-    setShowDropdown(true); // 👈 IMPORTANT: loader dikhane ke liye
+    setShowDropdown(true); 
     setLoading(true);
 
     clearTimeout(debounceRef.current);
@@ -107,10 +107,18 @@ const triggerSearch = useCallback(
   }, [query, triggerSearch]);
 
   const handleSelect = (item) => {
-    onClose?.();
-    const id = item.id.split("-")[1];
-    navigate(item.type === "medicine" ? `/medicine/${id}` : `/view-stores/${id}`);
-  };
+  onClose?.();
+
+  const rawId = item.id.split("-")[1];
+  const encodedId = encodeId(rawId);
+
+  navigate(
+    item.type === "medicine"
+      ? `/medicine/${encodedId}`
+      : `/view-stores/${encodedId}`
+  );
+};
+
   const handleKeyDown = (e) => {
   if (e.key !== "Enter") return;
 

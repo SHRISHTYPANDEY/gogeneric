@@ -42,8 +42,7 @@ export default function Notifications() {
   }
 };
 
-
-  const markOneAsRead = async (id) => {
+const markOneAsRead = async (id) => {
   try {
     const token = localStorage.getItem("token");
 
@@ -53,8 +52,16 @@ export default function Notifications() {
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
+    setNotifications((prev) =>
+      prev.map((n) =>
+        n.id === id ? { ...n, status: 1 } : n
+      )
+    );
+
     window.dispatchEvent(new Event("notifications-updated"));
-  } catch {}
+  } catch (err) {
+    console.error("Mark notification read failed", err);
+  }
 };
 
   if (!user) return <p className="text-center mt-10">Please login</p>;
@@ -79,7 +86,6 @@ export default function Notifications() {
     markOneAsRead(n.id);
   }
 }}
-
           >
             {(n.image_full_url || n.image || n.data?.image) && (
               <img

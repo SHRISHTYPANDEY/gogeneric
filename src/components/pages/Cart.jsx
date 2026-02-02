@@ -137,7 +137,6 @@ const updateQty = async (item, qty) => {
     });
   }
 }
-
 };
 
   const removeItem = async (item) => {
@@ -237,7 +236,8 @@ const updateQty = async (item, qty) => {
 
                     <div className="item-info">
                       <h4>{c.item?.name}</h4>
-                      <p>₹{c.price}</p>
+                      <p>₹{Number(c.price).toFixed(2)}</p>
+
                     </div>
 
                     <div className="qty-control">
@@ -250,9 +250,10 @@ const updateQty = async (item, qty) => {
                       </button>
                     </div>
 
-                    <div className="item-total">
-                      ₹{c.price * c.quantity}
-                    </div>
+                   <div className="item-total">
+  ₹{(c.price * c.quantity).toFixed(2)}
+</div>
+
                     <Trash2 className="delete" onClick={() => removeItem(c)} />
                   </div>
                 );
@@ -261,14 +262,16 @@ const updateQty = async (item, qty) => {
 
             <div className="cart-summary">
               <h3>Summary</h3>
-              <div className="summary-row">
-                <span>Subtotal</span>
-                <span>₹{total}</span>
-              </div>
-              <div className="summary-row total">
-                <span>Total</span>
-                <span>₹{total}</span>
-              </div>
+           <div className="summary-row">
+  <span>Subtotal</span>
+  <span>₹{total.toFixed(2)}</span>
+</div>
+
+<div className="summary-row total">
+  <span>Total</span>
+  <span>₹{total.toFixed(2)}</span>
+</div>
+
               <button
                 className="checkout-btn"
                 onClick={() =>

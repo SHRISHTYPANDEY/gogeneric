@@ -20,6 +20,8 @@ export default function MedicineDetails() {
   const touchEndX = useRef(0);
 
   const [medicine, setMedicine] = useState(null);
+  const [price, setPrice] = useState(null);
+const [storeName, setStoreName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -97,31 +99,42 @@ export default function MedicineDetails() {
     return () => detailsAbortRef.current?.abort();
   }, [id]);
 
-  /* ---------------- IMAGE HANDLING ---------------- */
-  useEffect(() => {
-    if (!medicine) return;
+ useEffect(() => {
+  if (!medicine) return;
 
-    const imgs = [];
+  let imgs = [];
 
-    if (medicine.image_full_url) imgs.push(medicine.image_full_url);
+  if (medicine.image_full_url) {
+    imgs.push(medicine.image_full_url);
+  }
 
-    if (Array.isArray(medicine.images_full_url)) {
-      imgs.push(...medicine.images_full_url);
-    }
+  if (Array.isArray(medicine.images_full_url)) {
+    imgs.push(...medicine.images_full_url);
+  }
 
-    if (Array.isArray(medicine.storage)) {
-      medicine.storage.forEach((s) => {
-        if (s.key === "image" && s.value) {
-          imgs.push(
-            `https://www.gogenericpharma.com/storage/product/${s.value}`
-          );
-        }
-      });
-    }
+  if (Array.isArray(medicine.storage)) {
+    medicine.storage.forEach((s) => {
+      if (s.key === "image" && s.value) {
+        imgs.push(
+          `https://www.gogenericpharma.com/storage/product/${s.value}`
+        );
+      }
+    });
+  }
 
-    setImages([...new Set(imgs)].map(cleanImageUrl));
-    setActiveIndex(0);
-  }, [medicine]);
+  // clean + unique
+  imgs = [...new Set(imgs)]
+    .map(cleanImageUrl)
+    .filter(Boolean);
+
+  // 🔥 IMPORTANT: placeholder inject karo
+  if (imgs.length === 0) {
+    imgs = ["/no-image.jpg"];
+  }
+
+  setImages(imgs);
+  setActiveIndex(0);
+}, [medicine]);
 
   /* ---------------- SWIPE HANDLERS ---------------- */
   const handleTouchStart = (e) =>
@@ -194,11 +207,15 @@ export default function MedicineDetails() {
               )}
 
               {images.length > 0 && (
-                <img
-                  className="med-det-product-img"
-                  src={images[activeIndex]}
-                  alt={medicine.name}
-                />
+               <img
+  className="med-det-product-img"
+  src={images[activeIndex]}
+  alt={medicine.name}
+  onError={(e) => {
+    e.currentTarget.src = "/no-image.jpg";
+  }}
+/>
+
               )}
 
               {images.length > 1 && (

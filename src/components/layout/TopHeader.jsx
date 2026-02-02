@@ -96,7 +96,6 @@ export default function TopHeader() {
       },
     });
 
-    // ✅ status === 0 means UNREAD
     const unreadCount = res.data.filter((n) => n.status === 0).length;
     setNotificationCount(unreadCount);
   } catch (err) {
@@ -104,12 +103,11 @@ export default function TopHeader() {
   }
 };
 useEffect(() => {
-  const interval = setInterval(() => {
-    if (user) fetchNotifications();
-  }, 15000);
-
-  return () => clearInterval(interval);
+  if (user) {
+    fetchNotifications(); // 🔥 immediate fetch on login
+  }
 }, [user]);
+
 
 
 useEffect(() => {

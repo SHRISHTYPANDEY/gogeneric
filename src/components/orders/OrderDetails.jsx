@@ -34,7 +34,7 @@ export default function OrderDetails() {
           ...(!token && guestId ? { guest_id: guestId } : {}),
         },
       });
-      console.log("orderdetailssss", res.data);
+      // console.log("orderdetailssss", res.data);
       const data = res.data;
 
       let normalized = [];
@@ -78,7 +78,6 @@ export default function OrderDetails() {
 
   const orderInfo = details[0];
 
-  // ✅ FINAL store resolver
   const resolvedStore =
     store ||
     orderInfo?.store ||

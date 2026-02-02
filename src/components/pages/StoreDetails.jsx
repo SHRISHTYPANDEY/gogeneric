@@ -7,6 +7,7 @@ import Loader from "../Loader";
 import toast from "react-hot-toast";
 import { FileText, MapPin, Star, Phone, Mail } from "lucide-react";
 import "./StoreDetails.css";
+import { encodeId } from "../../utils/idObfuscator";
 
 export default function StoreDetails() {
   const { id } = useParams();
@@ -104,6 +105,7 @@ const handlePrescriptionFile = (e) => {
         params: { name: keyword, store_id: id, limit: 10000, offset: 1 },
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
+          console.log("SEARCH API FULL RESPONSE:", res.data);
       const items = res.data?.items || res.data?.products || [];
 
       const sorted = items.sort((a, b) => {
@@ -319,7 +321,7 @@ const handlePrescriptionFile = (e) => {
                 key={p.id}
                 className="sd-prod-card"
                 onClick={() =>
-                  navigate(`/medicine/${p.id}`, {
+                  navigate(`/medicine/${encodeId(p.id)}`, {
                     state: { price: p.price, store_id: store.id },
                   })
                 }

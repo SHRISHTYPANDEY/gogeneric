@@ -38,10 +38,6 @@ export default function SearchList() {
     ignoreLocation: true,
     minMatchCharLength: 2,
   };
-  const isOutOfStock =
-  item.stock === 0 ||
-  item.available_quantity === 0 ||
-  item.is_available === false;
 
   useEffect(() => {
     fetchDiscountedItems();

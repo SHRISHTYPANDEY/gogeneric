@@ -1,5 +1,4 @@
 import "./BillSummary.css";
-
 export default function BillSummary({ cartItems, deliveryType }) {
   const itemTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -17,24 +16,24 @@ export default function BillSummary({ cartItems, deliveryType }) {
 
       <div className="bill-row">
         <span>Cart Amount</span>
-        <span>₹{itemTotal}</span>
+        <span>₹{itemTotal.toFixed(2)}</span>
       </div>
 
       <div className="bill-row">
         <span>Platform Fee</span>
-        <span>₹{platformFee}</span>
+        <span>₹{platformFee.toFixed(2)}</span>
       </div>
 
       <div className="bill-row">
         <span>Delivery Charges</span>
-        <span>₹{deliveryCharge}</span>
+        <span>₹{deliveryCharge.toFixed(2)}</span>
       </div>
 
       <hr />
 
       <div className="bill-row total">
         <strong>Total Payable</strong>
-        <strong>₹{grandTotal}</strong>
+        <strong>₹{grandTotal.toFixed(2)}</strong>
       </div>
     </div>
   );
