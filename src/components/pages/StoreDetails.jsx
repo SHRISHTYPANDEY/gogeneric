@@ -57,7 +57,7 @@ const handlePrescriptionFile = (e) => {
       const res = await api.get(`/api/v1/stores/details/${id}`, {
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-      console.log("store api data", res.data);
+      // console.log("store api data", res.data);
       setStore(res.data);
       
     } catch {
@@ -105,7 +105,7 @@ const handlePrescriptionFile = (e) => {
         params: { name: keyword, store_id: id, limit: 10000, offset: 1 },
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
       });
-          console.log("SEARCH API FULL RESPONSE:", res.data);
+          // console.log("SEARCH API FULL RESPONSE:", res.data);
       const items = res.data?.items || res.data?.products || [];
 
       const sorted = items.sort((a, b) => {
@@ -134,7 +134,7 @@ const handlePrescriptionFile = (e) => {
       headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
     });
 
-    console.log("LATEST PRODUCTS API RESPONSE ", res.data);
+    // console.log("LATEST PRODUCTS API RESPONSE ", res.data);
 
     const newProducts = res.data.products || res.data.items || [];
 

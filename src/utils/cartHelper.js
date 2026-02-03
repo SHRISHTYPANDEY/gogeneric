@@ -1,9 +1,6 @@
 import api from "../api/axiosInstance";
 import Swal from "sweetalert2";
 
-/**
- * Central alert helper (modal-style notification)
- */
 const showAlert = (icon, title, text = "") => {
   Swal.fire({
     icon,
@@ -15,10 +12,6 @@ const showAlert = (icon, title, text = "") => {
   });
 };
 
-/**
- * Sync cart item IDs from backend
- * Single source of truth = backend cart
- */
 const syncCartSnapshot = async ({ token, guestId }) => {
   const res = await api.get("/api/v1/customer/cart/list", {
     headers: {
@@ -45,7 +38,6 @@ export const addToCart = async ({ item }) => {
     localStorage.setItem("guest_id", guestId);
   }
 
-  // ✅ FAST FRONTEND STOCK CHECK
   if (
     item.available_stock === 0 ||
     item.stock === 0 ||
@@ -57,7 +49,6 @@ export const addToCart = async ({ item }) => {
   }
 
   try {
-    // 🔹 STEP 1: GET CART
     const cartRes = await api.get("/api/v1/customer/cart/list", {
       headers: {
         zoneId: JSON.stringify([3]),
@@ -69,12 +60,40 @@ export const addToCart = async ({ item }) => {
 
     const cartItems = cartRes.data || [];
 
-    // 🔹 STEP 2: CHECK IF ITEM EXISTS
+    const cartStoreId =
+  cartItems.length > 0 ? cartItems[0]?.item?.store_id : null;
+
+const itemStoreId = item.store_id;
+
+if (cartStoreId && cartStoreId !== itemStoreId) {
+  const result = await Swal.fire({
+    title: "Replace cart items?",
+    text: "Your cart contains items from another store. You can order from only one store at a time.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Replace",
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#016B61",
+  });
+
+  if (!result.isConfirmed) {
+    return; 
+  }
+
+  await api.delete("/api/v1/customer/cart/remove", {
+    headers: {
+      zoneId: JSON.stringify([3]),
+      moduleId: "2",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    params: !token ? { guest_id: guestId } : {},
+  });
+}
+
     const existingItem = cartItems.find(
       (c) => c.item_id === item.id
     );
 
-    // 🔹 STEP 3: UPDATE QTY IF EXISTS
     if (existingItem) {
       if (
         item.available_stock &&
@@ -103,8 +122,6 @@ export const addToCart = async ({ item }) => {
 
       showAlert("success", "Cart Updated", "Quantity increased");
     }
-
-    // 🔹 STEP 4: ADD NEW ITEM
     else {
       await api.post(
         "/api/v1/customer/cart/add",
@@ -126,8 +143,6 @@ export const addToCart = async ({ item }) => {
 
       showAlert("success", "Added to Cart", "Product added successfully");
     }
-
-    // 🔹 STEP 5: FINAL SYNC
     await syncCartSnapshot({ token, guestId });
 
   } catch (err) {

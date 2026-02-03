@@ -264,7 +264,7 @@ showAlert("warning", "Prescription Required", "Prescription is required");
       }
 
       for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
+        // console.log(pair[0], pair[1]);
       }
 
       const headers = {
@@ -275,9 +275,9 @@ showAlert("warning", "Prescription Required", "Prescription is required");
 
       const res = await api.post(ORDER_API, formData, { headers });
       if (isPrescriptionOrder) {
-        console.log("PRESCRIPTION ORDER API RESPONSE ", res.data);
+        // console.log("PRESCRIPTION ORDER API RESPONSE ", res.data);
       }
-      console.log("Cart order data", res.data);
+      // console.log("Cart order data", res.data);
       showAlert(
   "success",
   "Order Placed 🎉",

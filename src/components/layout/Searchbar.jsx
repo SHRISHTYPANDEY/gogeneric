@@ -57,7 +57,7 @@ export default function Searchbar({ isModal = false, onClose }) {
       },
       signal: abortRef.current.signal,
     });
-
+// console.log("item-store-search data", res.data);
     const data = [
       ...(res.data?.items || []).map((i) => ({
         id: `item-${i.id}`,
@@ -81,7 +81,6 @@ export default function Searchbar({ isModal = false, onClose }) {
     setLoading(false);
   }
 };
-
 
 const triggerSearch = useCallback(
   (text) => {

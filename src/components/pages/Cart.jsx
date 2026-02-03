@@ -27,7 +27,6 @@ export default function Cart() {
   const navigate = useNavigate();
 
   const { discountMap, fetchDiscountedItems } = useDiscounts();
-
   let guestId = localStorage.getItem("guest_id");
   if (!token && !guestId) {
     guestId = crypto.randomUUID();
@@ -75,14 +74,14 @@ export default function Cart() {
 const updateQty = async (item, qty) => {
   if (qty < 1) return;
 
-  console.log("Updating quantity:", {
-    cart_id: item.id,
-    oldQty: item.quantity,
-    newQty: qty,
-    price: item.price,
-    tokenPresent: !!token,
-    guestId,
-  });
+//   console.log("Updating quantity:", {
+//     cart_id: item.id,
+//     oldQty: item.quantity,
+//     newQty: qty,
+// price: getFinalPrice(item.item, discountMap),
+//     tokenPresent: !!token,
+//     guestId,
+//   });
 
   try {
     const res = await api.post(
@@ -102,8 +101,7 @@ const updateQty = async (item, qty) => {
       }
     );
 
-    console.log("Cart update success:", res.data);
-
+    // console.log("Cart update success:", res.data);
     window.dispatchEvent(new Event("cart-updated"));
  } catch (error) {
   console.error("Cart update failed", error);
@@ -187,8 +185,11 @@ const updateQty = async (item, qty) => {
       setSuggestedLoading(false);
     }
   };
+const total = cart.reduce((sum, c) => {
+  const price = getFinalPrice(c.item, discountMap);
+  return sum + price * c.quantity;
+}, 0);
 
-  const total = cart.reduce((sum, c) => sum + c.price * c.quantity, 0);
 
   if (loading) {
     return (
@@ -220,23 +221,42 @@ const updateQty = async (item, qty) => {
           <div className="cart-layout">
             <div className="cart-items">
               {cart.map((c) => {
-                const img =
-                  c.item?.image_full_url ||
-                  c.item?.images_full_url?.[0] ||
-                  c.item?.image;
+
+                const finalPrice = getFinalPrice(c.item, discountMap);
+const rawImg =
+  c.item?.image_full_url ||
+  c.item?.images_full_url?.[0] ||
+  c.item?.image;
+
+const img =
+  !rawImg ||
+  rawImg === "null" ||
+  rawImg === "undefined" ||
+  rawImg === "/"
+    ? null
+    : rawImg;
+
 
                 return (
                   <div key={c.id} className="cart-item">
-                    <img
-                      src={cleanImageUrl(img)}
-                      alt={c.item?.name}
-                      className="cart-img"
-                      onError={(e) => (e.currentTarget.src = "/no-image.png")}
-                    />
+<img
+  src={cleanImageUrl(img ?? "")}
+  alt={c.item?.name}
+  className="cart-img"
+  onError={(e) => (e.currentTarget.src = "/no-image.png")}
+/>
 
                     <div className="item-info">
                       <h4>{c.item?.name}</h4>
-                      <p>₹{Number(c.price).toFixed(2)}</p>
+                      {finalPrice < c.price ? (
+  <>
+    <p className="original-price">₹{c.price}</p>
+    <p className="discounted-price">₹{finalPrice}</p>
+  </>
+) : (
+  <p>₹{c.price}</p>
+)}
+
 
                     </div>
 
@@ -251,7 +271,8 @@ const updateQty = async (item, qty) => {
                     </div>
 
                    <div className="item-total">
-  ₹{(c.price * c.quantity).toFixed(2)}
+₹{(finalPrice * c.quantity).toFixed(2)}
+
 </div>
 
                     <Trash2 className="delete" onClick={() => removeItem(c)} />
@@ -309,17 +330,13 @@ const updateQty = async (item, qty) => {
                       )}
 
                       <div className="suggested-img-container">
-                        <img
-                          src={cleanImageUrl(
-                            p.image_full_url || p.images_full_url?.[0]
-                          )}
-                          alt={p.name}
-                          onError={(e) =>
-                            (e.currentTarget.src = "/no-image.png")
-                          }
-                        />
-                      </div>
+                       <img
+  src={cleanImageUrl(p.image_full_url || p.images_full_url?.[0] || "")}
+  alt={p.name}
+  onError={(e) => (e.currentTarget.src = "/no-image.png")}
+/>
 
+                      </div>
                       <div className="suggested-info">
                         <h4>{p.name}</h4>
 

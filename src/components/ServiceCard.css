@@ -56,6 +56,8 @@
   line-height: 1.7;
   max-width: 680px;
   margin: 25px auto 45px;
+    white-space: nowrap;    
+
 }
 
 .service-grid {
@@ -169,8 +171,8 @@
 
   .section-subtitle1 {
     font-size: 0.95rem;
-    margin: 15px auto 30px;
-    line-height: 1.5;
+    margin: 10px auto 30px;
+    line-height: 1;
   }
 
   .service-grid {

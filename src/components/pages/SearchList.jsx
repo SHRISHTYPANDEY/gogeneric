@@ -75,7 +75,7 @@ export default function SearchList() {
         },
         signal: abortRef.current.signal,
       });
-      console.log("search api data", res.data);
+      // console.log("search api data", res.data);
 
       const rawItems = res.data?.items || [];
       const rawStores = res.data?.stores || [];

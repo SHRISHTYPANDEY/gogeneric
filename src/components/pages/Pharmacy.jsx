@@ -46,7 +46,7 @@ export default function Pharmacy() {
           Accept: "application/json",
         },
       });
-      console.log("pharmacy data", res.data);
+      // console.log("pharmacy data", res.data);
       const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
       setStores(storeList);
     } catch (error) {

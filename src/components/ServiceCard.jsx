@@ -89,8 +89,7 @@ export default function ServiceCard() {
       <div className="section-header">
         <div className="title-wrapper">
           <h2 className="section-titlee">
-            <span className="title-gradient">Premium Health </span>
-            <span className="title-accent">Services</span>
+            <span className="title-gradient">Premium Health Services</span>
           </h2>
           <div className="title-decoration">
             <div className="decoration-line"></div>
