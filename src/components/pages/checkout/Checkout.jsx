@@ -30,16 +30,15 @@ export default function Checkout() {
   const [prescriptionFile, setPrescriptionFile] = useState(null);
   const { balance: walletBalance, fetchWallet } = useWallet();
   const showAlert = (icon, title, text, timer = null) => {
-  Swal.fire({
-    icon,
-    title,
-    text,
-    confirmButtonColor: "#016B61",
-    timer,
-    showConfirmButton: !timer,
-  });
-};
-
+    Swal.fire({
+      icon,
+      title,
+      text,
+      confirmButtonColor: "#016B61",
+      timer,
+      showConfirmButton: !timer,
+    });
+  };
 
   const isPrescriptionOrder = location.state?.isPrescriptionOrder;
 
@@ -104,8 +103,8 @@ export default function Checkout() {
         navigate("/cart");
       }
     } catch {
-       showAlert("error", "Error", "Failed to load cart");
-} finally {
+      showAlert("error", "Error", "Failed to load cart");
+    } finally {
       setLoading(false);
     }
   };
@@ -180,16 +179,16 @@ export default function Checkout() {
         headers,
       });
 
-showAlert(
-  "success",
-  "Order Placed 🎉",
-  "Thank you for shopping with us",
-  1500
-);
-      window.dispatchEvent(new Event("cart-updated")); 
+      showAlert(
+        "success",
+        "Order Placed 🎉",
+        "Thank you for shopping with us",
+        1500,
+      );
+      window.dispatchEvent(new Event("cart-updated"));
       navigate(`/orders/${res.data?.order_id}`);
     } catch (err) {
-showAlert("error", "Failed", "Order placement failed");
+      showAlert("error", "Failed", "Order placement failed");
     } finally {
       setPlacingOrder(false);
     }
@@ -201,22 +200,26 @@ showAlert("error", "Failed", "Order placement failed");
     // console.log("SELECTED ADDRESS FULL OBJECT", selectedAddress);
 
     if (!paymentMethod || !paymentReady) {
-showAlert("warning", "Payment Pending", "Complete payment first");
+      showAlert("warning", "Payment Pending", "Complete payment first");
       return;
     }
 
     if (deliveryType === "delivery" && !selectedAddress) {
-    showAlert("warning", "Address Required", "Please select delivery address");
+      showAlert(
+        "warning",
+        "Address Required",
+        "Please select delivery address",
+      );
       return;
     }
 
     if (!policyAccepted) {
-     showAlert("warning", "Policy Required", "Please accept policies");
+      showAlert("warning", "Policy Required", "Please accept policies");
       return;
     }
 
     if ((isPrescriptionRequired || isPrescriptionOrder) && !prescriptionFile) {
-showAlert("warning", "Prescription Required", "Prescription is required");
+      showAlert("warning", "Prescription Required", "Prescription is required");
       return false;
     }
 
@@ -231,10 +234,10 @@ showAlert("warning", "Prescription Required", "Prescription is required");
       if (paymentMethod === "wallet") {
         if (walletBalance < totalPayable) {
           showAlert(
-  "error",
-  "Insufficient Balance",
-  `Wallet balance ₹${walletBalance}`
-);
+            "error",
+            "Insufficient Balance",
+            `Wallet balance ₹${walletBalance}`,
+          );
 
           setPlacingOrder(false);
           return;
@@ -279,20 +282,19 @@ showAlert("warning", "Prescription Required", "Prescription is required");
       }
       // console.log("Cart order data", res.data);
       showAlert(
-  "success",
-  "Order Placed 🎉",
-  "Thank you for shopping with us",
-  1500
-);
+        "success",
+        "Order Placed 🎉",
+        "Thank you for shopping with us",
+        1500,
+      );
 
-      window.dispatchEvent(new Event("cart-updated")); 
+      window.dispatchEvent(new Event("cart-updated"));
       fetchWallet();
       localStorage.removeItem("delivery_type");
       navigate(`/orders/${res.data?.order_id || ""}`);
     } catch (err) {
       console.error("ORDER ERROR", err.response?.data || err);
-   showAlert("error", "Failed", "Order placement failed");
-
+      showAlert("error", "Failed", "Order placement failed");
     } finally {
       setPlacingOrder(false);
     }
@@ -307,49 +309,53 @@ showAlert("warning", "Prescription Required", "Prescription is required");
 
   const validateBeforeOrder = () => {
     if (!token) {
-showAlert("info", "Login Required", "Please login first");
+      showAlert("info", "Login Required", "Please login first");
       navigate("/login");
       return false;
     }
 
     if (deliveryType === "delivery" && !selectedAddress) {
-showAlert("warning", "Address Required", "Please select delivery address");
+      showAlert(
+        "warning",
+        "Address Required",
+        "Please select delivery address",
+      );
       return false;
     }
 
     if (!paymentMethod) {
-showAlert("warning", "Payment Required", "Please select payment method");
+      showAlert("warning", "Payment Required", "Please select payment method");
       return false;
     }
     if (!getOrderStoreId()) {
-   showAlert("error", "Error", "Store not found for this order");
+      showAlert("error", "Error", "Store not found for this order");
       return false;
     }
 
     if (paymentMethod === "wallet" && walletBalance < totalPayable) {
-showAlert(
-  "error",
-  "Insufficient Balance",
-  `Wallet balance ₹${walletBalance}`
-);
+      showAlert(
+        "error",
+        "Insufficient Balance",
+        `Wallet balance ₹${walletBalance}`,
+      );
       return false;
     }
 
     if (isPrescriptionRequired && !prescriptionFile) {
- showAlert(
-  "warning",
-  "Prescription Required",
-  "Prescription is required for selected medicines"
-);
+      showAlert(
+        "warning",
+        "Prescription Required",
+        "Prescription is required for selected medicines",
+      );
       return false;
     }
 
     if (!policyAccepted) {
-   showAlert(
-  "warning",
-  "Policy Required",
-  "Please accept Privacy Policy & Terms"
-);
+      showAlert(
+        "warning",
+        "Policy Required",
+        "Please accept Privacy Policy & Terms",
+      );
       return false;
     }
 

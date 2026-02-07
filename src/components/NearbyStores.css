@@ -83,8 +83,8 @@
 
 .store-card {
   position: relative;
-  min-width: 240px;
-  max-width: 250px;
+  min-width: 250px;
+  max-width: 280px;
   height: 370px;
   padding: 20px;
   border-radius: 28px;
@@ -178,31 +178,44 @@
   margin-top: auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   width: 100%;
   padding-bottom: 5px;
 }
-
 .price-box {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
-.original-price {
-  font-size: 12px;
+.originall-price {
+  font-size: 16px;
   color: #9ca3af;
   text-decoration: line-through;
   line-height: 1;
 }
-
-.discounted-price {
-  font-size: 19px;
+.discounted-price,
+.discountedd-price,
+.discounteddd-price {
+  font-size: 20px;
   font-weight: 800;
-  color: #111;
+  color: var(--primary-deep);
+  line-height: 1.2;
+}
+
+
+.discounteddd-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: #510303;
   line-height: 1.2;
 }
 
 .cart-action {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
   flex-shrink: 0;
 }
 

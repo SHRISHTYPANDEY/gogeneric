@@ -209,6 +209,7 @@
   background: var(--primary-deep);
   color: #fff;
   padding: 16px 42px;
+  width: 350px;
   border-radius: 50px;
   font-weight: 700;
   border: none;
@@ -230,4 +231,16 @@
   .wishlist-heading {
     font-size: 20px;
   }
+  .explore-btn {
+  background: var(--primary-deep);
+  color: #fff;
+  padding: 16px 42px;
+  width: 250px;
+  border-radius: 50px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
 }

@@ -51,6 +51,8 @@ import HealthCon from "./components/pages/HealthCon.jsx";
 import AppDownloadModal from "./components/AppDownloadModal.jsx";
 import BackButton from "./components/BackButton.jsx";
 import NotificationListener from "./components/NotificationListener.jsx";
+import LabTestCategories from "./components/LabTestCategories.jsx";
+import LabTestsPage from "./components/LabtestPage.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
@@ -69,7 +71,7 @@ function AppLayout() {
   const [showModal, setShowModal] = useState(false);
   const { showLoginModal, setShowLoginModal } = useAuth();
   const { location, setLocation } = useLocation();
-  const MODAL_COOLDOWN = 20 * 60 * 1000; // 20 minutes
+  const MODAL_COOLDOWN = 20 * 60 * 1000; 
 
    useEffect(() => {
   const lastDismissed = localStorage.getItem("appDownloadDismissedAt");
@@ -168,6 +170,8 @@ const closeModal = () => {
         <Route path="/category" element={<Category />} />
         <Route path="/health-concern/:concernSlug" element={<HealthConcern />} />
         <Route path="/health-concerns" element={<HealthCon />} />
+        <Route path="/lab-tests" element={<LabTestCategories />} />
+        <Route path="/lab-tests/:slug/tests" element={<LabTestsPage />} />
       </Routes>
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />

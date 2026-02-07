@@ -3,7 +3,6 @@ import api from "../api/axiosInstance";
 
 export default function useDiscounts() {
   const [discountMap, setDiscountMap] = useState({});
-
   const fetchDiscountedItems = useCallback(async () => {
     try {
       const res = await api.get("/api/v1/items/discounted", {

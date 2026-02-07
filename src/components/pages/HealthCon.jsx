@@ -1,41 +1,40 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import "./HealthCon.css";
-import api from "../../api/axiosInstance"
-import { cleanImageUrl }from "../../utils"
+import api from "../../api/axiosInstance";
+import { cleanImageUrl } from "../../utils";
 import { useNavigate } from "react-router-dom";
 
 export default function HealthCon() {
   const [concerns, setConcerns] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const navigate = useNavigate();
   const abortRef = useRef(null);
   const concernImages = {
-  ANTIBIOTIC: "/concern_img/ANTIBIOTIC Care.png",
-  Allergy: "/concern_img/Allergy.png",
-  "Body Pain": "/concern_img/Body Pain Care.png",
-  CARDIO : "/concern_img/CARDIO.png",
-  CNS: "/concern_img/CNS.png",
-  "Cold & Cough": "/concern_img/Cold & Cough.png",
-  Diabetes : "/concern_img/Diabetes Care.png",
-  Diarrhea: "/concern_img/Diarrhea.png",
-  Fever: "/concern_img/Fever Care.png",
-  "Gas / Bloating" : "/concern_img/Gas  Bloating.png",
-  General: "/concern_img/General.png",
-  Hedache: "/concern_img/Headache Care.png",
-  "High Blood Pressure": "/concern_img/High Blood Pressure.png",
-  Infection: "/concern_img/Infection.png",
-  Itching: "/concern_img/Itching.png",
-  KIDNEY: "/concern_img/KIDNEY Care.png",
-  Migraine: "/concern_img/Migraine.png",
-  "Muscle Pain": "/concern_img/Muscle Pain.png",
-  "Running Nose": "/concern_img/Running Nose.png",
-  "Skin Allergy / Rash": "/concern_img/Skin Allergy  Rash.png",
-  "Stomach Ache": "/concern_img/Stomach Ache.png",
-  "Supplements & Immunity Boosters": "/concern_img/Supplements & Immunity Boosters.png",
-  Vomiting: "/concern_img/Vomiting.png",
-};
-
+    ANTIBIOTIC: "/concern_img/ANTIBIOTIC Care.png",
+    Allergy: "/concern_img/Allergy.png",
+    "Body Pain": "/concern_img/Body Pain Care.png",
+    CARDIO: "/concern_img/CARDIO.png",
+    CNS: "/concern_img/CNS.png",
+    "Cold & Cough": "/concern_img/Cold & Cough.png",
+    Diabetes: "/concern_img/Diabetes Care.png",
+    Diarrhea: "/concern_img/Diarrhea.png",
+    Fever: "/concern_img/Fever Care.png",
+    "Gas / Bloating": "/concern_img/Gas  Bloating.png",
+    General: "/concern_img/General.png",
+    Hedache: "/concern_img/Headache Care.png",
+    "High Blood Pressure": "/concern_img/High Blood Pressure.png",
+    Infection: "/concern_img/Infection.png",
+    Itching: "/concern_img/Itching.png",
+    KIDNEY: "/concern_img/KIDNEY Care.png",
+    Migraine: "/concern_img/Migraine.png",
+    "Muscle Pain": "/concern_img/Muscle Pain.png",
+    "Running Nose": "/concern_img/Running Nose.png",
+    "Skin Allergy / Rash": "/concern_img/Skin Allergy  Rash.png",
+    "Stomach Ache": "/concern_img/Stomach Ache.png",
+    "Supplements & Immunity Boosters":
+      "/concern_img/Supplements & Immunity Boosters.png",
+    Vomiting: "/concern_img/Vomiting.png",
+  };
   useEffect(() => {
     return () => abortRef.current?.abort();
   }, []);
@@ -95,20 +94,19 @@ export default function HealthCon() {
             className="concern-type-card1"
             onClick={() =>
               navigate(`/health-concern/${c.id}`, {
-                state: {  concernName: c.name,
-        concernId: c.id,},
+                state: { concernName: c.name, concernId: c.id },
               })
             }
           >
             <div className="concern-type-image1">
-             <img
-  src={
-    cleanImageUrl(c.image_full_url) ||
-    concernImages[c.name] ||
-    "/no-image.jpg"
-  }
-  alt={c.name}
-/>
+              <img
+                src={
+                  cleanImageUrl(c.image_full_url) ||
+                  concernImages[c.name] ||
+                  "/no-image.jpg"
+                }
+                alt={c.name}
+              />
             </div>
             <p className="concern-type-name1">{c.name}</p>
           </div>

@@ -45,10 +45,10 @@ export default function NearbyStores() {
           headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
           signal: abortRef.current.signal,
         });
-
+// console.log("API RESPONSE:", res.data);
         const items = res.data.items || res.data.products || [];
         allItems = [...allItems, ...items];
-
+        // console.log("med data", res)
         if (!categoriesSet) {
           setCategories(res.data.categories || res.data.filters || []);
           categoriesSet = true;
@@ -174,16 +174,16 @@ export default function NearbyStores() {
                         <div className="price-box">
                           {discountedPrice ? (
                             <>
-                              <span className="original-price">
-                                ₹{store.price || store.unit_price}
+                              <span className="originall-price">
+                                ₹{store.mrp || store.price}
                               </span>
-                              <span className="discounted-price">
+                              <span className="discounteddd-price">
                                 ₹{discountedPrice}
                               </span>
                             </>
                           ) : (
-                            <span className="discounted-price">
-                              ₹{store.price || store.unit_price}
+                            <span className="discountedd-price">
+                              ₹{store.mrp || store.price}
                             </span>
                           )}
                         </div>

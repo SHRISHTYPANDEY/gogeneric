@@ -1,0 +1,186 @@
+/* ===== LAB CATEGORY SECTION ===== */
+
+.lab-category-section {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.lab-cate-title {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.lab-cate-title::after {
+  content: "";
+  display: block;
+  margin: 12px auto 0;
+  width: 400px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    #04403b 0%,
+    rgba(15, 118, 110, 0.6) 60%,
+    transparent 100%
+  );
+}
+.lab-cate-titlee {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.lab-cate-titlee::after {
+  content: "";
+  display: block;
+  margin: 12px auto 0;
+  width: 270px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    #04403b 0%,
+    rgba(15, 118, 110, 0.6) 60%,
+    transparent 100%
+  );
+}
+
+/* ===== GRID (3 PER ROW) ===== */
+
+.lab-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+/* ===== CARD ===== */
+
+.lab-category-card {
+  height: 290px;
+  border-radius: 22px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid transparent;
+}
+
+.lab-category-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 26px 50px rgba(0, 0, 0, 0.16);
+}
+
+/* ===== COLOR ROTATION (same vibe) ===== */
+
+.lab-category-card:nth-child(6n + 1) {
+  background: #ecfeff;
+  border-color: #67e8f9;
+}
+
+.lab-category-card:nth-child(6n + 2) {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.lab-category-card:nth-child(6n + 3) {
+  background: #fdf4ff;
+  border-color: #e879f9;
+}
+
+.lab-category-card:nth-child(6n + 4) {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.lab-category-card:nth-child(6n + 5) {
+  background: #fefce8;
+  border-color: #fde047;
+}
+
+.lab-category-card:nth-child(6n + 6) {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+}
+
+/* ===== IMAGE ===== */
+
+.lab-card-image-box {
+  height: 65%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.lab-card-image-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.lab-category-card:hover img {
+  transform: scale(1.1);
+}
+
+/* ===== INFO ===== */
+
+.lab-card-info-box {
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.lab-category-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  padding: 0 12px;
+  text-align: center;
+}
+
+/* ===== BUTTON ===== */
+
+.lab-browse-all-wrapper {
+  margin-top: 50px;
+}
+
+.lab-browse-all-btn {
+  padding: 14px 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lab-browse-all-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(20, 184, 166, 0.45);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .lab-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lab-category-card {
+    height: 200px;
+  }
+}
+
+

@@ -56,7 +56,7 @@
   line-height: 1.7;
   max-width: 680px;
   margin: 25px auto 45px;
-    white-space: nowrap;    
+  white-space: nowrap;    
 
 }
 
@@ -200,5 +200,12 @@
   }
   .title-accent {
     font-size: 1.6rem;
+  }
+}
+@media (max-width: 768px) {
+  .section-subtitle1 {
+    white-space: normal; 
+    text-align: center;
+    line-height: 1.5;
   }
 }

@@ -20,26 +20,22 @@ export default function MedicineDetails() {
   const touchEndX = useRef(0);
 
   const [medicine, setMedicine] = useState(null);
-  const [price, setPrice] = useState(null);
-const [storeName, setStoreName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const passedPrice = location.state?.price || null;
+
   const showAlert = (icon, title, text, timer = null) => {
-  Swal.fire({
-    icon,
-    title,
-    text,
-    confirmButtonColor: "#016B61",
-    timer,
-    showConfirmButton: !timer,
-  });
-};
-
-
-  /* ---------------- FETCH MEDICINE ---------------- */
+    Swal.fire({
+      icon,
+      title,
+      text,
+      confirmButtonColor: "#016B61",
+      timer,
+      showConfirmButton: !timer,
+    });
+  };
   const fetchMedicineDetails = async () => {
     detailsAbortRef.current?.abort();
     const controller = new AbortController();
@@ -57,6 +53,7 @@ const [storeName, setStoreName] = useState(null);
       });
 
       if (!controller.signal.aborted) {
+        // console.log("🧪 MEDICINE DETAIL API:", res.data);
         setMedicine(res.data || null);
       }
     } catch (err) {
@@ -69,12 +66,7 @@ const [storeName, setStoreName] = useState(null);
       }
 
       console.error("Medicine fetch error:", err);
-      showAlert(
-  "error",
-  "Error",
-  "Failed to load medicine details"
-);
-
+      showAlert("error", "Error", "Failed to load medicine details");
     } finally {
       if (!controller.signal.aborted) {
         setLoading(false);
@@ -82,16 +74,10 @@ const [storeName, setStoreName] = useState(null);
     }
   };
 
-  /* ---------------- MAIN EFFECT ---------------- */
   useEffect(() => {
     if (!id) {
       setLoading(false);
-      showAlert(
-  "error",
-  "Invalid Link",
-  "This medicine link is not valid"
-);
-
+      showAlert("error", "Invalid Link", "This medicine link is not valid");
       return;
     }
 
@@ -99,90 +85,75 @@ const [storeName, setStoreName] = useState(null);
     return () => detailsAbortRef.current?.abort();
   }, [id]);
 
- useEffect(() => {
-  if (!medicine) return;
+  useEffect(() => {
+    if (!medicine) return;
 
-  let imgs = [];
+    let imgs = [];
 
-  if (medicine.image_full_url) {
-    imgs.push(medicine.image_full_url);
-  }
+    if (medicine.image_full_url) imgs.push(medicine.image_full_url);
+    if (Array.isArray(medicine.images_full_url))
+      imgs.push(...medicine.images_full_url);
 
-  if (Array.isArray(medicine.images_full_url)) {
-    imgs.push(...medicine.images_full_url);
-  }
-
-  if (Array.isArray(medicine.storage)) {
-    medicine.storage.forEach((s) => {
-      if (s.key === "image" && s.value) {
-        imgs.push(
-          `https://www.gogenericpharma.com/storage/product/${s.value}`
-        );
-      }
-    });
-  }
-
-  // clean + unique
-  imgs = [...new Set(imgs)]
-    .map(cleanImageUrl)
-    .filter(Boolean);
-
-  // 🔥 IMPORTANT: placeholder inject karo
-  if (imgs.length === 0) {
-    imgs = ["/no-image.jpg"];
-  }
-
-  setImages(imgs);
-  setActiveIndex(0);
-}, [medicine]);
-
-  /* ---------------- SWIPE HANDLERS ---------------- */
-  const handleTouchStart = (e) =>
-    (touchStartX.current = e.touches[0].clientX);
-
-  const handleTouchMove = (e) =>
-    (touchEndX.current = e.touches[0].clientX);
-
-  const handleTouchEnd = () => {
-    const diff = touchStartX.current - touchEndX.current;
-
-    if (diff > 50 && activeIndex < images.length - 1) {
-      setActiveIndex((p) => p + 1);
+    if (Array.isArray(medicine.storage)) {
+      medicine.storage.forEach((s) => {
+        if (s.key === "image" && s.value) {
+          imgs.push(
+            `https://www.gogenericpharma.com/storage/product/${s.value}`
+          );
+        }
+      });
     }
 
-    if (diff < -50 && activeIndex > 0) {
-      setActiveIndex((p) => p - 1);
-    }
-  };
+    imgs = [...new Set(imgs)]
+      .map(cleanImageUrl)
+      .filter(Boolean);
 
-  /* ---------------- PRICE LOGIC ---------------- */
-  const basePrice =
-    passedPrice ||
+    if (imgs.length === 0) imgs = ["/no-image.jpg"];
+
+    setImages(imgs);
+    setActiveIndex(0);
+  }, [medicine]);
+
+  const mrp =
+    medicine?.mrp ||
     medicine?.price ||
     medicine?.unit_price ||
     medicine?.variations?.[0]?.price ||
     null;
 
-  const discountedPrice =
-    medicine?.discount && basePrice
-      ? medicine.discount_type === "percent"
-        ? Math.round(basePrice - (basePrice * medicine.discount) / 100)
-        : Math.max(basePrice - medicine.discount, 0)
-      : null;
+  // ✅ Final price priority:
+  // 1. passedPrice (from listing)
+  // 2. backend discount
+  // 3. mrp
+  const finalPrice = passedPrice
+    ? passedPrice
+    : medicine?.discount && mrp
+    ? medicine.discount_type === "percent"
+      ? Math.round(mrp - (mrp * medicine.discount) / 100)
+      : Math.max(mrp - medicine.discount, 0)
+    : mrp;
 
-  const finalPrice = discountedPrice || basePrice;
+  const showOldPrice = mrp && finalPrice < mrp;
 
-  const discountPercent =
-    discountedPrice && basePrice
-      ? Math.round(((basePrice - discountedPrice) / basePrice) * 100)
-      : null;
+  const discountPercent = showOldPrice
+    ? Math.round(((mrp - finalPrice) / mrp) * 100)
+    : null;
 
-  /* ---------------- RENDER ---------------- */
+  const handleTouchStart = (e) =>
+    (touchStartX.current = e.touches[0].clientX);
+  const handleTouchMove = (e) =>
+    (touchEndX.current = e.touches[0].clientX);
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    if (diff > 50 && activeIndex < images.length - 1)
+      setActiveIndex((p) => p + 1);
+    if (diff < -50 && activeIndex > 0)
+      setActiveIndex((p) => p - 1);
+  };
+
   return (
     <>
-      {medicine && (
-        <ProductSchema medicine={medicine} price={finalPrice} />
-      )}
+      {medicine && <ProductSchema medicine={medicine} price={finalPrice} />}
 
       <div className="med-det-page-container">
         {loading && <Loader text="Loading medicine details..." />}
@@ -206,17 +177,12 @@ const [storeName, setStoreName] = useState(null);
                 </span>
               )}
 
-              {images.length > 0 && (
-               <img
-  className="med-det-product-img"
-  src={images[activeIndex]}
-  alt={medicine.name}
-  onError={(e) => {
-    e.currentTarget.src = "/no-image.jpg";
-  }}
-/>
-
-              )}
+              <img
+                className="med-det-product-img"
+                src={images[activeIndex]}
+                alt={medicine.name}
+                onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
+              />
 
               {images.length > 1 && (
                 <div className="med-det-dots">
@@ -236,23 +202,22 @@ const [storeName, setStoreName] = useState(null);
             {/* RIGHT SECTION */}
             <div className="med-det-right-section">
               <h1 className="med-det-title">{medicine.name}</h1>
+
               {(medicine.store_name || medicine.store?.name) && (
-  <p className="med-det-store-name">
-    {medicine.store_name || medicine.store?.name}
-  </p>
-)}
+                <p className="med-det-store-name">
+                  {medicine.store_name || medicine.store?.name}
+                </p>
+              )}
 
-
+              {/* ✅ MRP + DISCOUNTED PRICE */}
               <div className="med-det-price-container">
-                {discountedPrice ? (
+                {showOldPrice ? (
                   <>
-                    <span className="med-det-old-price">₹{basePrice}</span>
-                    <span className="med-det-new-price">
-                      ₹{discountedPrice}
-                    </span>
+                    <span className="med-det-old-price">₹{mrp}</span>
+                    <span className="med-det-new-price">₹{finalPrice}</span>
                   </>
                 ) : (
-                  <span className="med-det-new-price">₹{basePrice}</span>
+                  <span className="med-det-new-price">₹{finalPrice}</span>
                 )}
               </div>
 
@@ -266,7 +231,13 @@ const [storeName, setStoreName] = useState(null);
               )}
 
               <div className="med-det-action-area">
-                <AddToCartButton item={medicine} />
+                <AddToCartButton
+                  item={{
+                    ...medicine,
+                    price: finalPrice,
+                    original_price: mrp,
+                  }}
+                />
               </div>
             </div>
           </div>
