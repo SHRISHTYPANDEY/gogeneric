@@ -60,9 +60,9 @@ export default function LabCategoryCards() {
             <div className="lab-card-image-box">
               <img
                 src={
-                  cleanImageUrl(cat.icon) || // API icon
-                  labCategoryImages[cat.slug] || // fallback object
-                  "/no-image.jpg" // final fallback
+                  cleanImageUrl(cat.icon) || 
+                  labCategoryImages[cat.slug] || 
+                  "/no-image.jpg" 
                 }
                 alt={cat.name}
               />

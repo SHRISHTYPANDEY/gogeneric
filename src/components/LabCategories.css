@@ -54,14 +54,14 @@
 
 .lab-category-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 22px;
 }
 
 /* ===== CARD ===== */
 
 .lab-category-card {
-  height: 290px;
+  height: 200px;
   border-radius: 22px;
   cursor: pointer;
   overflow: hidden;
