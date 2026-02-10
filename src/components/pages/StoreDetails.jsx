@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { FileText, MapPin, Star, Phone, Mail } from "lucide-react";
 import "./StoreDetails.css";
 import { encodeId } from "../../utils/idObfuscator";
+import { cleanImageUrl } from "../../utils";
 
 export default function StoreDetails() {
   const { id } = useParams();
@@ -328,7 +329,15 @@ const handlePrescriptionFile = (e) => {
               >
                 <WishlistButton item={p} />
                 <AddToCartButton item={p} />
+              <div className="sd-prod-image">
+<img
+  src={cleanImageUrl(p.image_full_url || p.image) || "/no-image.jpg"}
+  alt={p.name}
+  loading="lazy"
+  onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
+/>
 
+</div>
                 {getDiscountPercent(p) && (
                   <span className="sd-discount-badge">
                     {getDiscountPercent(p)}% OFF
