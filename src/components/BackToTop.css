@@ -1,8 +1,8 @@
 .back-to-top {
   position: fixed;
   bottom: 90px;
-  right: 30px;
-  background: #2563eb; /* blue */
+  left: 30px;
+  background: #2563eb;
   color: #fff;
   border: none;
   border-radius: 50%;

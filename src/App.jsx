@@ -53,6 +53,7 @@ import BackButton from "./components/BackButton.jsx";
 import NotificationListener from "./components/NotificationListener.jsx";
 import LabTestCategories from "./components/LabTestCategories.jsx";
 import LabTestsPage from "./components/LabtestPage.jsx";
+import CategoryDoctors from "./components/pages/CategoryDoctors.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
@@ -172,6 +173,10 @@ const closeModal = () => {
         <Route path="/health-concerns" element={<HealthCon />} />
         <Route path="/lab-tests" element={<LabTestCategories />} />
         <Route path="/lab-tests/:slug/tests" element={<LabTestsPage />} />
+        <Route
+  path="/doctors/category/:specialization"
+  element={<CategoryDoctors />}
+/>
       </Routes>
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />

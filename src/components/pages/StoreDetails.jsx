@@ -170,8 +170,6 @@ const handlePrescriptionFile = (e) => {
 });
 
 });
-
-
     setHasMore(newProducts.length === 20);
   } finally {
     setProductsLoading(false);

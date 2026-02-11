@@ -1,4 +1,3 @@
-/* ================= ROOT WRAPPER ================= */
 .who-we-are {
   max-width: 1100px;
   margin: 0 auto;
@@ -7,7 +6,6 @@
   color: var(--text-body);
 }
 
-/* ================= HERO ================= */
 .who-hero {
   text-align: center;
   padding: 70px 20px;
@@ -29,7 +27,6 @@
   font-weight: 500;
 }
 
-/* ================= SECTIONS ================= */
 .who-section {
   margin-bottom: 50px;
 }
@@ -50,7 +47,6 @@
   text-align: center;
 }
 
-/* ================= VISION / MISSION ================= */
 .who-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -94,8 +90,6 @@
   font-size: 15.5px;
   line-height: 1.6;
 }
-
-/* ================= LEADERSHIP ================= */
 .leader-card {
   background: #ffffff;
   padding: 36px;
@@ -147,7 +141,6 @@
   white-space: pre-line;
 }
 
-/* ================= DOWNLOAD APPS ================= */
 .apps-section {
   padding: 80px 20px;
   background: #f7fdfc;
@@ -169,7 +162,6 @@
   opacity: 0.85;
 }
 
-/* ================= APPS GRID ================= */
 .apps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -205,7 +197,6 @@
   margin-bottom: 30px;
 }
 
-/* ================= PLAY STORE BUTTON ================= */
 .store-link {
   display: flex;
   justify-content: center;
@@ -222,7 +213,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .who-hero h1 { font-size: 34px; }
   .who-section h2 { font-size: 28px; }
@@ -235,9 +225,7 @@
   .apps-section { padding: 60px 16px; }
   .store-link img { width: 160px; }
 }
-/* ================= CARD COLOR VARIATIONS ================= */
 
-/* Vision / Mission Cards */
 .who-card:nth-child(4n + 1) {
   background: #f0f7ff;
   border: 2px solid #63a0e7;
@@ -258,7 +246,6 @@
   border: 2px solid #fde68a;
 }
 
-/* ================= LEADERSHIP CARDS ================= */
 .leader-card:nth-child(4n + 1) {
   background: #f0fdfa;
   border: 2px solid #5eead4;
@@ -279,7 +266,6 @@
   border: 2px solid #fde68a;
 }
 
-/* ================= APP CARDS ================= */
 .app-card:nth-child(4n + 1) {
   background: #f0f7ff;
   border: 2px solid #63a0e7;
@@ -298,4 +284,89 @@
 .app-card:nth-child(4n + 4) {
   background: #fdf4ff;
   border: 2px solid #d8b4fe;
+}
+
+.leader-card {
+  display: flex;
+  align-items: stretch; 
+  background: #ffffff;
+  border-radius: 40px;
+  margin-bottom: 50px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.05);
+  min-height: 400px; 
+}
+
+.leader-reverse {
+  flex-direction: row-reverse;
+}
+.leader-image-container {
+  flex: 1; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  background: #f9f9f9; 
+  overflow: hidden;
+  padding: 20px 0; 
+}
+
+.leader-img-large {
+  width: 90%; 
+  height: calc(100% - 40px); 
+  object-fit: cover; 
+  object-position: top; 
+  display: block;
+  border-radius: 20px; 
+}
+
+.leader-content {
+  flex: 1.2;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.leader-content span {
+  width: fit-content;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #0f9d58;
+  background: rgba(15, 157, 88, 0.1);
+  padding: 8px 18px;
+  border-radius: 50px;
+  margin-bottom: 15px;
+}
+
+.leader-content h4 {
+  font-size: 32px;
+  font-weight: 850;
+  color: var(--primary-green);
+  margin-bottom: 20px;
+}
+
+.leader-content p {
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: #444;
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .leader-card, .leader-reverse {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .leader-image-container {
+    width: 100%;
+    height: 400px; 
+  }
+
+  .leader-content {
+    padding: 40px 25px;
+  }
 }

@@ -55,32 +55,28 @@ export default function ServiceCard() {
 
     {
       id: 4,
-      title: "Supplements",
-      image: "/service_img/supplements.jpg",
-      route: vitaminCategoryId
-        ? `/category/${encodeId(vitaminCategoryId)}`
-        : null,
-      categoryName: "Vitamins & Minerals",
-      description: "Essential vitamins & minerals for daily wellness",
+      title: "Hospital",
+      image: "/service_img/hospital.jpg",
+      route: "/hospital",
+      categoryName: "hospital",
+      description: "Book hospital services",
     },
 
     {
       id: 5,
-      title: "Skin Care",
-      image: "/service_img/skincare.jpg",
-      route: skinCareCategoryId
-        ? `/category/${encodeId(skinCareCategoryId)}`
-        : null,
-      categoryName: "Skin Care",
-      description: "Luxury dermatology products",
+      title: "Home HealthCare",
+      image: "/service_img/home-healthcare.jpg",
+      route: "/healthcare",
+      categoryName: "home-healthcare",
+      description: "Nursing & elderly care at home",
     },
 
     {
       id: 6,
-      title: "Finance",
+      title: "Insurance & Finance",
       image: "/service_img/finance.avif",
-      route: "/finance",
-      description: "Health investment plans",
+      route: "/insurance",
+      description: "Health insurance policy",
     },
   ];
 

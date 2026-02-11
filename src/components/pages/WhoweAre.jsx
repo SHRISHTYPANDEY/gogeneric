@@ -46,13 +46,18 @@ export default function WhoWeAre() {
 
         {/* Leadership */}
         <section className="who-section">
-          <h2>Leadership</h2>
+  <h2>Leadership</h2>
 
-          <div className="leader-card">
-            <h4>Mr. Kailash Singhania</h4>
-            <span>Director</span>
-            <p>
-              Go Generic stands for trust, transparency, and transformation. We
+  {/* Leader 1: Image Left */}
+  <div className="leader-card">
+    <div className="leader-image-container">
+      <img src="/who-we-are/image-1.png" alt="Mr. Kailash Singhania" className="leader-img-large" />
+    </div>
+    <div className="leader-content">
+      <span>Director</span>
+      <h4>Mr. Kailash Singhania</h4>
+      <p>
+       Go Generic stands for trust, transparency, and transformation. We
               are proud to offer a platform where retailers retain control,
               customers receive value, and technology drives progress. As we
               expand into new health-related services, our focus remains clear:
@@ -61,14 +66,21 @@ export default function WhoWeAre() {
               evolving — adding new features, expanding health services, and
               most importantly, listening to the people we serve. Together,
               let’s build a healthier, stronger, and more connected India.
-            </p>
-          </div>
+			  
+      </p>
+    </div>
+  </div>
 
-          <div className="leader-card">
-            <h4>Mr. Vibhor Singhania</h4>
-            <span>Director</span>
-            <p>
-              At Go Generic, our journey began with powerful vision — to make
+  {/* Leader 2: Image Right */}
+  <div className="leader-card leader-reverse">
+    <div className="leader-image-container">
+      <img src="/who-we-are/image-2.png" alt="Mr. Vibhor Singhania" className="leader-img-large" />
+    </div>
+    <div className="leader-content">
+      <span>Director</span>
+      <h4>Mr. Vibhor Singhania</h4>
+      <p>
+         At Go Generic, our journey began with powerful vision — to make
               healthcare more accessible, affordable, and local. In a country as
               vast and diverse as India, millions still struggle to access
               quality medicines at fair prices. At the same time, thousands of
@@ -79,14 +91,20 @@ export default function WhoWeAre() {
               pharmacies and ensuring real-time medicine availability, fair
               pricing, and doorstep delivery. Together, let’s make healthcare
               truly local, inclusive, and affordable for all.
-            </p>
-          </div>
+      </p>
+    </div>
+  </div>
 
-          <div className="leader-card">
-            <h4>Mr. Rahul Kumar Singh</h4>
-            <span>Chief Operating Officer</span>
-            <p>
-              At Go Generic, we believe that true innovation lies in simplicity,
+  {/* Leader 3: Image Left */}
+  <div className="leader-card">
+    <div className="leader-image-container">
+      <img src="/who-we-are/image-3.jpeg" alt="Mr. Rahul Kumar Singh" className="leader-img-large" />
+    </div>
+    <div className="leader-content">
+      <span>Chief Operating Officer</span>
+      <h4>Mr. Rahul Kumar Singh</h4>
+      <p>
+       	   At Go Generic, we believe that true innovation lies in simplicity,
               inclusivity, and impact. As we work towards transforming India’s
               healthcare landscape, our focus remains crystal clear — to ensure
               that every individual, regardless of their location or income, has
@@ -96,9 +114,10 @@ export default function WhoWeAre() {
               real-time medicine availability to ensuring smooth order
               processing and prompt deliveries, our goal is to offer a seamless
               experience to both consumers and pharmacy partners.
-            </p>
-          </div>
-        </section>
+      </p>
+    </div>
+  </div>
+</section>
       </div>
       {/* Download Our Apps */}
       <section className="apps-section">

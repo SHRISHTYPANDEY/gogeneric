@@ -1,8 +1,62 @@
+export const doctorCategories = [
+  {
+    id: 1,
+    name: "Cardio Issues",
+    specialization: "Cardiologist",
+    image: "/doctor_img/categories/cardiologist.jpg",
+  },
+  {
+    id: 2,
+    name: "Sugar Issues",
+    specialization: "Endocrinologist",
+    image: "/doctor_img/categories/endocrinologist.jpg",
+  },
+  {
+    id: 3,
+    name: "Women's Health",
+    specialization: "Gynecologist",
+    image: "/doctor_img/categories/gyenocologist.webp",
+  },
+  {
+    id: 4,
+    name: "Child Care",
+    specialization: "Pediatrician",
+    image: "/doctor_img/categories/pediatrician.webp",
+  },
+  {
+    id: 5,
+    name: "Bone & Joint",
+    specialization: "Orthopedist",
+    image: "/doctor_img/categories/orthopedist.jpg",
+  },
+  {
+    id: 6,
+    name: "Skin & Hair",
+    specialization: "Dermatologist",
+    image: "/doctor_img/categories/skin_hair.webp",
+  },
+  {
+    id: 7,
+    name: "Mental Health",
+    specialization: "Psychologist",
+    image: "/doctor_img/categories/mental_health.jpg",
+  },
+  {
+    id: 8,
+    name: "General Physician",
+    specialization: "Physician",
+    image: "/doctor_img/categories/physician.jpg",
+  },
+];
+
+
+
 export const doctors = [
   {
     id: "sangita-raj",
     name: "Dietician Sangita Raj",
     specialization: "Lifestyle & Weight Management",
+    category: "Physician",
     experience: "12+ Years",
     image: "/doctor_img/sangeeta.jpeg",
     phone: "919211510600",
@@ -78,6 +132,7 @@ export const doctors = [
   id: "dr-shashi",
   name: "Dr. Shashi",
   specialization: "Ayurvedic Gynaecology Specialist",
+  category: "Gynecologist",
   image: "/doctor_img/shashi.jpeg", 
   experience: "20 Years",
   phone: "01234567890", 
