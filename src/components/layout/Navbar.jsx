@@ -59,14 +59,14 @@ useEffect(() => {
       const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
       setPharmacies(storeList);
     })
-    .catch((err) => console.error("Navbar stores error:", err));
+    // .catch((err) => console.error("Navbar stores error:", err));
 
       api.get("/api/v1/stores/details/74")
     .then((res) => {
       const labData = res?.data?.stores || res?.data || [];
       setLabs(Array.isArray(labData) ? labData : [labData]);
     })
-    .catch((err) => console.error("Navbar labs error:", err));
+    // .catch((err) => console.error("Navbar labs error:", err));
 
 }, []);
   const closeMenu = () => setOpen(false);

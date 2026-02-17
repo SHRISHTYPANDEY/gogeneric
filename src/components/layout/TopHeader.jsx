@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { useLocation } from "../../context/LocationContext";
 import LogoImg from "../../assets/gogenlogo.png";
-import { FaShoppingCart, FaBell,FaDownload } from "react-icons/fa";
+import { FaShoppingCart, FaBell, FaDownload } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import SearchOverlayModal from "./SearchOverlayModal";
 import Swal from "sweetalert2";
@@ -31,22 +31,31 @@ export default function TopHeader() {
   const [notificationCount, setNotificationCount] = useState(0);
 
   const [openSearchModal, setOpenSearchModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const showAlert = (icon, title, text = "") => {
-  Swal.fire({
-    icon,
-    title,
-    text,
-    showConfirmButton: false,
-    timer: 2000,
-    backdrop: "rgba(0,0,0,0.6)",
-    customClass: {
-      popup: "gg-swal-popup",
-      backdrop: "gg-swal-backdrop",
-    },
-  });
-};
-
-
+    Swal.fire({
+      icon,
+      title,
+      text,
+      showConfirmButton: false,
+      timer: 2000,
+      backdrop: "rgba(0,0,0,0.6)",
+      customClass: {
+        popup: "gg-swal-popup",
+        backdrop: "gg-swal-backdrop",
+      },
+    });
+  };
   useEffect(() => {
     const handler = (e) => {
       if (langRef.current && !langRef.current.contains(e.target)) {
@@ -80,52 +89,50 @@ export default function TopHeader() {
   };
 
   const fetchNotifications = async () => {
-  try {
-    if (!user) {
-      setNotificationCount(0);
-      return;
+    try {
+      if (!user) {
+        setNotificationCount(0);
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+
+      const res = await api.get("/api/v1/customer/notifications", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          moduleId: 2,
+          zoneId: JSON.stringify([3]),
+        },
+      });
+
+      const unreadCount = res.data.filter((n) => n.status === 0).length;
+      setNotificationCount(unreadCount);
+    } catch (err) {
+      console.error("Notification fetch failed");
     }
-
-    const token = localStorage.getItem("token");
-
-    const res = await api.get("/api/v1/customer/notifications", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        moduleId: 2,
-        zoneId: JSON.stringify([3]),
-      },
-    });
-
-    const unreadCount = res.data.filter((n) => n.status === 0).length;
-    setNotificationCount(unreadCount);
-  } catch (err) {
-    console.error("Notification fetch failed");
-  }
-};
-useEffect(() => {
-  if (user) {
-    fetchNotifications(); // 🔥 immediate fetch on login
-  }
-}, [user]);
-
-
-
-useEffect(() => {
-  fetchCartCount();
-  fetchNotifications();
-
-  window.addEventListener("cart-updated", fetchCartCount);
-  window.addEventListener("notifications-updated", fetchNotifications);
-
-  return () => {
-    window.removeEventListener("cart-updated", fetchCartCount);
-    window.removeEventListener("notifications-updated", fetchNotifications);
   };
-}, [user]);
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchCartCount();
+    fetchNotifications();
+
+    window.addEventListener("cart-updated", fetchCartCount);
+    window.addEventListener("notifications-updated", fetchNotifications);
+
+    return () => {
+      window.removeEventListener("cart-updated", fetchCartCount);
+      window.removeEventListener("notifications-updated", fetchNotifications);
+    };
+  }, [user]);
 
   return (
     <>
-     <nav className="topheader-wrapper w-full">
+      <nav className="topheader-wrapper w-full">
         <div className="flex items-center justify-between">
           <div className="topheader-icons flex items-center gap-6">
             <img
@@ -139,11 +146,15 @@ useEffect(() => {
               className="location-trigger group"
               onClick={() => setOpenLocationModal(true)}
             >
-              <MdLocationOn size={20} className="text-orange-500" />
+              <MdLocationOn
+                size={isMobile ? 28 : 20}
+                className="text-orange-500"
+              />
+
               <div className="ml-2">
-                <span className="text-xs text-gray-400">{("location")}</span>
+                <span className="text-xs text-gray-400">{"location"}</span>
                 <div className="text-sm font-semibold">
-                  {location?.address || ("selectLocation")}
+                  {location?.address || "selectLocation"}
                 </div>
               </div>
               <IoMdArrowDropdown />
@@ -151,26 +162,30 @@ useEffect(() => {
           </div>
 
           <div className="flex items-center gap-6">
-            {/* DOWNLOAD APP */}
-<div
-  className="download-app-btn cursor-pointer"
-  onClick={() => window.open("https://play.google.com/store/apps/details?id=com.gogeneric.user", "_blank")}
->
-  <FaDownload size={16} />
-  <span>Download App</span>
-</div>
+            <div
+              className="download-app-btn cursor-pointer"
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.gogeneric.user",
+                  "_blank",
+                )
+              }
+            >
+              <FaDownload size={16} />
+              <span>Download App</span>
+            </div>
 
-            {/* SEARCH ICON (New) */}
-          <div
-  className="relative cursor-pointer md:hidden"
-  onClick={() => setOpenSearchModal(true)}
->
-  <IoSearch size={20} className="text-white" />
-</div>
-            {/* NOTIFICATIONS */}
+            <div
+              className="relative cursor-pointer md:hidden"
+              onClick={() => setOpenSearchModal(true)}
+            >
+              <IoSearch size={20} className="text-white" />
+            </div>
             <div
               className="relative cursor-pointer"
-              onClick={() => user ? navigate("/notifications") : setOpenLoginModal(true)}
+              onClick={() =>
+                user ? navigate("/notifications") : setOpenLoginModal(true)
+              }
             >
               <FaBell size={18} />
               {notificationCount > 0 && (
@@ -178,7 +193,6 @@ useEffect(() => {
               )}
             </div>
 
-            {/* CART */}
             <div
               className="relative cursor-pointer"
               onClick={() => navigate("/cart")}
@@ -187,14 +201,13 @@ useEffect(() => {
               {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
 
-            {/* PROFILE */}
             <div
               className="profile-trigger-premium cursor-pointer"
               onClick={handleProfileClick}
             >
               <CgProfile size={20} />
               <span className="font-semibold">
-                {user ? user.name?.split(" ")[0] :("login")}
+                {user ? user.name?.split(" ")[0] : "login"}
               </span>
             </div>
           </div>
@@ -232,7 +245,7 @@ useEffect(() => {
               const alreadyExists = addresses.find(
                 (a) =>
                   Number(a.latitude) === payload.lat &&
-                  Number(a.longitude) === payload.lng
+                  Number(a.longitude) === payload.lng,
               );
 
               if (!alreadyExists) {
@@ -246,12 +259,15 @@ useEffect(() => {
                     latitude: payload.lat,
                     longitude: payload.lng,
                   },
-                  { headers: { Authorization: `Bearer ${token}` } }
+                  { headers: { Authorization: `Bearer ${token}` } },
                 );
               }
               notifyAddressChange();
-              showAlert("success", "Location Updated", "Delivery location updated");
-
+              showAlert(
+                "success",
+                "Location Updated",
+                "Delivery location updated",
+              );
             } catch (err) {
               showAlert("error", "Location Failed", "Unable to save address");
 
@@ -263,10 +279,8 @@ useEffect(() => {
         />
       )}
       {openSearchModal && (
-  <SearchOverlayModal onClose={() => setOpenSearchModal(false)} />
-)}
-
+        <SearchOverlayModal onClose={() => setOpenSearchModal(false)} />
+      )}
     </>
   );
-  
 }

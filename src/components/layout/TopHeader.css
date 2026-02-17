@@ -159,7 +159,10 @@
   .topheader-wrapper > div { flex-direction: column; gap: 10px; }
   .location-trigger { margin-left: 0; max-width: 100%; width: 100%; order: 3; }
   .flex.items-center.gap-6 { width: 100%; justify-content: space-between; order: 2; }
-  /* .download-app-btn { display: none; } */
+  .location{
+ 
+  }
+
 }
 
 @media (max-width: 480px) {

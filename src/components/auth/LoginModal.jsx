@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
 import { Eye, EyeOff, Mail, Phone, User, Lock, ArrowLeft } from "lucide-react";
 
-/* 🔔 SweetAlert helper */
 const showAlert = (icon, title, text = "") => {
   Swal.fire({
     icon,
@@ -21,7 +20,6 @@ const showAlert = (icon, title, text = "") => {
     },
   });
 };
-
 
 export default function LoginModal({ onClose }) {
   const [isSignup, setIsSignup] = useState(false);
@@ -207,7 +205,6 @@ export default function LoginModal({ onClose }) {
           ×
         </span>
 
-        {/* 🔹 LEFT BRAND PANEL (Dribbble Inspired) */}
         <div className="login-left">
           <div className="brand-content">
             <h1>GoGeneric</h1>
@@ -219,7 +216,6 @@ export default function LoginModal({ onClose }) {
           </div>
         </div>
 
-        {/* 🔹 RIGHT FORM PANEL */}
         <div className="login-right">
           {isForgot && !isReset ? (
             <div className="form-content">

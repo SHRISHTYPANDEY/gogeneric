@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./LabCategories.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
+import Loader from "./Loader";
 
 export default function LabTestCategories() {
   const [categories, setCategories] = useState([]);
@@ -50,7 +51,7 @@ export default function LabTestCategories() {
       <h2 className="lab-cate-titlee">All Lab Categories</h2>
 
       {loading ? (
-        <div className="lab-loader">Loading lab categories...</div>
+        <Loader text="Loading lab categories..." />
       ) : (
         <div className="lab-category-grid">
           {categories.map((cat) => (

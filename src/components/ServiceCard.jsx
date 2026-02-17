@@ -1,83 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
-import { encodeId } from "../utils/idObfuscator";
 import "./ServiceCard.css";
 
 export default function ServiceCard() {
   const navigate = useNavigate();
-
-  const [skinCareCategoryId, setSkinCareCategoryId] = useState(null);
-  const [vitaminCategoryId, setVitaminCategoryId] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    api
-      .get("/api/v1/categories")
-      .then((res) => {
-        const categories = res.data || [];
-
-        const skinCare = categories.find((cat) =>
-          cat.name?.toLowerCase().includes("skin")
-        );
-
-        const vitamins = categories.find((cat) =>
-          cat.name?.toLowerCase().includes("vitamin")
-        );
-
-        if (skinCare) setSkinCareCategoryId(skinCare.id);
-        if (vitamins) setVitaminCategoryId(vitamins.id);
-      })
+    api.get("/api/v1/categories")
+      .then((res) => setCategories(res.data || []))
       .catch((err) => console.error("Category fetch error:", err));
   }, []);
 
   const services = [
-    {
-      id: 1,
-      title: "Pharmacy",
-      image: "/service_img/pharmacy.jpg",
-      route: "/pharmacy",
-      description: "Premium medications & health products",
-    },
-    {
-      id: 2,
-      title: "Lab Tests",
-      image: "/service_img/lab.jpg",
-      route: "/labs",
-      description: "Advanced diagnostics & reports",
-    },
-    {
-      id: 3,
-      title: "Doctors",
-      image: "/service_img/doctor.avif",
-      route: "/doctors",
-      description: "Expert medical consultations",
-    },
-
-    {
-      id: 4,
-      title: "Hospital",
-      image: "/service_img/hospital.jpg",
-      route: "/hospital",
-      categoryName: "hospital",
-      description: "Book hospital services",
-    },
-
-    {
-      id: 5,
-      title: "Home HealthCare",
-      image: "/service_img/home-healthcare.jpg",
-      route: "/healthcare",
-      categoryName: "home-healthcare",
-      description: "Nursing & elderly care at home",
-    },
-
-    {
-      id: 6,
-      title: "Insurance & Finance",
-      image: "/service_img/finance.avif",
-      route: "/insurance",
-      description: "Health insurance policy",
-    },
+    { id: 1, title: "Pharmacy", image: "/service_img/pharmacy.jpg", route: "/pharmacy", description: "Premium medications & health products" },
+    { id: 2, title: "Lab Tests", image: "/service_img/lab.jpg", route: "/labs", description: "Advanced diagnostics & reports" },
+    { id: 3, title: "Doctors", image: "/service_img/doctor.avif", route: "/doctors", description: "Expert medical consultations" },
+    { id: 4, title: "Hospital", image: "/service_img/hospital.jpg", route: "/hospital", description: "Book hospital services", comingsoon: true },
+    { id: 5, title: "Home Care", image: "/service_img/home-healthcare.jpg", route: "/healthcare", description: "Nursing & elderly care at home", comingsoon: true },
+    { id: 6, title: "Insurance", image: "/service_img/finance.avif", route: "/insurance", description: "Expert policy advice", comingsoon: true },
   ];
 
   return (
@@ -93,10 +35,7 @@ export default function ServiceCard() {
             <div className="decoration-line"></div>
           </div>
         </div>
-
-        <p className="section-subtitle1">
-          Discover our exclusive healthcare solutions designed for your wellness journey
-        </p>
+        <p className="section-subtitle1">Exclusive healthcare solutions for your wellness journey</p>
       </div>
 
       <div className="service-grid">
@@ -104,22 +43,12 @@ export default function ServiceCard() {
           <div
             key={item.id}
             className="service-card"
-            onClick={() =>
-              item.route &&
-              navigate(item.route, {
-                state: { categoryName: item.categoryName },
-              })
-            }
-            style={{ cursor: item.route ? "pointer" : "not-allowed" }}
+            onClick={() => !item.comingsoon && item.route && navigate(item.route)}
+            style={{ cursor: item.comingsoon ? "not-allowed" : "pointer" }}
           >
             <div className="image-container">
+              <img src={item.image} alt={item.title} className="service-image" />
               <div className="image-overlay"></div>
-              <img
-                src={item.image}
-                alt={item.title}
-                className="service-image"
-              />
-              <div className="image-gradient"></div>
             </div>
 
             <div className="card-content">
@@ -128,12 +57,10 @@ export default function ServiceCard() {
             </div>
 
             <div className="card-footer">
-              <button className="explore-btn" disabled={!item.route}>
-                Explore Service <span className="arrow-icon"> →</span>
+              <button className="explore-btn" disabled={item.comingsoon}>
+                {item.comingsoon ? "Coming Soon" : "Explore Service →"}
               </button>
             </div>
-
-            <div className="card-glow"></div>
           </div>
         ))}
       </div>

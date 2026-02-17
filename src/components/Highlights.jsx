@@ -2,7 +2,6 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import "./Highlights.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
-import WishlistButton from "./WishlistButton";
 import { useNavigate } from "react-router-dom";
 
 export default function Highlights() {
