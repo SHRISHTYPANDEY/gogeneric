@@ -11,7 +11,7 @@ export default function Doctors() {
     <>
       <div className="doctors-banner">
         <img
-          src="/doctor_img/Doctorbanner.png"
+          src="/doctor_img/Doctorbanner.webp"
           alt="Doctors Banner"
           className="doctors-banner-img"
         />
@@ -23,15 +23,21 @@ export default function Doctors() {
           <h2 className="categories-title">Doctor Categories</h2>
           <div className="categories-grid">
             {doctorCategories.map((cat) => (
-             <div
-  key={cat.id}
-  className="category-card1"
-  onClick={() => navigate(`/doctors/category/${cat.specialization}`)}
->
-  <h3 className="category-name1">{cat.name}</h3> 
-  <img src={cat.image} alt={cat.name} className="category-image" />
-  <p className="category-specialty">{cat.specialization}</p>
-</div>
+              <div
+                key={cat.id}
+                className="category-card1"
+                onClick={() =>
+                  navigate(`/doctors/category/${cat.specialization}`)
+                }
+              >
+                <h3 className="category-name1">{cat.name}</h3>
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="category-image"
+                />
+                <p className="category-specialty">{cat.specialization}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -47,7 +53,11 @@ export default function Doctors() {
                 className="doctor-card"
               >
                 <div className="doctor-image-wrapper">
-                  <img src={doc.image} alt={doc.name} className="doctor-image" />
+                  <img
+                    src={doc.image}
+                    alt={doc.name}
+                    className="doctor-image"
+                  />
                 </div>
                 <div className="doctor-info">
                   <h3 className="doctor-name">{doc.name}</h3>
@@ -60,7 +70,6 @@ export default function Doctors() {
           </div>
         </div>
       </div>
-
       <Footer />
     </>
   );

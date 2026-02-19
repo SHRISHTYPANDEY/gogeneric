@@ -10,8 +10,20 @@ export default function HomeBanner() {
   useEffect(() => {
     api.get("/api/v1/banners", {
         headers: { zoneId: "[3]", moduleId: "2", Accept: "application/json" },
+
       })
-      .then((res) => setBanners(res.data?.banners || []))
+      .then((res) => {
+        // console.log("API Response:", res.data); 
+        const bannerData = res.data?.banners || [];
+        // console.log("Banners Array:", bannerData); 
+        bannerData.forEach((b, i) => {
+          // console.log(`Banner ${i} ID: ${b.id}`);
+          // console.log(`Banner ${i} Image Raw:`, b.image);
+          // console.log(`Banner ${i} Image Full URL:`, b.image_full_url);
+          // console.log(`Banner ${i} Cleaned URL:`, cleanImageUrl(b.image_full_url || b.image));
+        });
+        setBanners(bannerData);
+      })
       .catch((err) => console.error("Banner error:", err));
   }, []);
 

@@ -115,7 +115,7 @@
 .category-card1:nth-child(8n + 7) .category-name1 { background: #43a047; }
 .category-card1:nth-child(8n + 7) .category-specialty { color: #43a047; }
 
-.category-card1:nth-child(8n + 8) .category-name { background: #00897b; }
+.category-card1:nth-child(8n + 8) .category-name1 { background: #00897b; }
 .category-card1:nth-child(8n + 8) .category-specialty { color: #00897b; }
 
 .doctors-grid {
