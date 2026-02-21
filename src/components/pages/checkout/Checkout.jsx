@@ -19,7 +19,6 @@ export default function Checkout() {
   const [loading, setLoading] = useState(true);
   const [placingOrder, setPlacingOrder] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-
   const [instructions, setInstructions] = useState([]);
   const [selectedTip, setSelectedTip] = useState("0");
   const location = useLocation();
@@ -29,6 +28,7 @@ export default function Checkout() {
   const [policyAccepted, setPolicyAccepted] = useState(false);
   const [prescriptionFile, setPrescriptionFile] = useState(null);
   const { balance: walletBalance, fetchWallet } = useWallet();
+  const [walletDiscount, setWalletDiscount] = useState(0);
   const showAlert = (icon, title, text, timer = null) => {
     Swal.fire({
       icon,
@@ -66,6 +66,8 @@ export default function Checkout() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const guestId = localStorage.getItem("guest_id");
+  
+  const finalPayable = totalPayable - walletDiscount;
 
   const isPrescriptionRequired = cartItems.some(
     (ci) => ci.item?.is_prescription_required == 1,
@@ -138,6 +140,13 @@ export default function Checkout() {
     });
   };
 
+  useEffect(() => {
+  if (walletBalance > 0) {
+    setWalletDiscount(Math.min(25, totalPayable));
+  } else {
+    setWalletDiscount(0);
+  }
+}, [walletBalance, totalPayable]);
   const placeOrderAfterPayment = async (paymentResponse) => {
     try {
       setPlacingOrder(true);
@@ -230,26 +239,25 @@ export default function Checkout() {
     try {
       setPlacingOrder(true);
       const storeId = getOrderStoreId();
-
-      if (paymentMethod === "wallet") {
-        if (walletBalance < totalPayable) {
-          showAlert(
-            "error",
-            "Insufficient Balance",
-            `Wallet balance ₹${walletBalance}`,
-          );
-
-          setPlacingOrder(false);
-          return;
-        }
-      }
+if (paymentMethod === "wallet") {
+  if (walletBalance < 25) {
+    showAlert(
+      "error",
+      "Insufficient Balance",
+      `Wallet balance is less than ₹25, cannot apply discount`,
+    );
+    setPlacingOrder(false);
+    return;
+  }
+}
       const formData = new FormData();
 
       formData.append("order_type", deliveryType);
       formData.append("delivery_type", deliveryType);
       formData.append("payment_method", paymentMethod);
-      formData.append("order_amount", totalPayable);
       formData.append("store_id", storeId);
+      formData.append("wallet_amount", walletDiscount);
+formData.append("order_amount", finalPayable);
 
       if (deliveryType === "delivery") {
         formData.append("address_id", selectedAddress.id);
@@ -400,9 +408,9 @@ export default function Checkout() {
 
           <PaymentMethod
             value={paymentMethod}
-            onChange={handlePaymentSelect}
-            walletBalance={walletBalance}
-            orderAmount={totalPayable}
+  onChange={handlePaymentSelect}
+  walletBalance={walletBalance}
+  orderAmount={finalPayable}
           />
 
           {paymentMethod === "wallet" && (
@@ -410,7 +418,7 @@ export default function Checkout() {
               style={{
                 marginTop: "8px",
                 fontWeight: 500,
-                color: walletBalance < orderAmount ? "red" : "green",
+                color: walletBalance < 25 ? "red" : "green",
               }}
             >
               Wallet Balance: ₹{walletBalance}
@@ -426,9 +434,10 @@ export default function Checkout() {
         <div className="checkout-right">
           {!isPrescriptionOrder && (
             <BillSummary
-              cartItems={cartItems}
-              deliveryType={deliveryType}
-              totalPayable={totalPayable}
+               cartItems={cartItems}
+  deliveryType={deliveryType}
+  walletDiscount={walletDiscount}
+  totalPayable={finalPayable}
             />
           )}
         </div>
