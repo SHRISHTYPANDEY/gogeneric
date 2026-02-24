@@ -9,7 +9,7 @@
   position: relative;
   overflow: hidden;
   background: #9ECFD4;
-  height: 65vh; 
+  /* height: 65vh;  */
   min-height: 400px;
   max-height: 550px;
 }
@@ -17,13 +17,15 @@
 .hero-slider-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  aspect-ratio: 1920 / 640;
 }
 
 .hero-slide {
   position: absolute;
   top: 0;
   left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
@@ -41,7 +43,7 @@
 .hero-img-full {
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: fill; 
   object-position: center;
 }
 
