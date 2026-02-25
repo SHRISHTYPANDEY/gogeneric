@@ -247,6 +247,7 @@ if (paymentMethod === "wallet") {
       "Insufficient Balance",
       `Wallet balance is less than ₹25, cannot apply discount`,
     );
+    setPaymentMethod(null);
     setPlacingOrder(false);
     return;
   }

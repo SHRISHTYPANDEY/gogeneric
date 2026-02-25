@@ -4,7 +4,7 @@ import { useLocation as useRouterLocation } from "react-router-dom";
 import { useLocation } from "../../context/LocationContext";
 import CategoriesCard from "../CategoriesCard";
 import HomeBanner from "../HomeBanner";
-import NearbyStores from "../NearbyStores";
+// import NearbyStores from "../NearbyStores";
 import Highlights from "../Highlights";
 import VisitAgain from "../VisitAgain";
 import FeaturedStores from "../FeaturedStores";
@@ -123,7 +123,7 @@ export default function Home() {
         <LabCategories />
         <CategoriesCard />
         <CommonConcern />
-        <NearbyStores />
+        {/* <NearbyStores /> */}
         <Highlights />
         <VisitAgain />
         <FeaturedStores />
