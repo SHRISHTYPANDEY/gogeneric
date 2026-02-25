@@ -9,16 +9,17 @@ export default function PaymentMethod({
 }) {
   const [open, setOpen] = useState(false);
 
-  const isWalletDisabled = walletBalance < orderAmount;
+  // Wallet disabled if balance is less than ₹25
+  const isWalletDisabled = walletBalance < 25;
 
   const methods = [
     { key: "cash_on_delivery", label: "Cash on Delivery" },
     { key: "digital_payment", label: "Pay Online" },
     {
-      key: "wallet",
-      label: "Wallet",
-      disabled: isWalletDisabled,
-    },
+  key: "wallet",
+  label: "Wallet (₹25 auto-applied)",
+  disabled: true, // cannot select again
+}
   ];
 
   return (
@@ -58,7 +59,7 @@ export default function PaymentMethod({
 
               {m.key === "wallet" && m.disabled && (
                 <span className="wallet-warning">
-                  (Insufficient balance)
+                  (Wallet can be used from ₹25 balance)
                 </span>
               )}
             </label>

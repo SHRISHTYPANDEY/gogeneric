@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { doctors } from "../../data/Doctor";
+// import { doctors } from "../../data/Doctor";
 import "./Doctors.css";
 import Footer from "../Footer";
 

@@ -27,8 +27,16 @@ export default function StoreDetails() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [remainingCategories, setRemainingCategories] = useState([]);
 
   const [discountMap, setDiscountMap] = useState({});
+
+  const INITIAL_CATEGORY_COUNT = 3; // first 3 categories load immediately
+  const PRODUCTS_LIMIT = 10;
+
+
+const [categoryPages, setCategoryPages] = useState({}); // { [categoryId]: currentPage }
+const [allCategoriesLoaded, setAllCategoriesLoaded] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -82,6 +90,67 @@ const handlePrescriptionFile = (e) => {
   }, [store?.id]);
 
   useEffect(() => {
+  if (activeTab !== "products" || productsLoading || searchTerm.trim() !== "") return;
+
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      // Fetch next category if available
+      if (remainingCategories.length > 0) {
+        const nextCategoryId = remainingCategories[0];
+        setRemainingCategories(prev => prev.slice(1));
+
+        // fetch products for this category
+        fetchProductsForCategory(nextCategoryId);
+      }
+    }
+  }, { threshold: 0.2 });
+
+  const sentinel = document.getElementById("scroll-sentinel");
+  if (sentinel) observer.observe(sentinel);
+  return () => observer.disconnect();
+}, [remainingCategories, productsLoading, activeTab, searchTerm]);
+
+const fetchProductsForCategory = async (categoryId) => {
+  try {
+    setProductsLoading(true);
+    const currentPage = categoryPages[categoryId] || 1;
+
+    const res = await api.get("/api/v1/items/latest", {
+      params: {
+        store_id: store.id,
+        category_id: categoryId,
+        limit: PRODUCTS_LIMIT,
+        offset: currentPage,
+      },
+      headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+    });
+
+    const items = res.data.products || res.data.items || [];
+    setCategoryPages(prev => ({
+      ...prev,
+      [categoryId]: items.length === PRODUCTS_LIMIT ? currentPage + 1 : currentPage
+    }));
+
+    setProducts(prev => {
+      const merged = [...prev, ...items];
+      const uniqueMap = new Map();
+      merged.forEach(item => uniqueMap.set(item.id, item));
+      return Array.from(uniqueMap.values()).sort((a, b) => {
+        const aStock = a.stock > 0 ? 1 : 0;
+        const bStock = b.stock > 0 ? 1 : 0;
+        return bStock - aStock;
+      });
+    });
+
+    if (items.length < PRODUCTS_LIMIT && remainingCategories.length === 0) {
+      setAllCategoriesLoaded(true);
+    }
+  } finally {
+    setProductsLoading(false);
+  }
+};
+
+  useEffect(() => {
     if (!store?.id) return;
 
     const delay = setTimeout(() => {
@@ -98,6 +167,29 @@ const handlePrescriptionFile = (e) => {
 
     return () => clearTimeout(delay);
   }, [searchTerm]);
+  // Infinite scroll effect
+useEffect(() => {
+  if (
+    activeTab !== "products" ||
+    allCategoriesLoaded ||
+    productsLoading ||
+    searchTerm.trim() !== ""
+  )
+    return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        fetchProducts();
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  const sentinel = document.getElementById("scroll-sentinel");
+  if (sentinel) observer.observe(sentinel);
+  return () => observer.disconnect();
+}, [allCategoriesLoaded, productsLoading, activeTab, searchTerm, store?.id]);
 
   const searchProducts = async (keyword) => {
     try {
@@ -121,61 +213,69 @@ const handlePrescriptionFile = (e) => {
     }
   };
 
- const fetchProducts = async (pageNumber) => {
+
+const fetchProducts = async () => {
+  if (!store?.category_details?.length) return;
+
   try {
     setProductsLoading(true);
 
-    const res = await api.get("/api/v1/items/latest", {
-      params: {
-        store_id: id,
-        category_id: store.category_details?.[0]?.id || 1,
-        limit: 20,
-        offset: pageNumber,
-      },
-      headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+    const categoryIds = store.category_details.map((c) => c.id);
+    const newCategoryPages = { ...categoryPages };
+
+    // Decide which categories to fetch initially
+    const categoriesToFetch = categoryIds.slice(0, INITIAL_CATEGORY_COUNT);
+
+    // Fetch all selected categories in parallel
+    const fetchPromises = categoriesToFetch.map(async (categoryId) => {
+      const currentPage = newCategoryPages[categoryId] || 1;
+
+      const res = await api.get("/api/v1/items/latest", {
+        params: {
+          store_id: store.id,
+          category_id: categoryId,
+          limit: PRODUCTS_LIMIT,
+          offset: currentPage,
+        },
+        headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
+      });
+
+      const items = res.data.products || res.data.items || [];
+      if (items.length === PRODUCTS_LIMIT) {
+        newCategoryPages[categoryId] = currentPage + 1;
+        return { items, hasMore: true, categoryId };
+      }
+      return { items, hasMore: false, categoryId };
     });
 
-    // console.log("LATEST PRODUCTS API RESPONSE ", res.data);
+    const results = await Promise.all(fetchPromises);
 
-    const newProducts = res.data.products || res.data.items || [];
+    // Merge products and maintain uniqueness
+    const fetchedProducts = results.flatMap(r => r.items);
+    const anyCategoryHasMore = results.some(r => r.hasMore);
 
-// if (newProducts.length) {
-//   console.log("🔎 SAMPLE PRODUCT STOCK DATA:", {
-//     id: newProducts[0].id,
-//     name: newProducts[0].name,
-//     stock: newProducts[0].stock,
-//     current_stock: newProducts[0].current_stock,
-//     quantity: newProducts[0].quantity,
-//     available_quantity: newProducts[0].available_quantity,
-//     fullObject: newProducts[0],
-//   });
-// }
+    setCategoryPages(newCategoryPages);
 
-    // console.log("NEW PRODUCTS (page " + pageNumber + ") ", newProducts);
+    setProducts(prev => {
+      const merged = [...prev, ...fetchedProducts];
+      const uniqueMap = new Map();
+      merged.forEach(item => uniqueMap.set(item.id, item));
+      return Array.from(uniqueMap.values()).sort((a, b) => {
+        const aStock = a.stock > 0 ? 1 : 0;
+        const bStock = b.stock > 0 ? 1 : 0;
+        return bStock - aStock;
+      });
+    });
 
-    setProducts((prev) => {
-  const merged = pageNumber === 1
-    ? newProducts
-    : [...prev, ...newProducts];
+    // Store which categories still have more products
+    setAllCategoriesLoaded(!anyCategoryHasMore);
 
-  const uniqueMap = new Map();
-  merged.forEach((item) => {
-    uniqueMap.set(item.id, item); 
-  });
-
- return Array.from(uniqueMap.values()).sort((a, b) => {
-  const aStock = a.stock > 0 ? 1 : 0;
-  const bStock = b.stock > 0 ? 1 : 0;
-  return bStock - aStock;
-});
-
-});
-    setHasMore(newProducts.length === 20);
+    // Save remaining categories to fetch on scroll
+    setRemainingCategories(categoryIds.slice(INITIAL_CATEGORY_COUNT));
   } finally {
     setProductsLoading(false);
   }
 };
-
   const fetchDiscountedProducts = async () => {
     try {
       const res = await api.get("/api/v1/items/discounted", {
@@ -213,32 +313,6 @@ const handlePrescriptionFile = (e) => {
     return Math.round(((base - discounted) / base) * 100);
   };
 
-  useEffect(() => {
-    if (
-      activeTab !== "products" ||
-      !hasMore ||
-      productsLoading ||
-      searchTerm.trim() !== ""
-    )
-      return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setPage((prev) => {
-            const next = prev + 1;
-            fetchProducts(next);
-            return next;
-          });
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    const sentinel = document.getElementById("scroll-sentinel");
-    if (sentinel) observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [hasMore, productsLoading, activeTab, searchTerm]);
 
   const fetchReviews = async () => {
     try {

@@ -45,10 +45,10 @@ export default function NearbyStores() {
           headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
           signal: abortRef.current.signal,
         });
-// console.log("API RESPONSE:", res.data);
+console.log("API RESPONSE of nearby store:", res.data);
         const items = res.data.items || res.data.products || [];
         allItems = [...allItems, ...items];
-        // console.log("med data", res)
+        console.log("med dataaaaaaa", res)
         if (!categoriesSet) {
           setCategories(res.data.categories || res.data.filters || []);
           categoriesSet = true;

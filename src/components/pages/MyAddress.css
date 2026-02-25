@@ -1,6 +1,3 @@
-/* ===============================
-   GoGeneric Theme Variables
-================================ */
 :root {
   --gg-primary: #016b61;
   --gg-primary-dark: #014f48;
@@ -21,9 +18,6 @@
   --gg-shadow-hover: 0 12px 35px rgba(0, 0, 0, 0.1);
 }
 
-/* ===============================
-   Page Wrapper
-================================ */
 .myaddress-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -32,9 +26,6 @@
   min-height: 100vh;
 }
 
-/* ===============================
-   Page Header
-================================ */
 .page-title {
   font-size: 28px;
   font-weight: 800;
@@ -42,7 +33,6 @@
   margin: 0;
 }
 
-/* Add New Button (inline styles ka replacement) */
 .add-address-btn {
   padding: 12px 22px;
   border-radius: 50px;
@@ -59,18 +49,12 @@
   transform: translateY(-1px);
 }
 
-/* ===============================
-   Address Grid
-================================ */
 .address-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 22px;
 }
 
-/* ===============================
-   Address Card
-================================ */
 .address-card {
   background: var(--gg-white);
   border-radius: var(--gg-radius-lg);
@@ -88,9 +72,6 @@
   box-shadow: var(--gg-shadow-hover);
 }
 
-/* ===============================
-   Card Header
-================================ */
 .address-header {
   display: flex;
   justify-content: space-between;
@@ -116,9 +97,6 @@
   border: 1px solid rgba(1, 107, 97, 0.3);
 }
 
-/* ===============================
-   Address Text
-================================ */
 .address-text {
   font-size: 14px;
   line-height: 1.6;
@@ -126,10 +104,6 @@
   margin-bottom: 22px;
   min-height: 48px;
 }
-
-/* ===============================
-   Actions
-================================ */
 .address-actions {
   display: flex;
   gap: 12px;
@@ -149,7 +123,6 @@
   border: none;
 }
 
-/* Edit */
 .address-actions button:first-child {
   background: #fff;
   color: var(--gg-primary);
@@ -161,7 +134,6 @@
   color: #fff;
 }
 
-/* Delete */
 .address-actions button:last-child {
   background: #fff0f0;
   color: #d32f2f;
@@ -172,9 +144,6 @@
   color: #fff;
 }
 
-/* ===============================
-   Edit Modal Overlay
-================================ */
 .edit-modal-overlay {
   position: fixed;
   inset: 0;
@@ -187,9 +156,6 @@
   padding: 20px;
 }
 
-/* ===============================
-   Edit Modal
-================================ */
 .edit-modal {
   background: var(--gg-white);
   width: 100%;
@@ -217,9 +183,6 @@
   }
 }
 
-/* ===============================
-   Responsive
-================================ */
 @media (max-width: 768px) {
   .myaddress-page {
     padding: 20px 14px;

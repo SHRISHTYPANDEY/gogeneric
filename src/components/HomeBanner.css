@@ -2,18 +2,19 @@
   --primary-deep: #016B61;
   --bg-cream: #E5E9C5;
   --transition-premium: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Smooth color transition for the whole site */
+  transition: --primary-deep 0.5s ease-in-out;
 }
 
 .hero-full-width {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: #9ECFD4;
-  /* height: 65vh;  */
+  background: var(--primary-deep); 
   min-height: 400px;
   max-height: 550px;
+  transition: background 0.6s ease;
 }
-
 .hero-slider-wrapper {
   position: relative;
   width: 100%;

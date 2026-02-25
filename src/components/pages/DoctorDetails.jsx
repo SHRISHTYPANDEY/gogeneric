@@ -1,14 +1,34 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { doctors } from "../../data/Doctor";
+import { useEffect, useState } from "react";
+import { getDoctorById } from "../../api/doctorapi";
 import "./DoctorDetails.css";
 import Footer from "../Footer";
-
+import Loader from "../Loader";
 export default function DoctorDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const doctor = doctors.find((d) => d.id === id);
-  if (!doctor) return <div className="error-msg">Doctor not found</div>;
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const data = await getDoctorById(id);
+        setDoctor(data);
+      } catch (err) {
+        setError("Doctor not found or API error");
+        console.error("Error fetching doctor:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDoctor();
+  }, [id]);
+
+  if (loading) return <Loader text="Loading doctor details..." />;
+  if (error) return <div className="error-msg">{error}</div>;
 
   return (
     <>
@@ -131,8 +151,7 @@ export default function DoctorDetails() {
                   <strong>Mode:</strong> {doctor.consultation.mode.join(", ")}
                 </p>
                 <p className="section-text">
-                  <strong>Prescription:</strong>{" "}
-                  {doctor.consultation.prescription}
+                  <strong>Prescription:</strong> {doctor.consultation.prescription}
                 </p>
               </section>
             )}

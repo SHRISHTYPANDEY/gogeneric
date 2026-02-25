@@ -139,14 +139,15 @@ export default function Checkout() {
       },
     });
   };
-
-  useEffect(() => {
-  if (walletBalance > 0) {
-    setWalletDiscount(Math.min(25, totalPayable));
+useEffect(() => {
+  if (walletBalance >= 25) {
+    setWalletDiscount(25); // auto-apply ₹25
+    setPaymentMethod("wallet"); // mark wallet as used
+    setPaymentReady(true); // allow checkout
   } else {
     setWalletDiscount(0);
   }
-}, [walletBalance, totalPayable]);
+}, [walletBalance]);
   const placeOrderAfterPayment = async (paymentResponse) => {
     try {
       setPlacingOrder(true);
@@ -407,25 +408,17 @@ formData.append("order_amount", finalPayable);
           )}
 
           <PaymentMethod
-            value={paymentMethod}
+  value={paymentMethod}
   onChange={handlePaymentSelect}
   walletBalance={walletBalance}
   orderAmount={finalPayable}
-          />
-
-          {paymentMethod === "wallet" && (
-            <p
-              style={{
-                marginTop: "8px",
-                fontWeight: 500,
-                color: walletBalance < 25 ? "red" : "green",
-              }}
-            >
-              Wallet Balance: ₹{walletBalance}
-              {walletBalance < orderAmount && " (Insufficient balance)"}
-            </p>
-          )}
-
+  disableWallet={walletBalance < 25} // new prop
+/>
+{walletBalance < 25 && (
+  <p style={{ color: "red", fontSize: "13px", marginTop: "5px" }}>
+    Wallet can be used from ₹25 balance
+  </p>
+)}
           {paymentReady && (
             <p className="payment-success-text">✅ Payment confirmed</p>
           )}

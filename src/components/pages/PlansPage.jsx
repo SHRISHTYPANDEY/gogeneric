@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { doctors } from "../../data/Doctor";
+import { getDoctorById } from "../../api/doctorapi";
 import "./PlansPage.css";
 import BookAppointment from "./BookAppointment";
 
 export default function PlansPage() {
   const { id } = useParams();
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  const doctor = doctors.find((d) => d.id === id);
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const data = await getDoctorById(id);
+        setDoctor(data);
+      } catch (err) {
+        setError("Doctor not found or API error");
+        console.error("Error fetching doctor:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchDoctor();
+  }, [id]);
+
+  if (loading) return <div className="loading-msg">Loading doctor plans...</div>;
+  if (error) return <div className="error-msg">{error}</div>;
   if (!doctor) return <div className="error-msg">Doctor not found</div>;
 
   const handleBook = (plan) => {
@@ -25,22 +44,23 @@ export default function PlansPage() {
           <h2 className="plans-heading">
             Choose Your <span className="highlight">Diet Plan</span>
           </h2>
-          <p className="plans-subheading">Simple, sustainable, and effective nutrition coaching.</p>
+          <p className="plans-subheading">
+            Simple, sustainable, and effective nutrition coaching.
+          </p>
         </div>
 
         <div className="plans-grid">
           {doctor.plans.map((plan) => (
-            <div 
-              key={plan.id} 
+            <div
+              key={plan.id}
               className={`plan-card ${plan.featured ? "featured-card" : ""}`}
             >
-             
-              <div className="popular-badge">Recommended</div>
-              
+              {plan.featured && <div className="popular-badge">Recommended</div>}
+
               <div className="plan-header">
                 <span className="plan-title">{plan.title}</span>
                 <p className="plan-subtitle">{plan.subtitle}</p>
-                
+
                 <div className="plan-price-row">
                   <span className="price-amt">{plan.price}</span>
                   {plan.id === "monthly" && <span className="price-tenure">/ month</span>}
@@ -58,9 +78,9 @@ export default function PlansPage() {
 
               <ul className="plan-features">
                 {Object.entries(plan.features).map(([key, value], index) => {
-                  if (value === false) return (
+                  if (!value) return (
                     <li key={index} className="feature-item disabled">
-                      <span className="icon cross">✕</span> 
+                      <span className="icon cross">✕</span>
                       <span className="label">{key}</span>
                     </li>
                   );
@@ -76,7 +96,7 @@ export default function PlansPage() {
                 })}
               </ul>
 
-              <button 
+              <button
                 className="plan-button"
                 onClick={() => handleBook(plan)}
               >
@@ -91,15 +111,15 @@ export default function PlansPage() {
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-box">
-               <h3 className="modal-title">Confirm Booking</h3>
+              <h3 className="modal-title">Confirm Booking</h3>
             </div>
-            
-            <BookAppointment 
-              phone={doctor.phone} 
-              whatsapp={doctor.whatsapp} 
+
+            <BookAppointment
+              phone={doctor.phone}
+              whatsapp={doctor.whatsapp}
               planName={selectedPlan?.title}
               planPrice={selectedPlan?.price}
-              onClose={() => setShowModal(false)} 
+              onClose={() => setShowModal(false)}
             />
 
             <button className="close-x" onClick={() => setShowModal(false)}>×</button>

@@ -49,8 +49,6 @@ export const doctorCategories = [
   },
 ];
 
-
-
 export const doctors = [
   {
     id: "sangita-raj",
