@@ -132,12 +132,12 @@
 }
 
 .card-footer {
-  padding: 0 10px 12px;
+  padding: 0 12px 16px;
 }
 
-.explore-btn {
+.explore-btnn {
   width: 100%;
-  padding: 7px 5px;
+  padding: 8px 12px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -148,7 +148,7 @@
   transition: all 0.3s ease;
 }
 
-.explore-btn:hover:not(:disabled) {
+.explore-btnn:hover:not(:disabled) {
   background: var(--accent-light);
   color: var(--primary-deep);
   font-weight: 600;

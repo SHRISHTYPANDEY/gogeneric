@@ -57,7 +57,7 @@ export default function ServiceCard() {
             </div>
 
             <div className="card-footer">
-              <button className="explore-btn" disabled={item.comingsoon}>
+              <button className="explore-btnn" disabled={item.comingsoon}>
                 {item.comingsoon ? "Coming Soon" : "Explore Service →"}
               </button>
             </div>

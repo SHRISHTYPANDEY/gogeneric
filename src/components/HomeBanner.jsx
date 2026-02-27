@@ -81,19 +81,29 @@ export default function HomeBanner() {
       `}</style>
       <div className="hero-full-width">
         <div className="hero-slider-wrapper">
-          {banners.map((banner, i) => (
-            <div 
-              className={`hero-slide ${i === index ? "active" : ""}`} 
-              key={banner.id || i}
-            >
-              <img
-                src={cleanImageUrl(banner?.image_full_url || banner?.image)}
-                alt="Premium Banner"
-                className="hero-img-full"
-              />
-              <div className="hero-overlay-dark"></div>
-            </div>
-          ))}
+          {banners.map((banner, i) => {
+
+  const finalImageUrl = cleanImageUrl(
+    banner?.image_full_url || banner?.image
+  );
+
+  console.log("Raw Banner Image:", banner?.image_full_url || banner?.image);
+  console.log("Clean Banner URL:", finalImageUrl);
+
+  return (
+    <div 
+      className={`hero-slide ${i === index ? "active" : ""}`} 
+      key={banner.id || i}
+    >
+      <img
+        src={finalImageUrl}
+        alt="Premium Banner"
+        className="hero-img-full"
+      />
+      <div className="hero-overlay-dark"></div>
+    </div>
+  );
+})}
 
           {/* Dots Pagination */}
           <div className="hero-dots-container">
