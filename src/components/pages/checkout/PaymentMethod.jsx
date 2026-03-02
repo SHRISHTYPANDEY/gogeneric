@@ -16,10 +16,10 @@ export default function PaymentMethod({
     { key: "cash_on_delivery", label: "Cash on Delivery" },
     { key: "digital_payment", label: "Pay Online" },
     {
-  key: "wallet",
-  label: "Wallet (₹25 auto-applied)",
-  disabled: true, // cannot select again
-}
+      key: "wallet",
+      label: "Wallet", // removed "(₹25 auto-applied)"
+      disabled: isWalletDisabled, // only disabled if balance < 25
+    },
   ];
 
   return (
@@ -29,8 +29,7 @@ export default function PaymentMethod({
         className="pay-using-toggle"
         onClick={() => setOpen(!open)}
       >
-        Pay Using{" "}
-        {value && `• ${methods.find((m) => m.key === value)?.label}`}
+        Pay Using {value && `• ${methods.find((m) => m.key === value)?.label}`}
       </button>
 
       {open && (
@@ -54,10 +53,9 @@ export default function PaymentMethod({
                   setOpen(false);
                 }}
               />
-
               {m.label}
 
-              {m.key === "wallet" && m.disabled && (
+              {m.key === "wallet" && isWalletDisabled && (
                 <span className="wallet-warning">
                   (Wallet can be used from ₹25 balance)
                 </span>

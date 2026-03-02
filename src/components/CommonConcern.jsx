@@ -3,14 +3,13 @@ import "./CommonConcern.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
-
 export default function CommonConcern() {
   const [concerns, setConcerns] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const abortRef = useRef(null);
-   const concernImages = {
+  const concernImages = {
   ANTIBIOTIC: "/concern_img/ANTIBIOTIC Care.png",
   Allergy: "/concern_img/Allergy.png",
   "Body Pain": "/concern_img/Body Pain Care.png",
@@ -110,7 +109,7 @@ export default function CommonConcern() {
             }
           >
             <div className="concern-type-image">
-             <img
+            <img
   src={
     cleanImageUrl(c.image_full_url) ||
     concernImages[c.name] ||

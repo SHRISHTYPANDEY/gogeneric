@@ -22,7 +22,6 @@ export default function Cart() {
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
-
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -62,7 +61,7 @@ export default function Cart() {
       setCart(cartItems);
       localStorage.setItem(
         "cart_item_ids",
-        JSON.stringify(cartItems.map((c) => c.item_id))
+        JSON.stringify(cartItems.map((c) => c.item_id)),
       );
     } catch (err) {
       console.error("Cart sync error", err);
@@ -71,71 +70,71 @@ export default function Cart() {
     }
   };
 
-const updateQty = async (item, qty) => {
-  if (qty < 1) return;
+  const updateQty = async (item, qty) => {
+    if (qty < 1) return;
 
-//   console.log("Updating quantity:", {
-//     cart_id: item.id,
-//     oldQty: item.quantity,
-//     newQty: qty,
-// price: getFinalPrice(item.item, discountMap),
-//     tokenPresent: !!token,
-//     guestId,
-//   });
+    //   console.log("Updating quantity:", {
+    //     cart_id: item.id,
+    //     oldQty: item.quantity,
+    //     newQty: qty,
+    // price: getFinalPrice(item.item, discountMap),
+    //     tokenPresent: !!token,
+    //     guestId,
+    //   });
 
-  try {
-    const res = await api.post(
-      "/api/v1/customer/cart/update",
-      {
-        cart_id: item.id,
-        price: item.price,
-        quantity: qty,
-        ...(token ? {} : { guest_id: guestId }),
-      },
-      {
-        headers: {
-          zoneId: JSON.stringify([3]),
-          moduleId: "2",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    try {
+      const res = await api.post(
+        "/api/v1/customer/cart/update",
+        {
+          cart_id: item.id,
+          price: item.price,
+          quantity: qty,
+          ...(token ? {} : { guest_id: guestId }),
         },
+        {
+          headers: {
+            zoneId: JSON.stringify([3]),
+            moduleId: "2",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        },
+      );
+
+      // console.log("Cart update success:", res.data);
+      window.dispatchEvent(new Event("cart-updated"));
+    } catch (error) {
+      console.error("Cart update failed", error);
+
+      if (
+        error.response &&
+        error.response.data?.errors &&
+        error.response.data.errors.length
+      ) {
+        const err = error.response.data.errors[0];
+
+        if (err.code === "out_of_stock") {
+          Swal.fire({
+            icon: "warning",
+            title: "Out of Stock 😔",
+            // text: err.message || "Selected quantity is not available",
+            confirmButtonColor: "#016B61",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: err.message || "Something went wrong",
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Network Error",
+          text: "Please try again later",
+        });
       }
-    );
-
-    // console.log("Cart update success:", res.data);
-    window.dispatchEvent(new Event("cart-updated"));
- } catch (error) {
-  console.error("Cart update failed", error);
-
-  if (
-    error.response &&
-    error.response.data?.errors &&
-    error.response.data.errors.length
-  ) {
-    const err = error.response.data.errors[0];
-
-    if (err.code === "out_of_stock") {
-      Swal.fire({
-        icon: "warning",
-        title: "Out of Stock 😔",
-        // text: err.message || "Selected quantity is not available",
-        confirmButtonColor: "#016B61",
-      });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Oops!",
-        text: err.message || "Something went wrong",
-      });
     }
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Network Error",
-      text: "Please try again later",
-    });
-  }
-}
-};
+  };
 
   const removeItem = async (item) => {
     await api.delete("/api/v1/customer/cart/remove-item", {
@@ -185,11 +184,10 @@ const updateQty = async (item, qty) => {
       setSuggestedLoading(false);
     }
   };
-const total = cart.reduce((sum, c) => {
-  const price = getFinalPrice(c.item, discountMap);
-  return sum + price * c.quantity;
-}, 0);
-
+  const total = cart.reduce((sum, c) => {
+    const price = getFinalPrice(c.item, discountMap);
+    return sum + price * c.quantity;
+  }, 0);
 
   if (loading) {
     return (
@@ -221,43 +219,47 @@ const total = cart.reduce((sum, c) => {
           <div className="cart-layout">
             <div className="cart-items">
               {cart.map((c) => {
-
                 const finalPrice = getFinalPrice(c.item, discountMap);
-const rawImg =
-  c.item?.image_full_url ||
-  c.item?.images_full_url?.[0] ||
-  c.item?.image;
+                const discountPercent = getDiscountPercent(c.item, discountMap);
+                const basePrice = c.item.mrp || c.item.price || c.item.unit_price;
 
-const img =
-  !rawImg ||
-  rawImg === "null" ||
-  rawImg === "undefined" ||
-  rawImg === "/"
-    ? null
-    : rawImg;
+                const rawImg =
+                  c.item?.image_full_url ||
+                  c.item?.images_full_url?.[0] ||
+                  c.item?.image;
 
+                const img =
+                  !rawImg ||
+                  rawImg === "null" ||
+                  rawImg === "undefined" ||
+                  rawImg === "/"
+                    ? null
+                    : rawImg;
 
                 return (
                   <div key={c.id} className="cart-item">
-<img
-  src={cleanImageUrl(img ?? "")}
-  alt={c.item?.name}
-  className="cart-img"
-  onError={(e) => (e.currentTarget.src = "/no-image.png")}
-/>
+                    <img
+                      src={img ? cleanImageUrl(img) : "/no-image.jpg"}
+                      alt={c.item?.name}
+                      className="cart-img"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "/no-image.jpg";
+                      }}
+                    />
 
                     <div className="item-info">
                       <h4>{c.item?.name}</h4>
-                      {finalPrice < c.price ? (
+             
+
+{finalPrice < basePrice ? (
   <>
-    <p className="original-price">₹{c.price}</p>
+    <p className="original-price">₹{basePrice}</p>
     <p className="discounted-price">₹{finalPrice}</p>
   </>
 ) : (
-  <p>₹{c.price}</p>
+  <p>₹{finalPrice}</p>
 )}
-
-
                     </div>
 
                     <div className="qty-control">
@@ -270,10 +272,9 @@ const img =
                       </button>
                     </div>
 
-                   <div className="item-total">
-₹{(finalPrice * c.quantity).toFixed(2)}
-
-</div>
+                    <div className="item-total">
+                      ₹{(finalPrice * c.quantity).toFixed(2)}
+                    </div>
 
                     <Trash2 className="delete" onClick={() => removeItem(c)} />
                   </div>
@@ -283,15 +284,15 @@ const img =
 
             <div className="cart-summary">
               <h3>Summary</h3>
-           <div className="summary-row">
-  <span>Subtotal</span>
-  <span>₹{total.toFixed(2)}</span>
-</div>
+              <div className="summary-row">
+                <span>Subtotal</span>
+                <span>₹{total.toFixed(2)}</span>
+              </div>
 
-<div className="summary-row total">
-  <span>Total</span>
-  <span>₹{total.toFixed(2)}</span>
-</div>
+              <div className="summary-row total">
+                <span>Total</span>
+                <span>₹{total.toFixed(2)}</span>
+              </div>
 
               <button
                 className="checkout-btn"
@@ -311,64 +312,65 @@ const img =
               <Loader text="Loading suggestions..." />
             ) : (
               <div className="suggested-grid">
-                {suggested.map((p) => {
-                  const discountedPrice = getDiscountedPrice(
-                    p,
-                    discountMap
-                  );
-                  const discountPercent = getDiscountPercent(
-                    p,
-                    discountMap
-                  );
+              {suggested.map((p) => {
+  const discountedPrice = getDiscountedPrice(p, discountMap);
+  const discountPercent = getDiscountPercent(p, discountMap);
 
-                  return (
-                    <div key={p.id} className="suggested-card">
-                      {discountPercent && (
-                        <div className="discount-badge">
-                          {discountPercent}% OFF
-                        </div>
-                      )}
+  // Calculate base price (MRP cut to integer)
+  const basePrice = p.mrp ? Math.floor(parseFloat(p.mrp)) : Math.floor(parseFloat(p.price));
 
-                      <div className="suggested-img-container">
-                       <img
-  src={cleanImageUrl(p.image_full_url || p.images_full_url?.[0] || "")}
-  alt={p.name}
-  onError={(e) => (e.currentTarget.src = "/no-image.png")}
-/>
+  const rawImg =
+    p.image_full_url && p.image_full_url !== "null" && p.image_full_url !== "undefined" && p.image_full_url !== "/"
+      ? cleanImageUrl(p.image_full_url)
+      : p.images_full_url?.[0] &&
+        p.images_full_url[0] !== "null" &&
+        p.images_full_url[0] !== "undefined" &&
+        p.images_full_url[0] !== "/"
+      ? cleanImageUrl(p.images_full_url[0])
+      : "/no-image.jpg";
 
-                      </div>
-                      <div className="suggested-info">
-                        <h4>{p.name}</h4>
+  return (
+    <div key={p.id} className="suggested-card">
+      {discountPercent && <div className="discount-badge">{discountPercent}% OFF</div>}
 
-                        {discountedPrice ? (
-                          <>
-                            <span className="original-price">
-                              ₹{p.price}
-                            </span>
-                            <span className="discounted-price">
-                              ₹{discountedPrice}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="discounted-price">
-                            ₹{p.price}
-                          </span>
-                        )}
-                      </div>
+      <div className="suggested-img-container">
+        <img
+          src={rawImg}
+          alt={p.name}
+          className="suggested-img"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "/no-image.jpg";
+          }}
+        />
+      </div>
 
-                      <div className="suggested-actions">
-                        <WishlistButton item={p} />
-                        <AddToCartButton
-                          item={{
-                            ...p,
-                            price: getFinalPrice(p, discountMap),
-                            original_price: p.price,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+      <div className="suggested-info">
+        <h4>{p.name}</h4>
+
+        {discountedPrice ? (
+          <>
+            <span className="original-price">₹{basePrice}</span>
+            <span className="discounted-price">₹{discountedPrice}</span>
+          </>
+        ) : (
+          <span className="discounted-price">₹{basePrice}</span>
+        )}
+      </div>
+
+      <div className="suggested-actions">
+        <WishlistButton item={p} />
+        <AddToCartButton
+          item={{
+            ...p,
+            price: getFinalPrice(p, discountMap),
+            original_price: basePrice,
+          }}
+        />
+      </div>
+    </div>
+  );
+})}
               </div>
             )}
           </div>

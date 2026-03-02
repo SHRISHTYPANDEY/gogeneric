@@ -74,7 +74,7 @@ function AppLayout() {
   const { location, setLocation } = useLocation();
   const MODAL_COOLDOWN = 20 * 60 * 1000; 
 
-   useEffect(() => {
+  useEffect(() => {
   const lastDismissed = localStorage.getItem("appDownloadDismissedAt");
 
   if (!lastDismissed) {
@@ -116,13 +116,12 @@ const closeModal = () => {
 
   return (
     <>
-    
       {showModal && <AppDownloadModal onClose={closeModal} />}
       
       <TopHeader />
       <Navbar />
       <div className="container"> 
-         <BackButton /> 
+        <BackButton /> 
       </div>
       <WhatsAppChat />
     <ScrollToTop />

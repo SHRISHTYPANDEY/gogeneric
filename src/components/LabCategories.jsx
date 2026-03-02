@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // 1. Import Framer Motion
 import "./LabCategories.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
@@ -42,7 +41,9 @@ export default function LabCategoryCards() {
   }, []);
 
   const handleCardClick = (cat) => {
-    navigate(`/lab-tests/${cat.slug}/tests`, { state: { categoryName: cat.name } });
+    navigate(`/lab-tests/${cat.slug}/tests`, {
+      state: { categoryName: cat.name },
+    });
   };
 
   if (loading) return null;
@@ -52,19 +53,19 @@ export default function LabCategoryCards() {
       <h2 className="lab-cate-title">Explore Our Lab Categories</h2>
 
       <div className="lab-category-grid">
-        {categories.slice(0, 6).map((cat, index) => (
-          <motion.div
+        {categories.slice(0, 6).map((cat) => (
+          <div
             key={cat.id}
             className="lab-category-card"
             onClick={() => handleCardClick(cat)}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -80 : 80 }} 
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }} 
-            transition={{ duration: 0.6, delay: index * 0.1 }} 
           >
             <div className="lab-card-image-box">
               <img
-                src={cleanImageUrl(cat.icon) || labCategoryImages[cat.slug] || "/no-image.jpg"}
+                src={
+                  cleanImageUrl(cat.icon) ||
+                  labCategoryImages[cat.slug] ||
+                  "/no-image.jpg"
+                }
                 alt={cat.name}
               />
             </div>
@@ -72,12 +73,15 @@ export default function LabCategoryCards() {
             <div className="lab-card-info-box">
               <p className="lab-category-name">{cat.name}</p>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
       <div className="lab-browse-all-wrapper">
-        <button className="lab-browse-all-btn" onClick={() => navigate("/lab-tests")}>
+        <button
+          className="lab-browse-all-btn"
+          onClick={() => navigate("/lab-tests")}
+        >
           Browse All Lab Categories
         </button>
       </div>

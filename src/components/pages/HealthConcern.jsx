@@ -6,6 +6,7 @@ import { cleanImageUrl } from "../../utils";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
 import Loader from "../Loader";
+import { encodeId } from "../../utils/idObfuscator";
 const HealthConcern = () => {
   const { concernSlug } = useParams();
   const [medicines, setMedicines] = useState([]);
@@ -24,7 +25,6 @@ const HealthConcern = () => {
     try {
       setLoading(true);
       setError("");
-
       const res = await api.get(
         `/api/v1/common-condition/items/${concernSlug}`,
         {
@@ -49,8 +49,8 @@ const HealthConcern = () => {
     }
   };
   const handleProductClick = (item) => {
-    navigate(`/medicine/${item.id}`);
-  };
+  navigate(`/medicine/${encodeId(item.id)}`);
+};
 
   return (
     <div className="concern-page">
@@ -67,10 +67,8 @@ const HealthConcern = () => {
         </div>
         <div className="concern-line"></div>
       </div>
-
       {loading && <Loader text="Loading Medicines..." />}
       {error && <p className="status-text error">{error}</p>}
-
       {!loading && medicines.length > 0 && (
         <div className="medicine-grid">
           {medicines
@@ -88,11 +86,9 @@ const HealthConcern = () => {
                 <div onClick={(e) => e.stopPropagation()}>
                   <WishlistButton item={item} />
                 </div>
-
                 <div onClick={(e) => e.stopPropagation()}>
                   <AddToCartButton item={item} />
                 </div>
-
                 <div className="card-img-wrapper">
                   <img
                     src={
@@ -104,7 +100,6 @@ const HealthConcern = () => {
                     onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
                   />
                 </div>
-
                 <div className="card-content">
                   <h3>{item.name}</h3>
                   {/* Rupee Symbol ke saath price */}
@@ -117,5 +112,4 @@ const HealthConcern = () => {
     </div>
   );
 };
-
 export default HealthConcern;

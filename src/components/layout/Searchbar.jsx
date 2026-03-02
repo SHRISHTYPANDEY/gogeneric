@@ -105,18 +105,17 @@ export default function Searchbar({ isModal = false, onClose }) {
   }, [query, triggerSearch]);
 
   const handleSelect = (item) => {
-    onClose?.();
+  onClose?.();
 
-    const rawId = item.id.split("-")[1];
+  const rawId = item.id.split("-")[1];
+
+  if (item.type === "medicine") {
     const encodedId = encodeId(rawId);
-
-    navigate(
-      item.type === "medicine"
-        ? `/medicine/${encodedId}`
-        : `/view-stores/${encodedId}`,
-    );
-  };
-
+    navigate(`/medicine/${encodedId}`);
+  } else {
+    navigate(`/view-stores/${rawId}`);
+  }
+};
   const handleKeyDown = (e) => {
     if (e.key !== "Enter") return;
 

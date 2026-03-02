@@ -1,5 +1,8 @@
 export function cleanImageUrl(url) {
   if (!url) return null;
+  if (!url || url === "null" || url === "undefined") {
+    return "/no-image.png";   
+  }
 
   let cleanUrl = url.replaceAll("//", "/").replace("https:/", "https://");
 

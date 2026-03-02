@@ -26,7 +26,7 @@ export default function HomeBanner() {
         // Optional: log first banner type
         if (bannerData[0]?.image || bannerData[0]?.image_full_url) {
           const firstImage = cleanImageUrl(bannerData[0].image_full_url || bannerData[0].image);
-          console.log("First banner is Base64?", isBase64Image(firstImage));
+          // console.log("First banner is Base64?", isBase64Image(firstImage));
         }
       })
       .catch((err) => console.error("Banner error:", err));
@@ -87,8 +87,8 @@ export default function HomeBanner() {
     banner?.image_full_url || banner?.image
   );
 
-  console.log("Raw Banner Image:", banner?.image_full_url || banner?.image);
-  console.log("Clean Banner URL:", finalImageUrl);
+  // console.log("Raw Banner Image:", banner?.image_full_url || banner?.image);
+  // console.log("Clean Banner URL:", finalImageUrl);
 
   return (
     <div 

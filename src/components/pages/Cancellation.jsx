@@ -42,7 +42,7 @@ export default function Cancellation() {
 
       {content ? (
         <div
-          className="cancel-content"
+          classname="cancel-content"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       ) : (

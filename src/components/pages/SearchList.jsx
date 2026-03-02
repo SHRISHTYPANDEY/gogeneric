@@ -26,23 +26,18 @@ export default function SearchList() {
   const [location, setLocation] = useState(null);
   const [activeTab, setActiveTab] = useState("medicines");
   const { discountMap, fetchDiscountedItems } = useDiscounts();
-
   const abortRef = useRef(null);
   const navigate = useNavigate();
-
   const cardThemes = ["teal", "blue", "green", "yellow", "pink"];
-
   const fuseOptions = {
     keys: ["name"],
     threshold: 0.6,
     ignoreLocation: true,
     minMatchCharLength: 2,
   };
-
   useEffect(() => {
     fetchDiscountedItems();
   }, [fetchDiscountedItems]);
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
@@ -53,18 +48,15 @@ export default function SearchList() {
       () => setLocation({ latitude: 0, longitude: 0 })
     );
   }, []);
-
   useEffect(() => {
     if (!query || query.trim().length < 2 || !location) return;
     fetchSearchResults(query.trim());
   }, [query, location]);
-
   const fetchSearchResults = async (searchText) => {
     try {
       if (abortRef.current) abortRef.current.abort();
       abortRef.current = new AbortController();
       setLoading(true);
-
       const res = await api.get("/api/v1/items/item-or-store-search", {
         params: { name: searchText.slice(0, 3) },
         headers: {
@@ -76,13 +68,10 @@ export default function SearchList() {
         signal: abortRef.current.signal,
       });
       // console.log("search api data", res.data);
-
       const rawItems = res.data?.items || [];
       const rawStores = res.data?.stores || [];
-
       const fuse = new Fuse(rawItems, fuseOptions);
       const fuzzyItems = fuse.search(searchText).map((r) => r.item);
-
       setMedicines(fuzzyItems);
       setStores(rawStores);
     } catch (err) {
@@ -91,12 +80,10 @@ export default function SearchList() {
       setLoading(false);
     }
   };
-
   const showEmptyState =
     !loading &&
     ((activeTab === "medicines" && medicines.length === 0) ||
       (activeTab === "stores" && stores.length === 0));
-
   return (
     <>
       <section className="gs-search-container">
@@ -116,7 +103,6 @@ export default function SearchList() {
                 Stores
               </button>
             </div>
-
             <div className="gs-header-right">
               <h2 className="gs-result-title">
                 Results for <span className="gs-highlight">"{query}"</span>
@@ -130,41 +116,34 @@ export default function SearchList() {
               )}
             </div>
           </div>
-
           {loading && (
             <div className="gs-loader-center">
               <Loader text="Searching..." />
             </div>
           )}
-
           {showEmptyState && (
             <div className="gs-status-box">
               <p className="gs-no-results">No {activeTab} found here.</p>
             </div>
           )}
-
           {!loading && activeTab === "medicines" && (
             <div className="gs-medicine-grid">
               {medicines.map((item, index) => {
                 const discountedPrice = getDiscountedPrice(item, discountMap);
                 const discountPercent = getDiscountPercent(item, discountMap);
                 const theme = cardThemes[index % cardThemes.length];
-
                 return (
                   <div
                     className={`gs-medicine-card card-theme-${theme}`}
                     key={item.id}
                     onClick={() => navigate(`/medicine/${encodeId(item.id)}`)}
-
                   >
                     <div className="gs-wishlist" onClick={(e) => e.stopPropagation()}>
                       <WishlistButton item={item} />
                     </div>
-
                     {discountPercent && (
                       <div className="discount-badge">{discountPercent}% OFF</div>
                     )}
-
                     <div className="gs-img-box">
                       <img
                         src={cleanImageUrl(item.image_full_url || item.image) || "/no-image.jpg"}
@@ -172,9 +151,7 @@ export default function SearchList() {
                         onError={(e) => (e.currentTarget.src = "/no-image.jpg")}
                       />
                     </div>
-
                     <h4 className="gs-med-name">{item.name}</h4>
-
                     <div className="gs-card-info">
                       <div className="price-box">
                         {discountedPrice ? (
@@ -186,7 +163,6 @@ export default function SearchList() {
                           <span className="discounted-price">{item.price || item.unit_price}</span>
                         )}
                       </div>
-
                       <div className="gs-card-action" onClick={(e) => e.stopPropagation()}>
                         <AddToCartButton
                           item={{
@@ -202,7 +178,6 @@ export default function SearchList() {
               })}
             </div>
           )}
-
           {!loading && activeTab === "stores" && (
             <div className="gs-medicine-grid">
               {stores.map((store, index) => {
@@ -211,8 +186,7 @@ export default function SearchList() {
                   <div
                     key={store.id}
                     className={`gs-medicine-card card-theme-${theme}`}
-                  onClick={() => navigate(`/view-stores/${encodeId(store.id)}`)}
-
+                  onClick={() => navigate(`/view-stores/${store.id}`)}
                   >
                     <div className="gs-img-box">
                       <img

@@ -1,21 +1,56 @@
 import "./BillSummary.css";
-export default function BillSummary({ cartItems, deliveryType, walletDiscount, totalPayable }) {
-  const itemTotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+import { getFinalPrice } from "../../../utils/priceUtils";
+
+export default function BillSummary({
+  cartItems,
+  deliveryType,
+  walletDiscount = 0,
+  totalPayable,
+  discountMap = {},
+}) {
+  // Total MRP (original prices)
+  const totalMRP = cartItems.reduce((sum, item) => {
+    const basePrice = item.item?.mrp
+      ? parseFloat(item.item.mrp)
+      : parseFloat(item.item?.price || 0);
+    return sum + basePrice * item.quantity;
+  }, 0);
+
+  // Total Discount
+  const totalDiscount = cartItems.reduce((sum, item) => {
+    const basePrice = item.item?.mrp
+      ? parseFloat(item.item.mrp)
+      : parseFloat(item.item?.price || 0);
+    const finalPrice = getFinalPrice(item.item, discountMap);
+    return sum + (basePrice - finalPrice) * item.quantity;
+  }, 0);
+
+  // Subtotal after item discounts
+  const subtotal = totalMRP - totalDiscount;
 
   const platformFee = 2;
   const deliveryCharge = deliveryType === "delivery" ? 50 : 0;
-  const grandTotal = itemTotal + platformFee + deliveryCharge;
+
+  // Grand Total after wallet discount
+  const grandTotal = subtotal + platformFee + deliveryCharge - walletDiscount;
 
   return (
     <div className="checkout-card">
       <h4>Bill Summary</h4>
 
       <div className="bill-row">
-        <span>Cart Amount</span>
-        <span>₹{itemTotal.toFixed(2)}</span>
+        <span>Total MRP</span>
+        <span>₹{totalMRP.toFixed(2)}</span>
+      </div>
+
+      <div className="bill-row">
+        <span>Total Discount</span>
+        <span style={{ color: "green" }}>-₹{totalDiscount.toFixed(2)}</span>
+      </div>
+
+      <div className="bill-row">
+        <span>Subtotal (After Discounts)</span>
+        <span>₹{subtotal.toFixed(2)}</span>
       </div>
 
       <div className="bill-row">
@@ -39,9 +74,8 @@ export default function BillSummary({ cartItems, deliveryType, walletDiscount, t
 
       <div className="bill-row total">
         <strong>Total Payable</strong>
-        <strong>₹{totalPayable.toFixed(2)}</strong>
+        <strong>₹{grandTotal.toFixed(2)}</strong>
       </div>
     </div>
   );
-
 }
