@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getDoctorById } from "../../api/doctorapi";
+import { getApprovedDoctorById, getDoctorById } from "../../api/doctorApi";
+import { cleanImageUrl } from "../../utils";
 import "./DoctorDetails.css";
 import Footer from "../Footer";
-import Loader from "../Loader";
+import { SkeletonDoctorProfile } from "../skeleton/SkeletonGrid";
 export default function DoctorDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -14,11 +15,21 @@ export default function DoctorDetails() {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const data = await getDoctorById(id);
+        let data;
+
+        try {
+          data = await getDoctorById(id);
+        } catch (err) {
+          if (err.response?.status === 404) {
+            data = await getApprovedDoctorById(id);
+          } else {
+            throw err;
+          }
+        }
+
         setDoctor(data);
       } catch (err) {
-        setError("Doctor not found or API error");
-        console.error("Error fetching doctor:", err);
+        setError("Doctor not found");
       } finally {
         setLoading(false);
       }
@@ -26,9 +37,9 @@ export default function DoctorDetails() {
 
     fetchDoctor();
   }, [id]);
-
-  if (loading) return <Loader text="Loading doctor details..." />;
-  if (error) return <div className="error-msg">{error}</div>;
+if (loading) return <SkeletonDoctorProfile />;
+if (error) return <div className="error-msg">{error}</div>;
+if (!doctor) return <div className="error-msg">Doctor data not available</div>;
 
   return (
     <>
@@ -37,7 +48,7 @@ export default function DoctorDetails() {
           <div className="profile-sidebar">
             <div className="img-container">
               <img
-                src={doctor.image}
+                src={doctor.photo ? cleanImageUrl(doctor.photo) : doctor.image}
                 alt={doctor.name}
                 className="profile-img"
               />
@@ -63,14 +74,20 @@ export default function DoctorDetails() {
             )}
 
             {/* EXPERIENCE */}
-            {(doctor.experience || doctor.experienceDetail) && (
+            {(doctor.experience || doctor.years_of_practice || doctor.experienceDetail) && (
               <section className="info-section">
                 <h3 className="section-title">Experience</h3>
-                {doctor.experience && (
+
+                {(doctor.years_of_practice || doctor.experience) && (
                   <p className="section-text">
-                    <strong>{doctor.experience}</strong>
+                    <strong>
+                      {doctor.years_of_practice
+                        ? `${doctor.years_of_practice} Years Experience`
+                        : doctor.experience}
+                    </strong>
                   </p>
                 )}
+
                 {doctor.experienceDetail && (
                   <p className="section-text">{doctor.experienceDetail}</p>
                 )}

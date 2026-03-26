@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
-import Loader from "../Loader";
 import toast from "react-hot-toast";
 import { FileText, MapPin, Star, Phone, Mail } from "lucide-react";
 import "./StoreDetails.css";
@@ -15,6 +14,9 @@ import {
   getFinalPrice,
   getDiscountPercent,
 } from "../../utils/priceUtils";
+import SkeletonText from "../skeleton/SkeletonText";
+import SkeletonCard from "../skeleton/SkeletonCard";
+import {SkeletonGrid} from "../skeleton/SkeletonGrid";
 export default function StoreDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -246,7 +248,7 @@ export default function StoreDetails() {
           map[item.id] = item.discounted_price;
         }
       });
-      discountMap(map);
+      // discountMap(map);
     } catch (err) {
       console.error("Error fetching discounted products:", err);
     }
@@ -269,7 +271,28 @@ export default function StoreDetails() {
       r.comment?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       r.customer_name?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-  if (loading) return <Loader text="Loading store details..." />;
+if (loading) {
+  return (
+    <div className="sd-main-container">
+
+      <SkeletonText width="200px" height="20px" />
+
+      <div className="sd-header-box">
+        <div>
+          <SkeletonText width="250px" height="30px" />
+          <SkeletonText width="200px" height="18px" />
+        </div>
+
+        <div className="sd-rating-card">
+          <SkeletonText width="60px" height="25px" />
+        </div>
+      </div>
+
+      <SkeletonGrid count={8} />
+
+    </div>
+  );
+}
   if (!store) return <div>Store not found</div>;
   return (
     <div className="sd-main-container">
@@ -389,10 +412,10 @@ export default function StoreDetails() {
           </div>
           {/* Loader */}
           {productsLoading && (
-            <div className="sd-products-loader">
-              <Loader text="Loading more products..." inline />
-            </div>
-          )}
+  <div className="sd-products-loader">
+    <SkeletonGrid count={6} />
+  </div>
+)}
           {/* Infinite Scroll Sentinel */}
           {hasMore && <div id="scroll-sentinel" style={{ height: 1 }} />}
         </>
@@ -410,8 +433,12 @@ export default function StoreDetails() {
       {activeTab === "reviews" && (
         <div className="sd-reviews-list">
           {reviewsLoading ? (
-            <Loader text="Loading reviews..." />
-          ) : (
+  <>
+    {[1,2,3].map((i)=>(
+      <SkeletonCard key={i} height="80px"/>
+    ))}
+  </>
+) : (
             filteredReviews.map((r) => (
               <div key={r.id} className="sd-rev-card">
                 <strong>{r.customer_name}</strong> ⭐ {r.rating}

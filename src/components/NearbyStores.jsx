@@ -4,7 +4,7 @@ import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
 import AddToCartButton from "./CartButton";
-import Loader from "./Loader";
+import {SkeletonGrid} from "./skeleton/SkeletonGrid";
 import WishlistButton from "./WishlistButton";
 import useDiscounts from "../hooks/useDiscounts";
 import { encodeId } from "../utils/idObfuscator";
@@ -45,10 +45,10 @@ export default function NearbyStores() {
           headers: { zoneId: JSON.stringify([3]), moduleId: 2 },
           signal: abortRef.current.signal,
         });
-console.log("API RESPONSE of nearby store:", res.data);
+// console.log("API RESPONSE of nearby store:", res.data);
         const items = res.data.items || res.data.products || [];
         allItems = [...allItems, ...items];
-        console.log("med dataaaaaaa", res)
+        // console.log("med dataaaaaaa", res)
         if (!categoriesSet) {
           setCategories(res.data.categories || res.data.filters || []);
           categoriesSet = true;
@@ -82,11 +82,16 @@ console.log("API RESPONSE of nearby store:", res.data);
 
   return (
     <div className="nearby-section max-w-7xl mx-auto">
-      <h2 className="nearby-title">Basic Medicines Near You</h2>
-
+<h2 className="nearby-title">
+  {loading ? (
+    <div className="skeleton" style={{ width: "260px", height: "24px" }} />
+  ) : (
+    "Basic Medicines Near You"
+  )}
+</h2>
       {loading ? (
-        <Loader text="Loading medicines..." />
-      ) : (
+  <SkeletonGrid count={10} />
+) : (
         <>
           {/* FILTERS */}
           <div className="nearby-filters">

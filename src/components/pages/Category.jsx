@@ -3,7 +3,7 @@ import "./Category.css";
 import api from "../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { cleanImageUrl } from "../../utils";
-import Loader from "../Loader";
+import {CategorySkeleton} from "../skeleton/SkeletonGrid";
 import { encodeId } from "../../utils/idObfuscator";
 
 export default function Category() {
@@ -22,8 +22,18 @@ export default function Category() {
   }, []);
 
   if (loading) {
-    return <Loader text="Loading Categories..." />;
-  }
+  return (
+    <div className="all-cat-page-container">
+      <h1 className="all-cat-main-title">All Categories</h1>
+
+      <div className="all-cat-grid-layout">
+        {[...Array(12)].map((_, i) => (
+          <CategorySkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
   return (
     <>

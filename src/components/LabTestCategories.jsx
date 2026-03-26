@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./LabCategories.css";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
-import Loader from "./Loader";
-
+import {SkeletonGrid} from "./skeleton/SkeletonGrid";
 export default function LabTestCategories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,8 +50,8 @@ export default function LabTestCategories() {
       <h2 className="lab-cate-titlee">All Lab Categories</h2>
 
       {loading ? (
-        <Loader text="Loading lab categories..." />
-      ) : (
+  <SkeletonGrid count={9} />
+) : (
         <div className="lab-category-grid">
           {categories.map((cat) => (
             <div

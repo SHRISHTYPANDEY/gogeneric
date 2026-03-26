@@ -4,14 +4,14 @@ import { useLocation as useRouterLocation } from "react-router-dom";
 import { useLocation } from "../../context/LocationContext";
 import CategoriesCard from "../CategoriesCard";
 import HomeBanner from "../HomeBanner";
-// import NearbyStores from "../NearbyStores";
+import NearbyStores from "../NearbyStores";
 import Highlights from "../Highlights";
 import VisitAgain from "../VisitAgain";
 import FeaturedStores from "../FeaturedStores";
 import Stores from "../Stores";
 import Footer from "../Footer";
 import CommonConcern from "../CommonConcern";
-import Loader from "../Loader";
+import HomeSkeleton from "../skeleton/HomeSkeleton";
 import ReviewPopup from "../ReviewPopup";
 import RepublicDayPopup from "../RepublicDayPopup";
 import api from "../../api/axiosInstance";
@@ -26,26 +26,32 @@ export default function Home() {
   const routerLocation = useRouterLocation();
   const { location } = useLocation();
 
-  const reloadHome = () => {
-    setLoading(true);
+  useEffect(() => {
+  const loadPage = async () => {
+    try {
+      setLoading(true);
 
-    const timer = setTimeout(() => {
+      // agar future me home APIs add karni ho
+      // await api.get("/api/v1/home-data");
+
+    } catch (e) {
+      console.error(e);
+    } finally {
       setLoading(false);
-    }, 1200);
-
-    return () => clearTimeout(timer);
+    }
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    reloadHome();
-  }, [routerLocation.key]);
+  loadPage();
+}, []);
+
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [routerLocation.key]);
 
   useEffect(() => {
     if (!location?.lat || !location?.lng) return;
 
     window.scrollTo({ top: 0, behavior: "smooth" });
-    reloadHome();
   }, [location?.lat, location?.lng]);
 
   useEffect(() => {
@@ -105,15 +111,9 @@ export default function Home() {
 
     setShowRepublicPopup(false);
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-
+if (loading) {
+  return <HomeSkeleton />;
+}
   return (
     <>
       <OrganizationSchema />
@@ -123,7 +123,7 @@ export default function Home() {
         <LabCategories />
         <CategoriesCard />
         <CommonConcern />
-        {/* <NearbyStores /> */}
+        <NearbyStores />
         <Highlights />
         <VisitAgain />
         <FeaturedStores />

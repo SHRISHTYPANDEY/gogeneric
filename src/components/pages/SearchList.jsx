@@ -7,9 +7,9 @@ import WishlistButton from "../WishlistButton";
 import Footer from "../Footer";
 import Fuse from "fuse.js";
 import AddToCartButton from "../CartButton";
-import Loader from "../Loader";
 import useDiscounts from "../../hooks/useDiscounts";
 import { encodeId } from "../../utils/idObfuscator";
+import {SkeletonGrid }from "../skeleton/SkeletonGrid";
 
 import {
   getDiscountedPrice,
@@ -117,10 +117,8 @@ export default function SearchList() {
             </div>
           </div>
           {loading && (
-            <div className="gs-loader-center">
-              <Loader text="Searching..." />
-            </div>
-          )}
+  <SkeletonGrid count={10} />
+)}
           {showEmptyState && (
             <div className="gs-status-box">
               <p className="gs-no-results">No {activeTab} found here.</p>

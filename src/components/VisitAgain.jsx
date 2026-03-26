@@ -3,7 +3,7 @@ import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import { useNavigate } from "react-router-dom";
 import "./VisitAgain.css";
-import Loader from "./Loader";
+import {SkeletonGrid} from "./skeleton/SkeletonGrid";
 import { MapPin, Clock } from "lucide-react";
 
 export default function VisitAgain() {
@@ -82,7 +82,7 @@ export default function VisitAgain() {
       </p>
 
       {loading ? (
-        <Loader text="Loading..." />
+        <SkeletonGrid count={5} />
       ) : (
         <div className="visit-again-scroll">
           {visitAgain.map((item) => {

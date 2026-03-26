@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { cleanImageUrl } from "../../utils";
 import { ArrowLeft, Phone, Mail, PackageSearch } from "lucide-react";
 import api from "../../api/axiosInstance";
-import Loader from "../../components/Loader";
 import "./OrderDetails.css";
-
+import SkeletonCard from "../skeleton/SkeletonCard";
+import BillSummary from "../pages/checkout/BillSummary";
 export default function OrderDetails() {
   const { orderId } = useParams();
   const navigate = useNavigate();
@@ -66,14 +66,13 @@ export default function OrderDetails() {
           moduleId: "2",
         },
       });
-
       setStore(res.data);
     } catch (err) {
       console.error("Store fetch error:", err);
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <SkeletonCard />;
   if (!details.length) return <p className="text-center">Order not found</p>;
 
   const orderInfo = details[0];
@@ -98,6 +97,18 @@ export default function OrderDetails() {
   const deliveryFee = Number(orderInfo.delivery_charge ?? 0);
   const totalPayable = Number(orderInfo.order_amount ?? itemTotal);
 
+  const cartItems = details.map((item) => ({
+  quantity: item.quantity,
+  item: {
+    price: item.price,
+    mrp: item.item_details?.mrp || item.price,
+  },
+}));
+
+const deliveryType =
+  orderInfo.order_type === "take_away" ? "takeaway" : "delivery";
+
+const walletDiscount = Number(orderInfo.wallet_discount ?? 0);
   const handleTrackOrder = () => {
     if (!resolvedOrderId) return;
     navigate(`/orders/${resolvedOrderId}/track`);
@@ -114,7 +125,7 @@ export default function OrderDetails() {
           <ArrowLeft size={18} />
         </button>
         <h3>Order #{resolvedOrderId}</h3>
-      </header>
+      </header> 
 
       <div className={`order-status ${orderInfo.order_status}`}>
         {orderInfo.order_status}
@@ -222,25 +233,14 @@ export default function OrderDetails() {
       )}
 
       <div className="order-section">
-        <h4>Order Summary</h4>
-
-        {hasItems && (
-          <div className="summary-row">
-            <span>Item Total</span>
-            <span>₹{itemTotal}</span>
-          </div>
-        )}
-
-        <div className="summary-row">
-          <span>Delivery Fee</span>
-          <span>₹{deliveryFee}</span>
-        </div>
-
-        <div className="summary-row total">
-          <strong>Total Amount</strong>
-          <strong>₹{totalPayable}</strong>
-        </div>
-      </div>
+  <BillSummary
+    cartItems={cartItems}
+    deliveryType={deliveryType}
+    walletDiscount={walletDiscount}
+    totalPayable={orderInfo.order_amount}
+    discountMap={{}}
+  />
+</div>
 
       <div className="order-actions">
         <button className="track-btn" onClick={handleTrackOrder}>

@@ -49,7 +49,7 @@ export default function CancelOrder({ order, onClose, onSuccess }) {
       onSuccess();
       onClose();
     } catch (error) {
-      console.error("❌ Cancel order failed:", error);
+      console.error("Cancel order failed:", error);
 
       Swal.fire({
         icon: "error",

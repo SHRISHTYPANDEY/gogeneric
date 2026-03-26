@@ -5,6 +5,7 @@ import "./Searchbar.css";
 import { cleanImageUrl } from "../../utils";
 import { useNavigate } from "react-router-dom";
 import Fuse from "fuse.js";
+import SearchSkeleton from "../skeleton/SearchSkeleton";
 import { encodeId } from "../../utils/idObfuscator";
 export default function Searchbar({ isModal = false, onClose }) {
   const [query, setQuery] = useState("");
@@ -18,6 +19,7 @@ export default function Searchbar({ isModal = false, onClose }) {
   const wrapperRef = useRef(null);
   const abortRef = useRef(null);
   const debounceRef = useRef(null);
+  const cacheRef = useRef({});
 
   useEffect(() => {
     if (isModal) document.body.style.overflow = "hidden";
@@ -43,44 +45,60 @@ export default function Searchbar({ isModal = false, onClose }) {
   }, []);
 
   const fetchResults = async (searchText) => {
-    try {
-      abortRef.current?.abort();
-      abortRef.current = new AbortController();
+  try {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
 
-      const res = await api.get("/api/v1/items/item-or-store-search", {
-        params: { name: searchText.slice(0, 3) },
-        headers: {
-          zoneId: "[3]",
-          moduleId: 2,
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-        signal: abortRef.current.signal,
-      });
-      // console.log("item-store-search data", res.data);
-      const data = [
-        ...(res.data?.items || []).map((i) => ({
-          id: `item-${i.id}`,
-          type: "medicine",
-          name: i.name,
-          image: i.image_full_url || i.image,
-        })),
-        ...(res.data?.stores || []).map((s) => ({
-          id: `store-${s.id}`,
-          type: "store",
-          name: s.name,
-          image: s.logo || s.image_full_url,
-        })),
-      ];
-
-      const fuse = new Fuse(data, { keys: ["name"], threshold: 0.45 });
-      setResults(fuse.search(searchText).map((r) => r.item));
-    } catch (e) {
-      if (e.name !== "CanceledError") console.error(e);
-    } finally {
+    // cache check
+    if (cacheRef.current[searchText]) {
+      setResults(cacheRef.current[searchText]);
       setLoading(false);
+      return;
     }
-  };
+
+    const res = await api.get("/api/v1/items/item-or-store-search", {
+      params: { name: searchText },
+      headers: {
+        zoneId: "[3]",
+        moduleId: 2,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      },
+      signal: abortRef.current.signal,
+    });
+
+    const data = [
+      ...(res.data?.items || []).map((i) => ({
+        id: `item-${i.id}`,
+        type: "medicine",
+        name: i.name,
+        image: i.image_full_url || i.image,
+      })),
+      ...(res.data?.stores || []).map((s) => ({
+        id: `store-${s.id}`,
+        type: "store",
+        name: s.name,
+        image: s.logo || s.image_full_url,
+      })),
+    ];
+
+    const fuse = new Fuse(data, {
+      keys: ["name"],
+      threshold: 0.35,
+      ignoreLocation: true,
+    });
+
+    const finalResults = fuse.search(searchText).map((r) => r.item);
+
+    cacheRef.current[searchText] = finalResults;
+
+    setResults(finalResults);
+  } catch (e) {
+    if (e.name !== "CanceledError") console.error(e);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const triggerSearch = useCallback(
     (text) => {
@@ -105,17 +123,17 @@ export default function Searchbar({ isModal = false, onClose }) {
   }, [query, triggerSearch]);
 
   const handleSelect = (item) => {
-  onClose?.();
+    onClose?.();
 
-  const rawId = item.id.split("-")[1];
+    const rawId = item.id.split("-")[1];
 
-  if (item.type === "medicine") {
-    const encodedId = encodeId(rawId);
-    navigate(`/medicine/${encodedId}`);
-  } else {
-    navigate(`/view-stores/${rawId}`);
-  }
-};
+    if (item.type === "medicine") {
+      const encodedId = encodeId(rawId);
+      navigate(`/medicine/${encodedId}`);
+    } else {
+      navigate(`/view-stores/${rawId}`);
+    }
+  };
   const handleKeyDown = (e) => {
     if (e.key !== "Enter") return;
 
@@ -159,8 +177,7 @@ export default function Searchbar({ isModal = false, onClose }) {
 
           {showDropdown && (
             <div className="search-dropdown">
-              {loading && <div className="loader">Searching...</div>}
-
+              {loading && <SearchSkeleton count={4} />}
               {!loading && results.length === 0 && (
                 <div className="empty-state">No results found</div>
               )}

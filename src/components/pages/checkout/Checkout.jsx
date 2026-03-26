@@ -11,8 +11,9 @@ import DeliveryType from "./DeliveryType";
 import AddressSection from "./AddressSection";
 import PaymentMethod from "./PaymentMethod";
 import PrescriptionUpload from "./PrescriptionUpload";
-import Loader from "../../Loader";
 import { openRazorpay } from "../../../utils/razorpayPayment";
+import SkeletonCard from "../../skeleton/SkeletonCard";
+import SkeletonText from "../../skeleton/SkeletonText";
 
 export default function Checkout() {
   const [cartItems, setCartItems] = useState([]);
@@ -66,8 +67,8 @@ export default function Checkout() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const guestId = localStorage.getItem("guest_id");
-  
-const finalPayable = totalPayable - walletDiscount;
+
+  const finalPayable = totalPayable - walletDiscount;
   const isPrescriptionRequired = cartItems.some(
     (ci) => ci.item?.is_prescription_required == 1,
   );
@@ -116,57 +117,57 @@ const finalPayable = totalPayable - walletDiscount;
   };
 
   const handlePaymentSelect = (method) => {
-  if (method === "wallet") {
-    if (walletBalance >= 25) {
-      setWalletDiscount(25); // always deduct ₹25
-      setPaymentReady(false); // need secondary method if total > 25
-      if (finalPayable > 25) {
-        showAlert(
-          "info",
-          "Wallet Applied",
-          "₹25 deducted from wallet. Please select another payment method for remaining amount."
-        );
+    if (method === "wallet") {
+      if (walletBalance >= 25) {
+        setWalletDiscount(25); // always deduct ₹25
+        setPaymentReady(false); // need secondary method if total > 25
+        if (finalPayable > 25) {
+          showAlert(
+            "info",
+            "Wallet Applied",
+            "₹25 deducted from wallet. Please select another payment method for remaining amount."
+          );
+        } else {
+          setPaymentReady(true); // full payment covered by wallet
+        }
       } else {
-        setPaymentReady(true); // full payment covered by wallet
+        setWalletDiscount(0);
+        setPaymentReady(false);
+        showAlert(
+          "error",
+          "Insufficient Wallet Balance",
+          "Wallet can be used only if balance is ₹25 or more"
+        );
       }
+      setPaymentMethod("wallet"); // mark wallet as primary
     } else {
-      setWalletDiscount(0);
-      setPaymentReady(false);
-      showAlert(
-        "error",
-        "Insufficient Wallet Balance",
-        "Wallet can be used only if balance is ₹25 or more"
-      );
+      // COD or Digital Payment
+      if (walletDiscount > 0) {
+        // wallet already applied
+        setSecondaryPayment(method); // store as secondary payment
+        setPaymentReady(true);
+      } else {
+        setWalletDiscount(0);
+        setPaymentMethod(method);
+        setSecondaryPayment(null);
+        setPaymentReady(true);
+      }
     }
-    setPaymentMethod("wallet"); // mark wallet as primary
-  } else {
-    // COD or Digital Payment
-    if (walletDiscount > 0) {
-      // wallet already applied
-      setSecondaryPayment(method); // store as secondary payment
-      setPaymentReady(true);
-    } else {
-      setWalletDiscount(0);
-      setPaymentMethod(method);
-      setSecondaryPayment(null);
-      setPaymentReady(true);
-    }
-  }
-};
+  };
 
   const handleDigitalPayment = () => {
-  if (!validateBeforeOrder()) return;
+    if (!validateBeforeOrder()) return;
 
-  openRazorpay({
-    amount: finalPayable, // use finalPayable here instead of totalPayable
-    name: "GoGeneric",
-    description: "Order Payment",
-    phone: selectedAddress?.phone,
-    onSuccess: (response) => {
-      placeOrderAfterPayment(response);
-    },
-  });
-};
+    openRazorpay({
+      amount: finalPayable, // use finalPayable here instead of totalPayable
+      name: "GoGeneric",
+      description: "Order Payment",
+      phone: selectedAddress?.phone,
+      onSuccess: (response) => {
+        placeOrderAfterPayment(response);
+      },
+    });
+  };
 
   const placeOrderAfterPayment = async (paymentResponse) => {
     try {
@@ -224,84 +225,100 @@ const finalPayable = totalPayable - walletDiscount;
     }
   };
 
- const handlePlaceOrder = async () => {
-  if (!validateBeforeOrder()) return;
+  const handlePlaceOrder = async () => {
+    if (!validateBeforeOrder()) return;
 
-  if (!paymentMethod || !paymentReady) {
-    showAlert("warning", "Payment Pending", "Complete payment first");
-    return;
-  }
-
-  if (deliveryType === "delivery" && !selectedAddress) {
-    showAlert("warning", "Address Required", "Please select delivery address");
-    return;
-  }
-
-  if (!policyAccepted) {
-    showAlert("warning", "Policy Required", "Please accept policies");
-    return;
-  }
-
-  if ((isPrescriptionRequired || isPrescriptionOrder) && !prescriptionFile) {
-    showAlert("warning", "Prescription Required", "Prescription is required");
-    return;
-  }
-
-  try {
-    setPlacingOrder(true);
-    const storeId = getOrderStoreId();
-    const formData = new FormData();
-
-    formData.append("order_type", deliveryType);
-    formData.append("delivery_type", deliveryType);
-    formData.append("payment_method", paymentMethod);
-    formData.append("store_id", storeId);
-    formData.append("wallet_amount", walletDiscount);
-
-    formData.append("wallet_amount", walletDiscount);
-if (walletDiscount > 0 && secondaryPayment) {
-  formData.append("payment_method", secondaryPayment); // remaining amount payment method
-} else {
-  formData.append("payment_method", paymentMethod);
-}
-formData.append("order_amount", totalPayable);
-    if (deliveryType === "delivery") {
-      formData.append("address_id", selectedAddress.id);
-      formData.append("address", selectedAddress.address);
-      formData.append("latitude", selectedAddress.latitude);
-      formData.append("longitude", selectedAddress.longitude);
-      formData.append("distance", selectedAddress.distance || 1);
+    if (!paymentMethod || !paymentReady) {
+      showAlert("warning", "Payment Pending", "Complete payment first");
+      return;
     }
 
-    if (!token) formData.append("guest_id", guestId);
-    if ((isPrescriptionRequired || isPrescriptionOrder) && prescriptionFile) {
-      formData.append("order_attachment[]", prescriptionFile);
+    if (deliveryType === "delivery" && !selectedAddress) {
+      showAlert("warning", "Address Required", "Please select delivery address");
+      return;
     }
 
-    const headers = {
-      zoneId: JSON.stringify([3]),
-      moduleId: "2",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    };
+    if (!policyAccepted) {
+      showAlert("warning", "Policy Required", "Please accept policies");
+      return;
+    }
 
-    const res = await api.post(ORDER_API, formData, { headers });
+    if ((isPrescriptionRequired || isPrescriptionOrder) && !prescriptionFile) {
+      showAlert("warning", "Prescription Required", "Prescription is required");
+      return;
+    }
 
-    showAlert("success", "Order Placed 🎉", "Thank you for shopping with us", 1500);
-    window.dispatchEvent(new Event("cart-updated"));
-    fetchWallet(); // Update remaining wallet balance
-    localStorage.removeItem("delivery_type");
-    navigate(`/orders/${res.data?.order_id || ""}`);
-  } catch (err) {
-    console.error("ORDER ERROR", err.response?.data || err);
-    showAlert("error", "Failed", "Order placement failed");
-  } finally {
-    setPlacingOrder(false);
-  }
-};
+    try {
+      setPlacingOrder(true);
+      const storeId = getOrderStoreId();
+      const formData = new FormData();
+
+      formData.append("order_type", deliveryType);
+      formData.append("delivery_type", deliveryType);
+      formData.append("payment_method", paymentMethod);
+      formData.append("store_id", storeId);
+      formData.append("wallet_amount", walletDiscount);
+
+      formData.append("wallet_amount", walletDiscount);
+      if (walletDiscount > 0 && secondaryPayment) {
+        formData.append("payment_method", secondaryPayment);
+      } else {
+        formData.append("payment_method", paymentMethod);
+      }
+      formData.append("order_amount", totalPayable);
+      if (deliveryType === "delivery") {
+        formData.append("address_id", selectedAddress.id);
+        formData.append("address", selectedAddress.address);
+        formData.append("latitude", selectedAddress.latitude);
+        formData.append("longitude", selectedAddress.longitude);
+        formData.append("distance", selectedAddress.distance || 1);
+      }
+
+      if (!token) formData.append("guest_id", guestId);
+      if ((isPrescriptionRequired || isPrescriptionOrder) && prescriptionFile) {
+        formData.append("order_attachment[]", prescriptionFile);
+      }
+
+      const headers = {
+        zoneId: JSON.stringify([3]),
+        moduleId: "2",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+
+      const res = await api.post(ORDER_API, formData, { headers });
+
+      showAlert("success", "Order Placed 🎉", "Thank you for shopping with us", 1500);
+      window.dispatchEvent(new Event("cart-updated"));
+      fetchWallet();
+      localStorage.removeItem("delivery_type");
+      navigate(`/orders/${res.data?.order_id || ""}`);
+    } catch (err) {
+      console.error("ORDER ERROR", err.response?.data || err);
+      showAlert("error", "Failed", "Order placement failed");
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
   if (loading) {
     return (
-      <div style={{ minHeight: "70vh" }}>
-        <Loader />
+      <div className="checkout-container">
+
+        <SkeletonText width="200px" height="30px" />
+
+        <div className="checkout-layout">
+
+          <div className="checkout-left">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+
+          <div className="checkout-right">
+            <SkeletonCard height="250px" />
+          </div>
+
+        </div>
+
       </div>
     );
   }
@@ -332,13 +349,13 @@ formData.append("order_amount", totalPayable);
     }
 
     if (paymentMethod === "wallet" && walletBalance < 25) {
-  showAlert(
-    "error",
-    "Insufficient Wallet Balance",
-    "Wallet can be used only if balance is ₹25 or more"
-  );
-  return false;
-}
+      showAlert(
+        "error",
+        "Insufficient Wallet Balance",
+        "Wallet can be used only if balance is ₹25 or more"
+      );
+      return false;
+    }
 
     if (isPrescriptionRequired && !prescriptionFile) {
       showAlert(
@@ -398,51 +415,51 @@ formData.append("order_amount", totalPayable);
           )}
 
           <PaymentMethod
-  value={paymentMethod}
-  onChange={handlePaymentSelect}
-  walletBalance={walletBalance}
-  orderAmount={finalPayable}
-  disableWallet={walletBalance < 25} 
-/>
-{walletBalance < 25 && (
-  <p style={{ color: "red", fontSize: "13px", marginTop: "5px" }}>
-    Wallet can be used from ₹25 balance
-  </p>
-)}
+            value={paymentMethod}
+            onChange={handlePaymentSelect}
+            walletBalance={walletBalance}
+            orderAmount={finalPayable}
+            disableWallet={walletBalance < 25}
+          />
+          {walletBalance < 25 && (
+            <p style={{ color: "red", fontSize: "13px", marginTop: "5px" }}>
+              Wallet can be used from ₹25 balance
+            </p>
+          )}
           {paymentReady && (
             <p className="payment-success-text">✅ Payment confirmed</p>
           )}
         </div>
 
-      <div className="checkout-right">
-  {!isPrescriptionOrder && (
-    <>
-      <BillSummary
-        cartItems={cartItems}
-        deliveryType={deliveryType}
-        walletDiscount={walletDiscount}
-        totalPayable={finalPayable}
-      />
+        <div className="checkout-right">
+          {!isPrescriptionOrder && (
+            <>
+              <BillSummary
+                cartItems={cartItems}
+                deliveryType={deliveryType}
+                walletDiscount={walletDiscount}
+                totalPayable={finalPayable}
+              />
 
-      {/* Wallet Discount Info */}
-      {walletDiscount > 0 && (
-        <p style={{ color: "green", fontSize: "13px", marginTop: "5px" }}>
-          ₹{walletDiscount} will be deducted from your wallet
-        </p>
-      )}
+              {/* Wallet Discount Info */}
+              {walletDiscount > 0 && (
+                <p style={{ color: "green", fontSize: "13px", marginTop: "5px" }}>
+                  ₹{walletDiscount} will be deducted from your wallet
+                </p>
+              )}
 
-      {/* Remaining Payment Info if hybrid */}
-      {walletDiscount > 0 && secondaryPayment && (
-        <p style={{ color: "blue", fontSize: "13px", marginTop: "3px" }}>
-          Remaining ₹{finalPayable} will be paid via{" "}
-          {secondaryPayment === "cash_on_delivery"
-            ? "Cash on Delivery"
-            : "Pay Online"}
-        </p>
-      )}
-    </>
-  )}
-</div>
+              {/* Remaining Payment Info if hybrid */}
+              {walletDiscount > 0 && secondaryPayment && (
+                <p style={{ color: "blue", fontSize: "13px", marginTop: "3px" }}>
+                  Remaining ₹{finalPayable} will be paid via{" "}
+                  {secondaryPayment === "cash_on_delivery"
+                    ? "Cash on Delivery"
+                    : "Pay Online"}
+                </p>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div className="policy-consent">
@@ -487,7 +504,7 @@ formData.append("order_amount", totalPayable);
 
       {placingOrder && (
         <div className="checkout-loader-overlay">
-          <Loader />
+          <SkeletonCard />
           <p>Placing your order...</p>
         </div>
       )}

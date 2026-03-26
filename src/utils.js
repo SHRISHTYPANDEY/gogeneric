@@ -1,20 +1,43 @@
+// export function cleanImageUrl(url) {
+//   if (!url) return null;
+//   if (!url || url === "null" || url === "undefined") {
+//     return "/no-image.png";   
+//   }
+
+//   let cleanUrl = url.replaceAll("//", "/").replace("https:/", "https://");
+
+//   if (!cleanUrl.includes("/public/")) {
+//     cleanUrl = cleanUrl.replace("/storage/", "/public/storage/");
+//   }
+
+//   if (!cleanUrl.startsWith("http")) {
+//     cleanUrl = `https://www.gogenericpharma.com${cleanUrl}`;
+//   }
+
+//   return cleanUrl;
+// }
 export function cleanImageUrl(url) {
   if (!url) return null;
-  if (!url || url === "null" || url === "undefined") {
-    return "/no-image.png";   
+
+  let cleanPath = url;
+
+  if (cleanPath.startsWith("http")) {
+    cleanPath = cleanPath.replace("https://www.gogenericpharma.com", "");
   }
 
-  let cleanUrl = url.replaceAll("//", "/").replace("https:/", "https://");
+  cleanPath = cleanPath.replace(/^\/+/, ""); 
 
-  if (!cleanUrl.includes("/public/")) {
-    cleanUrl = cleanUrl.replace("/storage/", "/public/storage/");
+  if (!cleanPath.includes("public/storage/")) {
+    
+    if (cleanPath.startsWith("storage/")) {
+      cleanPath = `public/${cleanPath}`;
+    } else {
+      cleanPath = `public/storage/${cleanPath}`;
+    }
   }
 
-  if (!cleanUrl.startsWith("http")) {
-    cleanUrl = `https://www.gogenericpharma.com${cleanUrl}`;
-  }
-
-  return cleanUrl;
+  const finalPath = cleanPath.replaceAll("//", "/");
+  return `https://www.gogenericpharma.com/${finalPath}`;
 }
 
 export function adjustColor(hex, percent, lighter = false) {

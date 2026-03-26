@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import "./Pharmacy.css";
 import { cleanImageUrl } from "../../utils";
-import Loader from "../Loader";
+import PharmacyCardSkeleton from "../skeleton/PharmacyCardSkeleton";
 import { MdLocationOn } from "react-icons/md";
 import { AiFillStar } from "react-icons/ai";
 import Footer from "../Footer";
@@ -73,18 +73,28 @@ const filteredStores = stores.filter((store) => {
 });
 
 
-  if (loading) {
-    return (
-      <div className="pharmacy-loader">
-        <Loader />
+if (loading) {
+  return (
+    <div className="pharmacy-page">
+
+      <div className="pharmacy-header">
+        <div className="skeleton skeleton-title"></div>
+        <div className="skeleton skeleton-btn"></div>
       </div>
-    );
-  }
+
+      <div className="pharmacy-grid">
+        {[...Array(8)].map((_, i) => (
+          <PharmacyCardSkeleton key={i} />
+        ))}
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <>
       <div className="pharmacy-page">
-        {/* --- Updated Header Section --- */}
         <div className="pharmacy-header">
           <h1 className="pharmacy-title">Pharmacies</h1>
           <input

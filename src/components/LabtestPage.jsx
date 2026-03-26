@@ -3,8 +3,7 @@ import { useParams } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { cleanImageUrl } from "../utils";
 import "./LabtestPage.css";
-import Loader from "./Loader";
-
+import {SkeletonGrid }from "./skeleton/SkeletonGrid";
 export default function LabTestsPage() {
   const { slug } = useParams();
   const [tests, setTests] = useState([]);
@@ -39,14 +38,16 @@ export default function LabTestsPage() {
   return (
     <section className="lab-tests-section max-w-7xl mx-auto px-4 py-6">
       <h2 className="lab-tests-title">
-        {categoryName || slug.replaceAll("-", " ")}
-      </h2>
+  {loading ? (
+    <div className="skeleton" style={{ width: "220px", height: "22px" }} />
+  ) : (
+    categoryName || slug.replaceAll("-", " ")
+  )}
+</h2>
 
       {loading ? (
-        <div className="lab-loader-wrapper">
-          <Loader text="Loading tests..." />
-        </div>
-      ) : tests.length === 0 ? (
+  <SkeletonGrid count={8} />
+) : tests.length === 0 ? (
         <div className="lab-empty">No tests found for this category.</div>
       ) : (
         <div className="lab-tests-grid">

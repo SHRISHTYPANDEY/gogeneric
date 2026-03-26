@@ -1,0 +1,45 @@
+/* Category icon box — image nahi hai toh emoji dikhao */
+.category-icon-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-emoji {
+    font-size: 72px;
+    line-height: 1;
+}
+
+.back-cat-btn {
+    background: none;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    color: #64748b;
+    display: block;
+}
+
+.back-cat-btn:hover {
+    background: #f8fafc;
+    color: #016b61;
+}
+
+.cat-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+.cat-empty button {
+    margin-top: 12px;
+    color: #6366f1;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+}

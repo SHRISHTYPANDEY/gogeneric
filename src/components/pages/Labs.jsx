@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MapPin, Star, Phone, Mail } from "lucide-react";
 import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
-import Loader from "../Loader";
+import {SkeletonLabCard} from "../skeleton/SkeletonGrid";
 import BackToTop from "../BackToTop";
 import LabCategoryCards from "../LabCategories";
 import "./Labs.css";
@@ -44,7 +44,7 @@ export default function Labs() {
     return (
       <div className="labs-page max-w-7xl mx-auto px-4">
         <h2 className="labs-heading">Our Partner Lab</h2>
-        <Loader />
+        <SkeletonLabCard />
       </div>
     );
   }
@@ -82,7 +82,6 @@ export default function Labs() {
         />
       </div>
 
-      {/* CONTENT */}
       <div className="store-content-vertical">
         <h3 className="store-name">{lab.name}</h3>
         <p className="store-address">{lab.address || "Address unavailable"}</p>

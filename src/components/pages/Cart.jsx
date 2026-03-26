@@ -7,9 +7,11 @@ import LoginModal from "../auth/LoginModal";
 import { useNavigate } from "react-router-dom";
 import AddToCartButton from "../CartButton";
 import WishlistButton from "../WishlistButton";
-import Loader from "../Loader";
 import useDiscounts from "../../hooks/useDiscounts";
 import Swal from "sweetalert2";
+import {SkeletonGrid} from "../skeleton/SkeletonGrid";
+import SkeletonCard from "../skeleton/SkeletonCard";
+import SkeletonText from "../skeleton/SkeletonText";
 import {
   getDiscountedPrice,
   getFinalPrice,
@@ -189,13 +191,29 @@ export default function Cart() {
     return sum + price * c.quantity;
   }, 0);
 
-  if (loading) {
-    return (
-      <div className="cart-loader">
-        <Loader text="Loading your cart..." />
+if (loading) {
+  return (
+    <div className="cart-page">
+
+      <SkeletonText width="200px" height="30px" />
+
+      <div className="cart-layout">
+
+        <div className="cart-items">
+          {[1,2,3].map((i)=>(
+            <SkeletonCard key={i}/>
+          ))}
+        </div>
+
+        <div className="cart-summary">
+          <SkeletonCard height="200px"/>
+        </div>
+
       </div>
-    );
-  }
+
+    </div>
+  );
+}
 
   return (
     <div className="cart-page">
@@ -309,8 +327,8 @@ export default function Cart() {
             <h3 className="suggested-title">You may also need</h3>
 
             {suggestedLoading ? (
-              <Loader text="Loading suggestions..." />
-            ) : (
+  <SkeletonGrid count={6}/>
+) : (
               <div className="suggested-grid">
               {suggested.map((p) => {
   const discountedPrice = getDiscountedPrice(p, discountMap);

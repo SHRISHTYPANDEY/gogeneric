@@ -4,7 +4,7 @@ import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import "./CategoryItems.css";
 import { Search } from "lucide-react";
-import Loader from "../Loader";
+import { ProductSkeleton } from "../skeleton/SkeletonGrid";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
 import { decodeId, encodeId } from "../../utils/idObfuscator";
@@ -107,15 +107,24 @@ export default function CategoryItems() {
     return () => clearTimeout(debounceRef.current);
   }, [search, items]);
 
-  if (isLoading) {
-    return (
-      <div className="category-items-page">
-        <div className="category-loader">
-          <Loader text="Loading medicines..." />
-        </div>
+if (isLoading) {
+  return (
+    <div className="category-items-page">
+
+      <div className="category-header">
+        <div className="skeleton skeleton-product-title"></div>
+        <div className="skeleton skeleton-product-price"></div>
       </div>
-    );
-  }
+
+      <div className="items-grid">
+        {[...Array(8)].map((_, i) => (
+          <ProductSkeleton key={i} />
+        ))}
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <div className="category-items-page">

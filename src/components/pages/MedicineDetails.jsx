@@ -6,9 +6,10 @@ import "./MedicineDetails.css";
 import { cleanImageUrl } from "../../utils";
 import Swal from "sweetalert2";
 import WishlistButton from "../WishlistButton";
-import Loader from "../Loader";
+
 import AddToCartButton from "../CartButton";
 import { decodeId } from "../../utils/idObfuscator";
+import {MedicineDetailSkeleton} from "../skeleton/SkeletonGrid";
 
 export default function MedicineDetails() {
   const { hash } = useParams();
@@ -156,7 +157,7 @@ export default function MedicineDetails() {
       {medicine && <ProductSchema medicine={medicine} price={finalPrice} />}
 
       <div className="med-det-page-container">
-        {loading && <Loader text="Loading medicine details..." />}
+        {loading && <MedicineDetailSkeleton />}
 
         {!loading && medicine && (
           <div className="med-det-main-card">

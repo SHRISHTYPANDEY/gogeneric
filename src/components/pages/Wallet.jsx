@@ -3,9 +3,10 @@ import "./Wallet.css";
 import { FaWallet, FaRupeeSign } from "react-icons/fa";
 import { useWallet } from "../../context/WalletContext";
 import { useAuth } from "../../context/AuthContext";
-import Loader from "../Loader";
 import { openRazorpay } from "../../utils/razorpayPayment";
 import api from "../../api/axiosInstance";
+import SkeletonCard from "../skeleton/SkeletonCard";
+import SkeletonText from "../skeleton/SkeletonText";
 
 export default function Wallet() {
   const { user } = useAuth();
@@ -69,13 +70,32 @@ const handleAddMoney = async () => {
 };
 
 
-  if (loading) {
-    return (
-      <div className="wallet-loader">
-        <Loader />
+if (loading) {
+  return (
+    <div className="wallet-page">
+
+      <div className="wallet-header">
+        <SkeletonText width="150px" height="28px" />
       </div>
-    );
-  }
+
+      <div className="wallet-balance-card">
+        <SkeletonText width="180px" height="20px" />
+        <SkeletonText width="120px" height="35px" />
+        <SkeletonText width="100px" height="40px" />
+      </div>
+
+      <div className="wallet-transactions">
+        <SkeletonText width="200px" height="25px" />
+
+        {[1,2,3,4].map((i)=>(
+          <SkeletonCard key={i} height="70px"/>
+        ))}
+
+      </div>
+
+    </div>
+  );
+}
 
   return (
     <>

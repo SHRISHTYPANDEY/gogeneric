@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import api from "../../api/axiosInstance";
-import Loader from "../Loader";
+import SkeletonText from "../skeleton/SkeletonText";
+import SkeletonCard from "../skeleton/SkeletonCard";
 import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "../../context/LocationContext";
 
@@ -215,13 +216,41 @@ showAlert(
       setLoading(false);
     }
   };
-  if (initialLoading) {
-    return (
-      <div className="profile-loader">
-        <Loader text="Loading profile..." />
+if (initialLoading) {
+  return (
+    <div className="premium-profile-page">
+
+      <div className="premium-container">
+
+        <div className="premium-main-card">
+
+          <div className="premium-avatar-box">
+            <SkeletonCard height="120px" width="120px" />
+          </div>
+
+          <div className="premium-user-meta">
+            <SkeletonText width="180px" height="24px" />
+            <SkeletonText width="220px" height="16px" />
+            <SkeletonText width="160px" height="16px" />
+          </div>
+
+          <div className="premium-stats-bar">
+            <SkeletonCard height="60px" />
+          </div>
+
+        </div>
+
+        <div className="premium-menu-stack">
+          {[1,2].map((i)=>(
+            <SkeletonCard key={i} height="50px"/>
+          ))}
+        </div>
+
       </div>
-    );
-  }
+
+    </div>
+  );
+}
 
   if (!user && showLogin) {
     return <LoginModal open onClose={() => navigate("/")} />;

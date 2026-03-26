@@ -5,7 +5,7 @@ import "./HealthConcern.css";
 import { cleanImageUrl } from "../../utils";
 import WishlistButton from "../WishlistButton";
 import AddToCartButton from "../CartButton";
-import Loader from "../Loader";
+import { SkeletonGrid } from "../skeleton/SkeletonGrid";
 import { encodeId } from "../../utils/idObfuscator";
 const HealthConcern = () => {
   const { concernSlug } = useParams();
@@ -54,7 +54,6 @@ const HealthConcern = () => {
 
   return (
     <div className="concern-page">
-      {/* HEADER */}
       <div className="concern-header">
         <h1 className="concern-title">{headingText}</h1>
         <div className="concern-search">
@@ -67,7 +66,7 @@ const HealthConcern = () => {
         </div>
         <div className="concern-line"></div>
       </div>
-      {loading && <Loader text="Loading Medicines..." />}
+      {loading && <SkeletonGrid />}
       {error && <p className="status-text error">{error}</p>}
       {!loading && medicines.length > 0 && (
         <div className="medicine-grid">
@@ -102,7 +101,6 @@ const HealthConcern = () => {
                 </div>
                 <div className="card-content">
                   <h3>{item.name}</h3>
-                  {/* Rupee Symbol ke saath price */}
                   <p className="price">₹{item.price}</p>
                 </div>
               </div>

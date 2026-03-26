@@ -26,7 +26,6 @@ export default function AddressForm({
     pincode: "",
   });
 
-  /* ------------------ SWEET ALERT HELPERS ------------------ */
   const showAlert = (icon, title, text, timer = null) => {
     Swal.fire({
       icon,
@@ -54,7 +53,6 @@ export default function AddressForm({
     }
   };
 
-  /* ------------------ DUPLICATE CHECK ------------------ */
   const isDuplicateAddress = (finalAddress) => {
     return existingAddresses.some((addr) => {
       if (initialData?.id && addr.id === initialData.id) return false;
@@ -67,7 +65,6 @@ export default function AddressForm({
     });
   };
 
-  /* ------------------ PREFILL (EDIT MODE) ------------------ */
   useEffect(() => {
     if (initialData) {
       setAddressType(initialData.address_type || "Home");
@@ -91,7 +88,6 @@ export default function AddressForm({
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  /* ------------------ SUBMIT ------------------ */
   const handleSubmit = async () => {
     if (!location?.lat || !location?.lng) {
       showAlert(
@@ -176,12 +172,10 @@ export default function AddressForm({
     }
   };
 
-  /* ------------------ UI ------------------ */
   return (
     <div className="address-form">
       <h4>{initialData ? "Edit Address" : "Add New Address"}</h4>
 
-      {/* ADDRESS TYPE */}
       <div className="address-type-row">
         <button
           className={`type-btn ${addressType === "Home" ? "active" : ""}`}
@@ -205,7 +199,6 @@ export default function AddressForm({
         </button>
       </div>
 
-      {/* CONTACT */}
       <input
         name="contact_name"
         placeholder="Contact Name"
@@ -219,7 +212,6 @@ export default function AddressForm({
         onChange={handleChange}
       />
 
-      {/* ADDRESS */}
       <input
         name="house"
         placeholder="House / Flat / Floor"

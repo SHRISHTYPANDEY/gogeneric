@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api/axiosInstance";
-import Loader from "../../components/Loader";
+import SkeletonCard from "../skeleton/SkeletonCard";
 import "./TrackOrder.css";
 
 const STATUS_STEPS = [
@@ -32,10 +32,10 @@ export default function TrackOrder() {
         },
       });
 
-      // console.log("📦 TRACK ORDER FULL RESPONSE:", res.data);
+      // console.log("TRACK ORDER FULL RESPONSE:", res.data);
       setTracking(res.data);
     } catch (error) {
-      console.error("❌ Track order failed:", error);
+      console.error("Track order failed:", error);
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ export default function TrackOrder() {
     fetchTracking();
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <SkeletonCard />;
   if (!tracking) return <p>No tracking data found</p>;
 
   const currentStep = STATUS_STEPS.findIndex(
@@ -56,7 +56,6 @@ export default function TrackOrder() {
     <div className="track-order-page">
       <h2>Tracking Order #{id}</h2>
 
-      {/* STATUS STEPPER */}
       <div className="order-stepper">
         {STATUS_STEPS.map((step, index) => (
           <div key={step.key} className="step-wrapper">

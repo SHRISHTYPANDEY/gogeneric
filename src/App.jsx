@@ -54,11 +54,11 @@ import NotificationListener from "./components/NotificationListener.jsx";
 import LabTestCategories from "./components/LabTestCategories.jsx";
 import LabTestsPage from "./components/LabtestPage.jsx";
 import CategoryDoctors from "./components/pages/CategoryDoctors.jsx";
+import DoctorsByCategory from "./components/pages/DoctorsByCategory.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${
-        import.meta.env.VITE_GOOGLE_MAPS_KEY
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY
       }`
     );
     const data = await res.json();
@@ -72,29 +72,35 @@ function AppLayout() {
   const [showModal, setShowModal] = useState(false);
   const { showLoginModal, setShowLoginModal } = useAuth();
   const { location, setLocation } = useLocation();
-  const MODAL_COOLDOWN = 20 * 60 * 1000; 
+  const MODAL_COOLDOWN = 20 * 60 * 1000;
 
   useEffect(() => {
-  const lastDismissed = localStorage.getItem("appDownloadDismissedAt");
+    const timer = setTimeout(() => {
+      const lastDismissed = localStorage.getItem("appDownloadDismissedAt");
 
-  if (!lastDismissed) {
-    setShowModal(true);
-    return;
-  }
-  const now = Date.now();
-  const diff = now - Number(lastDismissed);
-  if (diff > MODAL_COOLDOWN) {
-    setShowModal(true);
-  }
-}, []);
+      if (!lastDismissed) {
+        setShowModal(true);
+        return;
+      }
 
-const closeModal = () => {
-  localStorage.setItem("appDownloadDismissedAt", Date.now().toString());
-  setShowModal(false);
-};
+      const now = Date.now();
+      const diff = now - Number(lastDismissed);
+
+      if (diff > MODAL_COOLDOWN) {
+        setShowModal(true);
+      }
+    }, 120000); 
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const closeModal = () => {
+    localStorage.setItem("appDownloadDismissedAt", Date.now().toString());
+    setShowModal(false);
+  };
 
   useEffect(() => {
-    if (location) return; 
+    if (location) return;
 
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
@@ -117,14 +123,14 @@ const closeModal = () => {
   return (
     <>
       {showModal && <AppDownloadModal onClose={closeModal} />}
-      
+
       <TopHeader />
       <Navbar />
-      <div className="container"> 
-        <BackButton /> 
+      <div className="container">
+        <BackButton />
       </div>
       <WhatsAppChat />
-    <ScrollToTop />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aboutus" element={<About />} />
@@ -132,6 +138,8 @@ const closeModal = () => {
         <Route path="/doctors" element={<Doctors />} />
         <Route path="/doctors/:id" element={<DoctorDetails />} />
         <Route path="/doctors/:id/plans" element={<DoctorPlans />} />
+
+<Route path="/doctors/category/:slug" element={<DoctorsByCategory />} />
         <Route path="/contactus" element={<ContactUs />} />
         <Route
           path="/profile"
@@ -151,7 +159,7 @@ const closeModal = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/wallet" element={<Wallet />} />
-        <Route path="/loyalty-points" element={<LoyaltyPage />}/>
+        <Route path="/loyalty-points" element={<LoyaltyPage />} />
         <Route path="/orders/:id/track" element={<TrackOrder />} />
         <Route path="/orders/:orderId" element={<OrderDetails />} />
         <Route path="/terms-and-conditions" element={<Terms />} />
@@ -173,9 +181,9 @@ const closeModal = () => {
         <Route path="/lab-tests" element={<LabTestCategories />} />
         <Route path="/lab-tests/:slug/tests" element={<LabTestsPage />} />
         <Route
-  path="/doctors/category/:specialization"
-  element={<CategoryDoctors />}
-/>
+          path="/doctors/category/:specialization"
+          element={<CategoryDoctors />}
+        />
       </Routes>
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />

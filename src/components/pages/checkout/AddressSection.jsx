@@ -13,17 +13,17 @@ export default function AddressSection({ deliveryType, onSelect }) {
   const { location, addressVersion } = useLocation();
   const token = localStorage.getItem("token");
 
- useEffect(() => {
-  if (deliveryType !== "delivery") {
-    setAddresses([]);
-    setSelectedId(null);
-    return;
-  }
+  useEffect(() => {
+    if (deliveryType !== "delivery") {
+      setAddresses([]);
+      setSelectedId(null);
+      return;
+    }
 
-  if (!location) return;
+    if (!location) return;
 
-  fetchAddresses();
-}, [deliveryType, location, addressVersion]);
+    fetchAddresses();
+  }, [deliveryType, location, addressVersion]);
 
 
   const fetchAddresses = async () => {
@@ -32,8 +32,8 @@ export default function AddressSection({ deliveryType, onSelect }) {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-     const list = res.data?.data?.addresses || res.data?.addresses || [];
-setAddresses(list);
+      const list = res.data?.data?.addresses || res.data?.addresses || [];
+      setAddresses(list);
 
       // console.log("Address List", list)
       const def = list.find((a) => a.is_default);
@@ -46,15 +46,15 @@ setAddresses(list);
     }
   };
 
-const handleAddNew = () => {
-  if (!location?.lat || !location?.lng) {
-    toast.error("Please select delivery location first");
-    return;
-  }
+  const handleAddNew = () => {
+    if (!location?.lat || !location?.lng) {
+      toast.error("Please select delivery location first");
+      return;
+    }
 
-  setEditingAddress(null);
-  setShowForm(true);
-};
+    setEditingAddress(null);
+    setShowForm(true);
+  };
 
 
   if (deliveryType === "takeaway") return null;

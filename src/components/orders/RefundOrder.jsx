@@ -14,7 +14,6 @@ export default function RefundOrder({ order, onClose, onSuccess }) {
     order.refund_status === "approved" ||
     order.refund_status === "refunded";
 
-  // 🔥 Fetch refund reasons
   useEffect(() => {
     api
       .get("/api/v1/customer/order/refund-reasons")
@@ -31,7 +30,6 @@ export default function RefundOrder({ order, onClose, onSuccess }) {
       });
   }, []);
 
-  // 🔥 Submit refund request
   const handleSubmit = async () => {
     if (!reasonId) {
       Swal.fire({
