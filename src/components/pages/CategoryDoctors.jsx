@@ -7,10 +7,10 @@ export default function CategoryDoctors() {
   const { specialization } = useParams();
   const navigate = useNavigate();
 
-const filteredDoctors = doctors.filter(
-  (doc) =>
-    doc.category?.toLowerCase() === specialization.toLowerCase()
-);
+  const filteredDoctors = doctors.filter(
+    (doc) =>
+      doc.category?.toLowerCase() === specialization.toLowerCase()
+  );
 
   return (
     <>
@@ -51,9 +51,9 @@ const filteredDoctors = doctors.filter(
             ))
           ) : (
             <p>No doctors available in this category.
-                come back later.
+              come back later.
             </p>
-            
+
           )}
         </div>
       </div>

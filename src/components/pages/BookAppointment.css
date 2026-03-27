@@ -203,3 +203,60 @@ select.calendar-input {
     font-size: 15px;
   }
 }
+/* Consultation type grid */
+.consultation-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.consultation-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: #fff;
+}
+
+.consultation-type-card input[type="radio"] {
+  display: none;
+}
+
+.consultation-type-card.active {
+  border-color: #4caf50;        /* match your theme color */
+  background: #f0fff4;
+}
+
+.consultation-icon {
+  font-size: 22px;
+}
+
+.consultation-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.consultation-desc {
+  font-size: 11px;
+  color: #888;
+}
+
+/* Info banners */
+.info-banner {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.info-banner--teal  { background: #e6f7f4; color: #0f6e56; }
+.info-banner--blue  { background: #e6f1fb; color: #185fa5; }
+.info-banner--coral { background: #faece7; color: #993c1d; }

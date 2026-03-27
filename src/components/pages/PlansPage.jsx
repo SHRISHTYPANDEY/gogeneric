@@ -13,8 +13,6 @@ export default function PlansPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  
-
   useEffect(() => {
     const fetchData = async () => {
       try {

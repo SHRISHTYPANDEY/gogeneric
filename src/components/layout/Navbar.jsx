@@ -28,7 +28,7 @@ import {
   FaPhoneAlt,
   FaUsers,
   FaCoins,
-  FaStore, FaMotorcycle 
+  FaStore, FaMotorcycle , FaExclamationTriangle
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
@@ -87,7 +87,10 @@ useEffect(() => {
 
     navigate("/profile");
   };
-
+const handleReportClick = () => {
+  closeMenu();
+  navigate("/report");    
+};
   const handleLogout = () => {
     closeMenu();
     logout();
@@ -398,6 +401,18 @@ useEffect(() => {
     <FaMotorcycle /> Apply as Deliveryman
   </Link>
 </li>
+
+<li>
+            <Link
+              to="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleReportClick();
+              }}
+            >
+              <FaExclamationTriangle /> Report / Feedback
+            </Link>
+          </li>
 
           <li>
             <Link

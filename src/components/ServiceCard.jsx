@@ -19,7 +19,7 @@ export default function ServiceCard() {
     { id: 3, title: "Doctors", image: "/service_img/doctor.avif", route: "/doctors", description: "Expert medical consultations" },
     { id: 4, title: "Hospital", image: "/service_img/hospital.jpg", route: "/hospital", description: "Book hospital services", comingsoon: true },
     { id: 5, title: "Home Care", image: "/service_img/home-healthcare.jpg", route: "/healthcare", description: "Nursing & elderly care at home", comingsoon: true },
-    { id: 6, title: "Insurance", image: "/service_img/finance.avif", route: "/insurance", description: "Expert policy advice", comingsoon: true },
+    { id: 6, title: "Insurance/Advisory ", image: "/service_img/finance.avif", route: "/insurance", description: "Expert policy advice", comingsoon: true },
   ];
 
   return (

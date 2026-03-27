@@ -55,6 +55,7 @@ import LabTestCategories from "./components/LabTestCategories.jsx";
 import LabTestsPage from "./components/LabtestPage.jsx";
 import CategoryDoctors from "./components/pages/CategoryDoctors.jsx";
 import DoctorsByCategory from "./components/pages/DoctorsByCategory.jsx";
+import ReportPage from "./components/pages/ReportPage.jsx";
 const fetchAddress = async (lat, lng) => {
   try {
     const res = await fetch(
@@ -180,6 +181,7 @@ function AppLayout() {
         <Route path="/health-concerns" element={<HealthCon />} />
         <Route path="/lab-tests" element={<LabTestCategories />} />
         <Route path="/lab-tests/:slug/tests" element={<LabTestsPage />} />
+        <Route path="/report" element={<ReportPage />} />
         <Route
           path="/doctors/category/:specialization"
           element={<CategoryDoctors />}
