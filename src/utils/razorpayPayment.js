@@ -4,6 +4,7 @@ export const openRazorpay = ({
   description,
   phone,
   onSuccess,
+  onDismiss,
 }) => {
   if (!window.Razorpay) {
     alert("Razorpay SDK not loaded");
@@ -24,6 +25,11 @@ export const openRazorpay = ({
     },
     theme: {
       color: "#0d6efd",
+    },
+    modal: {
+      ondismiss: function () {
+        onDismiss?.(); 
+      },
     },
   };
 

@@ -47,7 +47,6 @@ export default function BookAppointment({
 }) {
   const { user } = useAuth();
 
-  // --- existing state ---
   const [useMyDetails, setUseMyDetails] = useState(true);
   const [patientName, setPatientName] = useState(user?.name || "");
   const [patientPhone, setPatientPhone] = useState(user?.phone || "");
@@ -58,7 +57,6 @@ export default function BookAppointment({
   const [selectedSlot, setSelectedSlot] = useState("");
   const [showPayNow, setShowPayNow] = useState(false);
 
-  // --- NEW state ---
   const [consultationType, setConsultationType] = useState("in_person");
 
   const numericPrice = getNumericPrice(planPrice);
