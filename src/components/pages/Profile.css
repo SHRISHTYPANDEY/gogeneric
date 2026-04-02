@@ -608,3 +608,22 @@
 .appt-pay-btn:hover {
   background: #4338ca;
 }
+.review-box {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.star-rating {
+  margin: 8px 0;
+}
+
+.review-box textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  margin-bottom: 10px;
+}

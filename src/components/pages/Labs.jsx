@@ -5,7 +5,7 @@ import api from "../../api/axiosInstance";
 import { cleanImageUrl } from "../../utils";
 import {SkeletonLabCard} from "../skeleton/SkeletonGrid";
 import BackToTop from "../BackToTop";
-import LabCategoryCards from "../LabCategories";
+// import LabCategoryCards from "../LabCategories";
 import "./Labs.css";
 
 export default function Labs() {
@@ -63,7 +63,7 @@ export default function Labs() {
 
   return (
     <>
-  <LabCategoryCards />
+  {/* <LabCategoryCards /> */}
 
   <div className="labs-page max-w-7xl mx-auto px-4">
     <h2 className="labs-heading">Our Partner Lab</h2>

@@ -9,7 +9,6 @@ import { useAuth } from "../../context/AuthContext";
 import { useLocation } from "../../context/LocationContext";
 
 import {
-  ShieldCheck,
   LogOut,
   ChevronRight,
   Camera,
@@ -40,9 +39,9 @@ const STEPS = [
 function getStepIndex(appt) {
   const s = appt.status;
   const p = appt.payment_status;
-  if (s === "rejected")        return -1; // special rejected state
-  if (s === "pending")         return 1;  // doctor review
-  if (s === "payment_pending") return 2;  // payment pending
+  if (s === "rejected")        return -1;
+  if (s === "pending")         return 1;
+  if (s === "payment_pending") return 2;
   if (s === "confirmed" || (s === "approved" && p === "paid")) return 3;
   if (s === "completed")       return 4;
   if (s === "approved" && (p === "free" || !p || p === "unpaid")) return 3;
@@ -51,12 +50,12 @@ function getStepIndex(appt) {
 
 function getStatusColor(status) {
   switch (status) {
-    case "confirmed":      return "bg-emerald-100 text-emerald-700 border-emerald-200";
-    case "approved":       return "bg-blue-100 text-blue-700 border-blue-200";
-    case "payment_pending":return "bg-orange-100 text-orange-700 border-orange-200";
-    case "rejected":       return "bg-red-100 text-red-700 border-red-200";
-    case "completed":      return "bg-purple-100 text-purple-700 border-purple-200";
-    default:               return "bg-yellow-100 text-yellow-700 border-yellow-200";
+    case "confirmed":       return "bg-emerald-100 text-emerald-700 border-emerald-200";
+    case "approved":        return "bg-blue-100 text-blue-700 border-blue-200";
+    case "payment_pending": return "bg-orange-100 text-orange-700 border-orange-200";
+    case "rejected":        return "bg-red-100 text-red-700 border-red-200";
+    case "completed":       return "bg-purple-100 text-purple-700 border-purple-200";
+    default:                return "bg-yellow-100 text-yellow-700 border-yellow-200";
   }
 }
 
@@ -72,35 +71,29 @@ function getStatusLabel(status) {
   }
 }
 
-// ─── Single Appointment Tracker Card ─────────────────────────────────────────
+// ─── Appointment Card ─────────────────────────────────────────────────────────
 function AppointmentCard({ appt }) {
   const [open, setOpen] = useState(false);
   const stepIndex  = getStepIndex(appt);
   const isRejected = appt.status === "rejected";
   const isVideo    = appt.consultation_type === "video_call";
+  
 
   return (
     <div className="appt-card">
-      {/* ── Header Row ── */}
       <div className="appt-card-header" onClick={() => setOpen(!open)}>
         <div className="appt-card-left">
           <span className="appt-plan-name">{appt.plan_name}</span>
-          <span className="appt-date">
-            📅 {appt.appointment_date} &nbsp;·&nbsp; ⏰ {appt.time_slot}
-          </span>
+          <span className="appt-date">📅 {appt.appointment_date} &nbsp;·&nbsp; ⏰ {appt.time_slot}</span>
         </div>
         <div className="appt-card-right">
-          <span className={`appt-status-badge ${getStatusColor(appt.status)}`}>
-            {getStatusLabel(appt.status)}
-          </span>
+          <span className={`appt-status-badge ${getStatusColor(appt.status)}`}>{getStatusLabel(appt.status)}</span>
           {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       </div>
 
-      {/* ── Expanded Details ── */}
       {open && (
         <div className="appt-card-body">
-          {/* Tracker Steps */}
           {!isRejected ? (
             <div className="appt-tracker">
               {STEPS.map((step, i) => {
@@ -112,36 +105,25 @@ function AppointmentCard({ appt }) {
                       <div className={`appt-step-circle ${done ? "done" : ""} ${current ? "current" : ""}`}>
                         {done ? "✓" : step.icon}
                       </div>
-                      <span className={`appt-step-label ${done ? "done" : ""}`}>
-                        {step.label}
-                      </span>
+                      <span className={`appt-step-label ${done ? "done" : ""}`}>{step.label}</span>
                     </div>
-                    {i < STEPS.length - 1 && (
-                      <div className={`appt-step-line ${i < stepIndex ? "done" : ""}`} />
-                    )}
+                    {i < STEPS.length - 1 && <div className={`appt-step-line ${i < stepIndex ? "done" : ""}`} />}
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="appt-rejected-banner">
-              ❌ Your appointment was rejected. You can book again.
-            </div>
+            <div className="appt-rejected-banner">❌ Your appointment was rejected. You can book again.</div>
           )}
 
-          {/* Details */}
           <div className="appt-details-grid">
             <div className="appt-detail-row">
               <span className="appt-detail-label">Type</span>
-              <span className="appt-detail-value">
-                {isVideo ? "🎥 Video Call" : "🏥 In-Person"}
-              </span>
+              <span className="appt-detail-value">{isVideo ? "🎥 Video Call" : "🏥 In-Person"}</span>
             </div>
             <div className="appt-detail-row">
               <span className="appt-detail-label">Plan Price</span>
-              <span className="appt-detail-value font-semibold">
-                ₹{Number(appt.plan_price).toLocaleString("en-IN")}
-              </span>
+              <span className="appt-detail-value font-semibold">₹{Number(appt.plan_price).toLocaleString("en-IN")}</span>
             </div>
             {appt.problem && (
               <div className="appt-detail-row">
@@ -152,46 +134,135 @@ function AppointmentCard({ appt }) {
             {appt.meeting_link && (
               <div className="appt-detail-row">
                 <span className="appt-detail-label">Video Link</span>
-                <a
-                  href={appt.meeting_link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="appt-meeting-link"
-                >
-                  🔗 Join Meeting
-                </a>
+                <a href={appt.meeting_link} target="_blank" rel="noreferrer" className="appt-meeting-link">🔗 Join Meeting</a>
               </div>
             )}
           </div>
-
-          {/* Pay Now button if payment pending */}
+          
           {appt.status === "payment_pending" && (
-            <a
-              href={`/pay/appointment/${appt.id}`}
-              className="appt-pay-btn"
-            >
+            <a href={`/pay/appointment/${appt.id}`} className="appt-pay-btn">
               💳 Pay Now — ₹{Number(appt.plan_price).toLocaleString("en-IN")}
             </a>
           )}
+          {appt.status === "completed" && (
+  <ReviewSection appt={appt} />
+)}
         </div>
+      
+      
       )}
     </div>
   );
 }
 
-// ─── My Appointments Section ──────────────────────────────────────────────────
+function ReviewSection({ appt }) {
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
+
+  useEffect(() => {
+    checkReview();
+  }, []);
+
+  const checkReview = async () => {
+    try {
+      const res = await api.get(`/api/v1/doctor/reviews/check/${appt.id}`);
+      if (res.data.has_reviewed) {
+        setAlreadyReviewed(true);
+      }
+    } catch (err) {
+      console.error("Check review error", err);
+    }
+  };
+
+  const submitReview = async () => {
+    if (!rating) {
+      Swal.fire("Error", "Please select rating", "error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await api.post("/api/v1/doctor/reviews", {
+        doctor_id: appt.doctor_id,
+        appointment_id: appt.id,
+        patient_name: appt.patient_name,
+        patient_phone: appt.patient_phone,
+        rating,
+        review,
+      });
+
+      Swal.fire("Success", "Review submitted!", "success");
+      setAlreadyReviewed(true);
+    } catch (err) {
+      Swal.fire("Error", err?.response?.data?.message || "Failed", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ⭐ Already reviewed UI
+  if (alreadyReviewed) {
+    return (
+      <div className="review-box">
+        ⭐ You have already submitted a review
+      </div>
+    );
+  }
+
+  return (
+    <div className="review-box">
+      <h4>⭐ Rate Your Experience</h4>
+
+      {/* ⭐ Star Rating */}
+      <div className="star-rating">
+        {[1,2,3,4,5].map((star) => (
+          <span
+            key={star}
+            onClick={() => setRating(star)}
+            style={{
+              cursor: "pointer",
+              fontSize: "20px",
+              color: star <= rating ? "#f59e0b" : "#d1d5db"
+            }}
+          >
+            ★
+          </span>
+        ))}
+      </div>
+
+      {/* 📝 Review */}
+      <textarea
+        placeholder="Write your review (optional)"
+        value={review}
+        onChange={(e) => setReview(e.target.value)}
+      />
+
+      <button
+        className="appt-pay-btn"
+        onClick={submitReview}
+        disabled={loading}
+      >
+        {loading ? "Submitting..." : "Submit Review"}
+      </button>
+    </div>
+  );
+}
+
+
+// ─── My Appointments ──────────────────────────────────────────────────────────
 function MyAppointments({ userPhone }) {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading]           = useState(true);
   const [activeTab, setActiveTab]       = useState("active");
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchData = async () => {
       if (!userPhone) return;
       try {
-        const res = await api.get(
-          `/api/v1/doctor/appointments/patient/${userPhone}`
-        );
+        const res = await api.get(`/api/v1/doctor/appointments/patient/${userPhone}`);
         setAppointments(res.data.data || []);
       } catch (err) {
         console.error("Appointments fetch error:", err);
@@ -199,7 +270,7 @@ function MyAppointments({ userPhone }) {
         setLoading(false);
       }
     };
-    fetch();
+    fetchData();
   }, [userPhone]);
 
   const active    = appointments.filter(a => !["completed", "rejected"].includes(a.status));
@@ -212,79 +283,129 @@ function MyAppointments({ userPhone }) {
         <CalendarCheck size={18} className="text-indigo-600" />
         <h3>My Appointments</h3>
       </div>
-
-      {/* Tabs */}
       <div className="appt-tabs">
-        <button
-          className={`appt-tab ${activeTab === "active" ? "active" : ""}`}
-          onClick={() => setActiveTab("active")}
-        >
+        <button className={`appt-tab ${activeTab === "active" ? "active" : ""}`} onClick={() => setActiveTab("active")}>
           Active {active.length > 0 && <span className="appt-tab-badge">{active.length}</span>}
         </button>
-        <button
-          className={`appt-tab ${activeTab === "past" ? "active" : ""}`}
-          onClick={() => setActiveTab("past")}
-        >
+        <button className={`appt-tab ${activeTab === "past" ? "active" : ""}`} onClick={() => setActiveTab("past")}>
           Past
         </button>
       </div>
-
       {loading ? (
         <div className="appt-loading">Loading appointments...</div>
       ) : displayed.length === 0 ? (
         <div className="appt-empty">
-          {activeTab === "active"
-            ? "No active appointments. Book a consultation!"
-            : "No past appointments."}
+          {activeTab === "active" ? "No active appointments. Book a consultation!" : "No past appointments."}
         </div>
       ) : (
         <div className="appt-list">
-          {displayed.map(appt => (
-            <AppointmentCard key={appt.id} appt={appt} />
-          ))}
+          {displayed.map(appt => <AppointmentCard key={appt.id} appt={appt} />)}
         </div>
       )}
     </div>
   );
 }
 
-// ─── Main Profile Component ───────────────────────────────────────────────────
+// ─── My Recommended Tests ─────────────────────────────────────────────────────
+function MyTests({ userPhone }) {
+  const [tests, setTests]     = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!userPhone) return;
+      try {
+        const res = await api.get(`/api/v1/doctor/test-recommendations/patient/${userPhone}`);
+        setTests(res.data.data || []);
+      } catch (err) {
+        console.error("Tests fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [userPhone]);
+
+  if (!loading && tests.length === 0) return null;
+
+  return (
+    <div className="my-appointments-section" style={{ marginTop: 16 }}>
+      <div className="appt-section-header">
+        <span style={{ fontSize: 18 }}>🔬</span>
+        <h3>Recommended Tests</h3>
+      </div>
+
+      {loading ? (
+        <div className="appt-loading">Loading recommended tests...</div>
+      ) : (
+        <>
+          <div className="appt-list">
+            {tests.map((test, i) => (
+              <div key={test.id || i} className="appt-card">
+                <div className="appt-card-header" style={{ cursor: "default" }}>
+                  <div className="appt-card-left">
+                    <span className="appt-plan-name">🧪 {test.test_name}</span>
+                    <span className="appt-date">
+                      📂 {test.test_category || "Lab Test"}
+                      {test.test_price ? ` · ₹${Number(test.test_price).toLocaleString("en-IN")}` : ""}
+                    </span>
+                    {test.note && (
+                      <span className="appt-date" style={{ marginTop: 2, color: "#6b7280" }}>
+                        📝 {test.note}
+                      </span>
+                    )}
+                    <span className="appt-date" style={{ color: "#9ca3af", fontSize: "0.7rem" }}>
+                      🗓 {new Date(test.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                    </span>
+                  </div>
+                  <div className="appt-card-right">
+                    <span className="appt-status-badge bg-indigo-100 text-indigo-700 border-indigo-200">
+                      Recommended
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <a
+            href="/labs"
+            className="appt-pay-btn"
+            style={{ marginTop: 12, display: "block", textAlign: "center", textDecoration: "none" }}
+          >
+            🔬 Book a Lab Test
+          </a>
+        </>
+      )}
+    </div>
+  );
+}
+
+// ─── Main Profile ─────────────────────────────────────────────────────────────
 export default function Profile() {
   const navigate = useNavigate();
   const { balance } = useWallet();
 
-  const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-
-  const [editing, setEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState("");
-
-  const [loading, setLoading] = useState(false);
-  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
-  const [showPassword, setShowPassword] = useState(false);
-  const [password, setPassword] = useState("");
-
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [user, setUser]                             = useState(null);
+  const [showLogin, setShowLogin]                   = useState(false);
+  const [initialLoading, setInitialLoading]         = useState(true);
+  const [editing, setEditing]                       = useState(false);
+  const [profileImage, setProfileImage]             = useState(null);
+  const [previewImage, setPreviewImage]             = useState("");
+  const [loading, setLoading]                       = useState(false);
+  const [loyaltyPoints, setLoyaltyPoints]           = useState(0);
+  const [totalOrders, setTotalOrders]               = useState(0);
+  const [showPasswordModal, setShowPasswordModal]   = useState(false);
+  const [oldPassword, setOldPassword]               = useState("");
+  const [newPassword, setNewPassword]               = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const { logout } = useAuth();
+  const [showPwd, setShowPwd]                       = useState(false);
+  const [showEditModal, setShowEditModal]           = useState(false);
+  const { logout }        = useAuth();
   const { resetLocation } = useLocation();
 
   const showAlert = (icon, title, text, timer = null) => {
-    Swal.fire({
-      icon,
-      title,
-      text,
-      confirmButtonColor: "#016B61",
-      timer,
-      showConfirmButton: !timer,
-    });
+    Swal.fire({ icon, title, text, confirmButtonColor: "#016B61", timer, showConfirmButton: !timer });
   };
 
   useEffect(() => {
@@ -292,27 +413,16 @@ export default function Profile() {
       try {
         const token = localStorage.getItem("token");
         if (!token) { setShowLogin(true); return; }
-
         const res = await api.get("/api/v1/customer/info", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            zoneId: JSON.stringify([3]),
-            moduleId: 2,
-            "X-localization": "en",
-          },
+          headers: { Authorization: `Bearer ${token}`, zoneId: JSON.stringify([3]), moduleId: 2, "X-localization": "en" },
         });
-
         const apiUser = res.data?.data || res.data;
         const normalized = {
-          id: apiUser.id,
-          email: apiUser.email,
-          phone: apiUser.phone,
+          id: apiUser.id, email: apiUser.email, phone: apiUser.phone,
           name: `${apiUser.f_name || ""} ${apiUser.l_name || ""}`.trim(),
-          f_name: apiUser.f_name,
-          l_name: apiUser.l_name,
+          f_name: apiUser.f_name, l_name: apiUser.l_name,
           image: apiUser.image_full_url || apiUser.image || "",
         };
-
         setUser(normalized);
         setPreviewImage(cleanImageUrl(normalized.image));
         localStorage.setItem("user", JSON.stringify(normalized));
@@ -332,7 +442,6 @@ export default function Profile() {
           params: { limit: 1, offset: 0 },
         });
         setTotalOrders(oRes.data?.total_size || 0);
-
         const pRes = await api.get("/api/v1/customer/loyalty-point/transactions", {
           headers: { Authorization: `Bearer ${token}`, zoneId: JSON.stringify([3]), moduleId: 2 },
           params: { limit: 20, offset: 0 },
@@ -355,8 +464,7 @@ export default function Profile() {
         headers: { Authorization: `Bearer ${token}`, zoneId: JSON.stringify([3]), moduleId: 2 },
       });
       showAlert("success", "Deleted", "Account deleted successfully", 2000);
-      localStorage.clear();
-      navigate("/");
+      localStorage.clear(); navigate("/");
     } catch (err) {
       showAlert("error", "Failed", err?.response?.data?.message || "Failed to delete account");
     }
@@ -374,7 +482,6 @@ export default function Profile() {
       formData.append("l_name", user.l_name || "");
       formData.append("button_type", "profile");
       if (profileImage) formData.append("image", profileImage);
-
       const res = await api.post("/api/v1/customer/update-profile", formData, {
         headers: { Authorization: `Bearer ${token}`, zoneId: JSON.stringify([3]), moduleId: 2, "Content-Type": "multipart/form-data" },
       });
@@ -382,9 +489,7 @@ export default function Profile() {
       setEditing(false);
     } catch (err) {
       showAlert("error", "Update Failed", err?.response?.data?.errors?.[0]?.message || "Update failed");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleChangePassword = async () => {
@@ -420,7 +525,7 @@ export default function Profile() {
             <div className="premium-stats-bar"><SkeletonCard height="60px" /></div>
           </div>
           <div className="premium-menu-stack">
-            {[1,2].map((i) => <SkeletonCard key={i} height="50px"/>)}
+            {[1,2].map(i => <SkeletonCard key={i} height="50px" />)}
           </div>
         </div>
       </div>
@@ -501,6 +606,9 @@ export default function Profile() {
           {/* ── MY APPOINTMENTS ── */}
           {user?.phone && <MyAppointments userPhone={user.phone} />}
 
+          {/* ── MY RECOMMENDED TESTS ── */}
+          {user?.phone && <MyTests userPhone={user.phone} />}
+
           {/* ── Menu Stack ── */}
           <div className="premium-menu-stack">
             <div className="premium-menu-link danger" onClick={() => { resetLocation(); logout(); navigate("/"); }}>
@@ -510,7 +618,6 @@ export default function Profile() {
               </div>
               <ChevronRight size={18} className="opacity-40" />
             </div>
-
             <div className="premium-menu-link danger" onClick={handleDeleteAccount}>
               <div className="premium-menu-left">
                 <div className="p-icon-circle-red"><FaUserAltSlash size={18} /></div>

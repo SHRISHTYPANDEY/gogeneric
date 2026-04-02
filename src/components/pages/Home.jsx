@@ -17,7 +17,7 @@ import RepublicDayPopup from "../RepublicDayPopup";
 import api from "../../api/axiosInstance";
 import ServiceCard from "../ServiceCard";
 import PlaystoreBanner from "../PlaystoreBanner";
-import LabCategories from "../LabCategories";
+// import LabCategories from "../LabCategories";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +30,6 @@ export default function Home() {
   const loadPage = async () => {
     try {
       setLoading(true);
-
-      // agar future me home APIs add karni ho
-      // await api.get("/api/v1/home-data");
 
     } catch (e) {
       console.error(e);
@@ -120,7 +117,7 @@ if (loading) {
       <div className="home">
         <HomeBanner />
         <ServiceCard />
-        <LabCategories />
+        {/* <LabCategories /> */}
         <CategoriesCard />
         <CommonConcern />
         <NearbyStores />

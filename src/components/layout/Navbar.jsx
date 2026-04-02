@@ -28,7 +28,7 @@ import {
   FaPhoneAlt,
   FaUsers,
   FaCoins,
-  FaStore, FaMotorcycle , FaExclamationTriangle
+  FaStore, FaMotorcycle , FaExclamationTriangle,FaFileAlt,
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
@@ -304,6 +304,20 @@ const handleReportClick = () => {
               </Link>
             </li>
           )}
+
+          {user && (
+  <li>
+    <Link
+      to="#"
+      onClick={(e) => {
+        e.preventDefault();
+        handleNavigate("/my-reports");
+      }}
+    >
+      <FaFileAlt /> My Reports
+    </Link>
+  </li>
+)}
 
           {user && (
             <li>
