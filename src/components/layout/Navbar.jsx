@@ -304,6 +304,13 @@ const handleReportClick = () => {
               </Link>
             </li>
           )}
+          {user && (
+  <li>
+    <Link to="#" onClick={(e) => { e.preventDefault(); handleNavigate("/my-health"); }}>
+      <FaClinicMedical /> My Health
+    </Link>
+  </li>
+)}
 
           {user && (
   <li>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import AppointmentCard from "./AppointmentCard";
 
 import api from "../../api/axiosInstance";
 import SkeletonText from "../skeleton/SkeletonText";
@@ -26,231 +27,6 @@ import { cleanImageUrl } from "../../utils";
 import LoginModal from "../auth/LoginModal";
 import "./Profile.css";
 import Footer from "../Footer";
-
-// ─── Appointment Status Steps ─────────────────────────────────────────────────
-const STEPS = [
-  { key: "booked",    label: "Booked",       icon: "📋" },
-  { key: "reviewing", label: "Doctor Review", icon: "👨‍⚕️" },
-  { key: "payment",   label: "Payment",       icon: "💳" },
-  { key: "confirmed", label: "Confirmed",     icon: "✅" },
-  { key: "completed", label: "Completed",     icon: "🎉" },
-];
-
-function getStepIndex(appt) {
-  const s = appt.status;
-  const p = appt.payment_status;
-  if (s === "rejected")        return -1;
-  if (s === "pending")         return 1;
-  if (s === "payment_pending") return 2;
-  if (s === "confirmed" || (s === "approved" && p === "paid")) return 3;
-  if (s === "completed")       return 4;
-  if (s === "approved" && (p === "free" || !p || p === "unpaid")) return 3;
-  return 1;
-}
-
-function getStatusColor(status) {
-  switch (status) {
-    case "confirmed":       return "bg-emerald-100 text-emerald-700 border-emerald-200";
-    case "approved":        return "bg-blue-100 text-blue-700 border-blue-200";
-    case "payment_pending": return "bg-orange-100 text-orange-700 border-orange-200";
-    case "rejected":        return "bg-red-100 text-red-700 border-red-200";
-    case "completed":       return "bg-purple-100 text-purple-700 border-purple-200";
-    default:                return "bg-yellow-100 text-yellow-700 border-yellow-200";
-  }
-}
-
-function getStatusLabel(status) {
-  switch (status) {
-    case "pending":         return "Awaiting Doctor";
-    case "approved":        return "Approved";
-    case "payment_pending": return "Payment Pending";
-    case "confirmed":       return "Confirmed";
-    case "completed":       return "Completed";
-    case "rejected":        return "Rejected";
-    default:                return status;
-  }
-}
-
-// ─── Appointment Card ─────────────────────────────────────────────────────────
-function AppointmentCard({ appt }) {
-  const [open, setOpen] = useState(false);
-  const stepIndex  = getStepIndex(appt);
-  const isRejected = appt.status === "rejected";
-  const isVideo    = appt.consultation_type === "video_call";
-  
-
-  return (
-    <div className="appt-card">
-      <div className="appt-card-header" onClick={() => setOpen(!open)}>
-        <div className="appt-card-left">
-          <span className="appt-plan-name">{appt.plan_name}</span>
-          <span className="appt-date">📅 {appt.appointment_date} &nbsp;·&nbsp; ⏰ {appt.time_slot}</span>
-        </div>
-        <div className="appt-card-right">
-          <span className={`appt-status-badge ${getStatusColor(appt.status)}`}>{getStatusLabel(appt.status)}</span>
-          {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </div>
-      </div>
-
-      {open && (
-        <div className="appt-card-body">
-          {!isRejected ? (
-            <div className="appt-tracker">
-              {STEPS.map((step, i) => {
-                const done    = i <= stepIndex;
-                const current = i === stepIndex;
-                return (
-                  <div key={step.key} className="appt-step-wrap">
-                    <div className={`appt-step ${done ? "done" : ""} ${current ? "current" : ""}`}>
-                      <div className={`appt-step-circle ${done ? "done" : ""} ${current ? "current" : ""}`}>
-                        {done ? "✓" : step.icon}
-                      </div>
-                      <span className={`appt-step-label ${done ? "done" : ""}`}>{step.label}</span>
-                    </div>
-                    {i < STEPS.length - 1 && <div className={`appt-step-line ${i < stepIndex ? "done" : ""}`} />}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="appt-rejected-banner">❌ Your appointment was rejected. You can book again.</div>
-          )}
-
-          <div className="appt-details-grid">
-            <div className="appt-detail-row">
-              <span className="appt-detail-label">Type</span>
-              <span className="appt-detail-value">{isVideo ? "🎥 Video Call" : "🏥 In-Person"}</span>
-            </div>
-            <div className="appt-detail-row">
-              <span className="appt-detail-label">Plan Price</span>
-              <span className="appt-detail-value font-semibold">₹{Number(appt.plan_price).toLocaleString("en-IN")}</span>
-            </div>
-            {appt.problem && (
-              <div className="appt-detail-row">
-                <span className="appt-detail-label">Problem</span>
-                <span className="appt-detail-value">{appt.problem}</span>
-              </div>
-            )}
-            {appt.meeting_link && (
-              <div className="appt-detail-row">
-                <span className="appt-detail-label">Video Link</span>
-                <a href={appt.meeting_link} target="_blank" rel="noreferrer" className="appt-meeting-link">🔗 Join Meeting</a>
-              </div>
-            )}
-          </div>
-          
-          {appt.status === "payment_pending" && (
-            <a href={`/pay/appointment/${appt.id}`} className="appt-pay-btn">
-              💳 Pay Now — ₹{Number(appt.plan_price).toLocaleString("en-IN")}
-            </a>
-          )}
-          {appt.status === "completed" && (
-  <ReviewSection appt={appt} />
-)}
-        </div>
-      
-      
-      )}
-    </div>
-  );
-}
-
-function ReviewSection({ appt }) {
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
-
-  useEffect(() => {
-    checkReview();
-  }, []);
-
-  const checkReview = async () => {
-    try {
-      const res = await api.get(`/api/v1/doctor/reviews/check/${appt.id}`);
-      if (res.data.has_reviewed) {
-        setAlreadyReviewed(true);
-      }
-    } catch (err) {
-      console.error("Check review error", err);
-    }
-  };
-
-  const submitReview = async () => {
-    if (!rating) {
-      Swal.fire("Error", "Please select rating", "error");
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      await api.post("/api/v1/doctor/reviews", {
-        doctor_id: appt.doctor_id,
-        appointment_id: appt.id,
-        patient_name: appt.patient_name,
-        patient_phone: appt.patient_phone,
-        rating,
-        review,
-      });
-
-      Swal.fire("Success", "Review submitted!", "success");
-      setAlreadyReviewed(true);
-    } catch (err) {
-      Swal.fire("Error", err?.response?.data?.message || "Failed", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ⭐ Already reviewed UI
-  if (alreadyReviewed) {
-    return (
-      <div className="review-box">
-        ⭐ You have already submitted a review
-      </div>
-    );
-  }
-
-  return (
-    <div className="review-box">
-      <h4>⭐ Rate Your Experience</h4>
-
-      {/* ⭐ Star Rating */}
-      <div className="star-rating">
-        {[1,2,3,4,5].map((star) => (
-          <span
-            key={star}
-            onClick={() => setRating(star)}
-            style={{
-              cursor: "pointer",
-              fontSize: "20px",
-              color: star <= rating ? "#f59e0b" : "#d1d5db"
-            }}
-          >
-            ★
-          </span>
-        ))}
-      </div>
-
-      {/* 📝 Review */}
-      <textarea
-        placeholder="Write your review (optional)"
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
-      />
-
-      <button
-        className="appt-pay-btn"
-        onClick={submitReview}
-        disabled={loading}
-      >
-        {loading ? "Submitting..." : "Submit Review"}
-      </button>
-    </div>
-  );
-}
-
 
 // ─── My Appointments ──────────────────────────────────────────────────────────
 function MyAppointments({ userPhone }) {
@@ -306,10 +82,12 @@ function MyAppointments({ userPhone }) {
   );
 }
 
-// ─── My Recommended Tests ─────────────────────────────────────────────────────
+
+
 function MyTests({ userPhone }) {
   const [tests, setTests]     = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate              = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -328,53 +106,125 @@ function MyTests({ userPhone }) {
 
   if (!loading && tests.length === 0) return null;
 
+  const getCategoryIcon = (category) => {
+    const c = (category || "").toLowerCase();
+    if (c.includes("haem") || c.includes("blood")) return "🩸";
+    if (c.includes("diab") || c.includes("sugar")) return "🔭";
+    if (c.includes("urine") || c.includes("renal")) return "🧫";
+    if (c.includes("radio") || c.includes("scan") || c.includes("xray")) return "🩻";
+    if (c.includes("cardio") || c.includes("heart")) return "❤️";
+    return "🧪";
+  };
+
   return (
     <div className="my-appointments-section" style={{ marginTop: 16 }}>
-      <div className="appt-section-header">
+
+      {/* Header */}
+      <div className="appt-section-header" style={{ marginBottom: 14 }}>
         <span style={{ fontSize: 18 }}>🔬</span>
         <h3>Recommended Tests</h3>
+        <span style={{
+          marginLeft: "auto", fontSize: 11, fontWeight: 500,
+          background: "#E1F5EE", color: "#085041",
+          padding: "3px 10px", borderRadius: 20
+        }}>
+          {tests.length} {tests.length === 1 ? "test" : "tests"}
+        </span>
       </div>
 
       {loading ? (
         <div className="appt-loading">Loading recommended tests...</div>
       ) : (
         <>
-          <div className="appt-list">
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {tests.map((test, i) => (
-              <div key={test.id || i} className="appt-card">
-                <div className="appt-card-header" style={{ cursor: "default" }}>
-                  <div className="appt-card-left">
-                    <span className="appt-plan-name">🧪 {test.test_name}</span>
-                    <span className="appt-date">
-                      📂 {test.test_category || "Lab Test"}
-                      {test.test_price ? ` · ₹${Number(test.test_price).toLocaleString("en-IN")}` : ""}
-                    </span>
-                    {test.note && (
-                      <span className="appt-date" style={{ marginTop: 2, color: "#6b7280" }}>
-                        📝 {test.note}
-                      </span>
-                    )}
-                    <span className="appt-date" style={{ color: "#9ca3af", fontSize: "0.7rem" }}>
-                      🗓 {new Date(test.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
-                    </span>
+              <div
+                key={test.id || i}
+                onClick={() => navigate("/labs")}
+                style={{
+                  background: "var(--color-background-primary)",
+                  border: "0.5px solid var(--color-border-tertiary)",
+                  borderRadius: "var(--border-radius-lg)",
+                  padding: "14px 16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 14,
+                  cursor: "pointer",
+                  transition: "border-color 0.15s, background 0.15s",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = "#5DCAA5";
+                  e.currentTarget.style.background  = "#E1F5EE";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = "var(--color-border-tertiary)";
+                  e.currentTarget.style.background  = "var(--color-background-primary)";
+                }}
+              >
+                {/* Icon */}
+                <div style={{
+                  width: 40, minWidth: 40, height: 40,
+                  borderRadius: "var(--border-radius-md)",
+                  background: "#E1F5EE",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 18,
+                }}>
+                  {getCategoryIcon(test.test_category)}
+                </div>
+
+                {/* Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: 13, fontWeight: 500,
+                    color: "var(--color-text-primary)",
+                    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                  }}>
+                    {test.test_name}
                   </div>
-                  <div className="appt-card-right">
-                    <span className="appt-status-badge bg-indigo-100 text-indigo-700 border-indigo-200">
-                      Recommended
-                    </span>
+                  <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 2 }}>
+                    {test.test_category || "Lab Test"}
                   </div>
+                  {test.note && (
+                    <div style={{
+                      fontSize: 11, color: "var(--color-text-tertiary)", marginTop: 2,
+                      whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                    }}>
+                      {test.note}
+                    </div>
+                  )}
+                </div>
+
+                {/* Price + Arrow */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                  {test.test_price && (
+                    <span style={{
+                      fontSize: 12, fontWeight: 500,
+                      background: "#E1F5EE", color: "#085041",
+                      padding: "3px 10px", borderRadius: 20, whiteSpace: "nowrap"
+                    }}>
+                      ₹{Number(test.test_price).toLocaleString("en-IN")}
+                    </span>
+                  )}
+                  <span style={{ fontSize: 14, color: "#5DCAA5" }}>→</span>
                 </div>
               </div>
             ))}
           </div>
 
-          <a
-            href="/labs"
-            className="appt-pay-btn"
-            style={{ marginTop: 12, display: "block", textAlign: "center", textDecoration: "none" }}
+          {/* Book Button */}
+          <div
+            onClick={() => navigate("/labs")}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              gap: 8, marginTop: 14, padding: "11px 16px",
+              background: "#E1F5EE", border: "0.5px solid #5DCAA5",
+              borderRadius: "var(--border-radius-md)",
+              fontSize: 13, fontWeight: 500, color: "#085041",
+              cursor: "pointer",
+            }}
           >
             🔬 Book a Lab Test
-          </a>
+          </div>
         </>
       )}
     </div>

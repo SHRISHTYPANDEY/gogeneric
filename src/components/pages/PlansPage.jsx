@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getDoctorById, getApprovedDoctorById, getApprovedPlans } from "../../api/doctorApi";
+import {
+  getDoctorById,
+  getApprovedDoctorById,
+  getApprovedPlans,
+  getDoctorPlans,
+} from "../../api/doctorApi";
 import "./PlansPage.css";
 import BookAppointment from "./BookAppointment";
 import SkeletonCard from "../skeleton/SkeletonCard";
+
 export default function PlansPage() {
   const { id } = useParams();
+
   const [doctor, setDoctor] = useState(null);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,35 +24,41 @@ export default function PlansPage() {
     const fetchData = async () => {
       try {
         let doctorData;
-        let source = 'normal';
+        let isApproved = false;
+
+        // ✅ Doctor fetch
         try {
           doctorData = await getDoctorById(id);
+
+          // Static plans
+          if (doctorData?.plans?.length > 0) {
+            setPlans(doctorData.plans);
+          }
+
         } catch (err) {
           if (err.response?.status === 404) {
             doctorData = await getApprovedDoctorById(id);
-            source = 'approved';
+            isApproved = true;
           } else {
             throw err;
           }
         }
-        setDoctor({
-          ...doctorData,
-          isApproved: source === 'approved',
-        });
 
-        let plansData = [];
+        setDoctor({ ...doctorData, isApproved });
 
-try {
-  plansData = await getApprovedPlans(id);
-} catch (err) {
-  console.warn("No plans found", err);
-}
+        // ✅ DB plans
+        if (isApproved) {
+          let plansData = await getApprovedPlans(id);
 
-setPlans(plansData);
+          if (!plansData || plansData.length === 0) {
+            plansData = await getDoctorPlans(id);
+          }
 
-        setPlans(plansData);
+          setPlans(plansData || []);
+        }
+
       } catch (err) {
-        console.error("Error fetching doctor or plans:", err);
+        console.error(err);
         setError("Doctor or plans not found");
       } finally {
         setLoading(false);
@@ -60,118 +73,156 @@ setPlans(plansData);
     setShowModal(true);
   };
 
-if (loading) {
-  return (
-    <section className="plans-section">
-      <div className="plans-wrapper">
-
-        <div className="plans-header-content">
-          <SkeletonCard height="30px" width="200px" />
-          <SkeletonCard height="16px" width="260px" />
+  // 🔹 LOADING
+  if (loading) {
+    return (
+      <section className="plans-section">
+        <div className="plans-wrapper">
+          <div className="plans-grid">
+            {[1, 2, 3].map((i) => (
+              <SkeletonCard key={i} height="300px" />
+            ))}
+          </div>
         </div>
+      </section>
+    );
+  }
 
-        <div className="plans-grid">
-          {[1,2,3].map((i)=>(
-            <SkeletonCard key={i} height="300px"/>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  );
-}
   if (error) return <div className="error-msg">{error}</div>;
-  if (!doctor) return <div className="error-msg">Doctor not found</div>;
 
   return (
     <section className="plans-section">
       <div className="plans-wrapper">
+
         <div className="plans-header-content">
           <h2 className="plans-heading">
             Choose Your <span className="highlight">Plan</span>
           </h2>
           <p className="plans-subheading">
-            Simple, sustainable, and effective nutrition coaching.
+            Simple, sustainable, and effective care plans.
           </p>
         </div>
 
         <div className="plans-grid">
-          {plans.length === 0 && <p>No plans available for this doctor.</p>}
+
+          {plans.length === 0 && (
+            <p>No plans available for this doctor.</p>
+          )}
 
           {plans.map((plan) => (
             <div
               key={plan.id}
               className={`plan-card ${plan.featured ? "featured-card" : ""}`}
             >
-              {plan.featured ? (
-                <div className="popular-badge">Recommended</div>
-              ) : null}
 
+              {plan.featured && (
+                <div className="popular-badge">Recommended</div>
+              )}
+
+              {/* HEADER */}
               <div className="plan-header">
-                <span className="plan-title">{plan.plan_name || plan.title}</span> 
+                <span className="plan-title">
+                  {plan.plan_name || plan.title}
+                </span>
 
                 <div className="plan-price-row">
-                  <span className="price-amt">₹{plan.price}</span>
-                  {plan.id === "monthly" && <span className="price-tenure">/ month</span>}
+                  <span className="price-amt">
+                    {plan.price}
+                  </span>
                 </div>
+
                 {plan.duration && (
                   <div className="plan-duration">
                     Duration: {plan.duration}
-                  </div>
-                )}
-
-                {plan.price === "₹99" && (
-                  <div className="refundable-info">
-                    <span className="info-icon">!</span>
-                    100% Refundable after consultation
                   </div>
                 )}
               </div>
 
               <div className="divider" />
 
+              {/* FEATURES */}
               <ul className="plan-features">
-                {plan.features?.map((feature, index) => (
-                  <li key={index} className="feature-item">
-                    <span className="icon">✓</span>
-                    <span className="label">{feature.feature_name}</span>
-                    {feature.feature_value && (
-                      <span className="value">{feature.feature_value}</span>
-                    )}
-                  </li>
-                ))}
+
+                {/* STATIC FEATURES */}
+                {plan.features && !Array.isArray(plan.features) &&
+                  Object.entries(plan.features).map(([key, value], i) => (
+                    <li key={i} className="feature-item">
+                      <span className={`icon ${value ? "check" : "cross"}`}>
+                        {value ? "✓" : "✕"}
+                      </span>
+
+                      <div className="feature-text">
+                        <span className="label">{key}</span>
+
+                        {typeof value === "string" && (
+                          <span className="value">{value}</span>
+                        )}
+                      </div>
+                    </li>
+                  ))
+                }
+
+                {/* DB FEATURES */}
+                {Array.isArray(plan.features) &&
+                  plan.features.map((f, i) => (
+                    <li key={i} className="feature-item">
+                      <span className="icon check">✓</span>
+
+                      <div className="feature-text">
+                        <span className="label">{f.feature_name}</span>
+
+                        {f.feature_value && (
+                          <span className="value">
+                            {f.feature_value}
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  ))
+                }
+
               </ul>
 
-              <button className="plan-button" onClick={() => handleBook(plan)}>
+              {/* BUTTON */}
+              <button
+                className="plan-button"
+                onClick={() => handleBook(plan)}
+              >
                 Get Started
               </button>
+
             </div>
           ))}
         </div>
       </div>
 
+      {/* MODAL */}
       {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            {console.log("Doctor object before modal:", doctor)}
-            {console.log("isApproved value being passed:", doctor?.isApproved)}
-            {console.log("doctorId being passed:", doctor?.id || id)}
-            <div className="modal-header-box">
-              <h3 className="modal-title">Confirm Booking</h3>
-            </div>
-
+        <div
+          className="modal-overlay"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="modal-box"
+            onClick={(e) => e.stopPropagation()}
+          >
             <BookAppointment
-              phone={doctor.phone}
-              whatsapp={doctor.whatsapp}
+              phone={doctor?.phone}
+              whatsapp={doctor?.whatsapp}
               planName={selectedPlan?.plan_name || selectedPlan?.title}
               planPrice={selectedPlan?.price}
-              doctorId={doctor.id || id}
-              planId={selectedPlan.id}
-              isApprovedDoctor={!!doctor.email}
+              doctorId={doctor?.id || id}
+              planId={selectedPlan?.id}
+              isApprovedDoctor={doctor?.isApproved}
               onClose={() => setShowModal(false)}
             />
 
-            <button className="close-x" onClick={() => setShowModal(false)}>×</button>
+            <button
+              className="close-x"
+              onClick={() => setShowModal(false)}
+            >
+              ×
+            </button>
           </div>
         </div>
       )}
