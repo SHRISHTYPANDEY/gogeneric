@@ -20,32 +20,20 @@ function getStepIndex(appt) {
     if (s === "payment_pending") return 2;
     if (s === "confirmed" || (s === "approved" && p === "paid")) return 3;
     if (s === "completed") return 4;
+    if (s === "rescheduled") return 3;
     if (s === "approved" && (p === "free" || !p || p === "unpaid")) return 3;
     return 1;
 }
 
-function getStatusColor(status) {
-    switch (status) {
-        case "confirmed": return "bg-emerald-100 text-emerald-700 border-emerald-200";
-        case "approved": return "bg-blue-100 text-blue-700 border-blue-200";
-        case "payment_pending": return "bg-orange-100 text-orange-700 border-orange-200";
-        case "rejected": return "bg-red-100 text-red-700 border-red-200";
-        case "completed": return "bg-purple-100 text-purple-700 border-purple-200";
-        default: return "bg-yellow-100 text-yellow-700 border-yellow-200";
-    }
-}
-
-function getStatusLabel(status) {
-    switch (status) {
-        case "pending": return "Awaiting Doctor";
-        case "approved": return "Approved";
-        case "payment_pending": return "Payment Pending";
-        case "confirmed": return "Confirmed";
-        case "completed": return "Completed";
-        case "rejected": return "Rejected";
-        default: return status;
-    }
-}
+const statusConfig = {
+    pending:         { bg: "#FEF3C7", color: "#92400E", label: "Awaiting Doctor" },
+    approved:        { bg: "#DBEAFE", color: "#1E40AF", label: "Approved" },
+    payment_pending: { bg: "#FFEDD5", color: "#9A3412", label: "Payment Pending" },
+    confirmed:       { bg: "#E1F5EE", color: "#085041", label: "Confirmed" },
+    completed:       { bg: "#EDE9FE", color: "#4C1D95", label: "Completed" },
+    rejected:        { bg: "#FEE2E2", color: "#991B1B", label: "Rejected" },
+    rescheduled:     { bg: "#FDF4FF", color: "#6B21A8", label: "🗓️ Rescheduled" },
+};
 
 function ReviewSection({ appt }) {
     const [rating, setRating] = useState(0);
@@ -101,23 +89,74 @@ export default function AppointmentCard({ appt }) {
     const [open, setOpen] = useState(false);
     const stepIndex = getStepIndex(appt);
     const isRejected = appt.status === "rejected";
+    const isRescheduled = appt.status === "rescheduled";
     const isVideo = appt.consultation_type === "video_call";
+
+    const statusMeta = statusConfig[appt.status] || statusConfig.pending;
 
     return (
         <div className="appt-card">
             <div className="appt-card-header" onClick={() => setOpen(!open)}>
                 <div className="appt-card-left">
                     <span className="appt-plan-name">{appt.plan_name}</span>
-                    <span className="appt-date">📅 {appt.appointment_date} &nbsp;·&nbsp; ⏰ {appt.time_slot}</span>
+                    <span className="appt-date">
+                        📅 {isRescheduled && appt.appointment_date
+                            ? appt.appointment_date
+                            : appt.appointment_date}
+                        &nbsp;·&nbsp;
+                        ⏰ {appt.time_slot}
+                    </span>
                 </div>
                 <div className="appt-card-right">
-                    <span className={`appt-status-badge ${getStatusColor(appt.status)}`}>{getStatusLabel(appt.status)}</span>
+                    <span
+                        className="appt-status-badge"
+                        style={{
+                            background: statusMeta.bg,
+                            color: statusMeta.color,
+                            border: `0.5px solid ${statusMeta.color}33`,
+                            borderRadius: 20,
+                            padding: "3px 10px",
+                            fontSize: 11,
+                            fontWeight: 500,
+                        }}
+                    >
+                        {statusMeta.label}
+                    </span>
                     {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
             </div>
 
             {open && (
                 <div className="appt-card-body">
+
+                    {/* ── Rescheduled info banner ── */}
+                    {isRescheduled && (
+                        <div style={{
+                            display: "flex", alignItems: "flex-start", gap: 10,
+                            background: "#FDF4FF",
+                            border: "0.5px solid #D8B4FE",
+                            borderRadius: 10,
+                            padding: "10px 14px",
+                            marginBottom: 14,
+                        }}>
+                            <span style={{ fontSize: 18, lineHeight: 1 }}>🗓️</span>
+                            <div>
+                                <div style={{ fontSize: 12, fontWeight: 500, color: "#6B21A8" }}>
+                                    Appointment Rescheduled
+                                </div>
+                                <div style={{ fontSize: 11, color: "#7E22CE", marginTop: 3 }}>
+                                    New date: <b>{appt.appointment_date}</b> &nbsp;·&nbsp; <b>{appt.time_slot}</b>
+                                </div>
+                                {appt.reschedule_reason && (
+                                    <div style={{ fontSize: 11, color: "#9333EA", marginTop: 2 }}>
+                                        Reason: {appt.reschedule_reason}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ── Progress tracker ── */}
                     {!isRejected ? (
                         <div className="appt-tracker">
                             {STEPS.map((step, i) => {
@@ -140,6 +179,7 @@ export default function AppointmentCard({ appt }) {
                         <div className="appt-rejected-banner">❌ Your appointment was rejected. You can book again.</div>
                     )}
 
+                    {/* ── Details grid ── */}
                     <div className="appt-details-grid">
                         <div className="appt-detail-row">
                             <span className="appt-detail-label">Type</span>
@@ -163,6 +203,7 @@ export default function AppointmentCard({ appt }) {
                         )}
                     </div>
 
+                    {/* ── Action buttons ── */}
                     {appt.status === "payment_pending" && (
                         <a href={`/pay/appointment/${appt.id}`} className="appt-pay-btn">
                             💳 Pay Now — ₹{Number(appt.plan_price).toLocaleString("en-IN")}

@@ -115,9 +115,9 @@ export default function PlansPage() {
               className={`plan-card ${plan.featured ? "featured-card" : ""}`}
             >
 
-              {plan.featured && (
-                <div className="popular-badge">Recommended</div>
-              )}
+              {plan.featured === true && (
+  <div className="popular-badge">Recommended</div>
+)}
 
               {/* HEADER */}
               <div className="plan-header">

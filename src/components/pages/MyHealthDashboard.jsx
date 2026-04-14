@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
-import { CalendarCheck, FileText } from "lucide-react";
+import { CalendarCheck, FileText, Upload, X, Eye, Trash2, CheckCircle, Loader } from "lucide-react";
 import AppointmentCard from "./AppointmentCard";
 import LoginModal from "../auth/LoginModal";
 import Footer from "../Footer";
+import Swal from "sweetalert2";
 
 const getCategoryIcon = (category) => {
     const c = (category || "").toLowerCase();
@@ -17,67 +18,404 @@ const getCategoryIcon = (category) => {
     return "🧪";
 };
 
-function TestCard({ test, onClick }) {
-    const [hovered, setHovered] = useState(false);
+/* ══════════════════════════════════════════
+Upload Modal
+══════════════════════════════════════════ */
+function UploadReportModal({ test, patient, onClose, onSuccess }) {
+    const fileInputRef = useRef();
+    const [file, setFile]         = useState(null);
+    const [preview, setPreview]   = useState(null);
+    const [notes, setNotes]       = useState("");
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
+const uploadRef = useRef(false);
+    const handleFile = (f) => {
+        if (!f) return;
+        const allowed = ["application/pdf", "image/jpeg", "image/png", "image/jpg", "image/webp"];
+        if (!allowed.includes(f.type)) {
+            Swal.fire("Invalid file", "Only PDF, JPG, PNG, WEBP allowed", "error");
+            return;
+        }
+        if (f.size > 10 * 1024 * 1024) {
+            Swal.fire("Too large", "Max file size is 10MB", "error");
+            return;
+        }
+        setFile(f);
+        if (f.type.startsWith("image/")) {
+            const reader = new FileReader();
+            reader.onload = e => setPreview(e.target.result);
+            reader.readAsDataURL(f);
+        } else {
+            setPreview("pdf");
+        }
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        handleFile(e.dataTransfer.files[0]);
+    };
+
+    const handleUpload = async () => {
+    if (!file || uploading) return;   
+    if (uploadRef.current || !file || uploading) return;
+    uploadRef.current = true;
+    setUploading(true);
+    setProgress(0);
+
+    const formData = new FormData();
+    formData.append("report_file", file);
+    formData.append("notes", notes || "");
+    formData.append("patient_phone", patient.phone);
+    formData.append("patient_name", patient.name);
+    formData.append("test_name", test.test_name);
+    formData.append("doctor_id", test.doctor_id);
+    if (test.appointment_id) formData.append("appointment_id", test.appointment_id);
+
+    console.log("Test object:", test);
+
+    try {
+        await api.post(`/api/v1/doctor/test-recommendations/${test.id}/upload-report`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+            onUploadProgress: (e) => {
+                if (e.total) {
+                    setProgress(Math.round((e.loaded * 100) / e.total));
+                }
+            },
+        });
+
+        Swal.fire({
+            icon: "success",
+            title: "Report Uploaded! ✅",
+            text: "Your doctor will be notified.",
+            confirmButtonColor: "#1D9E75",
+        });
+
+        onSuccess();
+        onClose();        // ← Close modal after success
+    } catch (err) {
+        Swal.fire("Upload failed", err?.response?.data?.message || "Please try again", "error");
+    } finally {
+        setUploading(false);
+        setProgress(0);
+    }
+};
+
     return (
-        <div
-            onClick={onClick}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
-            style={{
-                display: "flex", alignItems: "center", gap: 14,
-                background: hovered ? "#E1F5EE" : "var(--color-background-primary)",
-                border: `0.5px solid ${hovered ? "#5DCAA5" : "var(--color-border-tertiary)"}`,
-                borderRadius: "var(--border-radius-lg)",
-                padding: "12px 14px",
-                cursor: "pointer",
-                transition: "border-color 0.15s, background 0.15s",
-            }}                        
-        >
+        <div style={{
+            position: "fixed", inset: 0, zIndex: 1000,
+            background: "rgba(0,0,0,0.45)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "16px",
+        }} onClick={e => e.target === e.currentTarget && onClose()}>
             <div style={{
-                width: 40, minWidth: 40, height: 40,
-                borderRadius: "var(--border-radius-md)",
-                background: "#E1F5EE",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 18,
+                background: "var(--color-background-primary)",
+                borderRadius: 16, width: "100%", maxWidth: 440,
+                overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
             }}>
-                {getCategoryIcon(test.test_category)}
-            </div>
-
-            <div style={{ flex: 1, minWidth: 0 }}>
+                {/* Header */}
                 <div style={{
-                    fontSize: 13, fontWeight: 500,
-                    color: "var(--color-text-primary)",
-                    whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "16px 20px",
+                    borderBottom: "0.5px solid var(--color-border-tertiary)",
                 }}>
-                    {test.test_name}
-                </div>
-                <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 2 }}>
-                    {test.test_category || "Lab Test"}
-                </div>
-                {test.note && (
-                    <div style={{
-                        fontSize: 11, color: "var(--color-text-tertiary)", marginTop: 2,
-                        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
-                    }}>
-                        {test.note}
+                    <div>
+                        <div style={{ fontSize: 14, fontWeight: 500, color: "var(--color-text-primary)" }}>
+                            Upload Report
+                        </div>
+                        <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 2 }}>
+                            {test.test_name}
+                        </div>
                     </div>
-                )}
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
-                {test.test_price && (
-                    <span style={{
-                        fontSize: 12, fontWeight: 500,
-                        background: "#E1F5EE", color: "#085041",
-                        padding: "3px 10px", borderRadius: 20, whiteSpace: "nowrap"
+                    <button onClick={onClose} style={{
+                        background: "none", border: "none", cursor: "pointer",
+                        color: "var(--color-text-secondary)", padding: 4,
                     }}>
-                        ₹{Number(test.test_price).toLocaleString("en-IN")}
-                    </span>
-                )}
-                <span style={{ fontSize: 14, color: "#5DCAA5" }}>→</span>
+                        <X size={18} />
+                    </button>
+                </div>
+
+                <div style={{ padding: "20px" }}>
+                    {/* Drop zone */}
+                    {!file ? (
+                        <div
+                            onDrop={handleDrop}
+                            onDragOver={e => e.preventDefault()}
+                            onClick={() => fileInputRef.current.click()}
+                            style={{
+                                border: "1.5px dashed var(--color-border-secondary)",
+                                borderRadius: 12,
+                                padding: "32px 20px",
+                                textAlign: "center",
+                                cursor: "pointer",
+                                background: "var(--color-background-secondary)",
+                                transition: "border-color 0.15s",
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.borderColor = "#5DCAA5"}
+                            onMouseLeave={e => e.currentTarget.style.borderColor = "var(--color-border-secondary)"}
+                        >
+                            <Upload size={28} style={{ color: "#5DCAA5", marginBottom: 10 }} />
+                            <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text-primary)" }}>
+                                Tap to select or drag & drop
+                            </div>
+                            <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 4 }}>
+                                PDF, JPG, PNG, WEBP · Max 10MB
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={{
+                            border: "0.5px solid var(--color-border-tertiary)",
+                            borderRadius: 12, overflow: "hidden",
+                            position: "relative",
+                        }}>
+                            {preview === "pdf" ? (
+                                <div style={{
+                                    background: "#FEF3C7", padding: "20px",
+                                    display: "flex", alignItems: "center", gap: 12,
+                                }}>
+                                    <div style={{
+                                        width: 40, height: 40, background: "#F59E0B",
+                                        borderRadius: 8, display: "flex",
+                                        alignItems: "center", justifyContent: "center",
+                                        fontSize: 18,
+                                    }}>📄</div>
+                                    <div>
+                                        <div style={{ fontSize: 12, fontWeight: 500, color: "#92400E" }}>{file.name}</div>
+                                        <div style={{ fontSize: 11, color: "#B45309" }}>
+                                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <img src={preview} alt="preview"
+                                    style={{ width: "100%", maxHeight: 200, objectFit: "cover" }} />
+                            )}
+                            <button
+                                onClick={() => { setFile(null); setPreview(null); }}
+                                style={{
+                                    position: "absolute", top: 8, right: 8,
+                                    background: "rgba(0,0,0,0.5)", border: "none",
+                                    borderRadius: "50%", width: 26, height: 26,
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                    cursor: "pointer", color: "#fff",
+                                }}
+                            >
+                                <X size={13} />
+                            </button>
+                        </div>
+                    )}
+
+                    <input
+                        ref={fileInputRef} type="file"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp"
+                        style={{ display: "none" }}
+                        onChange={e => handleFile(e.target.files[0])}
+                    />
+
+                    {/* Notes */}
+                    <textarea
+                        value={notes}
+                        onChange={e => setNotes(e.target.value)}
+                        placeholder="Add notes (optional) — e.g. fasting sample, done at SRL labs..."
+                        rows={2}
+                        style={{
+                            width: "100%", marginTop: 12,
+                            padding: "10px 12px", fontSize: 12,
+                            border: "0.5px solid var(--color-border-tertiary)",
+                            borderRadius: 10, resize: "none",
+                            background: "var(--color-background-secondary)",
+                            color: "var(--color-text-primary)",
+                            outline: "none", boxSizing: "border-box",
+                        }}
+                    />
+
+                    {/* Progress bar */}
+                    {uploading && (
+                        <div style={{ marginTop: 10 }}>
+                            <div style={{
+                                height: 4, borderRadius: 4,
+                                background: "var(--color-border-tertiary)",
+                                overflow: "hidden",
+                            }}>
+                                <div style={{
+                                    height: "100%", borderRadius: 4,
+                                    background: "#5DCAA5",
+                                    width: `${progress}%`,
+                                    transition: "width 0.2s",
+                                }} />
+                            </div>
+                            <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 4, textAlign: "right" }}>
+                                Uploading... {progress}%
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+                        <button onClick={onClose} style={{
+                            flex: 1, padding: "10px", fontSize: 13,
+                            border: "0.5px solid var(--color-border-tertiary)",
+                            borderRadius: 10, cursor: "pointer",
+                            background: "transparent",
+                            color: "var(--color-text-secondary)",
+                        }}>
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleUpload}
+                            disabled={!file || uploading}
+                            style={{
+                                flex: 2, padding: "10px", fontSize: 13, fontWeight: 500,
+                                border: "none", borderRadius: 10, cursor: file && !uploading ? "pointer" : "not-allowed",
+                                background: file && !uploading ? "#1D9E75" : "var(--color-border-tertiary)",
+                                color: file && !uploading ? "#fff" : "var(--color-text-secondary)",
+                                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                                transition: "background 0.15s",
+                            }}
+                        >
+                            {uploading ? (
+        <><Loader size={14} className="animate-spin" /> Uploading... {progress}%</>
+    ) : (
+        <><Upload size={14} /> Upload Report</>
+    )}
+</button>
+                    </div>
+                </div>
             </div>
         </div>
+    );
+}
+
+/* ══════════════════════════════════════════
+   TestCard with upload
+══════════════════════════════════════════ */
+function TestCard({ test, patient, onClick, onUploadSuccess }) {
+    const [hovered, setHovered]     = useState(false);
+    const [showUpload, setShowUpload] = useState(false);
+    const hasReport = test.report_uploaded;
+
+    return (
+        <>
+            <div
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+                style={{
+                    display: "flex", alignItems: "center", gap: 14,
+                    background: hovered ? "#E1F5EE" : "var(--color-background-primary)",
+                    border: `0.5px solid ${hovered ? "#5DCAA5" : "var(--color-border-tertiary)"}`,
+                    borderRadius: "var(--border-radius-lg)",
+                    padding: "12px 14px",
+                    transition: "border-color 0.15s, background 0.15s",
+                }}
+            >
+                {/* Icon */}
+                <div style={{
+                    width: 40, minWidth: 40, height: 40,
+                    borderRadius: "var(--border-radius-md)",
+                    background: "#E1F5EE",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 18,
+                }}>
+                    {getCategoryIcon(test.test_category)}
+                </div>
+
+                {/* Info */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                        fontSize: 13, fontWeight: 500,
+                        color: "var(--color-text-primary)",
+                        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                    }}>
+                        {test.test_name}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 2 }}>
+                        {test.test_category || "Lab Test"}
+                    </div>
+                    {test.note && (
+                        <div style={{
+                            fontSize: 11, color: "var(--color-text-tertiary)", marginTop: 2,
+                            whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"
+                        }}>
+                            {test.note}
+                        </div>
+                    )}
+
+                    {/* Report uploaded badge */}
+                    {hasReport && (
+                        <div style={{
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            marginTop: 4, fontSize: 10, fontWeight: 500,
+                            color: "#085041", background: "#E1F5EE",
+                            border: "0.5px solid #5DCAA5",
+                            borderRadius: 20, padding: "2px 8px",
+                        }}>
+                            <CheckCircle size={10} /> Report uploaded
+                        </div>
+                    )}
+                </div>
+
+                {/* Right actions */}
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+                    {test.test_price && (
+                        <span style={{
+                            fontSize: 12, fontWeight: 500,
+                            background: "#E1F5EE", color: "#085041",
+                            padding: "3px 10px", borderRadius: 20, whiteSpace: "nowrap"
+                        }}>
+                            ₹{Number(test.test_price).toLocaleString("en-IN")}
+                        </span>
+                    )}
+
+                    {/* Book test button */}
+                    <button
+                        onClick={onClick}
+                        style={{
+                            fontSize: 11, padding: "4px 10px",
+                            background: "transparent",
+                            border: "0.5px solid #5DCAA5",
+                            borderRadius: 20, color: "#0F6E56",
+                            cursor: "pointer", whiteSpace: "nowrap",
+                        }}
+                    >
+                        Book →
+                    </button>
+
+                    {/* Upload button */}
+                    <button
+                        onClick={(e) => { e.stopPropagation(); setShowUpload(true); }}
+                        style={{
+                            fontSize: 11, padding: "4px 10px",
+                            background: hasReport ? "#E1F5EE" : "#1D9E75",
+                            border: "none",
+                            borderRadius: 20,
+                            color: hasReport ? "#085041" : "#fff",
+                            cursor: "pointer", whiteSpace: "nowrap",
+                            display: "flex", alignItems: "center", gap: 4,
+                        }}
+                    >
+                        <Upload size={10} />
+                        {hasReport ? "Re-upload" : "Upload Report"}
+                    </button>
+                </div>
+            </div>
+
+            {showUpload && (
+                <UploadReportModal
+                    test={test}
+                    patient={patient}
+                    onClose={() => setShowUpload(false)}
+                    onSuccess={() => {
+                        setShowUpload(false);
+                        Swal.fire({
+                            icon: "success",
+                            title: "Report Uploaded! ✅",
+                            text: "Your doctor will be notified and can now view this report.",
+                            confirmButtonColor: "#1D9E75",
+                        });
+                        onUploadSuccess();
+                    }}
+                />
+            )}
+        </>
     );
 }
 
@@ -109,7 +447,7 @@ function ReportsCard({ onClick }) {
             </div>
             <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 500, color: "var(--color-text-primary)" }}>
-                    My Lab Reports
+                    My Reports
                 </div>
                 <div style={{ fontSize: 11, color: "var(--color-text-secondary)", marginTop: 2 }}>
                     View all uploaded &amp; doctor-shared reports
@@ -120,35 +458,55 @@ function ReportsCard({ onClick }) {
     );
 }
 
+/* ══════════════════════════════════════════
+   Main Dashboard
+══════════════════════════════════════════ */
 export default function MyHealthDashboard() {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [showLogin, setShowLogin] = useState(false);
+    const [showLogin, setShowLogin]       = useState(false);
     const [appointments, setAppointments] = useState([]);
-    const [tests, setTests] = useState([]);
-    const [activeTab, setActiveTab] = useState("active");
-    const [loading, setLoading] = useState(true);
+    const [tests, setTests]               = useState([]);
+    const [activeTab, setActiveTab]       = useState("active");
+    const [loading, setLoading]           = useState(true);
 
     const phone = user?.phone;
+    const patient = { phone: user?.phone, name: user?.name };
+
+    const fetchAll = useCallback(async () => {
+        if (!phone) return;
+        setLoading(true);
+        try {
+            const [apptRes, testRes] = await Promise.all([
+                api.get(`/api/v1/doctor/appointments/patient/${phone}`),
+                api.get(`/api/v1/doctor/test-recommendations/patient/${phone}`),
+            ]);
+            setAppointments(apptRes.data.data || []);
+            setTests(testRes.data.data || []);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }, [phone]);
 
     useEffect(() => {
         if (!phone) { setShowLogin(true); return; }
-        const fetchAll = async () => {
-            try {
-                const [apptRes, testRes] = await Promise.all([
-                    api.get(`/api/v1/doctor/appointments/patient/${phone}`),
-                    api.get(`/api/v1/doctor/test-recommendations/patient/${phone}`),
-                ]);
-                setAppointments(apptRes.data.data || []);
-                setTests(testRes.data.data || []);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchAll();
-    }, [phone]);
+
+        const onFocus   = () => fetchAll();
+        const onVisible = () => { if (document.visibilityState === "visible") fetchAll(); };
+
+        window.addEventListener("focus", onFocus);
+        document.addEventListener("visibilitychange", onVisible);
+        window.addEventListener("appointment-updated", fetchAll);
+
+        return () => {
+            window.removeEventListener("focus", onFocus);
+            document.removeEventListener("visibilitychange", onVisible);
+            window.removeEventListener("appointment-updated", fetchAll);
+        };
+    }, [phone, fetchAll]);
 
     if (!user && showLogin) return <LoginModal open onClose={() => navigate("/")} />;
 
@@ -160,12 +518,12 @@ export default function MyHealthDashboard() {
         <>
             <div style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px" }}>
 
-                {/* ── Summary Cards ── */}
+                {/* Summary Cards */}
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 12, marginBottom: 24 }}>
                     {[
-                        { label: "Total Consultations", value: appointments.length, icon: "📋" },
-                        { label: "Recommended Tests",   value: tests.length,        icon: "🔬" },
-                        { label: "Completed",           value: past.filter(a => a.status === "completed").length, icon: "✅" },
+                        { label: "Total Consultations", value: appointments.length,                                   icon: "📋" },
+                        { label: "Recommended Tests",   value: tests.length,                                          icon: "🔬" },
+                        { label: "Completed",           value: past.filter(a => a.status === "completed").length,     icon: "✅" },
                     ].map(s => (
                         <div key={s.label} style={{
                             background: "var(--color-background-primary)",
@@ -180,10 +538,10 @@ export default function MyHealthDashboard() {
                     ))}
                 </div>
 
-                {/* ── My Reports ── */}
+                {/* My Reports */}
                 <ReportsCard onClick={() => navigate("/my-reports")} />
 
-                {/* ── Appointments ── */}
+                {/* Appointments */}
                 <div style={{
                     background: "var(--color-background-primary)",
                     border: "0.5px solid var(--color-border-tertiary)",
@@ -227,7 +585,7 @@ export default function MyHealthDashboard() {
                     </div>
                 </div>
 
-                {/* ── Recommended Tests ── */}
+                {/* Recommended Tests */}
                 {tests.length > 0 && (
                     <div style={{
                         background: "var(--color-background-primary)",
@@ -248,7 +606,9 @@ export default function MyHealthDashboard() {
                                 <TestCard
                                     key={test.id || i}
                                     test={test}
+                                    patient={patient}
                                     onClick={() => navigate("/labs")}
+                                    onUploadSuccess={fetchAll}
                                 />
                             ))}
                         </div>
@@ -271,7 +631,6 @@ export default function MyHealthDashboard() {
                         </div>
                     </div>
                 )}
-
             </div>
             <Footer />
         </>
