@@ -9,7 +9,7 @@ import axios from "axios";
 const BASE_URL = "https://www.gogenericpharma.com/api/v1";
 
 const CONSULTATION_TYPES = [
-  { value: "in_person", label: "In-Person Session", icon: "🏥", description: "Visit the clinic directly" },
+  { value: "in_person", label: "In-Clinic Consultation", icon: "🏥", description: "Visit the clinic directly" },
   { value: "video_call", label: "Video Call", icon: "📹", description: "Online video consultation" },
 ];
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"];
@@ -36,7 +36,7 @@ const MEDICAL_CONDITIONS = [
   "Asthma", "Arthritis", "Cholesterol", "Anaemia", "None",
 ];
 const ALLERGIES = ["Gluten", "Dairy/Lactose", "Nuts", "Soy", "Eggs", "Shellfish", "Fish", "None"];
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 const getNumericPrice = (price) => {
   if (typeof price === "number") return Math.round(price);
@@ -46,10 +46,10 @@ const getNumericPrice = (price) => {
 const fmtDate = (ymd) => {
   const d = new Date(ymd);
   return {
-    day:   d.toLocaleDateString("en-IN", { weekday: "short" }),
-    date:  d.getDate(),
+    day: d.toLocaleDateString("en-IN", { weekday: "short" }),
+    date: d.getDate(),
     month: d.toLocaleDateString("en-IN", { month: "short" }),
-    full:  d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
+    full: d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
   };
 };
 
@@ -81,51 +81,53 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   const todayObj = new Date();
 
   /* ── Month navigation (only for date picker) ── */
-  const [viewYear,  setViewYear]  = useState(todayObj.getFullYear());
+  const [viewYear, setViewYear] = useState(todayObj.getFullYear());
   const [viewMonth, setViewMonth] = useState(todayObj.getMonth());
 
   /* ── Basic ── */
-  const [useMyDetails,   setUseMyDetails]   = useState(true);
-  const [patientName,    setPatientName]    = useState(user?.name  || "");
-  const [patientPhone,   setPatientPhone]   = useState(user?.phone || "");
-  const [patientEmail,   setPatientEmail]   = useState(user?.email || "");
-  const [patientAge,     setPatientAge]     = useState("");
-  const [gender,         setGender]         = useState("");
+  const [useMyDetails, setUseMyDetails] = useState(true);
+  const [patientName, setPatientName] = useState(user?.name || "");
+  const [patientPhone, setPatientPhone] = useState(user?.phone || "");
+  const [patientEmail, setPatientEmail] = useState(user?.email || "");
+  const [patientAge, setPatientAge] = useState("");
+  const [gender, setGender] = useState("");
 
   /* ── Body ── */
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
+  const [bpSystolic, setBpSystolic] = useState("");
+  const [bpDiastolic, setBpDiastolic] = useState("");
 
   /* ── Medical ── */
-  const [bloodGroup,         setBloodGroup]         = useState("");
-  const [medicalConditions,  setMedicalConditions]  = useState([]);
-  const [allergies,          setAllergies]          = useState([]);
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [medicalConditions, setMedicalConditions] = useState([]);
+  const [allergies, setAllergies] = useState([]);
   const [currentMedications, setCurrentMedications] = useState("");
-  const [previousSurgeries,  setPreviousSurgeries]  = useState("");
+  const [previousSurgeries, setPreviousSurgeries] = useState("");
 
   /* ── Lifestyle ── */
   const [activityLevel, setActivityLevel] = useState("");
-  const [dietType,      setDietType]      = useState("");
-  const [waterIntake,   setWaterIntake]   = useState("");
-  const [sleepHours,    setSleepHours]    = useState("");
+  const [dietType, setDietType] = useState("");
+  const [waterIntake, setWaterIntake] = useState("");
+  const [sleepHours, setSleepHours] = useState("");
   const [smokingStatus, setSmokingStatus] = useState("");
   const [alcoholStatus, setAlcoholStatus] = useState("");
 
   /* ── Complaint ── */
-  const [problem,         setProblem]         = useState("");
-  const [healthGoal,      setHealthGoal]      = useState("");
+  const [problem, setProblem] = useState("");
+  const [healthGoal, setHealthGoal] = useState("");
   const [previousPatient, setPreviousPatient] = useState("");
 
   /* ── Booking state ── */
-  const [selectedDate,     setSelectedDate]     = useState("");
-  const [selectedSlot,     setSelectedSlot]     = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [consultationType, setConsultationType] = useState("in_person");
-  const [availableDates,   setAvailableDates]   = useState([]);
-  const [availableSlots,   setAvailableSlots]   = useState([]);
-  const [loadingDates,     setLoadingDates]     = useState(false);
-  const [loadingSlots,     setLoadingSlots]     = useState(false);
-  const [showPayNow,       setShowPayNow]       = useState(false);
-  const [appointmentId,    setAppointmentId]    = useState(null);
+  const [availableDates, setAvailableDates] = useState([]);
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [loadingDates, setLoadingDates] = useState(false);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [showPayNow, setShowPayNow] = useState(false);
+  const [appointmentId, setAppointmentId] = useState(null);
 
   const numericPrice = getNumericPrice(planPrice);
   const bmiData = weight && height ? calcBMI(weight, height) : null;
@@ -209,58 +211,60 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   /* ── Book ── */
   const handleBookClick = async () => {
     if (!patientName || !patientPhone || !patientAge || !gender) {
-        Swal.fire({ icon: "warning", title: "Missing Details", text: "Please fill all required patient details (Name, Phone, Age, Gender)." }); return;
+      Swal.fire({ icon: "warning", title: "Missing Details", text: "Please fill all required patient details (Name, Phone, Age, Gender)." }); return;
     }
     if (!weight) {
-        Swal.fire({ icon: "warning", title: "Missing Body Metrics", text: "Weight is required." }); return;
+      Swal.fire({ icon: "warning", title: "Missing Body Metrics", text: "Weight is required." }); return;
     }
     if (!selectedDate || !selectedSlot) {
-        Swal.fire({ icon: "warning", title: "Select Date & Slot", text: "Please select a date and time slot." }); return;
+      Swal.fire({ icon: "warning", title: "Select Date & Slot", text: "Please select a date and time slot." }); return;
     }
 
     try {
-        const res = await bookAppointment({
-            doctor_id: doctorId, patient_name: patientName, patient_phone: patientPhone,
-            patient_email: patientEmail, patient_age: patientAge, gender,
-            weight_kg: weight, height_cm: height, bmi: bmiData?.bmi || null,
-            blood_group: bloodGroup, medical_conditions: medicalConditions, allergies,
-            current_medications: currentMedications, previous_surgeries: previousSurgeries,
-            activity_level: activityLevel, diet_type: dietType,
-            water_intake_litres: waterIntake, sleep_hours: sleepHours,
-            smoking_status: smokingStatus, alcohol_status: alcoholStatus,
-            problem, health_goal: healthGoal,
-            previous_patient: previousPatient === "yes" ? 1 : 0,
-            plan_id: planId, plan_name: planName, plan_price: numericPrice,
-            appointment_date: selectedDate, time_slot: selectedSlot,
-            consultation_type: consultationType,
-        });
+      const res = await bookAppointment({
+        doctor_id: doctorId, patient_name: patientName, patient_phone: patientPhone,
+        patient_email: patientEmail, patient_age: patientAge, gender,
+        weight_kg: weight, height_cm: height, bmi: bmiData?.bmi || null,
+        bp_systolic: bpSystolic || null,
+bp_diastolic: bpDiastolic || null,
+        blood_group: bloodGroup, medical_conditions: medicalConditions, allergies,
+        current_medications: currentMedications, previous_surgeries: previousSurgeries,
+        activity_level: activityLevel, diet_type: dietType,
+        water_intake_litres: waterIntake, sleep_hours: sleepHours,
+        smoking_status: smokingStatus, alcohol_status: alcoholStatus,
+        problem, health_goal: healthGoal,
+        previous_patient: previousPatient === "yes" ? 1 : 0,
+        plan_id: planId, plan_name: planName, plan_price: numericPrice,
+        appointment_date: selectedDate, time_slot: selectedSlot,
+        consultation_type: consultationType,
+      });
 
-        if (!res?.appointment_id) throw new Error("Invalid response");
-        setAppointmentId(res.appointment_id);
+      if (!res?.appointment_id) throw new Error("Invalid response");
+      setAppointmentId(res.appointment_id);
 
-        // ── Free plan — seedha confirm, no payment ──
-        if (numericPrice === 0) {
-            Swal.fire({
-                icon: "success",
-                title: "Appointment Booked! 🎉",
-                text: "Your appointment has been confirmed.",
-                confirmButtonColor: "#10b981",
-            }).then(() => onClose?.());
-            return;
-        }
-
-        // ── Paid plan — show pay button ──
-        setShowPayNow(true);
+      // ── Free plan — seedha confirm, no payment ──
+      if (numericPrice === 0) {
         Swal.fire({
-            icon: "success",
-            title: "Appointment Booked",
-            text: "Please complete payment to confirm",
-            confirmButtonColor: "#10b981",
-        });
+          icon: "success",
+          title: "Appointment Booked! 🎉",
+          text: "Your appointment has been confirmed.",
+          confirmButtonColor: "#10b981",
+        }).then(() => onClose?.());
+        return;
+      }
+
+      // ── Paid plan — show pay button ──
+      setShowPayNow(true);
+      Swal.fire({
+        icon: "success",
+        title: "Appointment Booked",
+        text: "Please complete payment to confirm",
+        confirmButtonColor: "#10b981",
+      });
     } catch {
-        Swal.fire({ icon: "error", title: "Booking Failed", text: "Error booking appointment. Please try again." });
+      Swal.fire({ icon: "error", title: "Booking Failed", text: "Error booking appointment. Please try again." });
     }
-};
+  };
 
   /* ── Pay ── */
   const handlePayNow = () => {
@@ -286,18 +290,18 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   /* ── Slot grouping ── */
   const getSlotPeriod = (slot) => {
     const start = slot.split("-")[0].trim();
-    const hour  = parseInt(start.split(":")[0]);
-    const isPM  = start.includes("PM");
-    const h24   = isPM && hour !== 12 ? hour + 12 : hour;
+    const hour = parseInt(start.split(":")[0]);
+    const isPM = start.includes("PM");
+    const h24 = isPM && hour !== 12 ? hour + 12 : hour;
     if (h24 < 12) return "Morning";
     if (h24 < 17) return "Afternoon";
     return "Evening";
   };
-  const periodIcon  = { Morning: "🌅", Afternoon: "☀️", Evening: "🌆" };
+  const periodIcon = { Morning: "🌅", Afternoon: "☀️", Evening: "🌆" };
   const periodColor = {
-    Morning:   { bg: "#fffbeb", border: "#fcd34d", text: "#92400e", activeBg: "#f59e0b", activeText: "#fff" },
+    Morning: { bg: "#fffbeb", border: "#fcd34d", text: "#92400e", activeBg: "#f59e0b", activeText: "#fff" },
     Afternoon: { bg: "#eff6ff", border: "#93c5fd", text: "#1e40af", activeBg: "#3b82f6", activeText: "#fff" },
-    Evening:   { bg: "#fdf4ff", border: "#d8b4fe", text: "#6b21a8", activeBg: "#9333ea", activeText: "#fff" },
+    Evening: { bg: "#fdf4ff", border: "#d8b4fe", text: "#6b21a8", activeBg: "#9333ea", activeText: "#fff" },
   };
   const groupedSlots = availableSlots.reduce((acc, slot) => {
     const p = getSlotPeriod(slot);
@@ -306,7 +310,7 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
     return acc;
   }, {});
 
-  const chipBase   = { display: "inline-block", padding: "6px 12px", borderRadius: 20, fontSize: 12, cursor: "pointer", border: "1.5px solid #e5e7eb", background: "#f9fafb", color: "#374151", transition: "all .15s", margin: "3px" };
+  const chipBase = { display: "inline-block", padding: "6px 12px", borderRadius: 20, fontSize: 12, cursor: "pointer", border: "1.5px solid #e5e7eb", background: "#f9fafb", color: "#374151", transition: "all .15s", margin: "3px" };
   const chipActive = { background: "#ecfdf5", border: "1.5px solid #10b981", color: "#065f46", fontWeight: 600 };
 
   /* ════════════════════ RENDER ════════════════════ */
@@ -344,10 +348,10 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
           <span style={{ fontSize: 13 }}>Book for myself</span>
         </label>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          <input type="text"   placeholder="Patient Name *"    value={patientName}  onChange={(e) => setPatientName(e.target.value)}  className="calendar-input" style={{ gridColumn: "1/-1" }} />
-          <input type="tel"    placeholder="Phone Number *"    value={patientPhone} onChange={(e) => setPatientPhone(e.target.value)} className="calendar-input" />
-          <input type="email"  placeholder="Email (optional)"  value={patientEmail} onChange={(e) => setPatientEmail(e.target.value)} className="calendar-input" />
-          <input type="number" placeholder="Age (years) *"     value={patientAge}   onChange={(e) => setPatientAge(e.target.value)}   className="calendar-input" min={1} max={120} />
+          <input type="text" placeholder="Patient Name *" value={patientName} onChange={(e) => setPatientName(e.target.value)} className="calendar-input" style={{ gridColumn: "1/-1" }} />
+          <input type="tel" placeholder="Phone Number *" value={patientPhone} onChange={(e) => setPatientPhone(e.target.value)} className="calendar-input" />
+          <input type="email" placeholder="Email (optional)" value={patientEmail} onChange={(e) => setPatientEmail(e.target.value)} className="calendar-input" />
+          <input type="number" placeholder="Age (years) *" value={patientAge} onChange={(e) => setPatientAge(e.target.value)} className="calendar-input" min={1} max={120} />
           <select value={gender} onChange={(e) => setGender(e.target.value)} className="calendar-input">
             <option value="">Gender *</option>
             <option value="male">Male</option>
@@ -374,12 +378,49 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
             <input type="number" placeholder="Height (optional)" min={50} value={height} onChange={(e) => setHeight(e.target.value)} className="calendar-input" style={{ paddingRight: 40 }} />
             <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>cm</span>
           </div>
+          {/* BP Row */}
+          <div style={{ gridColumn: "1/-1", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+            <div style={{ position: "relative" }}>
+              <input
+                type="number" placeholder="Systolic BP (optional)" min={60} max={250}
+                value={bpSystolic} onChange={(e) => setBpSystolic(e.target.value)}
+                className="calendar-input" style={{ paddingRight: 50 }}
+              />
+              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>mmHg</span>
+            </div>
+            <div style={{ position: "relative" }}>
+              <input
+                type="number" placeholder="Diastolic BP (optional)" min={40} max={150}
+                value={bpDiastolic} onChange={(e) => setBpDiastolic(e.target.value)}
+                className="calendar-input" style={{ paddingRight: 50 }}
+              />
+              <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>mmHg</span>
+            </div>
+          </div>
         </div>
         {bmiData && (
           <div style={{ marginTop: 10, background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: 13, color: "#15803d" }}>📊 BMI: <strong>{bmiData.bmi}</strong></span>
             <span style={{ fontSize: 12, fontWeight: 600, padding: "3px 10px", borderRadius: 20, background: bmiData.category === "Normal" ? "#d1fae5" : bmiData.category === "Underweight" ? "#fef9c3" : "#fee2e2", color: bmiData.category === "Normal" ? "#065f46" : bmiData.category === "Underweight" ? "#92400e" : "#b91c1c" }}>
               {bmiData.category}
+            </span>
+          </div>
+        )}
+        {bpSystolic && bpDiastolic && (
+          <div style={{ marginTop: 8, background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 13, color: "#1e40af" }}>🩺 BP: <strong>{bpSystolic}/{bpDiastolic}</strong> mmHg</span>
+            <span style={{
+              fontSize: 12, fontWeight: 600, padding: "3px 10px", borderRadius: 20,
+              background: bpSystolic < 120 && bpDiastolic < 80 ? "#d1fae5" :
+                bpSystolic < 130 && bpDiastolic < 80 ? "#fef9c3" :
+                  bpSystolic < 140 || bpDiastolic < 90 ? "#fed7aa" : "#fee2e2",
+              color: bpSystolic < 120 && bpDiastolic < 80 ? "#065f46" :
+                bpSystolic < 130 && bpDiastolic < 80 ? "#92400e" :
+                  bpSystolic < 140 || bpDiastolic < 90 ? "#c2410c" : "#b91c1c",
+            }}>
+              {bpSystolic < 120 && bpDiastolic < 80 ? "Normal" :
+                bpSystolic < 130 && bpDiastolic < 80 ? "Elevated" :
+                  bpSystolic < 140 || bpDiastolic < 90 ? "High Stage 1" : "High Stage 2"}
             </span>
           </div>
         )}
@@ -406,8 +447,8 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
             return <button key={a} type="button" onClick={() => toggleArrayItem(allergies, setAllergies, a)} style={{ ...chipBase, ...(active ? chipActive : {}) }}>{active ? "✓ " : ""}{a}</button>;
           })}
         </div>
-        <textarea placeholder="Current Medications (if any)"          value={currentMedications} onChange={(e) => setCurrentMedications(e.target.value)} className="calendar-input" rows={2} style={{ marginTop: 10 }} />
-        <textarea placeholder="Previous Surgeries / Injuries (if any)" value={previousSurgeries}  onChange={(e) => setPreviousSurgeries(e.target.value)}  className="calendar-input" rows={2} />
+        <textarea placeholder="Current Medications (if any)" value={currentMedications} onChange={(e) => setCurrentMedications(e.target.value)} className="calendar-input" rows={2} style={{ marginTop: 10 }} />
+        <textarea placeholder="Previous Surgeries / Injuries (if any)" value={previousSurgeries} onChange={(e) => setPreviousSurgeries(e.target.value)} className="calendar-input" rows={2} />
       </div>
 
       {/* ── Lifestyle ── */}
@@ -448,7 +489,7 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
       {/* ── Complaint & Goal ── */}
       <div className="section">
         <h4>📝 Complaint & Health Goal</h4>
-        <textarea placeholder="Current Problem / Symptoms"     value={problem}     onChange={(e) => setProblem(e.target.value)}     className="calendar-input" rows={3} />
+        <textarea placeholder="Current Problem / Symptoms" value={problem} onChange={(e) => setProblem(e.target.value)} className="calendar-input" rows={3} />
         <textarea placeholder="Health Goal (e.g. lose weight, manage diabetes...)" value={healthGoal} onChange={(e) => setHealthGoal(e.target.value)} className="calendar-input" rows={2} />
       </div>
 
@@ -589,6 +630,7 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
           <div style={{ display: "flex", flexDirection: "column", gap: 4, color: "#6b7280" }}>
             <span>👤 {patientName}{patientAge ? `, ${patientAge} yrs` : ""}{gender ? `, ${gender}` : ""}</span>
             {weight && <span>⚖️ {weight} kg{height ? ` | ${height} cm` : ""}{bmiData ? ` | BMI: ${bmiData.bmi} (${bmiData.category})` : ""}</span>}
+            {bpSystolic && bpDiastolic && <span>🩺 BP: {bpSystolic}/{bpDiastolic} mmHg</span>}
             <span>📅 {fmtDate(selectedDate).full}</span>
             <span>🕐 {selectedSlot}</span>
             <span>{consultationType === "video_call" ? "📹" : "🏥"} {CONSULTATION_TYPES.find(t => t.value === consultationType)?.label}</span>
@@ -598,15 +640,15 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
       )}
 
       {!showPayNow && (
-    <button className="book-btn" onClick={handleBookClick}>
-        {numericPrice === 0 ? "Book Free Appointment" : "Book Appointment"}
-    </button>
-)}
+        <button className="book-btn" onClick={handleBookClick}>
+          {numericPrice === 0 ? "Book Free Appointment" : "Book Appointment"}
+        </button>
+      )}
       {showPayNow && numericPrice > 0 && (
-    <button className="pay-btn" onClick={handlePayNow}>
-        Pay ₹{numericPrice.toLocaleString("en-IN")}
-    </button>
-)}
+        <button className="pay-btn" onClick={handlePayNow}>
+          Pay ₹{numericPrice.toLocaleString("en-IN")}
+        </button>
+      )}
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

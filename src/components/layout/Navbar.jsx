@@ -28,7 +28,7 @@ import {
   FaPhoneAlt,
   FaUsers,
   FaCoins,
-  FaStore, FaMotorcycle , FaExclamationTriangle,FaFileAlt,
+  FaStore, FaMotorcycle, FaExclamationTriangle, FaFileAlt,
 } from "react-icons/fa";
 import { MdPrivacyTip } from "react-icons/md";
 import api from "../../api/axiosInstance";
@@ -48,27 +48,27 @@ export default function Navbar() {
   const [pharmacies, setPharmacies] = useState([]);
   const [labs, setLabs] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(null);
-useEffect(() => {
-  api.get("/api/v1/categories")
-    .then((res) => setCategories(res.data || []))
-    .catch((err) => console.error("Navbar categories error:", err));
-  api.get("/api/v1/stores/get-stores/all", {
-    headers: { zoneId: JSON.stringify([3]), moduleId: "2" }
-  })
-    .then((res) => {
-      const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
-      setPharmacies(storeList);
+  useEffect(() => {
+    api.get("/api/v1/categories")
+      .then((res) => setCategories(res.data || []))
+      .catch((err) => console.error("Navbar categories error:", err));
+    api.get("/api/v1/stores/get-stores/all", {
+      headers: { zoneId: JSON.stringify([3]), moduleId: "2" }
     })
+      .then((res) => {
+        const storeList = Array.isArray(res?.data?.stores) ? res.data.stores : [];
+        setPharmacies(storeList);
+      })
     // .catch((err) => console.error("Navbar stores error:", err));
 
-      api.get("/api/v1/stores/details/74")
-    .then((res) => {
-      const labData = res?.data?.stores || res?.data || [];
-      setLabs(Array.isArray(labData) ? labData : [labData]);
-    })
+    api.get("/api/v1/stores/details/74")
+      .then((res) => {
+        const labData = res?.data?.stores || res?.data || [];
+        setLabs(Array.isArray(labData) ? labData : [labData]);
+      })
     // .catch((err) => console.error("Navbar labs error:", err));
 
-}, []);
+  }, []);
   const closeMenu = () => setOpen(false);
 
   const handleNavigate = (path) => {
@@ -87,10 +87,10 @@ useEffect(() => {
 
     navigate("/profile");
   };
-const handleReportClick = () => {
-  closeMenu();
-  navigate("/report");    
-};
+  const handleReportClick = () => {
+    closeMenu();
+    navigate("/report");
+  };
   const handleLogout = () => {
     closeMenu();
     logout();
@@ -100,19 +100,19 @@ const handleReportClick = () => {
   return (
     <>
       <nav className="navbar">
-      <div className="nav-container">
-        <ul className="nav-links">
-          <li><Link to="/">Home</Link></li>
-          <li className="category-dropdown-container">
+        <div className="nav-container">
+          <ul className="nav-links">
+            <li><Link to="/">Home</Link></li>
+            <li className="category-dropdown-container">
               <Link to="/category" className="category-trigger">
                 Category
               </Link>
-              
+
               <div className="mega-dropdown">
                 <div className="dropdown-inner-grid">
                   {categories.slice(0, 15).map((cat) => (
-                    <div 
-                      key={cat.id} 
+                    <div
+                      key={cat.id}
                       className="dropdown-card"
                       onClick={() => {
                         navigate(`/category/${cat.id}`, { state: { categoryName: cat.name } });
@@ -131,82 +131,82 @@ const handleReportClick = () => {
                 </div>
               </div>
             </li>
-          <li
-  className="category-dropdown-container"
-  onMouseEnter={() => setOpenDropdown("pharmacy")}
-  onMouseLeave={() => setOpenDropdown(null)}
->
-  <Link to="/pharmacy" className="category-trigger">
-    Pharmacy
-  </Link>
+            <li
+              className="category-dropdown-container"
+              onMouseEnter={() => setOpenDropdown("pharmacy")}
+              onMouseLeave={() => setOpenDropdown(null)}
+            >
+              <Link to="/pharmacy" className="category-trigger">
+                Pharmacy
+              </Link>
 
-  {openDropdown === "pharmacy" && (
-    <div className="mega-dropdown">
-      <div className="dropdown-inner-grid">
-        {pharmacies.map((store) => (
-          <div
-            key={store.id}
-            className="dropdown-card"
-            onClick={() => {
-              navigate(`/view-stores/${store.id}`);
-              setOpenDropdown(null);
-            }}
-          >
-            <div className="dropdown-circle-img">
-              <img
-                src={cleanImageUrl(store.logo_full_url)}
-                alt={store.name}
-              />
-            </div>
-            <span className="dropdown-cat-name">
-              {store.name}
-            </span>
+              {openDropdown === "pharmacy" && (
+                <div className="mega-dropdown">
+                  <div className="dropdown-inner-grid">
+                    {pharmacies.map((store) => (
+                      <div
+                        key={store.id}
+                        className="dropdown-card"
+                        onClick={() => {
+                          navigate(`/view-stores/${store.id}`);
+                          setOpenDropdown(null);
+                        }}
+                      >
+                        <div className="dropdown-circle-img">
+                          <img
+                            src={cleanImageUrl(store.logo_full_url)}
+                            alt={store.name}
+                          />
+                        </div>
+                        <span className="dropdown-cat-name">
+                          {store.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </li>
+
+            <li className="category-dropdown-container">
+              <Link to="/labs" className="category-trigger">Labs</Link>
+
+              <div className="mega-dropdown">
+                <div className="dropdown-inner-grid">
+                  {labs.map((lab) => (
+                    <div
+                      key={lab.id}
+                      className="dropdown-card"
+                      onClick={() => {
+                        navigate(`/view-stores/${lab.id}`);
+                        closeMenu();
+                      }}
+                    >
+                      <div className="dropdown-circle-img">
+                        <img
+                          src={cleanImageUrl(lab.logo_full_url || lab.image_full_url)}
+                          alt={lab.name}
+                        />
+                      </div>
+                      <span className="dropdown-cat-name">{lab.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </li>
+
+            <li><Link to="/doctors">Doctors</Link></li>
+            <li><Link to="/blog">Blog</Link></li>
+            <li><Link to="/aboutus">About</Link></li>
+            <li><Link to="/contactus">Contact Us</Link></li>
+            <li><Link to="/who-we-are">Who We Are</Link></li>
+          </ul>
+
+          <div className="hamburger" onClick={() => setOpen(true)}>
+            <HiBars3 />
           </div>
-        ))}
-      </div>
-    </div>
-  )}
-</li>
-
-          <li className="category-dropdown-container">
-  <Link to="/labs" className="category-trigger">Labs</Link>
-
-  <div className="mega-dropdown">
-    <div className="dropdown-inner-grid">
-      {labs.map((lab) => (
-        <div
-          key={lab.id}
-          className="dropdown-card"
-          onClick={() => {
-            navigate(`/view-stores/${lab.id}`);
-            closeMenu();
-          }}
-        >
-          <div className="dropdown-circle-img">
-            <img
-              src={cleanImageUrl(lab.logo_full_url || lab.image_full_url)}
-              alt={lab.name}
-            />
-          </div>
-          <span className="dropdown-cat-name">{lab.name}</span>
         </div>
-      ))}
-    </div>
-  </div>
-</li>
-
-          <li><Link to="/doctors">Doctors</Link></li>
-          <li><Link to="/blog">Blog</Link></li>
-          <li><Link to="/aboutus">About</Link></li>
-          <li><Link to="/contactus">Contact Us</Link></li>
-          <li><Link to="/who-we-are">Who We Are</Link></li>
-        </ul>
-
-        <div className="hamburger" onClick={() => setOpen(true)}>
-          <HiBars3 />
-        </div>
-      </div>
-    </nav>
+      </nav>
       {open && <div className="overlay" onClick={closeMenu} />}
 
       <div className={`side-menu ${open ? "open" : ""}`}>
@@ -305,26 +305,26 @@ const handleReportClick = () => {
             </li>
           )}
           {user && (
-  <li>
-    <Link to="#" onClick={(e) => { e.preventDefault(); handleNavigate("/my-health"); }}>
-      <FaClinicMedical /> My Health
-    </Link>
-  </li>
-)}
+            <li>
+              <Link to="#" onClick={(e) => { e.preventDefault(); handleNavigate("/my-health"); }}>
+                <FaClinicMedical /> My Health
+              </Link>
+            </li>
+          )}
 
           {user && (
-  <li>
-    <Link
-      to="#"
-      onClick={(e) => {
-        e.preventDefault();
-        handleNavigate("/my-reports");
-      }}
-    >
-      <FaFileAlt /> My Reports
-    </Link>
-  </li>
-)}
+            <li>
+              <Link
+                to="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigate("/my-reports");
+                }}
+              >
+                <FaFileAlt /> My Reports
+              </Link>
+            </li>
+          )}
 
           {user && (
             <li>
@@ -341,18 +341,18 @@ const handleReportClick = () => {
           )}
 
           {user && (
-  <li>
-    <Link
-      to="#"
-      onClick={(e) => {
-        e.preventDefault();
-        handleNavigate("/loyalty-points");
-      }}
-    >
-      <FaCoins /> Loyalty Points
-    </Link>
-  </li>
-)}
+            <li>
+              <Link
+                to="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavigate("/loyalty-points");
+                }}
+              >
+                <FaCoins /> Loyalty Points
+              </Link>
+            </li>
+          )}
 
 
           <li>
@@ -400,30 +400,30 @@ const handleReportClick = () => {
             </Link>
           </li>
           <li>
-  <Link
-    to="#"
-    onClick={(e) => {
-      e.preventDefault();
-      window.open("https://gogenericpharma.com/vendor/apply", "_blank");
-    }}
-  >
-    <FaStore /> Apply as Vendor
-  </Link>
-</li>
+            <Link
+              to="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open("https://gogenericpharma.com/vendor/apply", "_blank");
+              }}
+            >
+              <FaStore /> Apply as Vendor
+            </Link>
+          </li>
 
-<li>
-  <Link
-    to="#"
-    onClick={(e) => {
-      e.preventDefault();
-     window.open("https://gogenericpharma.com/deliveryman/apply", "_blank");
-    }}
-  >
-    <FaMotorcycle /> Apply as Deliveryman
-  </Link>
-</li>
+          <li>
+            <Link
+              to="#"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open("https://gogenericpharma.com/deliveryman/apply", "_blank");
+              }}
+            >
+              <FaMotorcycle /> Apply as Deliveryman
+            </Link>
+          </li>
 
-<li>
+          <li>
             <Link
               to="#"
               onClick={(e) => {
