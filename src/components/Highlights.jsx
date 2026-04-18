@@ -21,7 +21,7 @@ const handleCardClick = (id, type) => {
 };
   const fetchHighlights = useCallback(async () => {
   try {
-    // 🔹 Parallel API calls
+    
     const [adsRes, campaignRes] = await Promise.all([
       api.get("/api/v1/advertisement/list", {
         headers: { zoneId: JSON.stringify([3]), moduleId: 2 },

@@ -62,29 +62,22 @@ const calcBMI = (weight, height) => {
   return { bmi, category };
 };
 
-/* Returns from=first-of-month (or today if current month), to=last-of-month */
 const getMonthRange = (year, month) => {
   const todayStr = new Date().toISOString().split("T")[0];
   const firstOfMonth = `${year}-${String(month + 1).padStart(2, "0")}-01`;
   const lastDay = new Date(year, month + 1, 0).getDate();
   const to = `${year}-${String(month + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
-  // from = whichever is later: today or first-of-month
   const from = firstOfMonth < todayStr ? todayStr : firstOfMonth;
   return { from, to };
 };
 
-/* ════════════════════════════════════════════════════════
-   BookAppointment
-════════════════════════════════════════════════════════ */
 export default function BookAppointment({ planName, planPrice, planId, doctorId, clinicAddress, onClose }) {
   const { user } = useAuth();
   const todayObj = new Date();
 
-  /* ── Month navigation (only for date picker) ── */
   const [viewYear, setViewYear] = useState(todayObj.getFullYear());
   const [viewMonth, setViewMonth] = useState(todayObj.getMonth());
 
-  /* ── Basic ── */
   const [useMyDetails, setUseMyDetails] = useState(true);
   const [patientName, setPatientName] = useState(user?.name || "");
   const [patientPhone, setPatientPhone] = useState(user?.phone || "");
@@ -92,20 +85,17 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   const [patientAge, setPatientAge] = useState("");
   const [gender, setGender] = useState("");
 
-  /* ── Body ── */
   const [weight, setWeight] = useState("");
   const [height, setHeight] = useState("");
   const [bpSystolic, setBpSystolic] = useState("");
   const [bpDiastolic, setBpDiastolic] = useState("");
 
-  /* ── Medical ── */
   const [bloodGroup, setBloodGroup] = useState("");
   const [medicalConditions, setMedicalConditions] = useState([]);
   const [allergies, setAllergies] = useState([]);
   const [currentMedications, setCurrentMedications] = useState("");
   const [previousSurgeries, setPreviousSurgeries] = useState("");
 
-  /* ── Lifestyle ── */
   const [activityLevel, setActivityLevel] = useState("");
   const [dietType, setDietType] = useState("");
   const [waterIntake, setWaterIntake] = useState("");
@@ -113,12 +103,10 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   const [smokingStatus, setSmokingStatus] = useState("");
   const [alcoholStatus, setAlcoholStatus] = useState("");
 
-  /* ── Complaint ── */
   const [problem, setProblem] = useState("");
   const [healthGoal, setHealthGoal] = useState("");
   const [previousPatient, setPreviousPatient] = useState("");
 
-  /* ── Booking state ── */
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
   const [consultationType, setConsultationType] = useState("in_person");
@@ -133,13 +121,14 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   const bmiData = weight && height ? calcBMI(weight, height) : null;
   const isCurrentMonth = viewYear === todayObj.getFullYear() && viewMonth === todayObj.getMonth();
 
-  /* ── Fetch dates whenever month changes ── */
+  // ✅ Track if booking for someone else
+  const isBookingForOther = !useMyDetails && patientPhone !== user?.phone;
+
   useEffect(() => {
     if (!doctorId) return;
     const load = async () => {
       setLoadingDates(true);
       setAvailableDates([]);
-      // Reset selection if user navigates away from selected date's month
       setSelectedDate(prev => {
         if (!prev) return prev;
         const [y, m] = prev.split("-").map(Number);
@@ -166,9 +155,8 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
     load();
   }, [doctorId, viewYear, viewMonth]);
 
-  /* ── Month nav buttons ── */
   const prevMonth = () => {
-    if (isCurrentMonth) return; // can't go before current month
+    if (isCurrentMonth) return;
     if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11); }
     else setViewMonth(m => m - 1);
   };
@@ -177,7 +165,6 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
     else setViewMonth(m => m + 1);
   };
 
-  /* ── Fetch slots ── */
   const handleDateChange = async (date) => {
     setSelectedDate(date);
     setSelectedSlot("");
@@ -196,8 +183,15 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
 
   const handleUseMyDetails = (checked) => {
     setUseMyDetails(checked);
-    if (checked) { setPatientName(user?.name || ""); setPatientPhone(user?.phone || ""); setPatientEmail(user?.email || ""); }
-    else { setPatientName(""); setPatientPhone(""); setPatientEmail(""); }
+    if (checked) {
+      setPatientName(user?.name || "");
+      setPatientPhone(user?.phone || "");
+      setPatientEmail(user?.email || "");
+    } else {
+      setPatientName("");
+      setPatientPhone("");
+      setPatientEmail("");
+    }
   };
 
   const handleConsultationTypeChange = (value) => {
@@ -208,7 +202,6 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
   const toggleArrayItem = (arr, setArr, item) =>
     setArr(arr.includes(item) ? arr.filter(x => x !== item) : [...arr, item]);
 
-  /* ── Book ── */
   const handleBookClick = async () => {
     if (!patientName || !patientPhone || !patientAge || !gender) {
       Swal.fire({ icon: "warning", title: "Missing Details", text: "Please fill all required patient details (Name, Phone, Age, Gender)." }); return;
@@ -222,38 +215,56 @@ export default function BookAppointment({ planName, planPrice, planId, doctorId,
 
     try {
       const res = await bookAppointment({
-        doctor_id: doctorId, patient_name: patientName, patient_phone: patientPhone,
-        patient_email: patientEmail, patient_age: patientAge, gender,
-        weight_kg: weight, height_cm: height, bmi: bmiData?.bmi || null,
+        doctor_id: doctorId,
+        patient_name: patientName,
+        patient_phone: patientPhone,
+        // ✅ KEY FIX: Always send the logged-in user's phone as booked_by_phone
+        booked_by_phone: user?.phone || patientPhone,
+        patient_email: patientEmail,
+        patient_age: patientAge,
+        gender,
+        weight_kg: weight,
+        height_cm: height,
+        bmi: bmiData?.bmi || null,
         bp_systolic: bpSystolic || null,
-bp_diastolic: bpDiastolic || null,
-        blood_group: bloodGroup, medical_conditions: medicalConditions, allergies,
-        current_medications: currentMedications, previous_surgeries: previousSurgeries,
-        activity_level: activityLevel, diet_type: dietType,
-        water_intake_litres: waterIntake, sleep_hours: sleepHours,
-        smoking_status: smokingStatus, alcohol_status: alcoholStatus,
-        problem, health_goal: healthGoal,
+        bp_diastolic: bpDiastolic || null,
+        blood_group: bloodGroup,
+        medical_conditions: medicalConditions,
+        allergies,
+        current_medications: currentMedications,
+        previous_surgeries: previousSurgeries,
+        activity_level: activityLevel,
+        diet_type: dietType,
+        water_intake_litres: waterIntake,
+        sleep_hours: sleepHours,
+        smoking_status: smokingStatus,
+        alcohol_status: alcoholStatus,
+        problem,
+        health_goal: healthGoal,
         previous_patient: previousPatient === "yes" ? 1 : 0,
-        plan_id: planId, plan_name: planName, plan_price: numericPrice,
-        appointment_date: selectedDate, time_slot: selectedSlot,
+        plan_id: planId,
+        plan_name: planName,
+        plan_price: numericPrice,
+        appointment_date: selectedDate,
+        time_slot: selectedSlot,
         consultation_type: consultationType,
       });
 
       if (!res?.appointment_id) throw new Error("Invalid response");
       setAppointmentId(res.appointment_id);
 
-      // ── Free plan — seedha confirm, no payment ──
       if (numericPrice === 0) {
         Swal.fire({
           icon: "success",
           title: "Appointment Booked! 🎉",
-          text: "Your appointment has been confirmed.",
+          html: isBookingForOther
+            ? `Appointment booked for <strong>${patientName}</strong> (${patientPhone}). It will appear in your dashboard.`
+            : "Your appointment has been confirmed.",
           confirmButtonColor: "#10b981",
         }).then(() => onClose?.());
         return;
       }
 
-      // ── Paid plan — show pay button ──
       setShowPayNow(true);
       Swal.fire({
         icon: "success",
@@ -266,7 +277,6 @@ bp_diastolic: bpDiastolic || null,
     }
   };
 
-  /* ── Pay ── */
   const handlePayNow = () => {
     openRazorpay({
       amount: numericPrice,
@@ -287,7 +297,6 @@ bp_diastolic: bpDiastolic || null,
     });
   };
 
-  /* ── Slot grouping ── */
   const getSlotPeriod = (slot) => {
     const start = slot.split("-")[0].trim();
     const hour = parseInt(start.split(":")[0]);
@@ -313,11 +322,10 @@ bp_diastolic: bpDiastolic || null,
   const chipBase = { display: "inline-block", padding: "6px 12px", borderRadius: 20, fontSize: 12, cursor: "pointer", border: "1.5px solid #e5e7eb", background: "#f9fafb", color: "#374151", transition: "all .15s", margin: "3px" };
   const chipActive = { background: "#ecfdf5", border: "1.5px solid #10b981", color: "#065f46", fontWeight: 600 };
 
-  /* ════════════════════ RENDER ════════════════════ */
   return (
     <div className="booking-container">
 
-      {/* ── Consultation Type ── */}
+      {/* Consultation Type */}
       <div className="section">
         <h4>Consultation Type</h4>
         <div className="consultation-type-grid">
@@ -340,13 +348,26 @@ bp_diastolic: bpDiastolic || null,
         )}
       </div>
 
-      {/* ── Patient Details ── */}
+      {/* Patient Details */}
       <div className="section">
         <h4>👤 Patient Details</h4>
         <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
           <input type="checkbox" checked={useMyDetails} onChange={(e) => handleUseMyDetails(e.target.checked)} />
           <span style={{ fontSize: 13 }}>Book for myself</span>
         </label>
+
+        {/* ✅ Show info banner when booking for someone else */}
+        {isBookingForOther && (
+          <div style={{
+            background: "#EFF6FF", border: "1px solid #BFDBFE",
+            borderRadius: 10, padding: "10px 14px", marginBottom: 12,
+            fontSize: 12, color: "#1E40AF",
+            display: "flex", alignItems: "center", gap: 8,
+          }}>
+            ℹ️ Booking for someone else. This appointment will still appear in <strong>your</strong> dashboard.
+          </div>
+        )}
+
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <input type="text" placeholder="Patient Name *" value={patientName} onChange={(e) => setPatientName(e.target.value)} className="calendar-input" style={{ gridColumn: "1/-1" }} />
           <input type="tel" placeholder="Phone Number *" value={patientPhone} onChange={(e) => setPatientPhone(e.target.value)} className="calendar-input" />
@@ -366,7 +387,7 @@ bp_diastolic: bpDiastolic || null,
         </select>
       </div>
 
-      {/* ── Body Metrics ── */}
+      {/* Body Metrics */}
       <div className="section">
         <h4>⚖️ Body Metrics</h4>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -378,22 +399,17 @@ bp_diastolic: bpDiastolic || null,
             <input type="number" placeholder="Height (optional)" min={50} value={height} onChange={(e) => setHeight(e.target.value)} className="calendar-input" style={{ paddingRight: 40 }} />
             <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>cm</span>
           </div>
-          {/* BP Row */}
           <div style={{ gridColumn: "1/-1", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             <div style={{ position: "relative" }}>
-              <input
-                type="number" placeholder="Systolic BP (optional)" min={60} max={250}
+              <input type="number" placeholder="Systolic BP (optional)" min={60} max={250}
                 value={bpSystolic} onChange={(e) => setBpSystolic(e.target.value)}
-                className="calendar-input" style={{ paddingRight: 50 }}
-              />
+                className="calendar-input" style={{ paddingRight: 50 }} />
               <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>mmHg</span>
             </div>
             <div style={{ position: "relative" }}>
-              <input
-                type="number" placeholder="Diastolic BP (optional)" min={40} max={150}
+              <input type="number" placeholder="Diastolic BP (optional)" min={40} max={150}
                 value={bpDiastolic} onChange={(e) => setBpDiastolic(e.target.value)}
-                className="calendar-input" style={{ paddingRight: 50 }}
-              />
+                className="calendar-input" style={{ paddingRight: 50 }} />
               <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, color: "#9ca3af" }}>mmHg</span>
             </div>
           </div>
@@ -426,7 +442,7 @@ bp_diastolic: bpDiastolic || null,
         )}
       </div>
 
-      {/* ── Medical History ── */}
+      {/* Medical History */}
       <div className="section">
         <h4>🩺 Medical History</h4>
         <select value={bloodGroup} onChange={(e) => setBloodGroup(e.target.value)} className="calendar-input">
@@ -451,7 +467,7 @@ bp_diastolic: bpDiastolic || null,
         <textarea placeholder="Previous Surgeries / Injuries (if any)" value={previousSurgeries} onChange={(e) => setPreviousSurgeries(e.target.value)} className="calendar-input" rows={2} />
       </div>
 
-      {/* ── Lifestyle ── */}
+      {/* Lifestyle */}
       <div className="section">
         <h4>🏃 Lifestyle & Diet</h4>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -486,46 +502,34 @@ bp_diastolic: bpDiastolic || null,
         </div>
       </div>
 
-      {/* ── Complaint & Goal ── */}
+      {/* Complaint & Goal */}
       <div className="section">
         <h4>📝 Complaint & Health Goal</h4>
         <textarea placeholder="Current Problem / Symptoms" value={problem} onChange={(e) => setProblem(e.target.value)} className="calendar-input" rows={3} />
         <textarea placeholder="Health Goal (e.g. lose weight, manage diabetes...)" value={healthGoal} onChange={(e) => setHealthGoal(e.target.value)} className="calendar-input" rows={2} />
       </div>
 
-      {/* ── Date Picker with Month Nav ── */}
+      {/* Date Picker */}
       <div className="section">
         <h4>📅 Select Date</h4>
-
-        {/* Month navigation bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 10, padding: "8px 12px", marginBottom: 12 }}>
-          <button
-            onClick={prevMonth}
-            disabled={isCurrentMonth}
-            style={{
-              background: "none", border: "1px solid #e5e7eb", borderRadius: 8,
-              width: 32, height: 32, fontSize: 18, lineHeight: 1,
-              cursor: isCurrentMonth ? "not-allowed" : "pointer",
-              color: isCurrentMonth ? "#d1d5db" : "#6b7280",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
-          >‹</button>
-
+          <button onClick={prevMonth} disabled={isCurrentMonth} style={{
+            background: "none", border: "1px solid #e5e7eb", borderRadius: 8,
+            width: 32, height: 32, fontSize: 18, lineHeight: 1,
+            cursor: isCurrentMonth ? "not-allowed" : "pointer",
+            color: isCurrentMonth ? "#d1d5db" : "#6b7280",
+            display: "flex", alignItems: "center", justifyContent: "center",
+          }}>‹</button>
           <span style={{ fontSize: 14, fontWeight: 600, color: "#374151" }}>
             {MONTHS[viewMonth]} {viewYear}
           </span>
-
-          <button
-            onClick={nextMonth}
-            style={{
-              background: "none", border: "1px solid #e5e7eb", borderRadius: 8,
-              width: 32, height: 32, fontSize: 18, lineHeight: 1, cursor: "pointer",
-              color: "#6b7280", display: "flex", alignItems: "center", justifyContent: "center",
-            }}
-          >›</button>
+          <button onClick={nextMonth} style={{
+            background: "none", border: "1px solid #e5e7eb", borderRadius: 8,
+            width: 32, height: 32, fontSize: 18, lineHeight: 1, cursor: "pointer",
+            color: "#6b7280", display: "flex", alignItems: "center", justifyContent: "center",
+          }}>›</button>
         </div>
 
-        {/* Dates */}
         {loadingDates ? (
           <div style={{ display: "flex", alignItems: "center", gap: 8, color: "#9ca3af", fontSize: 14 }}>
             <span style={{ width: 16, height: 16, border: "2px solid #d1d5db", borderTopColor: "#6b7280", borderRadius: "50%", display: "inline-block", animation: "spin 0.8s linear infinite" }} />
@@ -564,7 +568,7 @@ bp_diastolic: bpDiastolic || null,
         )}
       </div>
 
-      {/* ── Time Slot Picker ── */}
+      {/* Time Slot Picker */}
       <div className="section">
         <h4>🕐 Select Time Slot</h4>
         {!selectedDate ? (
@@ -623,12 +627,18 @@ bp_diastolic: bpDiastolic || null,
         )}
       </div>
 
-      {/* ── Booking Summary ── */}
+      {/* Booking Summary */}
       {selectedDate && selectedSlot && (
         <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: "14px 18px", marginBottom: 12, fontSize: 13 }}>
           <p style={{ fontWeight: 600, marginBottom: 8, color: "#374151" }}>📋 Booking Summary</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 4, color: "#6b7280" }}>
             <span>👤 {patientName}{patientAge ? `, ${patientAge} yrs` : ""}{gender ? `, ${gender}` : ""}</span>
+            {/* ✅ Show "Booked by" when booking for someone else */}
+            {isBookingForOther && (
+              <span style={{ color: "#3B82F6", fontWeight: 500 }}>
+                📱 Booked by: {user?.name || "You"} ({user?.phone})
+              </span>
+            )}
             {weight && <span>⚖️ {weight} kg{height ? ` | ${height} cm` : ""}{bmiData ? ` | BMI: ${bmiData.bmi} (${bmiData.category})` : ""}</span>}
             {bpSystolic && bpDiastolic && <span>🩺 BP: {bpSystolic}/{bpDiastolic} mmHg</span>}
             <span>📅 {fmtDate(selectedDate).full}</span>
